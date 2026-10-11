@@ -8,3 +8,8 @@ __pycache__/
 .venv/
 .pytest_cache/
 .cache
+extensions.txt
+sample/*png
+sample/*json
+sample/*html
+sample/*txt
