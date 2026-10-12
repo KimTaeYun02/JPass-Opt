@@ -9,7 +9,9 @@ __pycache__/
 .pytest_cache/
 .cache
 extensions.txt
-sample/*png
+sample/*/*png
 sample/*json
 sample/*html
 sample/*txt
+.env
+sampe/result/*
