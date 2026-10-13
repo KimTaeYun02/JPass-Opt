@@ -68,8 +68,8 @@ async def enter_station(field: Locator, station: str) -> None:
     await field.click()
     await field.press("ControlOrMeta+A")
     await field.press("Backspace")
+    # 한 글자씩 입력
     await field.press_sequentially(station, delay=150)
-    # 기존 자동완성 입력 동작을 유지한다.
     await field.page.wait_for_timeout(1500)
     await field.press("Enter")
     await field.page.wait_for_timeout(1000)
@@ -84,8 +84,8 @@ async def search_route(
     screenshot_dir: Path | None = None,
 ) -> None:
     if departure_time is not None:
+        # 출발 시각이 있는 경우 해당 시간으로 페이지의 타이머를 고정한다.
         departure_time = normalize_departure_time(departure_time)
-        # Date만 고정하고 자동완성·페이지 로딩에 쓰이는 타이머는 계속 실행한다.
         await page.clock.set_fixed_time(departure_time)
         print("검색 출발 시각:", departure_time.isoformat())
 
@@ -94,16 +94,27 @@ async def search_route(
     )
     print("HTTP:", response.status if response else None)
     if not response or response.status != 200:
+        print("페이지 접속 실패: %s", response.status if response else None)
         raise RuntimeError("페이지 접속 실패")
 
-    inputs = page.locator('input[placeholder="駅名・バス停名を入力"]:visible')
-    await inputs.nth(1).wait_for(state="visible")
-    print("입력창 수:", await inputs.count())
-    for index, station in enumerate((departure, arrival)):
-        field = inputs.nth(index)
-        await enter_station(field, station)
-        print("출발역:" if index == 0 else "도착역:", await field.input_value())
-        await take_screenshot(page, screenshot_dir, f"step_{index + 1}.png")
+    station_inputs = page.locator('input[placeholder="駅名・バス停名を入力"]:visible')
+    departure_field = station_inputs.nth(0)
+    arrival_field = station_inputs.nth(1)
+    await arrival_field.wait_for(state="visible")
+    inputs_cnt = await station_inputs.count()
+    print("입력창 수:", inputs_cnt)
+    if inputs_cnt < 2:
+        raise RuntimeError(
+            "출발/도착 입력창을 찾지 못했습니다. 입력창 수: %d" % inputs_cnt
+        )
+
+    await enter_station(departure_field, departure)
+    print("출발역:", await departure_field.input_value())
+    await take_screenshot(page, screenshot_dir, "step_1.png")
+
+    await enter_station(arrival_field, arrival)
+    print("도착역:", await arrival_field.input_value())
+    await take_screenshot(page, screenshot_dir, "step_2.png")
 
     await take_screenshot(page, screenshot_dir, "before_search.png", full_page=True)
     search_button = page.locator('button[data-testid="search-button"]:visible').first
