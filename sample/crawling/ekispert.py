@@ -24,6 +24,10 @@ class RouteResult(TypedDict):
     route: list[RoutePoint]
 
 
+class RouteSearchResult(TypedDict):
+    routes: list[RouteResult]
+
+
 def normalize_departure_time(departure_time: datetime) -> datetime:
     if departure_time.utcoffset() is None:
         raise ValueError("departure_time에는 시간대가 포함된 datetime을 전달해주세요.")
@@ -155,9 +159,8 @@ async def extract_line(element: Locator) -> str | None:
     return line
 
 
-async def extract_route(page: Page) -> RouteResult:
-    """첫 번째 검색 결과를 기존 time/fee/route 구조로 반환한다."""
-    section = page.locator('[data-testid="course-detail"]').first
+async def extract_course(section: Locator) -> RouteResult:
+    """경로 하나의 소요시간, 운임, 역과 이동 노선을 추출한다."""
     await section.wait_for(state="visible")
     time_text = await section.locator(
         '[data-testid="course-detail-header-total-time"]'
@@ -194,6 +197,16 @@ async def extract_route(page: Page) -> RouteResult:
     }
 
 
+async def extract_route(page: Page) -> RouteSearchResult:
+    """모든 검색 결과를 화면 순서대로 routes 배열에 담아 반환한다."""
+    sections = page.locator('[data-testid="course-detail"]')
+    await sections.first.wait_for(state="visible")
+    routes: list[RouteResult] = []
+    for index in range(await sections.count()):
+        routes.append(await extract_course(sections.nth(index)))
+    return {"routes": routes}
+
+
 async def crawl_route(
     departure: str,
     arrival: str,
@@ -201,8 +214,8 @@ async def crawl_route(
     headless: bool = False,
     departure_time: datetime | None = None,
     screenshot_dir: Path | None = None,
-) -> RouteResult:
-    """지정한 출발 시각으로 검색한다. None이면 사이트의 현재 시각을 사용한다."""
+) -> RouteSearchResult:
+    """모든 경로를 반환한다. 출발 시각이 None이면 사이트의 현재 시각을 사용한다."""
     if departure_time is not None:
         departure_time = normalize_departure_time(departure_time)
     if screenshot_dir is not None:

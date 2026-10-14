@@ -1,3 +1,3 @@
-from .ekispert import crawl_route
+from .ekispert import RouteSearchResult, crawl_route
 
-__all__ = ["crawl_route"]
+__all__ = ["RouteSearchResult", "crawl_route"]

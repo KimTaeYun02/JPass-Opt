@@ -13,5 +13,6 @@ sample/*/*png
 sample/*json
 sample/*html
 sample/*txt
+sample/screenshot
+sample/result
 .env
-sampe/result/*
