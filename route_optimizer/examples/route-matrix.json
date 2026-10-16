@@ -1,0 +1,8 @@
+[
+  {"departure":"A","arrival":"B","routes":[{"time":10,"fee":200,"route":[{"station":"A","line":"예시 노선"},{"station":"B","line":null}]}]},
+  {"departure":"A","arrival":"C","routes":[{"time":30,"fee":300,"route":[{"station":"A","line":"예시 노선"},{"station":"C","line":null}]}]},
+  {"departure":"B","arrival":"A","routes":[{"time":12,"fee":200,"route":[{"station":"B","line":"예시 노선"},{"station":"A","line":null}]}]},
+  {"departure":"B","arrival":"C","routes":[{"time":5,"fee":100,"route":[{"station":"B","line":"예시 노선"},{"station":"C","line":null}]}]},
+  {"departure":"C","arrival":"A","routes":[{"time":28,"fee":300,"route":[{"station":"C","line":"예시 노선"},{"station":"A","line":null}]}]},
+  {"departure":"C","arrival":"B","routes":[{"time":7,"fee":100,"route":[{"station":"C","line":"예시 노선"},{"station":"B","line":null}]}]}
+]
