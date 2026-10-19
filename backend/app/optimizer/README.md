@@ -26,15 +26,15 @@ JavaScript UTF-16 정렬 순서로 비교한다. 시작·마지막 역은 자유
 
 ### Python에서 호출
 
-저장소 루트에서 실행한다. 크롤러와 웹 서버를 설치하지 않아도 이 코드는 동작한다.
+`backend/`에서 실행한다. 크롤러와 웹 서버를 설치하지 않아도 이 코드는 동작한다.
 
 ```python
 import json
 from pathlib import Path
-from backend.app.optimizer import optimize_matrix
+from app.optimizer import optimize_matrix
 
 matrix = json.loads(
-    Path("backend/app/optimizer/examples/route-matrix.json").read_text(encoding="utf-8")
+    Path("app/optimizer/examples/route-matrix.json").read_text(encoding="utf-8")
 )
 result = optimize_matrix(["A", "B", "C"], matrix, selection="first", limit=1)
 print(result["plans"][0]["order"])  # ['A', 'B', 'C']
@@ -47,10 +47,10 @@ print(result["plans"][0]["order"])  # ['A', 'B', 'C']
 
 ### JSON 파일로 실행
 
-Python 3.14 이상을 사용한다. 아래 명령은 모두 저장소 루트 기준이다.
+Python 3.14 이상을 사용한다. 아래 명령은 모두 `backend/` 기준이다.
 
 ```sh
-python -m backend.app.optimizer backend/app/optimizer/examples/route-matrix.json --stations A B C --limit 3 --output backend/app/optimizer/result/optimized.json
+python -m app.optimizer app/optimizer/examples/route-matrix.json --stations A B C --limit 3 --output tests/optimized.json
 ```
 
 실행하면 방문 순서(`order`), 총 소요시간(`time`, 분), 총 운임(`fee`, 엔),
@@ -87,8 +87,8 @@ A·B·C 사이의 전체 6개 방향 구간이 들어 있다.
 ### 검증
 
 ```sh
-python -m unittest discover -s backend/tests -v
-poetry -P sample run ruff check --config sample/pyproject.toml backend
+python -m unittest discover -s tests -p 'test_optimizer.py' -v
+poetry run ruff check app tests
 ```
 
 독립적인 전체 순열 계산으로 무작위 비대칭·동률 비용표의 상위 1~3개 결과를
@@ -101,7 +101,7 @@ poetry -P sample run ruff check --config sample/pyproject.toml backend
 ```text
 backend/app/optimizer/
   __init__.py                공개 함수 제공
-  __main__.py                python -m backend.app.optimizer 진입점
+  __main__.py                python -m app.optimizer 진입점
   cli.py                     JSON 파일 읽기, 옵션 처리, 결과 출력
   matrix.py                  크롤러 스키마 검증 및 구간 후보 선택
   optimizer.py               Held–Karp DP와 결과 복원
@@ -128,5 +128,5 @@ optimize_visit_orders() → _held_karp()`다. 계산 결과는 반대 순서로 
 동률 해소 기준이며 현재 최저요금 전용·가중합·패스 할인 계산은 구현하지 않았다.
 `limit=3`이면 서로 다른 방문 순서를 최대 3개 반환한다.
 
-`__init__.py`는 외부 코드가 `from backend.app.optimizer import optimize_matrix`로
+`__init__.py`는 외부 코드가 `from app.optimizer import optimize_matrix`로
 호출하도록 공개 함수를 모은다. 네트워크 요청이나 크롤러 실행은 하지 않는다.

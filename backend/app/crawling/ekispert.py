@@ -6,8 +6,8 @@ from zoneinfo import ZoneInfo
 
 from playwright.async_api import Locator, Page, TimeoutError
 
-from .browser import browser_page
-from .parsers import parse_duration, parse_fee
+from app.crawling.browser import browser_page
+from app.crawling.parsers import parse_duration, parse_fee
 
 EKISPERT_URL = "https://roote.ekispert.net/"
 JAPAN_TIMEZONE = ZoneInfo("Asia/Tokyo")

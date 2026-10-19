@@ -33,6 +33,9 @@ select = ["E", "F", "I"]
 # 무시할 규칙
 ignore = ["E501"]
 
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
 [tool.ruff.format]
 # 포매팅할 때 따옴표 스타일 (기본값 "double")
 quote-style = "double"

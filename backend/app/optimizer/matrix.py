@@ -2,7 +2,11 @@
 
 from copy import deepcopy
 
-from .optimizer import optimize_visit_orders, validate_places, validate_quote
+from app.optimizer.optimizer import (
+    optimize_visit_orders,
+    validate_places,
+    validate_quote,
+)
 
 
 def quotes_from_segments(segments, *, selection="first"):

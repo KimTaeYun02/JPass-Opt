@@ -1,11 +1,11 @@
-"""Offline JSON CLI. Run from the repo root: python -m backend.app.optimizer --help."""
+"""Offline JSON CLI. Run from backend/: python -m app.optimizer --help."""
 
 import argparse
 import json
 import sys
 from pathlib import Path
 
-from .matrix import optimize_matrix
+from app.optimizer.matrix import optimize_matrix
 
 
 def main(argv=None):

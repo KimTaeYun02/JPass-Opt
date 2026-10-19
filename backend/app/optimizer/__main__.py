@@ -1,6 +1,6 @@
-"""Run the offline optimizer with python -m backend.app.optimizer."""
+"""Run the offline optimizer with python -m app.optimizer."""
 
-from .cli import main
+from app.optimizer.cli import main
 
 if __name__ == "__main__":
     main()

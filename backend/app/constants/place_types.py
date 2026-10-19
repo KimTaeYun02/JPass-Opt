@@ -1,0 +1,113 @@
+"""여행 유형 목록과 유형별 Google Places 검색 타입."""
+
+TRAVEL_TYPE: list[str] = [
+    "culture",  # 역사·문화
+    "nature",  # 자연·풍경
+    "anime",  # 애니메이션
+    "shopping",  # 쇼핑
+    "relaxation",  # 휴식·힐링
+    "activity",  # 액티비티
+]
+
+PLACE_TYPES_BY_TRAVEL_TYPE: dict[str, list[str]] = {
+    # 역사/문화
+    "culture": [
+        "historical_landmark",
+        "historical_place",
+        "cultural_landmark",
+        "castle",
+        "monument",
+        "museum",
+        "history_museum",
+        "art_museum",
+        "art_gallery",
+        "sculpture",
+        "buddhist_temple",
+        "shinto_shrine",
+        "cultural_center",
+        "performing_arts_theater",
+    ],
+    # 자연/풍경
+    "nature": [
+        "scenic_spot",
+        "mountain_peak",
+        "lake",
+        "river",
+        "beach",
+        "island",
+        "woods",
+        "nature_preserve",
+        "national_park",
+        "state_park",
+        "park",
+        "city_park",
+        "garden",
+        "botanical_garden",
+        "hiking_area",
+        "observation_deck",
+        "wildlife_refuge",
+    ],
+    "anime": [
+        "book_store",
+        "toy_store",
+        "shopping_mall",
+        "department_store",
+        "video_arcade",
+        "amusement_center",
+        # "movie_theater",
+        # "internet_cafe",
+        "art_gallery",
+        # "museum",
+        # "tourist_attraction",
+    ],
+    "shopping": [
+        "shopping_mall",
+        "department_store",
+        "market",
+        "flea_market",
+        "discount_store",
+        "clothing_store",
+        "electronics_store",
+        "gift_shop",
+        "plaza",
+        "observation_deck",
+        "tourist_attraction",
+        "ferris_wheel",
+        "monument",
+    ],
+    "relaxation": [
+        "public_bath",
+        "spa",
+        "massage_spa",
+        "sauna",
+        "massage",
+        "garden",
+        "botanical_garden",
+        "park",
+        "city_park",
+        "nature_preserve",
+        "scenic_spot",
+        "resort_hotel",
+    ],
+    "activity": [
+        "amusement_park",
+        "water_park",
+        "aquarium",
+        "zoo",
+        "wildlife_park",
+        "adventure_sports_center",
+        # "cycling_park",
+        "go_karting_venue",
+        # "bowling_alley",
+        # "karaoke",
+        # "video_arcade",
+        # "amusement_center",
+        "planetarium",
+        # "ski_resort",
+        "sports_activity_location",
+        "ice_skating_rink",
+        # "swimming_pool",
+        # "fishing_pond",
+        # "fishing_pier",
+    ],
+}
