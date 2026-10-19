@@ -1,4 +1,4 @@
-"""Offline JSON CLI. Run from the repo root: python -m route_optimizer --help."""
+"""Offline JSON CLI. Run from the repo root: python -m backend.app.optimizer --help."""
 
 import argparse
 import json
