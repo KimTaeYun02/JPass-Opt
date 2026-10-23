@@ -111,7 +111,6 @@ async def search_route(
         raise RuntimeError(
             "출발/도착 입력창을 찾지 못했습니다. 입력창 수: %d" % inputs_cnt
         )
-
     await enter_station(departure_field, departure)
     print("출발역:", await departure_field.input_value())
     await take_screenshot(page, screenshot_dir, "step_1.png")

@@ -10,7 +10,13 @@ async def browser_page(*, headless: bool = False) -> AsyncIterator[Page]:
     async with async_playwright() as playwright:
         browser = await playwright.chromium.launch(
             headless=headless,
-            args=["--no-sandbox", "--disable-dev-shm-usage"],
+            args=[
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-gpu-compositing",
+                "--disable-accelerated-2d-canvas",
+            ],
         )
         try:
             page = await browser.new_page(
