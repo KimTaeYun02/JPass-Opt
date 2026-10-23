@@ -1,6 +1,9 @@
 # JPass-Opt
 경제보복 프로젝트
 
+동선 최적화 API의 서버 실행, Swagger 사용법과 **curl 요청 예시**는
+[백엔드 실행 안내](backend/README.md)를 참고한다.
+
 `crawl_route()`는 검색 결과에 표시된 모든 경로를 화면 순서대로 반환한다.
 
 ```json
@@ -41,30 +44,30 @@ cheapest = min(
 
 ## 백엔드 구조
 
-크롤러, 외부 API 클라이언트, 최적화 엔진은 `backend/app/`에서 관리한다.
+API 서버, 입출력 모델, 최적화 서비스와 외부 조회 모듈은 `backend/app/`에서 관리한다.
 
 ```text
 backend/
   app/
+    main.py                  FastAPI 앱 생성·라우터 연결
+    api/routes.py            POST /api/routes/optimize
+    schemas/route.py         요청·응답 모델과 입력 검증
+    services/route_service.py 역 조회·경로 수집·최적화·응답 조립
     clients/google_maps.py  Google 관광지 좌표 조회
-    clients/heartrails.py   HeartRails 주변 역 조회
+    clients/heartrails.py   HeartRails 주변 역·환승역 조회
     crawling/                브라우저 기반 경로 수집
     optimizer/               구간 데이터 검증·방문 순서 최적화·CLI
-  tests/test_optimizer.py    최적화 엔진 검증
 ```
 
-현재 API 서버와 전체 수집·최적화 서비스는 아직 구현하지 않았다.
+`POST /api/routes/optimize`에서 관광지 입력을 받아 전체 수집·최적화 서비스를 실행한다.
 최적화에는 모든 방향별 구간이 필요하다.
 백엔드 의존성은 `backend/pyproject.toml`과 `backend/poetry.lock`에서 관리한다.
 
-최적화 CLI와 테스트는 `backend/`에서 실행한다. 주변 검색 테스트는 루트 `.env`의
-`GOOGLE_PLACE_API_KEY`를 사용한다.
+최적화 엔진 CLI는 `backend/`에서 실행한다.
 
 ```sh
 cd backend
 poetry run python -m app.optimizer app/optimizer/examples/route-matrix.json --stations A B C
-poetry run python -m unittest discover -s tests -p 'test_optimizer.py' -v
-poetry run python -m tests.test_nearby_search
 ```
 
 최적화 엔진의 상세 설명은 [optimizer README](backend/app/optimizer/README.md)를 참고한다.
