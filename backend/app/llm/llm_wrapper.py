@@ -97,6 +97,10 @@ class GeminiWrapper:
     ) -> BaseModel | str:
         validator = _response_model(response_schema, response_validator)
         schema = response_schema if response_schema is not None else validator
+        if isinstance(schema, type) and issubclass(schema, BaseModel):
+            schema = schema.model_json_schema()
+        # JSON Schema는 전용 필드로 보내 additionalProperties 등의 키를 보존한다.
+        is_json_schema = isinstance(schema, dict)
         config = types.GenerateContentConfig(
             system_instruction=system_prompt,
             temperature=temperature,
@@ -104,7 +108,8 @@ class GeminiWrapper:
             response_mime_type="application/json"
             if schema is not None
             else "text/plain",
-            response_schema=schema,
+            response_schema=None if is_json_schema else schema,
+            response_json_schema=schema if is_json_schema else None,
         )
         response = self.client.models.generate_content(
             model=self.model_name, contents=user_prompt, config=config

@@ -35,6 +35,11 @@ print(result.place_name)
 `response_schema`에 Pydantic 모델을 주면 `response_validator`는 생략해도 된다.
 일반 JSON 스키마만 주면 JSON 문자열을 반환한다.
 
+Gemini는 Pydantic 모델을 JSON Schema로 변환하고, JSON 스키마 딕셔너리는
+SDK의 `response_json_schema`로 전달한다. `additionalProperties: false` 같은
+제약을 보존하며, `response_validator`가 있으면 응답도 해당 모델로 검증한다.
+전송 방식은 [Google Gen AI SDK의 JSON Schema 예제](https://googleapis.github.io/python-genai/#json-response-schema)를 따른다.
+
 두 래퍼의 인자는 같다. `temperature`는 기본적으로 생략하며,
 필요하면 지원하는 모델에서 `temperature=0.7`처럼 전달한다.
 `max_output_tokens`는 기본 1024다. API 오류와 응답 검증 오류는 그대로 전달한다.
