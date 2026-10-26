@@ -26,6 +26,56 @@ class NearbyPlace(TypedDict, total=False):
     types: list[str]
 
 
+def search_text(
+    text_query: str,
+    api_key: str,
+    *,
+    language_code: str = "ko",
+    region_code: str = "JP",
+    page_size: int = 20,
+    rank_preference: str = "RELEVANCE",
+    location_bias: dict | None = None,
+    page_token: str | None = None,
+) -> dict:
+    """Text Search를 한 번 호출한다. 페이지 추가 조회나 재시도는 하지 않는다."""
+    FIELD_MASK = (
+        "places.id,places.displayName,places.formattedAddress,places.location,"
+        "places.primaryType,places.types,places.googleMapsUri,nextPageToken"
+    )
+    if not isinstance(text_query, str) or not text_query.strip():
+        raise ValueError("text_query에 검색어를 입력해주세요.")
+    if not api_key.strip():
+        raise ValueError("Google Places API 키가 필요합니다.")
+
+    payload = {
+        "textQuery": text_query,
+        "languageCode": language_code,
+        "regionCode": region_code,
+        "pageSize": page_size,
+        "rankPreference": rank_preference,
+        "openNow": False,
+    }
+    if location_bias is not None:
+        payload["locationBias"] = location_bias
+    if page_token is not None:
+        if not isinstance(page_token, str) or not page_token.strip():
+            raise ValueError("page_token에 이전 응답의 nextPageToken을 입력해주세요.")
+        payload["pageToken"] = page_token
+
+    response = requests.post(
+        "https://places.googleapis.com/v1/places:searchText",
+        headers={
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": api_key.strip(),
+            "X-Goog-FieldMask": FIELD_MASK,
+        },
+        json=payload,
+        timeout=30,
+    )
+    response.raise_for_status()
+    return response.json()
+
+
 def get_coordinates(
     place_name: str,
     api_key: str,

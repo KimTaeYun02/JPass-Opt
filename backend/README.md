@@ -1,11 +1,14 @@
 # 여행 동선·주변 관광지 추천 백엔드
 
-일차별 관광지 목록으로 방문 순서·예상 도착 시각·교통비를 계산하고, 역 목록에서 추천 거점을 골라 주변 관광지를 검색하는 FastAPI 서버다.
+일차별 관광지 목록으로 방문 순서·예상 도착 시각·교통비를 계산하고, 역 주변 관광지 추천과 자연어 장소 검색을 제공하는 FastAPI 서버다.
 
 | API | 역할 |
 | --- | --- |
 | `POST /api/routes/optimize` | 관광지 방문 순서 최적화와 역·환승역 좌표 조회 |
 | `POST /api/nearby/recommend` | LLM으로 앵커 역을 선택하고 해당 역 주변 관광지 추천 |
+| `POST /api/places/search` | 사용자 문장을 일본어 검색어로 재작성해 Google Places 조회 |
+
+자연어 장소 검색의 요청·응답과 호출 횟수 제한은 [장소 검색 API 안내](docs/text_search.md)를 참고한다. Gemini는 한 번 호출하고 Places는 검색어별 첫 페이지만 최대 3회 조회한다. 확인 질문이 반환되면 Places를 호출하지 않는다. `tests/test_text_search.py`는 요청 모델을 만들어 실제 서비스를 호출하는 수동 테스트다.
 
 ## 서버 실행 — 첫 번째 터미널
 
@@ -29,19 +32,20 @@ xvfb-run -a poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000
 | `http://localhost:8000/openapi.json` | API 구조와 모델을 담은 OpenAPI JSON |
 | `http://localhost:8000/api/routes/optimize` | 동선 최적화 요청 주소. HTTP `POST`로 호출 |
 | `http://localhost:8000/api/nearby/recommend` | 역 주변 관광지 추천 주소. HTTP `POST`로 호출 |
+| `http://localhost:8000/api/places/search` | 자연어 장소 검색 주소. HTTP `POST`로 호출 |
 
 Codespaces에서는 8000번 포트를 전달한 주소 뒤에 `/docs`를 붙이면 된다. 동선 최적화에는 Google·Gemini API 키가 필요하지 않다. 관광지의 Google Place ID는 프론트가 검색 결과에서 얻어 전달한다.
 
-주변 관광지 추천만 호출한다면 브라우저를 실행하지 않으므로 Xvfb 없이 아래처럼 서버를 켤 수 있다. 두 API를 함께 사용할 때는 위의 Xvfb 실행 명령을 사용한다.
+장소 검색·주변 관광지 추천에는 브라우저가 필요 없으므로 Xvfb 없이 아래처럼 서버를 켤 수 있다. 동선 최적화도 호출할 때는 위의 Xvfb 실행 명령을 사용한다.
 
 ```bash
 cd backend
 poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-### 주변 관광지 추천용 API 키
+### 장소 검색·주변 관광지 추천용 API 키
 
-주변 관광지 추천은 Google Places와 Gemini를 사용한다. 저장소 루트의 `.env`에 다음 값을 설정한 뒤 서버를 시작한다. 앱은 시작 시 이 파일을 읽으며, 이미 설정된 환경 변수는 덮어쓰지 않는다.
+장소 검색과 주변 관광지 추천은 Google Places와 Gemini를 사용한다. 저장소 루트의 `.env`에 다음 값을 설정한 뒤 서버를 시작한다. 앱은 시작 시 이 파일을 읽으며, 이미 설정된 환경 변수는 덮어쓰지 않는다.
 
 ```dotenv
 GOOGLE_PLACE_API_KEY=발급받은_Google_Places_API_키
@@ -49,7 +53,19 @@ GEMINI_API_KEY=발급받은_Gemini_API_키
 GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
-`GEMINI_MODEL`은 선택 설정이며 생략해도 위 모델을 사용한다. API 키는 서버에서만 관리하고 프론트의 요청 JSON에는 넣지 않는다. 키가 없어도 서버와 동선 최적화 API는 사용할 수 있으며, 주변 관광지 추천 요청에는 `503`을 반환한다.
+`GEMINI_MODEL`은 선택 설정이며 생략해도 위 모델을 사용한다. API 키는 서버에서만 관리하고 프론트의 요청 JSON에는 넣지 않는다. 키가 없어도 서버와 동선 최적화 API는 사용할 수 있으며, 장소 검색·주변 관광지 추천 요청에는 `503`을 반환한다.
+
+## 자연어 장소 검색 curl 테스트
+
+서버를 켜고 다음 요청을 보낸다. `userQuery`만 필수이며 언어는 `ko`, 지역은 `JP`, 검색어당 결과 수는 `20`, 정렬은 `RELEVANCE`가 기본값이다. 전체 위치 옵션과 응답 구조는 [장소 검색 API 안내](docs/text_search.md)를 참고한다. `/docs`에서도 `POST /api/places/search`를 직접 실행할 수 있다.
+
+```bash
+curl -sS -X POST http://localhost:8000/api/places/search \
+  -H 'Content-Type: application/json' \
+  --data-binary '{"userQuery":"후지사와역 근처 인기 있는 야키니쿠집 찾아줘"}'
+```
+
+응답의 `textQueries`는 일본어 검색어 목록이고, `results[].response`는 각 검색어의 Google 원본 응답이다. 확인이 필요하면 `clarificationQuestion`에 질문을 반환하고 `results`는 빈 배열이 된다. 이 API는 페이지 토큰을 받지 않으며 자동 페이지 조회·재시도·추가 LLM 시도를 하지 않는다.
 
 ## 동선 최적화 curl 테스트 — 두 번째 터미널
 
@@ -215,13 +231,18 @@ app/
 ├── main.py                    # FastAPI app 생성, 환경 설정, router 연결
 ├── api/
 │   ├── routes.py              # POST /api/routes/optimize
-│   └── nearby.py              # POST /api/nearby/recommend
+│   ├── nearby.py              # POST /api/nearby/recommend
+│   └── places.py              # POST /api/places/search
 ├── schemas/
 │   ├── route.py               # 동선 최적화 요청·응답 모델
-│   └── nearby.py              # 주변 추천 요청·응답 모델
+│   ├── nearby.py              # 주변 추천 요청·응답 모델
+│   └── place_search.py        # 자연어 장소 검색·LLM 결과·위치 모델
 ├── services/
 │   ├── route_service.py       # 역 조회·경로 수집·최적화·응답 조립
-│   └── nearby_service.py      # 앵커 역 선택·주변 검색·추천 결과 조립
+│   ├── nearby_service.py      # 앵커 역 선택·주변 검색·추천 결과 조립
+│   └── place_search_service.py # 검색어 재작성·최대 3개 Places 검색
+├── prompts/
+│   └── place_search.py        # dedent로 정리한 검색어 재작성 프롬프트
 ├── clients/                   # Google Places·HeartRails 외부 API 호출
 ├── llm/                       # 기존 Gemini·GPT 호출 래퍼
 ├── crawling/                  # Ekispert 경로 크롤링
@@ -243,10 +264,12 @@ flowchart TD
 - **Uvicorn**은 HTTP 요청을 받는 서버 프로그램이다. `app.main:app`은 `app/main.py`의 `app` 객체를 실행한다는 뜻이다.
 - **API 라우터**는 URL·HTTP 메서드와 실행할 함수를 연결한다. `api/`의 함수는 검증된 요청을 서비스에 전달하고 결과·오류를 HTTP 응답으로 돌려준다.
 - **Pydantic 스키마**는 JSON이 정해진 모델에 맞는지 확인한다. 날짜·시간·필수 Place ID·좌표·추천 개수 등을 검증하고 Swagger 문서의 입력·출력 구조도 생성한다.
-- **서비스**는 작업 순서를 담당한다. 동선 서비스는 역·경로 조회와 최적화를, 주변 추천 서비스는 앵커 역 선택과 검색·중복 제거·결과 조립을 수행한다.
+- **서비스**는 작업 순서를 담당한다. 동선 서비스는 역·경로 조회와 최적화를, 주변 추천 서비스는 앵커 역 선택과 검색·중복 제거·결과 조립을 수행한다. 장소 검색 서비스는 프롬프트로 검색어를 재작성하고 검색어별 Google 응답을 모은다.
 - **클라이언트·LLM 래퍼·크롤러·최적화 모듈**은 외부 호출과 계산의 구체적인 방법을 담당한다. HTTP 상태 코드는 라우터가 처리한다.
 
 예를 들어 주변 추천 요청은 `JSON → FastAPI의 요청 모델 검증 → api/nearby.py → nearby_service.py → Gemini·Google Places → 응답 모델 → JSON`으로 처리된다. 역할을 나누면 검색 방법을 바꾸더라도 프론트가 호출하는 URL과 JSON 형식은 유지할 수 있다.
+
+장소 검색은 `api/places.py → schemas/place_search.py → services/place_search_service.py → Gemini·clients/google_maps.py`로 처리한다. 영어 프롬프트는 `prompts/place_search.py`에서 `textwrap.dedent`로 관리하며, 앱은 테스트 모듈을 가져오지 않는다. 반환 필드는 `clients/google_maps.py`의 `search_text()` 내부 `FIELD_MASK`에서 수정한다.
 
 동기 방식인 HeartRails 요청은 스레드에서 실행해 서버 이벤트 루프를 막지 않도록 한다. Chromium 부하를 줄이기 위해 앱 프로세스 하나당 최적화 작업을 한 번에 하나씩 실행한다. `--workers`를 늘리면 이 제한도 프로세스마다 따로 적용되므로 기본 실행 명령은 단일 프로세스를 사용한다.
 
@@ -256,10 +279,10 @@ flowchart TD
 
 | HTTP 상태 | 의미 |
 | --- | --- |
-| `422` | 필수 Place ID 누락·빈 값, 날짜·일차·좌표 오류, 근처 역이나 사용할 경로 없음 |
-| `429` | 주변 추천 중 Gemini 또는 Google Places 사용량·호출 제한 도달 |
-| `502` | 외부 API 또는 크롤러 호출 실패 |
-| `503` | 주변 추천에 필요한 서버 API 키가 설정되지 않음 |
+| `422` | 입력값 오류, 빈 장소 검색 문장, 잘못된 검색 옵션, 근처 역이나 사용할 경로 없음 |
+| `429` | Gemini 또는 Google Places 사용량·호출 제한 도달 |
+| `502` | 외부 API·크롤러 호출 실패 또는 유효하지 않은 LLM 응답 |
+| `503` | 장소 검색·주변 추천에 필요한 서버 API 키가 설정되지 않음 |
 | `504` | 외부 조회 시간 초과 |
 
 주변 추천의 잘못된 태그·좌표·개수·반경도 `422`를 반환한다. 입력 검증 오류는 `{"detail": [...]}`로 필드별 오류를 반환하고 서비스 오류는 `{"detail": "설명"}` 형식이다. 외부 서비스의 내부 오류와 서버 파일 경로를 응답에 그대로 노출하지 않는다.

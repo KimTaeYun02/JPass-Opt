@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.nearby import router as nearby_router
+from app.api.places import router as places_router
 from app.api.routes import router as routes_router
 from app.logging_config import configure_logging
 
@@ -26,7 +27,7 @@ def create_app() -> FastAPI:
     application = FastAPI(
         title="JPass 여행 API",
         version="0.1.0",
-        description="관광지 방문 순서 최적화, 역·환승역 좌표와 역 주변 관광지 추천",
+        description="자연어 장소 검색, 관광지 방문 순서 최적화, 역·환승역 좌표와 역 주변 관광지 추천",
         lifespan=lifespan,
     )
     origins = [
@@ -44,6 +45,7 @@ def create_app() -> FastAPI:
     )
     application.include_router(routes_router)
     application.include_router(nearby_router)
+    application.include_router(places_router)
     return application
 
 
