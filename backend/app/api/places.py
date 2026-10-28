@@ -23,8 +23,10 @@ logger = logging.getLogger(__name__)
     response_model=PlaceSearchResponse,
     summary="자연어로 일본 장소 검색",
     description=(
-        "사용자 요청을 일본어 검색어로 변환하고 검색어별 Google Places 첫 페이지를 반환합니다. "
-        "검색어는 최대 세 개이며 추가 질문이 필요하면 장소 검색 없이 질문을 반환합니다. "
+        "사용자 요청을 일본어 검색어로 증강하고 검색어별 Google Places 첫 페이지를 반환합니다. "
+        "Google 응답 언어는 한국어(ko), 지역 코드는 JP로 고정합니다. "
+        "검색어는 최대 세 개이며 요청이 모호해 검색어를 만들 수 없으면 "
+        "장소 검색 없이 textQueries는 null, results는 빈 배열로 반환합니다. "
         "다음 페이지는 자동으로 조회하지 않습니다."
     ),
     responses={
@@ -42,10 +44,10 @@ def search(payload: PlaceSearchRequest) -> PlaceSearchResponse:
     try:
         result = search_places(payload)
         logger.info(
-            "장소 검색 완료: 검색어=%d개, 장소=%d개, 추가 질문=%s, 소요=%.2f초",
+            "장소 검색 완료: 검색어=%d개, 장소=%d개, 검색 생략=%s, 소요=%.2f초",
             len(result.textQueries or []),
             sum(len(item.response.get("places", [])) for item in result.results),
-            result.clarificationQuestion is not None,
+            result.textQueries is None,
             perf_counter() - started_at,
         )
         return result

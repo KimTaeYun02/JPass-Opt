@@ -1,4 +1,4 @@
-"""사용자 문장 → 일본어 검색어 → 최대 세 번의 Google 장소 검색."""
+"""사용자 문장 → 일본어 검색어 증강 → 최대 세 번의 Google 장소 검색."""
 
 import json
 import logging
@@ -40,7 +40,7 @@ class PlaceSearchRateLimitError(PlaceSearchProviderError):
 
 
 def rewrite_query(user_query: str, *, llm: GeminiWrapper) -> QueryRewrite:
-    """LLM을 한 번 호출하고 검색어 목록 또는 추가 질문을 검증한다."""
+    """LLM을 한 번 호출하고 증강된 검색어 목록 또는 null을 검증한다."""
     if not isinstance(user_query, str) or not user_query.strip():
         raise ValueError("user_query에 검색 요청을 입력해주세요.")
 
@@ -63,17 +63,16 @@ def run_search(
     request = PlaceSearchRequest.model_validate(request)
     rewrite = rewrite_query(request.userQuery, llm=llm)
     if rewrite.textQueries is None:
-        logger.info("장소 검색어 변환 완료: 추가 질문 필요, Google 검색=0회")
+        logger.info("장소 검색어 증강 완료: 검색어 생성 불가, Google 검색=0회")
         return PlaceSearchResponse(
             userQuery=request.userQuery,
             textQueries=None,
-            clarificationQuestion=rewrite.clarificationQuestion,
             results=[],
         )
 
     # 프롬프트나 스키마 제한과 별개로 실제 호출을 세 번 이하로 고정한다.
     queries = rewrite.textQueries[:3]
-    logger.info("장소 검색어 변환 완료: Google 검색=%d회 예정", len(queries))
+    logger.info("장소 검색어 증강 완료: Google 검색=%d회 예정", len(queries))
     location_bias = (
         request.locationBias.model_dump(exclude_none=True)
         if request.locationBias is not None
@@ -84,8 +83,8 @@ def run_search(
         data = search_text(
             text_query=query,
             api_key=api_key,
-            language_code=request.languageCode,
-            region_code=request.regionCode,
+            language_code="ko",
+            region_code="JP",
             page_size=request.pageSize,
             rank_preference=request.rankPreference,
             location_bias=location_bias,
@@ -102,7 +101,6 @@ def run_search(
     return PlaceSearchResponse(
         userQuery=request.userQuery,
         textQueries=queries,
-        clarificationQuestion=None,
         results=results,
     )
 

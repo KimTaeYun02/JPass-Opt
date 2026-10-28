@@ -1,5 +1,7 @@
 """역 주변 관광지 추천 API의 요청·응답 모델."""
 
+from typing import Annotated
+
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.constants.place_types import TRAVEL_TYPE
@@ -33,6 +35,25 @@ class AnchorStationSelection(BaseModel):
     def check_unique_candidates(cls, values: list[str]) -> list[str]:
         if len(values) != len(set(values)):
             raise ValueError("앵커 역 후보 ID는 중복해서 선택할 수 없습니다.")
+        return values
+
+
+class RecommendedPlaceRanking(BaseModel):
+    """LLM 내부 응답. 입력 후보의 0부터 시작하는 인덱스를 추천 순서로 반환한다."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    indices: list[Annotated[int, Field(strict=True, ge=0)]] = Field(
+        min_length=1,
+        max_length=20,
+        json_schema_extra={"uniqueItems": True},
+    )
+
+    @field_validator("indices")
+    @classmethod
+    def check_unique_indices(cls, values: list[int]) -> list[int]:
+        if len(values) != len(set(values)):
+            raise ValueError("장소 후보 인덱스는 중복해서 선택할 수 없습니다.")
         return values
 
 

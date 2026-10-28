@@ -65,15 +65,6 @@ class PlaceSearchRequest(BaseModel):
         description="찾고 싶은 장소를 자연어로 입력합니다.",
         examples=["에노시마 근처 고깃집과 카페를 찾아줘"],
     )
-    languageCode: str = Field(
-        default="ko", min_length=1, pattern=r"\S", description="Google 응답 언어"
-    )
-    regionCode: str = Field(
-        default="JP",
-        min_length=1,
-        pattern=r"\S",
-        description="Google 응답의 지역 코드. 검색 국가를 제한하는 조건은 아닙니다.",
-    )
     pageSize: int = Field(
         default=20,
         ge=1,
@@ -87,19 +78,22 @@ class PlaceSearchRequest(BaseModel):
         description="주변 장소를 우선 검색할 원 또는 사각형. 지역 밖 결과도 포함될 수 있습니다.",
     )
 
-    @field_validator("userQuery", "languageCode", "regionCode")
+    @field_validator("userQuery")
     @classmethod
     def trim_input(cls, value: str) -> str:
         return value.strip()
 
 
 class QueryRewrite(BaseModel):
-    """LLM 검색어 변환 응답. 초과 검색어는 로컬에서도 세 개로 자른다."""
+    """LLM 검색어 증강 응답. 검색어를 만들 수 없으면 null을 반환한다."""
 
     model_config = ConfigDict(extra="forbid")
 
-    textQueries: list[str] | None = Field(min_length=1, max_length=3)
-    clarificationQuestion: str | None
+    textQueries: list[str] | None = Field(
+        min_length=1,
+        max_length=3,
+        description="증강된 일본어 검색어. 요청이 모호해 검색어를 만들 수 없으면 null",
+    )
 
     @field_validator("textQueries", mode="before")
     @classmethod
@@ -115,21 +109,6 @@ class QueryRewrite(BaseModel):
         if any(not query for query in queries):
             raise ValueError("LLM 검색어는 빈 문자열일 수 없습니다.")
         return list(dict.fromkeys(queries))
-
-    @field_validator("clarificationQuestion")
-    @classmethod
-    def normalize_question(cls, value: str | None) -> str | None:
-        if value is None:
-            return None
-        if not value.strip():
-            raise ValueError("추가 질문은 빈 문자열일 수 없습니다.")
-        return value.strip()
-
-    @model_validator(mode="after")
-    def check_output(self) -> "QueryRewrite":
-        if (self.textQueries is None) == (self.clarificationQuestion is None):
-            raise ValueError("검색어 목록과 추가 질문 중 하나만 있어야 합니다.")
-        return self
 
 
 class PlaceSearchResult(BaseModel):
@@ -151,13 +130,10 @@ class PlaceSearchResponse(BaseModel):
     textQueries: list[str] | None = Field(
         min_length=1,
         max_length=3,
-        description="변환된 일본어 검색어. 추가 질문이 필요하면 null",
-    )
-    clarificationQuestion: str | None = Field(
-        description="검색에 필요한 추가 질문. 검색어가 생성되면 null"
+        description="증강된 일본어 검색어. 요청이 모호해 검색어를 만들 수 없으면 null",
     )
     results: list[PlaceSearchResult] = Field(
         default_factory=list,
         max_length=3,
-        description="검색어별 첫 페이지 응답. 추가 질문이 필요하면 빈 배열",
+        description="검색어별 첫 페이지 응답. 검색어를 만들 수 없으면 빈 배열",
     )

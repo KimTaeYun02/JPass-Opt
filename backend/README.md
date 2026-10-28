@@ -2,13 +2,15 @@
 
 일차별 관광지 목록으로 방문 순서·예상 도착 시각·교통비를 계산하고, 역 주변 관광지 추천과 자연어 장소 검색을 제공하는 FastAPI 서버다.
 
+세 API의 입력·출력·처리 흐름과 기계 판독용 OpenAPI JSON은 [API 참조 문서](docs/README.md)에서 확인한다.
+
 | API | 역할 |
 | --- | --- |
 | `POST /api/routes/optimize` | 관광지 방문 순서 최적화와 역·환승역 좌표 조회 |
 | `POST /api/nearby/recommend` | LLM으로 앵커 역을 선택하고 해당 역 주변 관광지 추천 |
-| `POST /api/places/search` | 사용자 문장을 일본어 검색어로 재작성해 Google Places 조회 |
+| `POST /api/places/search` | 사용자 문장을 일본어 검색어로 증강·정규화해 Google Places 조회 |
 
-자연어 장소 검색의 요청·응답과 호출 횟수 제한은 [장소 검색 API 안내](docs/text_search.md)를 참고한다. Gemini는 한 번 호출하고 Places는 검색어별 첫 페이지만 최대 3회 조회한다. 확인 질문이 반환되면 Places를 호출하지 않는다. `tests/test_text_search.py`는 요청 모델을 만들어 실제 서비스를 호출하는 수동 테스트다.
+자연어 장소 검색의 요청·응답과 호출 횟수 제한은 [장소 검색 API 안내](docs/text_search.md)를 참고한다. Gemini는 검색어 증강·정규화에 한 번 호출하고 Places는 검색어별 첫 페이지만 최대 3회 조회한다. 검색어를 만들 수 없으면 추가 질문 없이 `textQueries: null`, `results: []`를 HTTP `200`으로 반환하며 Places를 호출하지 않는다. `tests/test_text_search.py`는 요청 모델을 만들어 실제 서비스를 호출하는 수동 테스트다.
 
 ## 서버 실행 — 첫 번째 터미널
 
@@ -57,7 +59,7 @@ GEMINI_MODEL=gemini-3.5-flash-lite
 
 ## 자연어 장소 검색 curl 테스트
 
-서버를 켜고 다음 요청을 보낸다. `userQuery`만 필수이며 언어는 `ko`, 지역은 `JP`, 검색어당 결과 수는 `20`, 정렬은 `RELEVANCE`가 기본값이다. 전체 위치 옵션과 응답 구조는 [장소 검색 API 안내](docs/text_search.md)를 참고한다. `/docs`에서도 `POST /api/places/search`를 직접 실행할 수 있다.
+서버를 켜고 다음 요청을 보낸다. `userQuery`만 필수이며 검색어당 결과 수는 `20`, 정렬은 `RELEVANCE`가 기본값이다. Google 호출의 `languageCode="ko"`, `regionCode="JP"`는 서버 고정값으로 요청 JSON에서 받지 않는다. 일본어 검색어와 한국어 선호 반환 언어를 함께 사용하며, `JP`가 결과를 일본으로 엄격히 제한하지는 않는다. 전체 위치 옵션과 응답 구조는 [장소 검색 API 안내](docs/text_search.md)를 참고한다. `/docs`에서도 `POST /api/places/search`를 직접 실행할 수 있다.
 
 ```bash
 curl -sS -X POST http://localhost:8000/api/places/search \
@@ -65,7 +67,7 @@ curl -sS -X POST http://localhost:8000/api/places/search \
   --data-binary '{"userQuery":"후지사와역 근처 인기 있는 야키니쿠집 찾아줘"}'
 ```
 
-응답의 `textQueries`는 일본어 검색어 목록이고, `results[].response`는 각 검색어의 Google 원본 응답이다. 확인이 필요하면 `clarificationQuestion`에 질문을 반환하고 `results`는 빈 배열이 된다. 이 API는 페이지 토큰을 받지 않으며 자동 페이지 조회·재시도·추가 LLM 시도를 하지 않는다.
+응답의 `textQueries`는 일본어 검색어 목록이고, `results[].response`는 각 검색어의 Google 원본 응답이다. 검색 의도가 모호해 유용한 검색어를 만들 수 없으면 `{"userQuery":"입력한 문장","textQueries":null,"results":[]}`를 HTTP `200`으로 반환한다. 이때 Google 호출은 0회이며 추가 질문은 반환하지 않는다. 이 API는 페이지 토큰을 받지 않으며 자동 페이지 조회·재시도·추가 LLM 시도를 하지 않는다.
 
 ## 동선 최적화 curl 테스트 — 두 번째 터미널
 
@@ -177,14 +179,14 @@ JSON
 
 이 예제는 최대 두 역을 선택할 수 있도록 허용한다. LLM이 한 역만 선택할 수도 있으므로 `results`의 길이는 1 또는 2다. 선택된 역마다 최대 세 관광지를 반환하며, 검색 결과가 부족하면 그보다 적거나 0개일 수 있다.
 
-요청 진행 상황은 서버를 켠 터미널의 `INFO` 로그에서 확인한다. 앵커 역 선택, 역·태그별 주변 검색, 후보 정리와 추천 완료 건수·소요 시간이 표시되며, 실패하면 오류 로그가 남는다. 로그 설정을 바꾼 뒤에는 서버를 재시작한다.
+요청 진행 상황은 서버를 켠 터미널의 `INFO` 로그에서 확인한다. 앵커 역 선택, 역·태그별 주변 검색, 후보 정리와 추천 완료 건수·소요 시간이 표시되며, 복수 태그는 LLM 순위 선정 또는 생략 여부도 기록한다. 실패하면 오류 로그가 남는다. 로그 설정을 바꾼 뒤에는 서버를 재시작한다.
 
 ### 입력
 
 | 필드 | 타입·조건 | 의미 |
 | --- | --- | --- |
 | `travelTypes` | string 배열, 1개 이상 | `culture`, `nature`, `anime`, `shopping`, `relaxation`, `activity` 중 선택. 복수 선택 가능하며 중복은 제거 |
-| `userRequest` | string, 기본값 `""` | 앵커 역 선택 시 LLM에 전달할 사용자 요청사항 |
+| `userRequest` | string, 기본값 `""` | 앵커 역 선택과 복수 태그 후보 순위 선정 시 LLM에 전달할 사용자 요청사항 |
 | `stations` | 역 배열, 1개 이상 | 추천 거점으로 선택할 후보 역 목록 |
 | `stations[].stationId` | string 또는 null, 선택 | 프론트에서 관리하는 역 ID. 응답에 그대로 반환 |
 | `stations[].name` | string 또는 null, 선택 | 역 이름 |
@@ -218,11 +220,11 @@ JSON
 ### 추천 흐름과 현재 범위
 
 1. 사용자 요청사항·여행 태그·역 목록을 기존 Gemini 래퍼에 보내 앵커 역을 선택한다. LLM은 후보 ID 목록만 반환하며 서버가 실제 입력 역에 연결한다. 없는 역 ID·중복 선택·개수 초과는 오류로 처리한다.
-2. 선택된 역마다 기존 Google Nearby Search 클라이언트로 주변 장소를 조회한다. 태그가 하나면 최대 N개, 복수면 태그 전체에 검색 개수 `2 × N`을 나누어 요청한다.
+2. 선택된 역마다 기존 Google Nearby Search 클라이언트로 주변 장소를 조회한다. 태그가 하나면 최대 N개, 복수면 태그 전체에 검색 개수 `2 × N`을 나누어 요청한다. 태그별 추가 검색 개수와 예산보다 많은 태그 중 조회할 태그는 기존처럼 무작위로 배분한다.
 3. 같은 역에서 얻은 장소는 Google Place ID로 중복을 제거하고, 좌표가 없거나 반경 밖인 장소는 제외한다.
-4. 태그가 하나면 검색 결과의 거리순을 유지해 최대 N개를 반환한다. 복수 태그면 후보 중 최대 N개를 랜덤 선택한다. 결과가 부족해도 개수를 채우기 위한 추가 검색은 하지 않는다.
+4. 태그가 하나면 검색 순서대로 처음 N개를 반환한다. 복수 태그의 유효 후보가 0~1개이면 LLM 순위 선정을 생략한다. 후보가 2개 이상이면 해당 역에서 Gemini를 한 번 호출해 사용자 요청사항·태그에 맞는 `min(N, 후보 수)`개를 순서대로 선택한다. 후보가 N개 이하여도 반환 순서를 정하기 위해 호출한다. 결과가 부족해도 개수를 채우기 위한 추가 검색은 하지 않는다.
 
-앵커 선택에만 LLM을 사용한다. `select_recommendations()`의 LLM 순위 선정은 TODO로 남겨두었으며, 현재는 사용자 자유 문장을 관광지 순위에 반영하지 않는다. 서로 다른 역의 추천에는 같은 장소가 포함될 수 있다.
+순위 선정에는 앵커 선택에 사용한 Gemini 클라이언트를 재사용한다. LLM에는 사용자 요청사항·태그·요청 개수와 후보의 인덱스·이름·대표 유형·검색 태그·역과의 거리만 전달한다. ID와 좌표는 보내지 않고, `{"indices": [2, 0, 1]}`처럼 반환된 0부터 시작하는 인덱스로 원래 장소 객체를 복원한다. 동적 JSON Schema와 로컬 검증으로 정확히 `min(N, 후보 수)`개의 중복 없는 정수와 후보 범위를 확인하며, 출력은 256토큰으로 제한한다. 오류 시 재시도하거나 무작위 결과로 대체하지 않는다. HTTP 요청·응답 형식은 그대로이며 인덱스·선정 이유를 응답에 추가하지 않는다. 서로 다른 역의 추천에는 같은 장소가 포함될 수 있다.
 
 ## 코드 구조와 요청 흐름
 
@@ -242,7 +244,8 @@ app/
 │   ├── nearby_service.py      # 앵커 역 선택·주변 검색·추천 결과 조립
 │   └── place_search_service.py # 검색어 재작성·최대 3개 Places 검색
 ├── prompts/
-│   └── place_search.py        # dedent로 정리한 검색어 재작성 프롬프트
+│   ├── place_search.py        # dedent로 정리한 검색어 재작성 프롬프트
+│   └── nearby_ranking.py      # dedent로 정리한 주변 장소 순위 선정 프롬프트
 ├── clients/                   # Google Places·HeartRails 외부 API 호출
 ├── llm/                       # 기존 Gemini·GPT 호출 래퍼
 ├── crawling/                  # Ekispert 경로 크롤링

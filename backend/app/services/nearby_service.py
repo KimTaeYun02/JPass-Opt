@@ -15,11 +15,13 @@ from requests import Timeout as RequestsTimeout
 
 from app.clients.google_maps import search_nearby
 from app.llm import GeminiWrapper
+from app.prompts.nearby_ranking import RERANK_SYSTEM_PROMPT
 from app.schemas.nearby import (
     AnchorStationSelection,
     NearbyRequest,
     NearbyResponse,
     RecommendedPlace,
+    RecommendedPlaceRanking,
     StationInput,
     StationOutput,
     StationRecommendations,
@@ -210,13 +212,81 @@ def normalize_place(
 
 
 def select_recommendations(
-    request: NearbyRequest, candidates: list[RecommendedPlace]
+    request: NearbyRequest,
+    candidates: list[RecommendedPlace],
+    *,
+    llm: GeminiWrapper,
 ) -> list[RecommendedPlace]:
-    """4. 단일 태그는 검색 순서, 복수 태그는 랜덤으로 최대 N개를 선정한다."""
-    if len(request.travelTypes) == 1:
+    """4. 복수 태그 후보를 LLM으로 정렬하고 선택한 인덱스를 장소로 복원한다."""
+    if len(request.travelTypes) == 1 or len(candidates) <= 1:
         return candidates[: request.placeCount]
-    # TODO: userRequest와 후보 장소를 LLM에 보내 ranking 후 N개를 선정한다.
-    return random.sample(candidates, k=min(request.placeCount, len(candidates)))
+
+    selection_count = min(request.placeCount, len(candidates))
+    user_prompt = json.dumps(
+        {
+            "userRequest": request.userRequest,
+            "travelTypes": request.travelTypes,
+            "placeCount": selection_count,
+            "candidates": [
+                {
+                    "index": index,
+                    "name": place.name,
+                    "primaryType": place.primaryType,
+                    "searchTags": place.searchTags,
+                    "distanceMeters": place.distanceMeters,
+                }
+                for index, place in enumerate(candidates)
+            ],
+        },
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+    response_schema = RecommendedPlaceRanking.model_json_schema()
+    indices_schema = response_schema["properties"]["indices"]
+    indices_schema["minItems"] = selection_count
+    indices_schema["maxItems"] = selection_count
+    indices_schema["items"]["enum"] = list(range(len(candidates)))
+
+    started_at = perf_counter()
+    logger.info(
+        "LLM 장소 재순위화 시작: 후보=%d개, 선택=%d개",
+        len(candidates),
+        selection_count,
+    )
+    try:
+        raw = llm.request(
+            system_prompt=RERANK_SYSTEM_PROMPT,
+            user_prompt=user_prompt,
+            max_output_tokens=256,
+            response_schema=response_schema,
+            response_validator=RecommendedPlaceRanking,
+        )
+        if isinstance(raw, RecommendedPlaceRanking):
+            raw = raw.model_dump()
+        ranking = (
+            RecommendedPlaceRanking.model_validate_json(raw)
+            if isinstance(raw, str)
+            else RecommendedPlaceRanking.model_validate(raw)
+        )
+    except (ValidationError, RuntimeError) as exc:
+        logger.warning("LLM 재순위화 응답 검증 실패: 오류=%s", type(exc).__name__)
+        raise NearbyProviderError(
+            "LLM이 유효한 추천 인덱스를 반환하지 않았습니다."
+        ) from exc
+
+    if len(ranking.indices) != selection_count:
+        raise NearbyProviderError(
+            "LLM이 요청한 개수의 추천 인덱스를 반환하지 않았습니다."
+        )
+    if any(index >= len(candidates) for index in ranking.indices):
+        raise NearbyProviderError("LLM이 후보에 없는 추천 인덱스를 반환했습니다.")
+
+    logger.info(
+        "LLM 장소 재순위화 완료: 선택=%d개, 소요=%.2f초",
+        len(ranking.indices),
+        perf_counter() - started_at,
+    )
+    return [candidates[index] for index in ranking.indices]
 
 
 def run_flow(
@@ -237,14 +307,18 @@ def run_flow(
     )
     return NearbyResponse(
         results=[
-            recommend_for_station(request, station, api_key=api_key)
+            recommend_for_station(request, station, api_key=api_key, llm=llm)
             for station in stations
         ]
     )
 
 
 def recommend_for_station(
-    request: NearbyRequest, station: StationInput, *, api_key: str
+    request: NearbyRequest,
+    station: StationInput,
+    *,
+    api_key: str,
+    llm: GeminiWrapper,
 ) -> StationRecommendations:
     """선택한 역 하나를 기준으로 최대 placeCount개의 장소를 추천한다."""
     started_at = perf_counter()
@@ -289,13 +363,19 @@ def recommend_for_station(
                 candidates[place.googlePlaceId] = place
             elif tag not in existing.searchTags:
                 existing.searchTags.append(tag)
-    selected = select_recommendations(request, list(candidates.values()))
+    selected = select_recommendations(request, list(candidates.values()), llm=llm)
+    if len(request.travelTypes) == 1:
+        selection_method = "거리순"
+    elif len(candidates) <= 1:
+        selection_method = "후보 순서"
+    else:
+        selection_method = "LLM 재순위화"
     logger.info(
         "역별 추천 완료: stationId=%s, 유효한 중복 제거 후보=%d개, 추천=%d개, 방식=%s, 소요=%.2f초",
         station.stationId,
         len(candidates),
         len(selected),
-        "거리순" if len(request.travelTypes) == 1 else "무작위",
+        selection_method,
         perf_counter() - started_at,
     )
     return StationRecommendations(
