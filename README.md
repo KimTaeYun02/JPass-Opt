@@ -1,6 +1,16 @@
 # JPass-Opt
 경제보복 프로젝트
 
+## 프론트 데모
+
+`web/`에서 Node.js 22.20 이상으로 `npm ci`, `npm run dev`를 실행하세요.
+`http://127.0.0.1:5173/demo.html?mode=example`은 백엔드·키 없이 예제로 실행됩니다.
+`/demo.html`의 API 모드는 아직 병합되지 않은 `feat/backend-api` 서버가 별도로 필요합니다.
+
+[프론트 실행·API 설정](web/README.md) · [오프라인 경로 실험](web/docs/routing-prototypes.md) · [AI 기획·검토 문서](docs/ai/README.md)
+
+## 기존 경로 크롤러
+
 `crawl_route()`는 검색 결과에 표시된 모든 경로를 화면 순서대로 반환한다.
 
 ```json

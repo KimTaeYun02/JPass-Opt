@@ -1,0 +1,47 @@
+{
+  "source": "Ekispert for web: browser-visible route 1, collected 2026-10-13",
+  "comparisonDate": "2026-10-17",
+  "assumption": "Example date; all-pairs comparison at 09:00 JST. Two-hour stays for the selected candidate. Station-to-station only.",
+  "places": [
+    {"id":"nezu","name":"네즈 신사","station":"東大前","stayMinutes":120},
+    {"id":"odaiba","name":"오다이바","station":"テレコムセンター","stayMinutes":120},
+    {"id":"tokyo-dome","name":"도쿄돔","station":"後楽園","stayMinutes":120},
+    {"id":"enoshima","name":"에노시마","station":"片瀬江ノ島","stayMinutes":120},
+    {"id":"meiji","name":"메이지 신궁","station":"参宮橋","stayMinutes":120}
+  ],
+  "stationCodes":{"東大前":"29075","テレコムセンター":"29057","後楽園":"22675","片瀬江ノ島":"23108","参宮橋":"22702"},
+  "searchOptions":{"shinkansen":"true","express":"true","highway":"true","local":"true","connectionBus":"true","plane":"true","ship":"true","sleep":"true","liner":"true","searchType":"departure","sort":"time","ticketType":"IC","transferTime":"normal","surchargeType":"non_reserved","isRealtime":"false","device":"PC","mockFileName":""},
+  "snapshotSearchRequestedAt":"2026-10-17T00:00:05.000Z",
+  "snapshotSearchMinuteAt":"2026-10-17T00:00:00.000Z",
+  "searchSubmissions":25,
+  "paidApiCalls":0,
+  "discardedQueries":[{"from":"東大前","to":"参宮橋","requestedAt":"2026-10-17T03:46:05.000Z","reason":"Wrong hour selected; superseded by 15:46 lookup."}],
+  "snapshots":[
+    {"fromStation":"東大前","toStation":"テレコムセンター","actualDeparture":"09:05","actualArrival":"09:51","readyToArrivalMinutes":51,"result":{"time":46,"fee":534,"route":[{"station":"東大前","line":"東京メトロ南北線・白金高輪行"},{"station":"飯田橋","line":"東京メトロ有楽町線・新木場行"},{"station":"豊洲","line":"ゆりかもめ・新橋行"},{"station":"テレコムセンター","line":null}]}},
+    {"fromStation":"東大前","toStation":"後楽園","actualDeparture":"09:05","actualArrival":"09:07","readyToArrivalMinutes":7,"result":{"time":2,"fee":178,"route":[{"station":"東大前","line":"東京メトロ南北線・白金高輪行"},{"station":"後楽園","line":null}]}},
+    {"fromStation":"東大前","toStation":"片瀬江ノ島","actualDeparture":"09:16","actualArrival":"10:36","readyToArrivalMinutes":96,"result":{"time":80,"fee":1278,"route":[{"station":"東大前","line":"東京メトロ南北線急行・西谷行"},{"station":"溜池山王","line":"東京メトロ銀座線・浅草行"},{"station":"新橋","line":"ＪＲ東海道本線・熱海行"},{"station":"藤沢","line":"小田急江ノ島線・片瀬江ノ島行"},{"station":"片瀬江ノ島","line":null}]}},
+    {"fromStation":"東大前","toStation":"参宮橋","actualDeparture":"09:05","actualArrival":"09:36","readyToArrivalMinutes":36,"result":{"time":31,"fee":513,"route":[{"station":"東大前","line":"東京メトロ南北線・白金高輪行"},{"station":"四ツ谷","line":"ＪＲ中央線快速・高尾行"},{"station":"新宿","line":"小田急小田原線・本厚木行"},{"station":"参宮橋","line":null}]}},
+    {"fromStation":"テレコムセンター","toStation":"東大前","actualDeparture":"09:04","actualArrival":"09:52","readyToArrivalMinutes":52,"result":{"time":48,"fee":534,"route":[{"station":"テレコムセンター","line":"ゆりかもめ・豊洲行"},{"station":"豊洲","line":"東京メトロ有楽町線・小手指行"},{"station":"飯田橋","line":"東京メトロ南北線・赤羽岩淵行"},{"station":"東大前","line":null}]}},
+    {"fromStation":"テレコムセンター","toStation":"後楽園","actualDeparture":"09:03","actualArrival":"09:47","readyToArrivalMinutes":47,"result":{"time":44,"fee":721,"route":[{"station":"テレコムセンター","line":"ゆりかもめ・新橋行"},{"station":"新橋","line":"ＪＲ上野東京ライン・土浦行"},{"station":"東京","line":"東京メトロ丸ノ内線・池袋行"},{"station":"後楽園","line":null}]}},
+    {"fromStation":"テレコムセンター","toStation":"片瀬江ノ島","actualDeparture":"09:13","actualArrival":"10:36","readyToArrivalMinutes":96,"result":{"time":83,"fee":1457,"route":[{"station":"テレコムセンター","line":"ゆりかもめ・新橋行"},{"station":"新橋","line":"ＪＲ東海道本線・熱海行"},{"station":"藤沢","line":"小田急江ノ島線・片瀬江ノ島行"},{"station":"片瀬江ノ島","line":null}]}},
+    {"fromStation":"テレコムセンター","toStation":"参宮橋","actualDeparture":"09:03","actualArrival":"09:58","readyToArrivalMinutes":58,"result":{"time":55,"fee":890,"route":[{"station":"テレコムセンター","line":"徒歩"},{"station":"テレコムセンター駅前／都営バス","line":"都営バス・海０１(門前仲町－東京テレポート・台場駅経由)・東京テレポート駅前行"},{"station":"東京テレポート駅前／都営バス","line":"徒歩"},{"station":"東京テレポート","line":"東京臨海高速鉄道りんかい線・池袋行"},{"station":"新宿","line":"小田急小田原線・本厚木行"},{"station":"参宮橋","line":null}]}},
+    {"fromStation":"後楽園","toStation":"東大前","actualDeparture":"09:01","actualArrival":"09:04","readyToArrivalMinutes":4,"result":{"time":3,"fee":178,"route":[{"station":"後楽園","line":"東京メトロ南北線・浦和美園行"},{"station":"東大前","line":null}]}},
+    {"fromStation":"後楽園","toStation":"テレコムセンター","actualDeparture":"09:02","actualArrival":"09:47","readyToArrivalMinutes":47,"result":{"time":45,"fee":534,"route":[{"station":"後楽園","line":"東京メトロ南北線・新横浜行"},{"station":"飯田橋","line":"東京メトロ有楽町線・新木場行"},{"station":"豊洲","line":"ゆりかもめ・新橋行"},{"station":"テレコムセンター","line":null}]}},
+    {"fromStation":"後楽園","toStation":"片瀬江ノ島","actualDeparture":"09:03","actualArrival":"10:16","readyToArrivalMinutes":76,"result":{"time":73,"fee":1379,"route":[{"station":"後楽園","line":"東京メトロ丸ノ内線・荻窪行"},{"station":"東京","line":"ＪＲ東海道本線・熱海行"},{"station":"藤沢","line":"小田急江ノ島線・片瀬江ノ島行"},{"station":"片瀬江ノ島","line":null}]}},
+    {"fromStation":"後楽園","toStation":"参宮橋","actualDeparture":"09:08","actualArrival":"09:36","readyToArrivalMinutes":36,"result":{"time":28,"fee":513,"route":[{"station":"後楽園","line":"東京メトロ南北線・白金高輪行"},{"station":"四ツ谷","line":"ＪＲ中央線快速・高尾行"},{"station":"新宿","line":"小田急小田原線・本厚木行"},{"station":"参宮橋","line":null}]}},
+    {"fromStation":"片瀬江ノ島","toStation":"東大前","actualDeparture":"09:10","actualArrival":"10:34","readyToArrivalMinutes":94,"result":{"time":84,"fee":1278,"route":[{"station":"片瀬江ノ島","line":"小田急江ノ島線・藤沢行"},{"station":"藤沢","line":"ＪＲ東海道本線(上野東京ライン)・上野行"},{"station":"新橋","line":"東京メトロ銀座線・渋谷行"},{"station":"溜池山王","line":"東京メトロ南北線・浦和美園行"},{"station":"東大前","line":null}]}},
+    {"fromStation":"片瀬江ノ島","toStation":"テレコムセンター","actualDeparture":"09:10","actualArrival":"10:35","readyToArrivalMinutes":95,"result":{"time":85,"fee":1457,"route":[{"station":"片瀬江ノ島","line":"小田急江ノ島線・藤沢行"},{"station":"藤沢","line":"ＪＲ東海道本線(上野東京ライン)・上野行"},{"station":"新橋","line":"ゆりかもめ・豊洲行"},{"station":"テレコムセンター","line":null}]}},
+    {"fromStation":"片瀬江ノ島","toStation":"後楽園","actualDeparture":"09:10","actualArrival":"10:27","readyToArrivalMinutes":87,"result":{"time":77,"fee":1379,"route":[{"station":"片瀬江ノ島","line":"小田急江ノ島線・藤沢行"},{"station":"藤沢","line":"ＪＲ東海道本線(上野東京ライン)・上野行"},{"station":"東京","line":"東京メトロ丸ノ内線・池袋行"},{"station":"後楽園","line":null}]}},
+    {"fromStation":"片瀬江ノ島","toStation":"参宮橋","actualDeparture":"09:10","actualArrival":"10:29","readyToArrivalMinutes":89,"result":{"time":79,"fee":1337,"route":[{"station":"片瀬江ノ島","line":"小田急江ノ島線・藤沢行"},{"station":"藤沢","line":"ＪＲ湘南新宿ライン特別快速・高崎行"},{"station":"新宿","line":"小田急小田原線・本厚木行"},{"station":"参宮橋","line":null}]}},
+    {"fromStation":"参宮橋","toStation":"東大前","actualDeparture":"09:06","actualArrival":"09:38","readyToArrivalMinutes":38,"result":{"time":32,"fee":513,"route":[{"station":"参宮橋","line":"小田急小田原線・新宿行"},{"station":"新宿","line":"ＪＲ中央線快速・東京行"},{"station":"四ツ谷","line":"東京メトロ南北線・赤羽岩淵行"},{"station":"東大前","line":null}]}},
+    {"fromStation":"参宮橋","toStation":"テレコムセンター","actualDeparture":"09:06","actualArrival":"09:55","readyToArrivalMinutes":55,"result":{"time":49,"fee":931,"route":[{"station":"参宮橋","line":"小田急小田原線・新宿行"},{"station":"新宿","line":"ＪＲ埼京線・新木場行"},{"station":"国際展示場","line":"徒歩"},{"station":"有明(東京都)","line":"ゆりかもめ・新橋行"},{"station":"テレコムセンター","line":null}]}},
+    {"fromStation":"参宮橋","toStation":"後楽園","actualDeparture":"09:06","actualArrival":"09:32","readyToArrivalMinutes":32,"result":{"time":26,"fee":523,"route":[{"station":"参宮橋","line":"小田急小田原線・新宿行"},{"station":"新宿","line":"ＪＲ中央線快速・東京行"},{"station":"御茶ノ水","line":"東京メトロ丸ノ内線・池袋行"},{"station":"後楽園","line":null}]}},
+    {"fromStation":"参宮橋","toStation":"片瀬江ノ島","actualDeparture":"09:08","actualArrival":"10:13","readyToArrivalMinutes":73,"result":{"time":65,"fee":1149,"route":[{"station":"参宮橋","line":"小田急小田原線・本厚木行"},{"station":"代々木上原","line":"小田急小田原線快速急行・藤沢行"},{"station":"相模大野","line":"小田急特急メトロえのしま 91号"},{"station":"片瀬江ノ島","line":null}]}}
+  ],
+  "timed":[
+    {"fromStation":"テレコムセンター","toStation":"後楽園","searchRequestedAt":"2026-10-17T02:00:05.000Z","searchMinuteAt":"2026-10-17T02:00:00.000Z","actualDeparture":"11:03","actualArrival":"11:43","readyToArrivalMinutes":43,"result":{"time":40,"fee":534,"route":[{"station":"テレコムセンター","line":"ゆりかもめ・豊洲行"},{"station":"豊洲","line":"東京メトロ有楽町線・和光市行"},{"station":"飯田橋","line":"東京メトロ南北線・浦和美園行"},{"station":"後楽園","line":null}]}},
+    {"fromStation":"後楽園","toStation":"東大前","searchRequestedAt":"2026-10-17T04:43:05.000Z","searchMinuteAt":"2026-10-17T04:43:00.000Z","actualDeparture":"13:44","actualArrival":"13:46","readyToArrivalMinutes":3,"result":{"time":2,"fee":178,"route":[{"station":"後楽園","line":"東京メトロ南北線・浦和美園行"},{"station":"東大前","line":null}]}},
+    {"fromStation":"東大前","toStation":"参宮橋","searchRequestedAt":"2026-10-17T06:46:05.000Z","searchMinuteAt":"2026-10-17T06:46:00.000Z","actualDeparture":"15:48","actualArrival":"16:18","readyToArrivalMinutes":32,"result":{"time":30,"fee":513,"route":[{"station":"東大前","line":"東京メトロ南北線急行・新横浜行"},{"station":"四ツ谷","line":"ＪＲ中央線快速・武蔵小金井行"},{"station":"新宿","line":"小田急小田原線・伊勢原行"},{"station":"参宮橋","line":null}]}},
+    {"fromStation":"参宮橋","toStation":"片瀬江ノ島","searchRequestedAt":"2026-10-17T09:18:05.000Z","searchMinuteAt":"2026-10-17T09:18:00.000Z","actualDeparture":"18:28","actualArrival":"19:42","readyToArrivalMinutes":84,"result":{"time":74,"fee":649,"route":[{"station":"参宮橋","line":"小田急小田原線・伊勢原行"},{"station":"代々木上原","line":"小田急小田原線快速急行・藤沢行"},{"station":"藤沢","line":"小田急江ノ島線・片瀬江ノ島行"},{"station":"片瀬江ノ島","line":null}]}}
+  ]
+}

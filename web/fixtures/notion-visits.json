@@ -1,0 +1,40 @@
+{
+  "sourceUrl": "https://app.notion.com/p/3f76b39941c280709b39fbf09d433548",
+  "sourceSection": "참고 자료(블로그, paper 등등)",
+  "notice": "Notion의 역간 크롤링 결과입니다. 검색 시각과 장소↔역 도보시간은 제공되지 않았습니다. 체류 120분과 시작 시각은 데모 가정이며 실제 예약·영업시간이 아닙니다.",
+  "startAt": "2026-10-17T09:00:00+09:00",
+  "datasets": [
+    {
+      "id": "five-visits",
+      "title": "네즈신사 · 오다이바 · 도쿄돔 · 에노시마 캔들 · 메이지 신궁",
+      "places": [
+        {"id": "nezu", "name": "네즈신사", "station": "東大前", "stayMinutes": 120},
+        {"id": "odaiba", "name": "오다이바", "station": "テレコムセンター", "stayMinutes": 120},
+        {"id": "tokyo-dome", "name": "도쿄돔", "station": "後楽園", "stayMinutes": 120},
+        {"id": "enoshima", "name": "에노시마 캔들", "station": "片瀬江ノ島", "stayMinutes": 120},
+        {"id": "meiji", "name": "메이지 신궁", "station": "参宮橋", "stayMinutes": 120}
+      ],
+      "snapshots": [
+        {"from": "nezu", "to": "odaiba", "departure": "東大前", "arrival": "テレコムセンター", "time": 46, "fee": 534, "route": [{"station":"東大前","line":"東京メトロ南北線・白金高輪行"},{"station":"飯田橋","line":"東京メトロ有楽町線・新木場行"},{"station":"豊洲","line":"ゆりかもめ・新橋行"},{"station":"テレコムセンター","line":null}]},
+        {"from": "odaiba", "to": "tokyo-dome", "departure": "テレコムセンター", "arrival": "後楽園", "time": 44, "fee": 721, "route": [{"station":"テレコムセンター","line":"ゆりかもめ・新橋行"},{"station":"新橋","line":"ＪＲ上野東京ライン・土浦行"},{"station":"東京","line":"東京メトロ丸ノ内線・池袋行"},{"station":"後楽園","line":null}]},
+        {"from": "tokyo-dome", "to": "enoshima", "departure": "後楽園", "arrival": "片瀬江ノ島", "time": 73, "fee": 1379, "route": [{"station":"後楽園","line":"東京メトロ丸ノ内線・荻窪行"},{"station":"東京","line":"ＪＲ東海道本線・熱海行"},{"station":"藤沢","line":"小田急江ノ島線・片瀬江ノ島行"},{"station":"片瀬江ノ島","line":null}]},
+        {"from": "enoshima", "to": "meiji", "departure": "片瀬江ノ島", "arrival": "参宮橋", "time": 79, "fee": 1337, "route": [{"station":"片瀬江ノ島","line":"小田急江ノ島線・藤沢行"},{"station":"藤沢","line":"ＪＲ湘南新宿ライン特別快速・高崎行"},{"station":"新宿","line":"小田急小田原線・本厚木行"},{"station":"参宮橋","line":null}]}
+      ]
+    },
+    {
+      "id": "four-visits",
+      "title": "スカイツリー · 도쿄 국립박물관 · 센소지 · 스미다 수족관",
+      "places": [
+        {"id": "skytree", "name": "도쿄스카이트리", "station": "とうきょうスカイツリー", "stayMinutes": 120},
+        {"id": "museum", "name": "도쿄 국립박물관", "station": "鶯谷", "stayMinutes": 120},
+        {"id": "sensoji", "name": "센소지", "station": "浅草", "stayMinutes": 120},
+        {"id": "aquarium", "name": "스미다 수족관", "station": "とうきょうスカイツリー", "stayMinutes": 120}
+      ],
+      "snapshots": [
+        {"from": "skytree", "to": "museum", "departure": "とうきょうスカイツリー", "arrival": "鶯谷", "time": 21, "fee": 490, "route": [{"station":"とうきょうスカイツリー","line":"東武スカイツリーライン区間急行・浅草行"},{"station":"浅草","line":"東京メトロ銀座線・渋谷行"},{"station":"上野","line":"ＪＲ京浜東北・根岸線・南浦和行"},{"station":"鶯谷","line":null}]},
+        {"from": "museum", "to": "sensoji", "departure": "鶯谷", "arrival": "浅草", "time": 14, "fee": 333, "route": [{"station":"鶯谷","line":"ＪＲ京浜東北・根岸線・大船行"},{"station":"上野","line":"東京メトロ銀座線・浅草行"},{"station":"浅草","line":null}]},
+        {"from": "sensoji", "to": "aquarium", "departure": "浅草", "arrival": "とうきょうスカイツリー", "time": 3, "fee": 157, "route": [{"station":"浅草","line":"東武スカイツリーライン区間準急・南栗橋行"},{"station":"とうきょうスカイツリー","line":null}]}
+      ]
+    }
+  ]
+}
