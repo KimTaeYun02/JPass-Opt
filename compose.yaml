@@ -1,0 +1,18 @@
+services:
+  api:
+    image: jpass-api:local
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "${API_PORT:-8000}:8000"
+    restart: unless-stopped
+    stop_grace_period: 30s
+    shm_size: "1gb"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

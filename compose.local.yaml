@@ -1,0 +1,5 @@
+# Optional workaround for local hosts where Compose-created networks cannot
+# reach external services. Apply alongside compose.yaml; see backend/docs/docker.md.
+services:
+  api:
+    network_mode: bridge

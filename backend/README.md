@@ -4,6 +4,8 @@
 
 세 API의 입력·출력·처리 흐름과 기계 판독용 OpenAPI JSON은 [API 참조 문서](docs/README.md)에서 확인한다.
 
+Docker로 실행·배포하려면 [Docker 실행·배포 안내](docs/docker.md)를 참고한다.
+
 | API | 역할 |
 | --- | --- |
 | `POST /api/routes/optimize` | 관광지 방문 순서 최적화와 역·환승역 좌표 조회 |

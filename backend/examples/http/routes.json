@@ -1,0 +1,22 @@
+{
+  "startDate": "2026-11-10",
+  "dayCount": 1,
+  "days": [
+    {
+      "dayIndex": 1,
+      "dailyStartTime": "08:00",
+      "places": [
+        {
+          "name": "센소지",
+          "googlePlaceId": "example-sensoji",
+          "location": {"lat": 35.7148, "lng": 139.7967}
+        },
+        {
+          "name": "도쿄 스카이트리",
+          "googlePlaceId": "example-tokyo-skytree",
+          "location": {"lat": 35.7101, "lng": 139.8107}
+        }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,8 @@
 
 전체 API 계약과 처리 흐름, AI 연동용 OpenAPI JSON은 [API 참조 문서](backend/docs/README.md)에서 확인한다.
 
+컨테이너로 실행·배포하려면 [Docker 실행·배포 안내](backend/docs/docker.md)를 참고한다.
+
 `crawl_route()`는 검색 결과에 표시된 모든 경로를 화면 순서대로 반환한다.
 
 ```json
