@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jpass-api
+spec:
+  replicas: 1
+  # The route-crawling lock is local to one Uvicorn process.
+  # Recreate avoids running old and new replicas together during an update.
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: jpass-api
+  template:
+    metadata:
+      labels:
+        app: jpass-api
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 300
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          image: jpass-api:local
+          # The image is loaded into minikube, not pulled from a registry.
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: jpass-api-config
+          env:
+            - name: GOOGLE_PLACE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jpass-api-secrets
+                  key: GOOGLE_PLACE_API_KEY
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jpass-api-secrets
+                  key: GEMINI_API_KEY
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 2Gi
+          startupProbe:
+            httpGet:
+              path: /openapi.json
+              port: http
+            periodSeconds: 2
+            timeoutSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /openapi.json
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /openapi.json
+              port: http
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - name: browser-shm
+              mountPath: /dev/shm
+      volumes:
+        - name: browser-shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi

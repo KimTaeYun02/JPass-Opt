@@ -14,6 +14,8 @@
 - **실행 중인 서버의 계약:** `GET /openapi.json`. Swagger UI는 `GET /docs`, ReDoc은 `GET /redoc`이다. 이 경로는 업무 API와 구분한다.
 - **구현 원본:** [main.py](../app/main.py), [요청·응답 모델](../app/schemas), [라우터](../app/api), [서비스](../app/services).
 - 실행·API 키·Chromium 설치 안내는 [backend README](../README.md)를 참조한다.
+- 컨테이너 실행은 [Docker 안내](docker.md), 로컬 Kubernetes 배포는 [minikube 안내](kubernetes.md)를 참조한다.
+- Git 설정을 읽는 Argo CD 배포와 UI 접속은 [Argo CD 실습 안내](argocd.md)를 참조한다.
 
 JSON 형태·필수 필드·타입은 OpenAPI와 모델을 확인한다. 순차 처리, 검색 생략, 최적화의 계산 범위처럼 스키마만으로 표현할 수 없는 의미는 각 API의 Flow와 제한을 확인한다. 예시의 장소·ID는 구조 설명용이며 외부 서비스가 해당 결과를 반환한다는 의미는 아니다.
 

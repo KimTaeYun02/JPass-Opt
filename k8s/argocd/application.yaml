@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jpass-api
+  namespace: argocd
+spec:
+  project: jpass-local
+  source:
+    repoURL: https://github.com/KimTaeYun02/JPass-Opt.git
+    targetRevision: feat/k8s-deployment
+    path: k8s/ghcr
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jpass
+  # Start with manual sync so the first deployment can be inspected in the UI.
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

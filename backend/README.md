@@ -6,6 +6,10 @@
 
 Docker로 실행·배포하려면 [Docker 실행·배포 안내](docs/docker.md)를 참고한다.
 
+minikube로 로컬 Kubernetes를 테스트하려면 [Kubernetes 실행 안내](docs/kubernetes.md)를 참고한다.
+
+Argo CD에서 Git 설정으로 배포하려면 [Argo CD 실습 안내](docs/argocd.md)를 참고한다.
+
 | API | 역할 |
 | --- | --- |
 | `POST /api/routes/optimize` | 관광지 방문 순서 최적화와 역·환승역 좌표 조회 |

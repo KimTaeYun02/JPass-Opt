@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: jpass-local
+  namespace: argocd
+spec:
+  description: JPass API deployment on the local minikube cluster
+  sourceRepos:
+    - https://github.com/KimTaeYun02/JPass-Opt.git
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: jpass
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
