@@ -17,9 +17,14 @@ from app.logging_config import configure_logging
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if not os.getenv("GEMINI_MODEL", "").strip():
+    missing_settings = [
+        name
+        for name in ("GOOGLE_PLACE_API_KEY", "GEMINI_API_KEY", "GEMINI_MODEL")
+        if not os.getenv(name, "").strip()
+    ]
+    if missing_settings:
         raise RuntimeError(
-            "필수 Gemini 모델 환경 변수가 설정되지 않았습니다: GEMINI_MODEL"
+            f"필수 서버 환경 변수가 설정되지 않았습니다: {', '.join(missing_settings)}"
         )
     app.state.route_lock = asyncio.Lock()
     yield

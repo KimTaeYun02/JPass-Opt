@@ -121,7 +121,7 @@ kubectl --context jpass-local -n argocd get secret argocd-initial-admin-secret -
 
 UI에서 `jpass-api`를 열고 **SYNC → SYNCHRONIZE**를 실행한다. Git 설정과 실행 상태가 다르면 `OutOfSync`, 적용이 맞으면 `Synced`, 앱이 준비되면 `Healthy`로 표시된다.
 
-`Synced`는 앱의 정상 기동을 보장하지 않는다. `GEMINI_MODEL`이 누락되거나 비어 있으면 Pod 객체는 생성되지만 앱이 종료되어 `Ready`가 되지 않으며 컨테이너 재시작이 반복될 수 있다. API Pod 로그에서 설정 오류를 확인하고 Git의 ConfigMap을 수정한 뒤 Sync하고 Pod를 다시 시작한다. API 키 누락은 앱의 시작 검증 대상이 아니며, API 요청 시 `503`으로 처리한다.
+`Synced`는 앱의 정상 기동을 보장하지 않는다. `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL` 중 하나라도 누락·빈 문자열·공백뿐이면 `lifespan`에서 앱 시작이 실패한다. Pod 객체는 생성될 수 있지만 앱이 종료되어 `Ready`가 되지 않으며 컨테이너 재시작이 반복될 수 있다. API Pod 로그에서 누락된 설정 이름을 확인한다. 모델은 Git의 ConfigMap을 수정한 뒤 Sync하고, API 키는 기존 Secret 적용 스크립트로 갱신한 뒤 Pod를 다시 시작한다. 시작 검증은 값의 존재 여부만 확인하며 실제 외부 API를 호출하지 않는다.
 
 같은 동작을 Kubernetes API로 요청할 수도 있다.
 

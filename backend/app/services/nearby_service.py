@@ -29,10 +29,6 @@ from app.schemas.route import Location
 logger = logging.getLogger(__name__)
 
 
-class NearbyConfigurationError(RuntimeError):
-    """주변 추천에 필요한 서버 설정이 없다."""
-
-
 ANCHOR_SYSTEM_PROMPT = """너는 일본 여행에서 주변 관광지를 검색할 기준 역을 선택한다.
 규칙:
 1. stations에 제공된 후보 중 minAnchorCount개 이상 maxAnchorCount개 이하를 선택한다.
@@ -338,20 +334,8 @@ def recommend_for_station(
 
 def recommend_nearby(request: NearbyRequest) -> NearbyResponse:
     """서버 설정으로 LLM 앵커 선정·역별 주변 검색·추천 응답 조립을 실행한다."""
-    places_key = os.getenv("GOOGLE_PLACE_API_KEY", "").strip()
-    gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
-    if not places_key or not gemini_key:
-        missing_keys = [
-            name
-            for name, value in (
-                ("GOOGLE_PLACE_API_KEY", places_key),
-                ("GEMINI_API_KEY", gemini_key),
-            )
-            if not value
-        ]
-        logger.warning("주변 추천 설정 누락: %s", ",".join(missing_keys))
-        raise NearbyConfigurationError("주변 추천에 필요한 서버 설정이 없습니다.")
-
+    places_key = os.environ["GOOGLE_PLACE_API_KEY"].strip()
+    gemini_key = os.environ["GEMINI_API_KEY"].strip()
     model_name = (
         os.getenv("GEMINI_NEARBY_MODEL", "").strip()
         or os.environ["GEMINI_MODEL"].strip()

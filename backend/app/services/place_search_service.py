@@ -18,10 +18,6 @@ from app.schemas.place_search import (
 logger = logging.getLogger(__name__)
 
 
-class PlaceSearchConfigurationError(RuntimeError):
-    """검색에 필요한 서버 API 키가 없다."""
-
-
 def rewrite_query(user_query: str, *, llm: GeminiWrapper) -> QueryRewrite:
     """LLM을 한 번 호출하고 증강된 검색어 목록 또는 null을 검증한다."""
     if not isinstance(user_query, str) or not user_query.strip():
@@ -86,12 +82,9 @@ def run_search(
 
 
 def search_places(request: PlaceSearchRequest) -> PlaceSearchResponse:
-    """서버 설정과 클라이언트 수명을 관리하고 외부 오류를 구분한다."""
-    places_key = os.getenv("GOOGLE_PLACE_API_KEY", "").strip()
-    gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
-    if not places_key or not gemini_key:
-        raise PlaceSearchConfigurationError("장소 검색에 필요한 서버 설정이 없습니다.")
-
+    """서버 설정으로 LLM 검색어 재작성과 Google 장소 검색을 실행한다."""
+    places_key = os.environ["GOOGLE_PLACE_API_KEY"].strip()
+    gemini_key = os.environ["GEMINI_API_KEY"].strip()
     model_name = os.environ["GEMINI_MODEL"].strip()
     with GeminiWrapper(api_key=gemini_key, model_name=model_name) as llm:
         return run_search(request, api_key=places_key, llm=llm)
