@@ -4,5 +4,6 @@ metadata:
   name: jpass-api-config
 data:
   GEMINI_MODEL: gemini-3.5-flash-lite
+  # Optional override; missing or blank uses GEMINI_MODEL.
   GEMINI_NEARBY_MODEL: gemini-3.5-flash-lite
   CORS_ORIGINS: http://localhost:3000,http://localhost:5173

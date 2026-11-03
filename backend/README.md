@@ -51,7 +51,7 @@ cd backend
 poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-### 장소 검색·주변 관광지 추천용 API 키
+### Gemini 모델·장소 검색·주변 관광지 추천용 API 키
 
 장소 검색과 주변 관광지 추천은 Google Places와 Gemini를 사용한다. 저장소 루트의 `.env`에 다음 값을 설정한 뒤 서버를 시작한다. 앱은 시작 시 이 파일을 읽으며, 이미 설정된 환경 변수는 덮어쓰지 않는다.
 
@@ -62,7 +62,9 @@ GEMINI_MODEL=gemini-3.5-flash-lite
 GEMINI_NEARBY_MODEL=gemini-3.5-flash-lite
 ```
 
-모델 설정은 선택 사항이다. `GEMINI_MODEL`은 기본 모델이며 생략하면 `gemini-3.5-flash-lite`를 사용한다. 주변 관광지 추천은 `GEMINI_NEARBY_MODEL` → `GEMINI_MODEL` → `gemini-3.5-flash-lite` 순서로 모델을 선택하며, 앞뒤 공백을 제거한 뒤 빈 값은 건너뛴다. nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다. API 키는 서버에서만 관리하고 프론트의 요청 JSON에는 넣지 않는다. 키가 없어도 서버와 동선 최적화 API는 사용할 수 있으며, 장소 검색·주변 관광지 추천 요청에는 `503`을 반환한다.
+`GEMINI_MODEL`은 공통 기본 모델을 지정하는 필수 설정이다. 미설정·빈 문자열·공백뿐이면 앱 시작이 실패한다. 장소 검색은 이 모델을 사용한다. 주변 관광지 추천은 선택 설정인 `GEMINI_NEARBY_MODEL`을 우선 사용하며, 해당 값이 미설정·빈 문자열·공백뿐이면 `GEMINI_MODEL`을 사용한다. 모델의 앞뒤 공백은 제거하며 코드에 고정된 모델명으로 대체하지 않는다. 위 모델명은 설정 예시이며 nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다.
+
+API 키는 서버에서만 관리하고 프론트의 요청 JSON에는 넣지 않는다. 모델 설정이 유효하면 API 키가 없어도 서버와 동선 최적화 API는 사용할 수 있으며, 장소 검색·주변 관광지 추천 요청에는 `503`을 반환한다. 시작 시 모델명 존재 여부만 검증하며 실제 모델 사용 가능 여부나 API 키의 유효성을 외부 호출로 확인하지 않는다.
 
 ## 자연어 장소 검색 curl 테스트
 
@@ -254,6 +256,7 @@ app/
 │   ├── place_search.py        # dedent로 정리한 검색어 재작성 프롬프트
 │   └── nearby_ranking.py      # dedent로 정리한 주변 장소 순위 선정 프롬프트
 ├── clients/                   # Google Places·HeartRails 외부 API 호출
+├── errors.py                  # 외부 서비스의 공통 오류 타입·상태 분류
 ├── llm/                       # 기존 Gemini·GPT 호출 래퍼
 ├── crawling/                  # Ekispert 경로 크롤링
 └── optimizer/                 # 이동 시간·요금을 이용한 방문 순서 최적화
@@ -276,6 +279,8 @@ flowchart TD
 - **Pydantic 스키마**는 JSON이 정해진 모델에 맞는지 확인한다. 날짜·시간·필수 Place ID·좌표·추천 개수 등을 검증하고 Swagger 문서의 입력·출력 구조도 생성한다.
 - **서비스**는 작업 순서를 담당한다. 동선 서비스는 역·경로 조회와 최적화를, 주변 추천 서비스는 앵커 역 선택과 검색·중복 제거·결과 조립을 수행한다. 장소 검색 서비스는 프롬프트로 검색어를 재작성하고 검색어별 Google 응답을 모은다.
 - **클라이언트·LLM 래퍼·크롤러·최적화 모듈**은 외부 호출과 계산의 구체적인 방법을 담당한다. HTTP 상태 코드는 라우터가 처리한다.
+
+장소 검색·주변 추천의 LLM 래퍼와 Google 클라이언트는 외부 호출·응답 오류를 `errors.py`의 공통 `Provider*` 예외로 분류한다. 서비스는 추천·검색 흐름을 실행하고, API는 공통 예외를 기존 HTTP 상태로 변환한다. LLM 응답 모델 검증과 연결 정리는 래퍼가 담당한다.
 
 예를 들어 주변 추천 요청은 `JSON → FastAPI의 요청 모델 검증 → api/nearby.py → nearby_service.py → Gemini·Google Places → 응답 모델 → JSON`으로 처리된다. 역할을 나누면 검색 방법을 바꾸더라도 프론트가 호출하는 URL과 JSON 형식은 유지할 수 있다.
 

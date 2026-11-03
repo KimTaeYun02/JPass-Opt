@@ -14,7 +14,7 @@
 | Request model | `NearbyRequest` |
 | Response model | `NearbyResponse` |
 
-API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 않는다. 서버에 `GOOGLE_PLACE_API_KEY`와 `GEMINI_API_KEY`가 모두 필요하다. 모델은 `GEMINI_NEARBY_MODEL` → `GEMINI_MODEL` → `gemini-3.5-flash-lite` 순서로 선택하며, 앞뒤 공백을 제거한 뒤 빈 값은 건너뛴다. 기본 모델과 nearby 전용 모델의 초기 설정값은 모두 `gemini-3.5-flash-lite`이며, nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다.
+API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 않는다. 이 API를 호출하려면 `GOOGLE_PLACE_API_KEY`와 `GEMINI_API_KEY`가 모두 필요하다. 주변 추천 모델은 선택 설정인 `GEMINI_NEARBY_MODEL`을 우선 사용하며, 해당 값이 미설정·빈 문자열·공백뿐이면 공통 기본 모델인 `GEMINI_MODEL`을 사용한다. 앱 시작 시 `GEMINI_MODEL`을 검증하고 미설정·빈 문자열·공백뿐이면 시작이 실패한다. 모델의 앞뒤 공백은 제거하며 코드에 고정된 모델명으로 대체하지 않는다. 저장소의 모델 설정 예시는 모두 `gemini-3.5-flash-lite`이며, nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다.
 
 ## Source code
 
@@ -28,6 +28,7 @@ API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 �
 | 여행 태그·Google 장소 유형 매핑 | [app/constants/place_types.py](../app/constants/place_types.py) |
 | Google Nearby Search | [app/clients/google_maps.py](../app/clients/google_maps.py)의 `search_nearby()` |
 | Gemini 요청·구조화 출력 파싱 | [app/llm/llm_wrapper.py](../app/llm/llm_wrapper.py)의 `GeminiWrapper` |
+| 외부 서비스의 공통 오류 타입·상태 분류 | [app/errors.py](../app/errors.py) |
 | 앱 등록·환경 변수·CORS | [app/main.py](../app/main.py) |
 
 ## Input Schema
@@ -178,7 +179,7 @@ Google 원본 응답의 `types`, `displayName.languageCode`, 평점·영업시�
 7. 같은 역의 장소를 `googlePlaceId`로 병합한다. 첫 등장 장소 정보를 유지하고 후속 검색 태그만 `searchTags`에 추가한다. 서로 다른 역 사이에서는 중복을 제거하지 않는다.
 8. 단일 태그면 Google 검색 순서를 유지해 앞쪽 최대 `N`개를 반환한다. 복수 태그여도 유효 후보가 0~1개면 그대로 반환한다. **복수 태그이며 정제·중복 제거 후 후보가 2개 이상이면 Gemini를 한 번 더 호출한다.** 후보가 `N`개 이하여도 순서를 정하기 위해 호출한다.
 9. 재순위화는 `min(N, 후보 수)`개의 고유 인덱스를 검증하고 그 순서대로 원래 장소 객체를 선택한다. 역별 응답을 조립하고 다음 역을 처리한다.
-10. 모든 역을 마치면 `NearbyResponse`를 반환하고 `finally`에서 Gemini 클라이언트를 닫는다. 도중 외부 호출·응답 검증이 실패하면 전체 요청이 실패하며 앞서 완료된 역의 부분 결과도 반환하지 않는다.
+10. 모든 역을 마치면 `NearbyResponse`를 반환하고 `with` 블록을 나가며 Gemini 클라이언트를 닫는다. 정리 실패는 래퍼가 로그로 남기며 기존 결과·오류를 유지한다. 도중 외부 호출·응답 검증이 실패하면 전체 요청이 실패하며 앞서 완료된 역의 부분 결과도 반환하지 않는다.
 
 ```mermaid
 flowchart TD
@@ -245,6 +246,8 @@ LLM 입력은 `userRequest`, `travelTypes`, 선택 개수, 후보의 `index`, `n
 | `504` | `requests.Timeout`, `httpx.TimeoutException`, Gemini 또는 Google의 408·504 | `외부 추천 서비스 응답 시간이 초과되었습니다.` |
 
 서비스 오류 형식은 `{"detail": "설명"}`이다. 외부 응답 본문이나 API 키를 HTTP detail에 넣지 않는다. 오류가 나면 전체 요청을 종료하며 부분 성공·애플리케이션의 명시적 재시도·재순위화 실패 시 대체 결과는 없다. 위 표는 코드가 변환하는 예외에 대한 계약이며 처리되지 않은 예외까지 모두 이 표의 상태로 변환하는 것은 아니다.
+
+LLM 래퍼와 Google 클라이언트는 호출 제한·시간 초과·연결 실패·응답 형식 오류를 공통 `Provider*` 예외로 변환한다. 서비스는 검증된 LLM 모델을 사용하며 현재 요청의 후보 ID·선택 개수·인덱스 범위만 추가로 검사한다. API는 공통 예외를 HTTP 상태로 변환하며, 내부 코드의 일반 `TypeError`·`AttributeError` 등을 외부 서비스 오류로 묶지 않는다.
 
 ## 호출 수와 동시성
 

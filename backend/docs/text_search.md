@@ -21,10 +21,11 @@
 | --- | --- |
 | HTTP 처리·오류 상태 코드 | [api/places.py](../app/api/places.py) |
 | 입력·출력·위치·LLM 모델 | [schemas/place_search.py](../app/schemas/place_search.py) |
-| 키 확인·검색 흐름·외부 오류 분류 | [services/place_search_service.py](../app/services/place_search_service.py) |
+| 키 확인·검색 흐름 | [services/place_search_service.py](../app/services/place_search_service.py) |
 | 검색어 증강 규칙 | [prompts/place_search.py](../app/prompts/place_search.py) |
-| Google 요청·FieldMask | [clients/google_maps.py](../app/clients/google_maps.py) |
+| Google 요청·FieldMask·응답 검증·외부 오류 분류 | [clients/google_maps.py](../app/clients/google_maps.py) |
 | Gemini 요청·응답 파싱·연결 관리 | [llm/llm_wrapper.py](../app/llm/llm_wrapper.py) |
+| 외부 서비스의 공통 오류 타입·상태 분류 | [errors.py](../app/errors.py) |
 | 앱 등록·환경 변수 로딩 | [main.py](../app/main.py) |
 
 ## 실행과 호출
@@ -37,7 +38,7 @@ GEMINI_API_KEY=발급받은_Gemini_API_키
 GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
-`GEMINI_MODEL`은 선택 설정이며 생략하면 위 모델을 사용한다. 앱은 시작 시 루트 `.env`를 읽으며 기존 환경 변수는 덮어쓰지 않는다. 키는 서버에서 관리하고 요청 JSON에는 넣지 않는다.
+장소 검색 모델은 공통 기본 모델인 `GEMINI_MODEL`로 지정한다. 필수 설정이며 미설정·빈 문자열·공백뿐이면 앱 시작이 실패한다. 모델의 앞뒤 공백은 제거하며 코드에 고정된 모델명으로 대체하지 않는다. 위 모델명은 설정 예시다. 주변 추천용 `GEMINI_NEARBY_MODEL`은 선택 사항이며 이 API에는 영향을 주지 않는다. 앱은 시작 시 루트 `.env`를 읽으며 기존 환경 변수는 덮어쓰지 않는다. API 키는 서버에서 관리하고 요청 JSON에는 넣지 않는다. API 키 누락은 시작을 막지 않으며 장소 검색 요청 시 `503`을 반환한다.
 
 ```bash
 cd backend
@@ -250,13 +251,13 @@ tests/
 
 1. FastAPI가 `PlaceSearchRequest`를 검증한다. 실패하면 외부 호출 없이 `422`를 반환한다.
 2. 동기 `def` 라우터가 작업 스레드에서 서비스를 실행한다. 서비스는 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`를 모두 확인한다. 누락되면 `503`이며, 검색어 생성 불가 분기도 이 설정 확인을 먼저 거친다.
-3. 요청마다 Gemini 클라이언트를 생성한다. 모델은 `GEMINI_MODEL`, 비어 있으면 `gemini-3.5-flash-lite`다. `userQuery`만 `{"userQuery": "..."}` 형태로 LLM에 전달하며 `locationBias` 등 검색 옵션은 전달하지 않는다.
+3. 요청마다 `GEMINI_MODEL`에 지정한 모델로 Gemini 클라이언트를 생성한다. `userQuery`만 `{"userQuery": "..."}` 형태로 LLM에 전달하며 `locationBias` 등 검색 옵션은 전달하지 않는다.
 4. Gemini가 프롬프트와 `QueryRewrite` JSON Schema를 받아 일본어 검색어를 증강한다. 내부 출력은 `{"textQueries": ["일본어 검색어"]}` 또는 `{"textQueries": null}`이다. 기본 출력 토큰 수는 1024이며 이 흐름은 temperature를 별도 지정하지 않는다.
 5. 서버는 LLM 결과의 추가 필드를 거부하고 검색어가 있으면 먼저 최대 3개로 자른 뒤 앞뒤 공백·중복을 제거한다. 빈 목록·빈 검색어·잘못된 응답은 `502`다. 일본어 여부·실제 장소 존재는 별도의 코드 검증을 하지 않는다.
 6. `textQueries=null`이면 Google을 호출하지 않고 `results=[]`로 `200`을 반환한다.
 7. 검색어가 있으면 순서대로 각 검색어의 Google Text Search 첫 페이지를 최대 3회 조회한다. Google에 `languageCode=ko`, `regionCode=JP`, `openNow=false`와 요청의 `pageSize`, `rankPreference`, 선택적 `locationBias`를 보낸다.
-8. 각 Google 응답을 검증해 `results`에 원본을 넣는다. 중간 검색이 실패하면 전체 요청이 실패하며 앞서 받은 부분 결과를 반환하지 않는다.
-9. `finally`에서 Gemini 클라이언트를 닫는다. 정리 중 발생한 오류는 로그에 남기고 기존 결과·오류는 유지한다.
+8. Google 클라이언트가 응답을 검증하고 서비스는 `results`에 원본을 넣는다. 중간 검색이 실패하면 전체 요청이 실패하며 앞서 받은 부분 결과를 반환하지 않는다.
+9. `with` 블록을 나가며 Gemini 클라이언트를 닫는다. 래퍼는 정리 중 발생한 오류를 로그에 남기고 기존 결과·오류를 유지한다.
 
 ```mermaid
 flowchart TD
@@ -339,6 +340,6 @@ Google만 직접 호출하거나 수동으로 다음 페이지를 조회할 때�
 
 입력 검증 오류는 `{"detail": [...]}`, 서비스 오류는 `{"detail": "설명"}` 형식이다. 서비스 오류에는 외부 응답 본문·키 등 내부 정보를 노출하지 않는다.
 
-LLM·Google의 오류를 위 표대로 변환하는 범위는 서비스에서 명시적으로 잡는 예외다. 공급자의 모든 `5xx`를 `503`으로 전달하는 정책은 없으며, 예를 들어 Google HTTP `500`은 `502`다. `textQueries=null`과 Google의 정상 0건 응답은 오류가 아니다.
+LLM 래퍼·Google 클라이언트가 외부 호출·응답 오류를 공통 `Provider*` 예외로 분류하고 API가 위 표의 HTTP 상태로 변환한다. 내부 코드의 일반 `TypeError`·`AttributeError` 등을 외부 서비스 오류로 묶지 않는다. 공급자의 모든 `5xx`를 `503`으로 전달하는 정책은 없으며, 예를 들어 Google HTTP `500`은 `502`다. `textQueries=null`과 Google의 정상 0건 응답은 오류가 아니다.
 
 공식 문서: [Text Search 가이드](https://developers.google.com/maps/documentation/places/web-service/text-search?hl=ko), [요청·응답 REST 스펙](https://developers.google.com/maps/documentation/places/web-service/reference/rest/v1/places/searchText), [Place 응답 필드](https://developers.google.com/maps/documentation/places/web-service/reference/rest/v1/places).

@@ -23,7 +23,9 @@ CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 API_PORT=8000
 ```
 
-모델 설정은 선택 사항이다. `GEMINI_MODEL`은 기본 모델이며 생략하면 `gemini-3.5-flash-lite`를 사용한다. 주변 관광지 추천은 `GEMINI_NEARBY_MODEL` → `GEMINI_MODEL` → `gemini-3.5-flash-lite` 순서로 모델을 선택하며, 앞뒤 공백을 제거한 뒤 빈 값은 건너뛴다. nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다. 키가 없어도 앱과 동선 최적화 API는 사용할 수 있으며, 장소 검색·주변 추천은 `503`을 반환한다. Compose가 `env_file: .env`를 읽으므로 `.env` 파일 자체는 준비해야 한다. 키는 이미지에 복사하지 않고 컨테이너 실행 시 환경 변수로 주입한다. `.env`는 Git에 올리지 않는다.
+`GEMINI_MODEL`은 공통 기본 모델을 지정하는 필수 설정이다. 미설정·빈 문자열·공백뿐이면 앱 시작이 실패하고 컨테이너가 종료된다. 주변 추천용 `GEMINI_NEARBY_MODEL`은 선택 사항이며, 미설정·빈 문자열·공백뿐이면 `GEMINI_MODEL`을 사용한다. 모델의 앞뒤 공백은 제거하며 코드에 고정된 모델명으로 대체하지 않는다. 위 모델명은 설정 예시이며 nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다. 모델 설정이 유효하면 API 키가 없어도 앱과 동선 최적화 API는 사용할 수 있으며, 장소 검색·주변 추천은 `503`을 반환한다.
+
+Compose가 `env_file: .env`를 읽으므로 `.env` 파일 자체는 준비해야 한다. 키는 이미지에 복사하지 않고 컨테이너 실행 시 환경 변수로 주입한다. `.env`는 Git에 올리지 않는다.
 
 `CORS_ORIGINS`에는 **브라우저에서 실제 접속하는 프론트엔드 주소**를 지정한다. 예를 들어 프론트가 `https://travel.example.com`에서 열리면 다음처럼 설정한다.
 

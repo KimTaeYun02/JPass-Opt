@@ -17,6 +17,10 @@ from app.logging_config import configure_logging
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    if not os.getenv("GEMINI_MODEL", "").strip():
+        raise RuntimeError(
+            "필수 Gemini 모델 환경 변수가 설정되지 않았습니다: GEMINI_MODEL"
+        )
     app.state.route_lock = asyncio.Lock()
     yield
 

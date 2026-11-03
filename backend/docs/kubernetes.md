@@ -52,6 +52,8 @@ python backend/scripts/apply_k8s_secret.py
 
 일반 설정은 [configmap.yaml](../../k8s/local/configmap.yaml)에서 바꾼다. Kubernetes는 Compose의 `env_file`을 자동으로 읽지 않는다. Deployment가 ConfigMap과 Secret을 참조하면 컨테이너의 환경 변수로 전달된다. 현재 앱이 읽는 환경 변수 이름을 유지하므로 `Settings` 리팩터링 없이 실행할 수 있다.
 
+ConfigMap의 `GEMINI_MODEL`은 공통 기본 모델을 지정하는 필수 설정이며 미설정·빈 문자열·공백뿐이면 앱 시작이 실패한다. 주변 추천용 `GEMINI_NEARBY_MODEL`은 선택 사항으로, 미설정·빈 문자열·공백뿐이면 `GEMINI_MODEL`을 사용한다. 예시 모델명 `gemini-3.5-flash-lite`는 설정값이며 코드의 기본값으로 사용하지 않는다.
+
 ## 4. API 배포
 
 ```bash
@@ -165,7 +167,7 @@ kubectl --context jpass-local -n jpass logs -f deployment/jpass-api --tail=100
 kubectl --context jpass-local -n jpass get events --sort-by=.metadata.creationTimestamp
 ```
 
-`ErrImageNeverPull`이면 이미지 로딩을, `CreateContainerConfigError`이면 API 키 Secret 생성과 키 이름을 확인한다. GHCR 배포의 `ImagePullBackOff`이면 이미지 주소와 `ghcr-pull-secret`의 인증을 확인한다. 외부 연결 오류가 의심되면 API 키를 노출하지 않고 DNS만 확인한다.
+`ErrImageNeverPull`이면 이미지 로딩을, `CreateContainerConfigError`이면 API 키 Secret 생성과 키 이름을 확인한다. GHCR 배포의 `ImagePullBackOff`이면 이미지 주소와 `ghcr-pull-secret`의 인증을 확인한다. `GEMINI_MODEL`이 누락되거나 비어 있으면 Pod 객체는 생성되지만 앱 프로세스가 시작 중 종료되어 `Ready`가 되지 않고 컨테이너 재시작이 반복되면 `CrashLoopBackOff`가 표시될 수 있다. 앱 로그에서 설정 오류를 확인하고 ConfigMap을 수정한다. 시작 검증은 공통 기본 모델명 존재 여부만 확인하며 모델 사용 가능 여부나 API 키 유효성을 외부 호출로 확인하지 않는다. 외부 연결 오류가 의심되면 API 키를 노출하지 않고 DNS만 확인한다.
 
 ```bash
 kubectl --context jpass-local -n jpass exec deployment/jpass-api -- python -c 'import socket; print(socket.getaddrinfo("generativelanguage.googleapis.com", 443))'

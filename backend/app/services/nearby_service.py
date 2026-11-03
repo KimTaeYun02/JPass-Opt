@@ -6,14 +6,12 @@ import math
 import os
 import random
 from time import perf_counter
+from typing import cast
 
-import httpx
-from google.genai.errors import APIError as GeminiAPIError
 from pydantic import ValidationError
-from requests import HTTPError, RequestException
-from requests import Timeout as RequestsTimeout
 
 from app.clients.google_maps import search_nearby
+from app.errors import ProviderResponseError
 from app.llm import GeminiWrapper
 from app.prompts.nearby_ranking import RERANK_SYSTEM_PROMPT
 from app.schemas.nearby import (
@@ -33,18 +31,6 @@ logger = logging.getLogger(__name__)
 
 class NearbyConfigurationError(RuntimeError):
     """주변 추천에 필요한 서버 설정이 없다."""
-
-
-class NearbyProviderError(RuntimeError):
-    """외부 추천 서비스 호출 또는 응답 검증에 실패했다."""
-
-
-class NearbyProviderTimeout(NearbyProviderError):
-    """외부 추천 서비스 응답 시간이 초과됐다."""
-
-
-class NearbyRateLimitError(NearbyProviderError):
-    """외부 추천 서비스의 요청 한도를 초과했다."""
 
 
 ANCHOR_SYSTEM_PROMPT = """너는 일본 여행에서 주변 관광지를 검색할 기준 역을 선택한다.
@@ -102,27 +88,22 @@ def select_anchor_station(
         len(candidates),
         max_anchor_count,
     )
-    try:
-        selection = AnchorStationSelection.model_validate(
-            llm.request(
-                system_prompt=ANCHOR_SYSTEM_PROMPT,
-                user_prompt=user_prompt,
-                response_schema=response_schema,
-                response_validator=AnchorStationSelection,
-            )
-        )
-    except (ValidationError, RuntimeError) as exc:
-        logger.warning("LLM 앵커 응답 검증 실패: 오류=%s", type(exc).__name__)
-        raise NearbyProviderError(
-            "LLM이 유효한 앵커 역 목록을 반환하지 않았습니다."
-        ) from exc
+    selection = cast(
+        AnchorStationSelection,
+        llm.request(
+            system_prompt=ANCHOR_SYSTEM_PROMPT,
+            user_prompt=user_prompt,
+            response_schema=response_schema,
+            response_validator=AnchorStationSelection,
+        ),
+    )
     if len(selection.candidateIds) > max_anchor_count:
         logger.warning(
             "LLM 앵커 선택 상한 초과: 선택=%d개, 상한=%d개",
             len(selection.candidateIds),
             max_anchor_count,
         )
-        raise NearbyProviderError(
+        raise ProviderResponseError(
             f"LLM은 앵커 역을 최대 {max_anchor_count}개 선택할 수 있습니다."
         )
     unknown_ids = [value for value in selection.candidateIds if value not in candidates]
@@ -130,7 +111,7 @@ def select_anchor_station(
         logger.warning(
             "LLM 앵커 응답에 입력에 없는 후보 ID가 %d개 있음", len(unknown_ids)
         )
-        raise NearbyProviderError(
+        raise ProviderResponseError(
             f"LLM이 입력에 없는 역을 선택했습니다: {', '.join(unknown_ids)}"
         )
     logger.info(
@@ -238,33 +219,23 @@ def rank_places_with_llm(
         len(candidates),
         selection_count,
     )
-    try:
-        raw = llm.request(
+    ranking = cast(
+        RecommendedPlaceRanking,
+        llm.request(
             system_prompt=RERANK_SYSTEM_PROMPT,
             user_prompt=user_prompt,
             max_output_tokens=256,
             response_schema=response_schema,
             response_validator=RecommendedPlaceRanking,
-        )
-        if isinstance(raw, RecommendedPlaceRanking):
-            raw = raw.model_dump()
-        ranking = (
-            RecommendedPlaceRanking.model_validate_json(raw)
-            if isinstance(raw, str)
-            else RecommendedPlaceRanking.model_validate(raw)
-        )
-    except (ValidationError, RuntimeError) as exc:
-        logger.warning("LLM 재순위화 응답 검증 실패: 오류=%s", type(exc).__name__)
-        raise NearbyProviderError(
-            "LLM이 유효한 추천 인덱스를 반환하지 않았습니다."
-        ) from exc
+        ),
+    )
 
     if len(ranking.indices) != selection_count:
-        raise NearbyProviderError(
+        raise ProviderResponseError(
             "LLM이 요청한 개수의 추천 인덱스를 반환하지 않았습니다."
         )
     if any(index >= len(candidates) for index in ranking.indices):
-        raise NearbyProviderError("LLM이 후보에 없는 추천 인덱스를 반환했습니다.")
+        raise ProviderResponseError("LLM이 후보에 없는 추천 인덱스를 반환했습니다.")
 
     logger.info(
         "LLM 장소 재순위화 완료: 선택=%d개, 소요=%.2f초",
@@ -320,8 +291,6 @@ def recommend_for_station(
             radius=request.radius,
             max_results=count,
         )
-        if not isinstance(places, list):
-            raise NearbyProviderError("주변 검색의 장소 목록 형식이 올바르지 않습니다.")
         logger.info(
             "주변 검색 완료: stationId=%s, 태그=%s, 수신=%d개, 소요=%.2f초",
             station.stationId,
@@ -381,22 +350,14 @@ def recommend_nearby(request: NearbyRequest) -> NearbyResponse:
             if not value
         ]
         logger.warning("주변 추천 설정 누락: %s", ",".join(missing_keys))
-        raise NearbyConfigurationError(
-            "주변 추천에 필요한 API 키가 설정되지 않았습니다."
-        )
+        raise NearbyConfigurationError("주변 추천에 필요한 서버 설정이 없습니다.")
 
-    llm = None
-    try:
-        model_name = (
-            os.getenv("GEMINI_NEARBY_MODEL", "").strip()
-            or os.getenv("GEMINI_MODEL", "").strip()
-            or "gemini-3.5-flash-lite"
-        )
-        logger.info("Gemini 클라이언트 준비: 모델=%s", model_name)
-        llm = GeminiWrapper(
-            api_key=gemini_key,
-            model_name=model_name,
-        )
+    model_name = (
+        os.getenv("GEMINI_NEARBY_MODEL", "").strip()
+        or os.environ["GEMINI_MODEL"].strip()
+    )
+    logger.info("Gemini 클라이언트 준비: 모델=%s", model_name)
+    with GeminiWrapper(api_key=gemini_key, model_name=model_name) as llm:
         stations = select_anchor_station(
             request, llm=llm, max_anchor_count=request.maxAnchorCount
         )
@@ -406,38 +367,3 @@ def recommend_nearby(request: NearbyRequest) -> NearbyResponse:
                 for station in stations
             ]
         )
-    except NearbyProviderError:
-        raise
-    except (RequestsTimeout, httpx.TimeoutException) as exc:
-        logger.warning("외부 추천 서비스 응답 시간 초과: 오류=%s", type(exc).__name__)
-        raise NearbyProviderTimeout(
-            "외부 추천 서비스 응답 시간이 초과되었습니다."
-        ) from exc
-    except GeminiAPIError as exc:
-        logger.warning("Gemini 요청 실패: status=%s", exc.code)
-        if exc.code == 429:
-            raise NearbyRateLimitError("Gemini 요청 한도를 초과했습니다.") from exc
-        if exc.code in (408, 504):
-            raise NearbyProviderTimeout("Gemini 응답 시간이 초과되었습니다.") from exc
-        raise NearbyProviderError("Gemini 요청에 실패했습니다.") from exc
-    except HTTPError as exc:
-        status = exc.response.status_code if exc.response is not None else None
-        logger.warning("Google 주변 검색 요청 실패: status=%s", status)
-        if status == 429:
-            raise NearbyRateLimitError("주변 검색 요청 한도를 초과했습니다.") from exc
-        if status in (408, 504):
-            raise NearbyProviderTimeout(
-                "주변 검색 응답 시간이 초과되었습니다."
-            ) from exc
-        raise NearbyProviderError("주변 검색 요청에 실패했습니다.") from exc
-    except (RequestException, httpx.HTTPError) as exc:
-        logger.warning("외부 추천 서비스 연결 실패: 오류=%s", type(exc).__name__)
-        raise NearbyProviderError("외부 추천 서비스에 연결할 수 없습니다.") from exc
-    except (ValueError, KeyError, TypeError, AttributeError, RuntimeError) as exc:
-        logger.warning("외부 추천 서비스 응답 형식 오류: 오류=%s", type(exc).__name__)
-        raise NearbyProviderError(
-            "외부 추천 서비스의 응답이 올바르지 않습니다."
-        ) from exc
-    finally:
-        if llm is not None:
-            llm.close()

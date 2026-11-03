@@ -5,12 +5,10 @@ from time import perf_counter
 
 from fastapi import APIRouter, HTTPException
 
+from app.errors import ProviderError, ProviderRateLimitError, ProviderTimeoutError
 from app.schemas.place_search import PlaceSearchRequest, PlaceSearchResponse
 from app.services.place_search_service import (
     PlaceSearchConfigurationError,
-    PlaceSearchProviderError,
-    PlaceSearchProviderTimeout,
-    PlaceSearchRateLimitError,
     search_places,
 )
 
@@ -59,26 +57,29 @@ def search(payload: PlaceSearchRequest) -> PlaceSearchResponse:
         raise HTTPException(
             status_code=503, detail="장소 검색 서비스를 사용할 수 없습니다."
         ) from exc
-    except PlaceSearchRateLimitError as exc:
+    except ProviderRateLimitError as exc:
         logger.warning(
-            "장소 검색 실패: status=429, 요청 한도 초과, 소요=%.2f초",
+            "장소 검색 실패: status=429, 오류=%s, 소요=%.2f초",
+            exc,
             perf_counter() - started_at,
         )
         raise HTTPException(
             status_code=429,
             detail="외부 검색 서비스의 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요.",
         ) from exc
-    except PlaceSearchProviderTimeout as exc:
+    except ProviderTimeoutError as exc:
         logger.warning(
-            "장소 검색 실패: status=504, 응답 시간 초과, 소요=%.2f초",
+            "장소 검색 실패: status=504, 오류=%s, 소요=%.2f초",
+            exc,
             perf_counter() - started_at,
         )
         raise HTTPException(
             status_code=504, detail="외부 검색 서비스 응답 시간이 초과되었습니다."
         ) from exc
-    except PlaceSearchProviderError as exc:
+    except ProviderError as exc:
         logger.warning(
-            "장소 검색 실패: status=502, 외부 서비스 오류, 소요=%.2f초",
+            "장소 검색 실패: status=502, 오류=%s, 소요=%.2f초",
+            exc,
             perf_counter() - started_at,
         )
         raise HTTPException(

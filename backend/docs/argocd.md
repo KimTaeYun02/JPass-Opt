@@ -97,6 +97,8 @@ Application의 주요 설정:
 
 Application은 API 이미지의 소스 코드를 빌드하지 않는다. 이미 GHCR에 올라간 이미지 주소를 Git의 YAML에서 읽어 배포한다.
 
+모델 설정은 Git의 [ConfigMap](../../k8s/local/configmap.yaml)에 명시한다. 공통 기본 모델인 `GEMINI_MODEL`이 미설정·빈 문자열·공백뿐이면 앱 시작이 실패한다. 주변 추천용 `GEMINI_NEARBY_MODEL`은 선택 사항이며, 미설정·빈 문자열·공백뿐이면 `GEMINI_MODEL`을 사용한다. 코드에 고정된 모델명으로 대체하지 않는다. 이 검증을 반영한 이미지를 GHCR에 올리고 태그·digest도 갱신해야 적용된다.
+
 ## 5. 웹 UI 열기
 
 첫 번째 터미널에서 포트 전달을 켜둔다.
@@ -118,6 +120,8 @@ kubectl --context jpass-local -n argocd get secret argocd-initial-admin-secret -
 ## 6. Sync해서 API Pod 올리기
 
 UI에서 `jpass-api`를 열고 **SYNC → SYNCHRONIZE**를 실행한다. Git 설정과 실행 상태가 다르면 `OutOfSync`, 적용이 맞으면 `Synced`, 앱이 준비되면 `Healthy`로 표시된다.
+
+`Synced`는 앱의 정상 기동을 보장하지 않는다. `GEMINI_MODEL`이 누락되거나 비어 있으면 Pod 객체는 생성되지만 앱이 종료되어 `Ready`가 되지 않으며 컨테이너 재시작이 반복될 수 있다. API Pod 로그에서 설정 오류를 확인하고 Git의 ConfigMap을 수정한 뒤 Sync하고 Pod를 다시 시작한다. API 키 누락은 앱의 시작 검증 대상이 아니며, API 요청 시 `503`으로 처리한다.
 
 같은 동작을 Kubernetes API로 요청할 수도 있다.
 

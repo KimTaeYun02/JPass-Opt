@@ -3,6 +3,12 @@ from typing import TypedDict, cast
 import requests
 
 from app.constants.place_types import PLACE_TYPES_BY_TRAVEL_TYPE, TRAVEL_TYPE
+from app.errors import (
+    ProviderError,
+    ProviderResponseError,
+    ProviderTimeoutError,
+    provider_error_for_status,
+)
 
 
 class PlaceLocation(TypedDict, total=False):
@@ -24,6 +30,54 @@ class NearbyPlace(TypedDict, total=False):
     formattedAddress: str
     primaryType: str
     types: list[str]
+
+
+def _request_places(
+    endpoint: str,
+    *,
+    api_key: str,
+    field_mask: str,
+    payload: dict,
+    validate_place_objects: bool = False,
+) -> dict:
+    """Places 요청과 응답 형식 검증을 한 곳에서 처리한다."""
+    try:
+        response = requests.post(
+            f"https://places.googleapis.com/v1/places:{endpoint}",
+            headers={
+                "Content-Type": "application/json",
+                "X-Goog-Api-Key": api_key,
+                "X-Goog-FieldMask": field_mask,
+            },
+            json=payload,
+            timeout=30,
+        )
+        response.raise_for_status()
+    except requests.Timeout as exc:
+        raise ProviderTimeoutError("Google 장소 검색 응답 시간 초과") from exc
+    except requests.HTTPError as exc:
+        status = exc.response.status_code if exc.response is not None else None
+        raise provider_error_for_status(status, "Google 장소 검색 실패") from exc
+    except requests.RequestException as exc:
+        raise ProviderError("Google 장소 검색 연결 실패") from exc
+
+    try:
+        data = response.json()
+    except ValueError as exc:
+        raise ProviderResponseError(
+            "Google 장소 검색 응답 JSON 형식이 올바르지 않습니다."
+        ) from exc
+
+    if not isinstance(data, dict) or "error" in data:
+        raise ProviderResponseError("Google 장소 검색 응답이 올바르지 않습니다.")
+    places = data.get("places", [])
+    if not isinstance(places, list) or (
+        validate_place_objects and any(not isinstance(place, dict) for place in places)
+    ):
+        raise ProviderResponseError("Google 장소 목록 형식이 올바르지 않습니다.")
+    if "nextPageToken" in data and not isinstance(data["nextPageToken"], str):
+        raise ProviderResponseError("Google 다음 페이지 토큰이 올바르지 않습니다.")
+    return data
 
 
 def search_text(
@@ -62,18 +116,13 @@ def search_text(
             raise ValueError("page_token에 이전 응답의 nextPageToken을 입력해주세요.")
         payload["pageToken"] = page_token
 
-    response = requests.post(
-        "https://places.googleapis.com/v1/places:searchText",
-        headers={
-            "Content-Type": "application/json",
-            "X-Goog-Api-Key": api_key.strip(),
-            "X-Goog-FieldMask": FIELD_MASK,
-        },
-        json=payload,
-        timeout=30,
+    return _request_places(
+        "searchText",
+        api_key=api_key.strip(),
+        field_mask=FIELD_MASK,
+        payload=payload,
+        validate_place_objects=True,
     )
-    response.raise_for_status()
-    return response.json()
 
 
 def get_coordinates(
@@ -167,21 +216,18 @@ def search_nearby(
             f"검색할 장소 타입이 설정되지 않은 여행 유형입니다: {travel_type}"
         )
 
-    response = requests.post(
-        "https://places.googleapis.com/v1/places:searchNearby",
-        headers={
-            "Content-Type": "application/json",
-            "X-Goog-Api-Key": api_key,
-            "X-Goog-FieldMask": (
-                "places.id,"
-                "places.displayName,"
-                "places.location,"
-                "places.formattedAddress,"
-                "places.primaryType,"
-                "places.types"
-            ),
-        },
-        json={
+    data = _request_places(
+        "searchNearby",
+        api_key=api_key,
+        field_mask=(
+            "places.id,"
+            "places.displayName,"
+            "places.location,"
+            "places.formattedAddress,"
+            "places.primaryType,"
+            "places.types"
+        ),
+        payload={
             "includedTypes": list(included_types),
             "maxResultCount": max_results,
             "rankPreference": rank_preference,
@@ -197,7 +243,5 @@ def search_nearby(
             "languageCode": "ko",
             "regionCode": "JP",
         },
-        timeout=30,
     )
-    response.raise_for_status()
-    return cast(list[NearbyPlace], response.json().get("places", []))
+    return cast(list[NearbyPlace], data.get("places", []))
