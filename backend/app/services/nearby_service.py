@@ -289,30 +289,6 @@ def select_recommendations(
     return [candidates[index] for index in ranking.indices]
 
 
-def run_flow(
-    payload: NearbyRequest | dict,
-    *,
-    api_key: str,
-    llm: GeminiWrapper,
-    max_anchor_count: int | None = None,
-) -> NearbyResponse:
-    """입력 검증 → 복수 앵커 선정 → 역별 검색·중복 병합·최종 추천."""
-    request = NearbyRequest.model_validate(payload)
-    if not api_key.strip():
-        raise ValueError("GOOGLE_PLACE_API_KEY가 필요합니다.")
-    if max_anchor_count is None:
-        max_anchor_count = request.maxAnchorCount
-    stations = select_anchor_station(
-        request, llm=llm, max_anchor_count=max_anchor_count
-    )
-    return NearbyResponse(
-        results=[
-            recommend_for_station(request, station, api_key=api_key, llm=llm)
-            for station in stations
-        ]
-    )
-
-
 def recommend_for_station(
     request: NearbyRequest,
     station: StationInput,
@@ -392,7 +368,7 @@ def recommend_for_station(
 
 
 def recommend_nearby(request: NearbyRequest) -> NearbyResponse:
-    """서버 키로 클라이언트를 만들고 외부 오류를 HTTP와 구분된 예외로 정리한다."""
+    """서버 설정으로 LLM 앵커 선정·역별 주변 검색·추천 응답 조립을 실행한다."""
     places_key = os.getenv("GOOGLE_PLACE_API_KEY", "").strip()
     gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
     if not places_key or not gemini_key:
@@ -417,7 +393,15 @@ def recommend_nearby(request: NearbyRequest) -> NearbyResponse:
             api_key=gemini_key,
             model_name=model_name,
         )
-        return run_flow(request, api_key=places_key, llm=llm)
+        stations = select_anchor_station(
+            request, llm=llm, max_anchor_count=request.maxAnchorCount
+        )
+        return NearbyResponse(
+            results=[
+                recommend_for_station(request, station, api_key=places_key, llm=llm)
+                for station in stations
+            ]
+        )
     except NearbyProviderError:
         raise
     except (RequestsTimeout, httpx.TimeoutException) as exc:
