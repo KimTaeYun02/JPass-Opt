@@ -142,18 +142,6 @@ def select_anchor_station(
     return [candidates[value].model_copy(deep=True) for value in selection.candidateIds]
 
 
-def build_search_plan(request: NearbyRequest) -> list[tuple[str, int]]:
-    """2. 태그 하나면 N개, 복수면 전체 2N개를 태그별로 나누어 조회한다."""
-    if len(request.travelTypes) == 1:
-        return [(request.travelTypes[0], request.placeCount)]
-
-    budget = 2 * request.placeCount
-    # 태그 수가 2N보다 많으면 이번 실행에서 조회할 태그도 무작위로 고른다.
-    tags = random.sample(request.travelTypes, k=min(len(request.travelTypes), budget))
-    quota, remainder = divmod(budget, len(tags))
-    return [(tag, quota + (index < remainder)) for index, tag in enumerate(tags)]
-
-
 def distance_meters(origin: Location, destination: Location) -> float:
     """구면 위 두 좌표의 직선거리. 도보 경로나 이동 시간은 계산하지 않는다."""
     lat1, lat2 = math.radians(origin.lat), math.radians(destination.lat)
@@ -211,16 +199,13 @@ def normalize_place(
     )
 
 
-def select_recommendations(
+def rank_places_with_llm(
     request: NearbyRequest,
     candidates: list[RecommendedPlace],
     *,
     llm: GeminiWrapper,
 ) -> list[RecommendedPlace]:
-    """4. 복수 태그 후보를 LLM으로 정렬하고 선택한 인덱스를 장소로 복원한다."""
-    if len(request.travelTypes) == 1 or len(candidates) <= 1:
-        return candidates[: request.placeCount]
-
+    """LLM으로 장소 후보를 정렬하고 선택한 인덱스를 장소로 복원한다."""
     selection_count = min(request.placeCount, len(candidates))
     user_prompt = json.dumps(
         {
@@ -303,8 +288,22 @@ def recommend_for_station(
         station.stationId,
         station.name,
     )
+    single_tag = len(request.travelTypes) == 1
+    if single_tag:
+        search_plan = [(request.travelTypes[0], request.placeCount)]
+    else:
+        budget = 2 * request.placeCount
+        # 태그 수가 2N보다 많으면 이번 실행에서 조회할 태그도 무작위로 고른다.
+        tags = random.sample(
+            request.travelTypes, k=min(len(request.travelTypes), budget)
+        )
+        quota, remainder = divmod(budget, len(tags))
+        search_plan = [
+            (tag, quota + (index < remainder)) for index, tag in enumerate(tags)
+        ]
+
     candidates: dict[str, RecommendedPlace] = {}
-    for tag, count in build_search_plan(request):
+    for tag, count in search_plan:
         logger.info(
             "주변 검색 시작: stationId=%s, 태그=%s, 최대=%d개, 반경=%sm",
             station.stationId,
@@ -339,12 +338,13 @@ def recommend_for_station(
                 candidates[place.googlePlaceId] = place
             elif tag not in existing.searchTags:
                 existing.searchTags.append(tag)
-    selected = select_recommendations(request, list(candidates.values()), llm=llm)
-    if len(request.travelTypes) == 1:
-        selection_method = "거리순"
-    elif len(candidates) <= 1:
-        selection_method = "후보 순서"
+
+    candidate_places = list(candidates.values())
+    if single_tag or len(candidate_places) <= 1:
+        selected = candidate_places[: request.placeCount]
+        selection_method = "거리순" if single_tag else "후보 순서"
     else:
+        selected = rank_places_with_llm(request, candidate_places, llm=llm)
         selection_method = "LLM 재순위화"
     logger.info(
         "역별 추천 완료: stationId=%s, 유효한 중복 제거 후보=%d개, 추천=%d개, 방식=%s, 소요=%.2f초",
