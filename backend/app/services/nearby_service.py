@@ -387,7 +387,11 @@ def recommend_nearby(request: NearbyRequest) -> NearbyResponse:
 
     llm = None
     try:
-        model_name = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
+        model_name = (
+            os.getenv("GEMINI_NEARBY_MODEL", "").strip()
+            or os.getenv("GEMINI_MODEL", "").strip()
+            or "gemini-3.5-flash-lite"
+        )
         logger.info("Gemini 클라이언트 준비: 모델=%s", model_name)
         llm = GeminiWrapper(
             api_key=gemini_key,

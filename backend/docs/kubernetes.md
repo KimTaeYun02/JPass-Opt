@@ -48,7 +48,7 @@ kubectl --context jpass-local apply -f k8s/local/namespace.yaml
 python backend/scripts/apply_k8s_secret.py
 ```
 
-스크립트는 Docker Compose가 해석한 환경 값을 메모리에서 읽고, API 키 두 개만 `jpass/jpass-api-secrets`에 server-side apply한다. 키를 화면·명령 인자·파일에 출력하지 않는다. `GEMINI_MODEL`, `CORS_ORIGINS`, `API_PORT`는 Secret에 복사하지 않는다. API 키가 비어 있으면 적용하지 않고 종료한다. 이미 존재하는 `.env`를 수정하거나 컨테이너를 실행하지 않는다.
+스크립트는 Docker Compose가 해석한 환경 값을 메모리에서 읽고, API 키 두 개만 `jpass/jpass-api-secrets`에 server-side apply한다. 키를 화면·명령 인자·파일에 출력하지 않는다. `GEMINI_MODEL`, `GEMINI_NEARBY_MODEL`, `CORS_ORIGINS`, `API_PORT`는 Secret에 복사하지 않는다. API 키가 비어 있으면 적용하지 않고 종료한다. 이미 존재하는 `.env`를 수정하거나 컨테이너를 실행하지 않는다.
 
 일반 설정은 [configmap.yaml](../../k8s/local/configmap.yaml)에서 바꾼다. Kubernetes는 Compose의 `env_file`을 자동으로 읽지 않는다. Deployment가 ConfigMap과 Secret을 참조하면 컨테이너의 환경 변수로 전달된다. 현재 앱이 읽는 환경 변수 이름을 유지하므로 `Settings` 리팩터링 없이 실행할 수 있다.
 

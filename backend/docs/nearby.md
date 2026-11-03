@@ -14,7 +14,7 @@
 | Request model | `NearbyRequest` |
 | Response model | `NearbyResponse` |
 
-API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 않는다. 서버에 `GOOGLE_PLACE_API_KEY`와 `GEMINI_API_KEY`가 모두 필요하다. `GEMINI_MODEL`의 기본값은 `gemini-3.5-flash-lite`다.
+API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 않는다. 서버에 `GOOGLE_PLACE_API_KEY`와 `GEMINI_API_KEY`가 모두 필요하다. 모델은 `GEMINI_NEARBY_MODEL` → `GEMINI_MODEL` → `gemini-3.5-flash-lite` 순서로 선택하며, 앞뒤 공백을 제거한 뒤 빈 값은 건너뛴다. 기본 모델과 nearby 전용 모델의 초기 설정값은 모두 `gemini-3.5-flash-lite`이며, nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다.
 
 ## Source code
 
