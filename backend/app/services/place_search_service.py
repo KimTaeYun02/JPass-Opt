@@ -33,58 +33,51 @@ def rewrite_query(user_query: str, *, llm: GeminiWrapper) -> QueryRewrite:
     )
 
 
-def run_search(
-    request: PlaceSearchRequest, *, api_key: str, llm: GeminiWrapper
-) -> PlaceSearchResponse:
-    """검증된 요청으로 검색한다. HTTP나 환경 변수와 독립적인 서비스 흐름."""
-    request = PlaceSearchRequest.model_validate(request)
-    rewrite = rewrite_query(request.userQuery, llm=llm)
-    if rewrite.textQueries is None:
-        logger.info("장소 검색어 증강 완료: 검색어 생성 불가, Google 검색=0회")
-        return PlaceSearchResponse(
-            userQuery=request.userQuery,
-            textQueries=None,
-            results=[],
-        )
-
-    # 프롬프트나 스키마 제한과 별개로 실제 호출을 세 번 이하로 고정한다.
-    queries = rewrite.textQueries[:3]
-    logger.info("장소 검색어 증강 완료: Google 검색=%d회 예정", len(queries))
-    location_bias = (
-        request.locationBias.model_dump(exclude_none=True)
-        if request.locationBias is not None
-        else None
-    )
-    results = []
-    for index, query in enumerate(queries, start=1):
-        data = search_text(
-            text_query=query,
-            api_key=api_key,
-            language_code="ko",
-            region_code="JP",
-            page_size=request.pageSize,
-            rank_preference=request.rankPreference,
-            location_bias=location_bias,
-        )
-        results.append(PlaceSearchResult(textQuery=query, response=data))
-        logger.info(
-            "Google 장소 검색 완료: %d/%d, 장소=%d개",
-            index,
-            len(queries),
-            len(data.get("places", [])),
-        )
-
-    return PlaceSearchResponse(
-        userQuery=request.userQuery,
-        textQueries=queries,
-        results=results,
-    )
-
-
 def search_places(request: PlaceSearchRequest) -> PlaceSearchResponse:
     """서버 설정으로 LLM 검색어 재작성과 Google 장소 검색을 실행한다."""
     places_key = os.environ["GOOGLE_PLACE_API_KEY"].strip()
     gemini_key = os.environ["GEMINI_API_KEY"].strip()
     model_name = os.environ["GEMINI_MODEL"].strip()
     with GeminiWrapper(api_key=gemini_key, model_name=model_name) as llm:
-        return run_search(request, api_key=places_key, llm=llm)
+        request = PlaceSearchRequest.model_validate(request)
+        rewrite = rewrite_query(request.userQuery, llm=llm)
+        if rewrite.textQueries is None:
+            logger.info("장소 검색어 증강 완료: 검색어 생성 불가, Google 검색=0회")
+            return PlaceSearchResponse(
+                userQuery=request.userQuery,
+                textQueries=None,
+                results=[],
+            )
+
+        # 프롬프트나 스키마 제한과 별개로 실제 호출을 세 번 이하로 고정한다.
+        queries = rewrite.textQueries[:3]
+        logger.info("장소 검색어 증강 완료: Google 검색=%d회 예정", len(queries))
+        location_bias = (
+            request.locationBias.model_dump(exclude_none=True)
+            if request.locationBias is not None
+            else None
+        )
+        results = []
+        for index, query in enumerate(queries, start=1):
+            data = search_text(
+                text_query=query,
+                api_key=places_key,
+                language_code="ko",
+                region_code="JP",
+                page_size=request.pageSize,
+                rank_preference=request.rankPreference,
+                location_bias=location_bias,
+            )
+            results.append(PlaceSearchResult(textQuery=query, response=data))
+            logger.info(
+                "Google 장소 검색 완료: %d/%d, 장소=%d개",
+                index,
+                len(queries),
+                len(data.get("places", [])),
+            )
+
+        return PlaceSearchResponse(
+            userQuery=request.userQuery,
+            textQueries=queries,
+            results=results,
+        )
