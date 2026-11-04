@@ -23,7 +23,8 @@
 | 입력·출력·위치·LLM 모델 | [schemas/place_search.py](../app/schemas/place_search.py) |
 | 키 확인·검색 흐름 | [services/place_search_service.py](../app/services/place_search_service.py) |
 | 검색어 증강 규칙 | [prompts/place_search.py](../app/prompts/place_search.py) |
-| Google 요청·FieldMask·응답 검증·외부 오류 분류 | [clients/google_maps.py](../app/clients/google_maps.py) |
+| Google 요청 설정·FieldMask·응답 검증 | [clients/google_maps.py](../app/clients/google_maps.py) |
+| 공통 HTTP 요청·예외 변환·JSON 파싱 | [clients/http_client.py](../app/clients/http_client.py) |
 | Gemini 요청·응답 파싱·연결 관리 | [llm/llm_wrapper.py](../app/llm/llm_wrapper.py) |
 | 외부 서비스의 공통 오류 타입·상태 분류 | [errors.py](../app/errors.py) |
 | 앱 등록·환경 변수 로딩 | [main.py](../app/main.py) |
@@ -240,7 +241,8 @@ app/
 ├── schemas/place_search.py         # API 입력·출력, 위치 조건, LLM 결과 검증
 ├── services/place_search_service.py # Gemini 재작성 → 최대 3개 Places 검색
 ├── prompts/place_search.py         # textwrap.dedent로 정리한 영어 프롬프트
-└── clients/google_maps.py          # Google Text Search 요청과 원본 JSON 반환
+├── clients/google_maps.py          # Google Text Search 요청과 원본 JSON 반환
+└── clients/http_client.py          # 공통 HTTP 요청·예외 변환·JSON 파싱
 tests/
 ├── test_text_search.py             # 요청 모델을 만들어 실제 서비스를 호출하는 수동 실행
 ├── test_text_search_flow.py        # 재작성 결과·호출 횟수 제한 검증
@@ -289,7 +291,7 @@ LLM 프롬프트는 장소 탐색 의도마다 1개씩 최대 3개를 생성하�
 | 페이지네이션 | 첫 페이지만 조회. `nextPageToken` 반환 가능, API 입력 `pageToken`은 미지원 |
 | 재시도·캐시 | 애플리케이션의 자동 재시도·추가 LLM 시도·검색 캐시 없음 |
 | 요청 한도 | 자체 사용자별 rate limiter 없음. 공급자의 `429`를 HTTP `429`로 변환 |
-| 외부 timeout | Gemini HTTP 옵션 `30000ms`, Google `requests.post(timeout=30)` |
+| 외부 timeout | Gemini HTTP 옵션 `30000ms`, Google Places HTTP POST 30초 |
 | 전체 timeout | 별도의 요청 전체 deadline 없음. 외부 호출별 timeout을 합친 값이 엄격한 전체 시간 상한은 아님 |
 
 장소 수 제한은 Google에 요청하는 `pageSize` 기준이며 서버가 응답 장소 목록을 다시 잘라서 보정하지 않는다.

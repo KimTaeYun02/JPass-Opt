@@ -17,6 +17,8 @@
 코드 참조:
 
 - HTTP 라우터와 예외 매핑: [routes.py](../app/api/routes.py)
+- 외부 조회 공통 예외: [errors.py](../app/errors.py)
+- 공통 HTTP 요청·예외 변환·JSON 파싱: [http_client.py](../app/clients/http_client.py)
 - 입출력 모델·입력 검증: [route.py](../app/schemas/route.py)
 - 처리 순서·응답 조립: [route_service.py](../app/services/route_service.py)
 - 역 API: [heartrails.py](../app/clients/heartrails.py)
@@ -268,16 +270,21 @@ flowchart TD
 
 ## HTTP errors
 
-예외 분류 기준은 서비스의 `optimize_route`와 라우터의 `optimize`다. 어느 일차에서든 오류가 나면 부분 성공 응답 없이 전체 요청이 실패한다.
+HeartRails 클라이언트와 경로 크롤러는 외부 호출 오류를 `app.errors`의 공통 예외로 변환한다. 서비스의 `optimize_route`는 이 예외를 그대로 전달하고, 라우터의 `optimize`가 HTTP 상태와 고정된 공개 오류 메시지로 변환한다. 어느 일차에서든 오류가 나면 부분 성공 응답 없이 전체 요청이 실패한다.
 
 | Status | 실제 분류·조건 | 응답 |
 | --- | --- | --- |
 | `422` | FastAPI/Pydantic의 입력 모델 검증 실패 | `{"detail":[...]}` 형태의 검증 오류 목록 |
 | `422` | `RouteDataError`: 근처 역 없음, 동명이역 구분 불가, 유효 경로 없음, 최적화 검증 실패, 선택 경로의 역 좌표 없음 | `{"detail":"오류 설명"}` |
-| `502` | `RouteProviderError`: Requests 오류, Playwright 오류, 크롤러의 접속·검색 RuntimeError, 외부 데이터 처리 중 ValidationError·KeyError·TypeError | `{"detail":"오류 설명"}` |
-| `504` | Requests Timeout 또는 Playwright TimeoutError | `{"detail":"외부 역·경로 정보 조회 시간이 초과되었습니다."}` |
+| `429` | `ProviderRateLimitError`: 외부 서비스의 HTTP 429 | `{"detail":"외부 역·경로 정보 서비스의 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요."}` |
+| `502` | `ProviderError` 및 `ProviderResponseError`: 외부 연결·조회 실패 또는 외부 응답 형식 오류 | `{"detail":"외부 역·경로 정보 서비스에서 정상적인 응답을 받지 못했습니다."}` |
+| `504` | `ProviderTimeoutError`: Requests·Playwright 시간 초과 또는 외부 서비스의 HTTP 408·504 | `{"detail":"외부 역·경로 정보 조회 시간이 초과되었습니다."}` |
 
-`RouteProviderTimeout`은 `RouteProviderError`보다 먼저 분류한다. 크롤러의 결과 URL 대기에서 발생한 timeout은 한 번 잡아 결과 페이지·요소 확인으로 진행하므로, 그 대기 자체가 즉시 504를 만드는 것은 아니다. 처리 목록 밖의 예외는 이 API가 별도 변환하지 않으며 서버 오류가 될 수 있다.
+`ProviderRateLimitError`와 `ProviderTimeoutError`는 기본 `ProviderError`보다 먼저 분류한다. 외부 오류의 원문은 HTTP 응답에 그대로 포함하지 않는다. 서비스 전체의 `KeyError`, `TypeError`, `ValidationError`, 일반 `RuntimeError`를 외부 조회 오류로 바꾸는 처리는 없으며, 내부 오류는 서버 오류로 드러난다.
+
+HeartRails 노선 조회에서 응답 형식 오류가 발생하면 역명 조회로 재시도한다. 역명 조회도 유효하지 않으면 `ProviderResponseError`를 전달한다. 연결 실패·요청 한도·시간 초과에는 이 재시도를 적용하지 않는다.
+
+크롤러의 결과 URL 대기에서 발생한 timeout은 한 번 잡아 결과 페이지·요소 확인으로 진행하므로, 그 대기 자체가 즉시 504를 만드는 것은 아니다. 경로 후보 선택과 최적화의 `ValueError`를 `RouteDataError`로 처리하는 기존 정책은 유지한다.
 
 ## 외부 호출·동시성·제한
 

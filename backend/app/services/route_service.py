@@ -6,12 +6,6 @@ from copy import deepcopy
 from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
-from playwright.async_api import Error as PlaywrightError
-from playwright.async_api import TimeoutError as PlaywrightTimeoutError
-from pydantic import ValidationError
-from requests import RequestException
-from requests import Timeout as RequestsTimeout
-
 from app.clients.heartrails import get_nearest_stations, get_stations
 from app.crawling import crawl_route
 from app.optimizer import optimize_visit_order, quotes_from_segments
@@ -32,14 +26,6 @@ logger = logging.getLogger(__name__)
 
 class RouteDataError(ValueError):
     """입력한 여행지로 유효한 동선을 만들 수 없다."""
-
-
-class RouteProviderError(RuntimeError):
-    """외부 역·경로 정보 제공 서비스 조회에 실패했다."""
-
-
-class RouteProviderTimeout(RouteProviderError):
-    """외부 역·경로 정보 제공 서비스의 응답 시간이 초과됐다."""
 
 
 def find_stations(day):
@@ -93,15 +79,9 @@ async def collect_quotes(stations, start_at):
                 else:
                     logger.info("경로 조회: %s → %s (%s)", *key, start_at.isoformat())
                     # 이 환경은 Xvfb에서 화면 모드 Chromium으로 크롤링한다.
-                    try:
-                        result = await crawl_route(
-                            *key, departure_time=start_at, headless=False
-                        )
-                    except RuntimeError as exc:
-                        # 크롤러가 페이지 접속·검색 실패에 사용하는 예외다.
-                        raise RouteProviderError(
-                            "외부 경로 정보 조회에 실패했습니다."
-                        ) from exc
+                    result = await crawl_route(
+                        *key, departure_time=start_at, headless=False
+                    )
                     try:
                         selected, _ = quotes_from_segments(
                             [
@@ -224,8 +204,8 @@ def build_day_output(day, day_date, start_at, stations, plan):
     )
 
 
-async def _optimize_route(request: RouteRequest) -> RouteResponse:
-    """입력 검증 → 근처 역 → 경로 수집 → 최적화 → 응답. 일차별로 독립 실행한다."""
+async def optimize_route(request: RouteRequest) -> RouteResponse:
+    """근처 역 → 경로 수집 → 최적화 → 응답. 일차별로 독립 실행한다."""
     days = []
     for day in sorted(request.days, key=lambda item: item.dayIndex):
         day_date = request.startDate + timedelta(days=day.dayIndex - 1)
@@ -259,19 +239,3 @@ async def _optimize_route(request: RouteRequest) -> RouteResponse:
         totalTravelMinutes=sum(day.totalTravelMinutes for day in days),
         totalTransportFare=sum(day.totalTransportFare for day in days),
     )
-
-
-async def optimize_route(request: RouteRequest) -> RouteResponse:
-    """외부 조회 오류를 호출자가 HTTP 상태로 변환할 수 있는 예외로 정리한다."""
-    try:
-        return await _optimize_route(request)
-    except (RequestsTimeout, PlaywrightTimeoutError) as exc:
-        raise RouteProviderTimeout(
-            "외부 역·경로 정보 조회 시간이 초과되었습니다."
-        ) from exc
-    except (RequestException, PlaywrightError) as exc:
-        raise RouteProviderError("외부 역·경로 정보 조회에 실패했습니다.") from exc
-    except (ValidationError, KeyError, TypeError) as exc:
-        raise RouteProviderError(
-            "외부 역·경로 정보의 응답 형식이 올바르지 않습니다."
-        ) from exc

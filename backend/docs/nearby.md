@@ -27,6 +27,7 @@ API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 �
 | 장소 재순위화 프롬프트 | [app/prompts/nearby_ranking.py](../app/prompts/nearby_ranking.py) |
 | 여행 태그·Google 장소 유형 매핑 | [app/constants/place_types.py](../app/constants/place_types.py) |
 | Google Nearby Search | [app/clients/google_maps.py](../app/clients/google_maps.py)의 `search_nearby()` |
+| 공통 HTTP 요청·예외 변환·JSON 파싱 | [app/clients/http_client.py](../app/clients/http_client.py)의 `request_json()` |
 | Gemini 요청·구조화 출력 파싱 | [app/llm/llm_wrapper.py](../app/llm/llm_wrapper.py)의 `GeminiWrapper` |
 | 외부 서비스의 공통 오류 타입·상태 분류 | [app/errors.py](../app/errors.py) |
 | 앱 등록·환경 변수·CORS | [app/main.py](../app/main.py) |
@@ -260,7 +261,7 @@ LLM 래퍼와 Google 클라이언트는 호출 제한·시간 초과·연결 실
 
 앵커 수는 항상 1 이상이며, 기본 상한은 `max(1, 입력 역 수 // 2)`다. 명시한 `maxAnchorCount`는 선택을 허용하는 상한이므로 LLM이 그보다 적게 선택할 수 있다.
 
-Google `requests.post`의 timeout은 호출당 30초, Gemini SDK HTTP timeout은 호출당 30,000ms다. 전체 API 요청의 별도 총 시간 제한은 없다. 표는 코드 수준의 호출 수로 SDK 내부의 네트워크 재시도까지 센 값은 아니다.
+Google Places HTTP POST의 timeout은 호출당 30초, Gemini SDK HTTP timeout은 호출당 30,000ms다. 전체 API 요청의 별도 총 시간 제한은 없다. 표는 코드 수준의 호출 수로 SDK 내부의 네트워크 재시도까지 센 값은 아니다.
 
 라우터는 동기 `def`로 FastAPI 작업 스레드에서 실행한다. 요청 하나 안에서는 앵커 선정 → 첫 역의 태그별 검색 → 해당 역 재순위화 → 다음 역 순서로 모두 직렬 실행한다. 별도 병렬 처리·캐시·요청 간 잠금은 없다. 서로 다른 HTTP 요청은 FastAPI 실행 환경에서 동시에 진행할 수 있다. 한 HTTP 요청 안에서는 동일 Gemini 클라이언트를 재사용한다.
 

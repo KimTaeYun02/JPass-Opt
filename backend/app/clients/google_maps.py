@@ -2,13 +2,9 @@ from typing import TypedDict, cast
 
 import requests
 
+from app.clients.http_client import request_json
 from app.constants.place_types import PLACE_TYPES_BY_TRAVEL_TYPE, TRAVEL_TYPE
-from app.errors import (
-    ProviderError,
-    ProviderResponseError,
-    ProviderTimeoutError,
-    provider_error_for_status,
-)
+from app.errors import ProviderResponseError
 
 
 class PlaceLocation(TypedDict, total=False):
@@ -40,33 +36,19 @@ def _request_places(
     payload: dict,
     validate_place_objects: bool = False,
 ) -> dict:
-    """Places 요청과 응답 형식 검증을 한 곳에서 처리한다."""
-    try:
-        response = requests.post(
-            f"https://places.googleapis.com/v1/places:{endpoint}",
-            headers={
-                "Content-Type": "application/json",
-                "X-Goog-Api-Key": api_key,
-                "X-Goog-FieldMask": field_mask,
-            },
-            json=payload,
-            timeout=30,
-        )
-        response.raise_for_status()
-    except requests.Timeout as exc:
-        raise ProviderTimeoutError("Google 장소 검색 응답 시간 초과") from exc
-    except requests.HTTPError as exc:
-        status = exc.response.status_code if exc.response is not None else None
-        raise provider_error_for_status(status, "Google 장소 검색 실패") from exc
-    except requests.RequestException as exc:
-        raise ProviderError("Google 장소 검색 연결 실패") from exc
-
-    try:
-        data = response.json()
-    except ValueError as exc:
-        raise ProviderResponseError(
-            "Google 장소 검색 응답 JSON 형식이 올바르지 않습니다."
-        ) from exc
+    """Google Places 요청 설정과 응답 구조 검증을 처리한다."""
+    data = request_json(
+        "POST",
+        f"https://places.googleapis.com/v1/places:{endpoint}",
+        provider="Google 장소 검색",
+        headers={
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": api_key,
+            "X-Goog-FieldMask": field_mask,
+        },
+        json=payload,
+        timeout=30,
+    )
 
     if not isinstance(data, dict) or "error" in data:
         raise ProviderResponseError("Google 장소 검색 응답이 올바르지 않습니다.")
