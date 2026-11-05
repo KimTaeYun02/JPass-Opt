@@ -2,7 +2,7 @@
 
 일차별 관광지 목록으로 방문 순서·예상 도착 시각·교통비를 계산하고, 역 주변 관광지 추천과 자연어 장소 검색을 제공하는 FastAPI 서버다.
 
-세 API의 입력·출력·처리 흐름과 기계 판독용 OpenAPI JSON은 [API 참조 문서](docs/README.md)에서 확인한다.
+네 API의 입력·출력·처리 흐름과 기계 판독용 OpenAPI JSON은 [API 참조 문서](docs/README.md)에서 확인한다.
 
 Docker로 실행·배포하려면 [Docker 실행·배포 안내](docs/docker.md)를 참고한다.
 
@@ -15,6 +15,9 @@ Argo CD에서 Git 설정으로 배포하려면 [Argo CD 실습 안내](docs/argo
 | `POST /api/routes/optimize` | 관광지 방문 순서 최적화와 역·환승역 좌표 조회 |
 | `POST /api/nearby/recommend` | LLM으로 앵커 역을 선택하고 해당 역 주변 관광지 추천 |
 | `POST /api/places/search` | 사용자 문장을 일본어 검색어로 증강·정규화해 Google Places 조회 |
+| `POST /api/stations/resolve` | 관광지 좌표로 동선 계산 전에 최근접 기준역만 조회 |
+
+기준역 조회에는 Google·Gemini 키나 크롤러가 필요하지 않다. 관광지별 실패를 분리하며 요청·응답은 [기준역 조회 API 안내](docs/stations.md)를 참고한다.
 
 자연어 장소 검색의 요청·응답과 호출 횟수 제한은 [장소 검색 API 안내](docs/text_search.md)를 참고한다. Gemini는 검색어 증강·정규화에 한 번 호출하고 Places는 검색어별 첫 페이지만 최대 3회 조회한다. 검색어를 만들 수 없으면 추가 질문 없이 `textQueries: null`, `results: []`를 HTTP `200`으로 반환하며 Places를 호출하지 않는다. `tests/test_text_search.py`는 요청 모델을 만들어 실제 서비스를 호출하는 수동 테스트다.
 

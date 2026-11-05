@@ -140,6 +140,48 @@
           }
         }
       }
+    },
+    "/api/stations/resolve": {
+      "post": {
+        "tags": [
+          "기준역 조회"
+        ],
+        "summary": "일차별 관광지의 최근접 기준역 조회",
+        "description": "관광지별 Google Place ID와 좌표를 받아 최근접 역을 반환합니다. dayIndex는 1~7, 일차별 장소는 1~8개이며 일부 일차만 요청할 수 있습니다. 동선 계산·경로 크롤링·Google Places 호출은 실행하지 않습니다. 조회 실패는 장소별 status로 반환하며 다른 장소의 성공 결과를 유지합니다.",
+        "operationId": "resolve_api_stations_resolve_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StationResolveRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StationResolveResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -194,6 +236,19 @@
           "places"
         ],
         "title": "DayInput"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
       },
       "Leg": {
         "properties": {
@@ -678,6 +733,36 @@
         ],
         "title": "RectangleBias"
       },
+      "ResolvedStation": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/StationLocation"
+          },
+          "line": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "location"
+        ],
+        "title": "ResolvedStation"
+      },
       "RouteRequest": {
         "properties": {
           "startDate": {
@@ -797,6 +882,53 @@
         ],
         "title": "Station"
       },
+      "StationDayInput": {
+        "properties": {
+          "dayIndex": {
+            "type": "integer",
+            "maximum": 7.0,
+            "minimum": 1.0,
+            "title": "Dayindex"
+          },
+          "places": {
+            "items": {
+              "$ref": "#/components/schemas/StationPlace"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Places"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "dayIndex",
+          "places"
+        ],
+        "title": "StationDayInput"
+      },
+      "StationDayResult": {
+        "properties": {
+          "dayIndex": {
+            "type": "integer",
+            "title": "Dayindex"
+          },
+          "places": {
+            "items": {
+              "$ref": "#/components/schemas/StationPlaceResult"
+            },
+            "type": "array",
+            "title": "Places"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dayIndex",
+          "places"
+        ],
+        "title": "StationDayResult"
+      },
       "StationInput": {
         "properties": {
           "name": {
@@ -842,6 +974,29 @@
         ],
         "title": "StationInput"
       },
+      "StationLocation": {
+        "properties": {
+          "lat": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Lat"
+          },
+          "lng": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Lng"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "lat",
+          "lng"
+        ],
+        "title": "StationLocation"
+      },
       "StationOutput": {
         "properties": {
           "name": {
@@ -875,6 +1030,75 @@
           "location"
         ],
         "title": "StationOutput"
+      },
+      "StationPlace": {
+        "properties": {
+          "googlePlaceId": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Googleplaceid"
+          },
+          "location": {
+            "$ref": "#/components/schemas/StationLocation"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "googlePlaceId",
+          "location"
+        ],
+        "title": "StationPlace"
+      },
+      "StationPlaceResult": {
+        "properties": {
+          "googlePlaceId": {
+            "type": "string",
+            "title": "Googleplaceid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "not_found",
+              "error"
+            ],
+            "title": "Status"
+          },
+          "station": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResolvedStation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "timeout",
+                  "unavailable",
+                  "invalid_response"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "googlePlaceId",
+          "status"
+        ],
+        "title": "StationPlaceResult"
       },
       "StationRecommendations": {
         "properties": {
@@ -913,6 +1137,41 @@
         ],
         "title": "StationRecommendations"
       },
+      "StationResolveRequest": {
+        "properties": {
+          "days": {
+            "items": {
+              "$ref": "#/components/schemas/StationDayInput"
+            },
+            "type": "array",
+            "maxItems": 7,
+            "minItems": 1,
+            "title": "Days"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "days"
+        ],
+        "title": "StationResolveRequest"
+      },
+      "StationResolveResponse": {
+        "properties": {
+          "days": {
+            "items": {
+              "$ref": "#/components/schemas/StationDayResult"
+            },
+            "type": "array",
+            "title": "Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "days"
+        ],
+        "title": "StationResolveResponse"
+      },
       "TransportStep": {
         "properties": {
           "fromStation": {
@@ -933,6 +1192,46 @@
           "line"
         ],
         "title": "TransportStep"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
       },
       "Visit": {
         "properties": {

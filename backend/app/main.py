@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.nearby import router as nearby_router
 from app.api.places import router as places_router
 from app.api.routes import router as routes_router
+from app.api.stations import router as stations_router
 from app.logging_config import configure_logging
 
 
@@ -46,6 +47,7 @@ def create_app() -> FastAPI:
     application.include_router(routes_router)
     application.include_router(nearby_router)
     application.include_router(places_router)
+    application.include_router(stations_router)
     return application
 
 

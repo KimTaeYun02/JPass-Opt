@@ -25,6 +25,7 @@ AI와 함께 기획·구현·검토할 때 사용한 프로젝트 문서를 모�
 | [추천 다중 선택](design/demo-selection-design.md) | [선택 검토](reviews/demo-selection-review.md) |
 | [API 연동](design/api-integration-design.md) | 현재 계약은 Notion·프론트 README 우선. 당시 백엔드 변경 제안은 이 PR에서 제외. |
 | [이번 패키징 계약](design/frontend-packaging.md) | [패키징 검토·실행 결과](reviews/frontend-packaging.md) |
+| [기준역 API 통합 계약](design/station-integration.md) | [기준역·프론트 통합 검증](reviews/station-integration.md) |
 
 [이전 화면 흐름 QA](reviews/flow-qa-final.md)에는 포커스·입력 조합 등의 수동 검증 항목도 남아 있습니다. 과거 소스에 대한 추정을 현재 확정 결함으로 취급하지 마세요. 최종 통합 판단과 실제 실행 결과는 패키징 검토에 기록합니다.
 

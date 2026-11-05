@@ -57,7 +57,7 @@ test('nearby compatibility adapter accepts both documented inner object and resu
   assert.throws(() => buildNearbyRequest({ ...draftWithPlaces(), revision: 99 }, result, 0), /다시 계산/);
   assert.throws(() => normalizeNearby({ ...group, returnedCount: 2 }));
 });
-test('provisional text-search parses raw Google fields, dedupes, handles clarification and empty results', () => {
+test('text-search parses raw Google fields, dedupes, handles clarification and empty results', () => {
   const place = { id: 'ChIJtext', displayName: { text: 'text place' }, location: { latitude: 35, longitude: 139 }, formattedAddress: 'Japan', primaryType: 'park' };
   const response = parseTextSearch({ textQueries: ['query'], clarificationQuestion: null, results: [{ response: { places: [place, place, { id: 'missing coordinate' }, { ...place, displayName: {} }, { ...place, location: {} }] } }] });
   assert.equal(response.places.length, 1);
@@ -65,6 +65,18 @@ test('provisional text-search parses raw Google fields, dedupes, handles clarifi
   assert.deepEqual(parseTextSearch({ textQueries: null, clarificationQuestion: '어느 지역인가요?', results: [] }), { places: [], clarification: '어느 지역인가요?' });
   assert.deepEqual(parseTextSearch({ textQueries: null, clarificationQuestion: '어느 지역인가요?' }), { places: [], clarification: '어느 지역인가요?' });
   assert.deepEqual(parseTextSearch({ textQueries: ['query'], clarificationQuestion: null, results: [{ response: {} }] }).places, []);
+});
+
+test('current backend null queries prompt for details while genuine empty results stay empty', () => {
+  const response = parseTextSearch({ userQuery: '추천해줘', textQueries: null, results: [] });
+  assert.deepEqual(response.places, []);
+  assert.match(response.clarification, /지역이나 장소.*구체적으로/);
+  assert.deepEqual(parseTextSearch({ userQuery: 'Kyoto', textQueries: ['京都'], results: [] }), { places: [], clarification: null });
+  for (const malformed of [
+    { textQueries: null, results: [{ response: {} }] },
+    { textQueries: null },
+    { results: [] },
+  ]) assert.throws(() => parseTextSearch(malformed), TravelApiError);
 });
 test('HTTP uses POST with exact payload and no retry, handles provider/configuration/network failures', async () => {
   const requests = [];
@@ -75,7 +87,10 @@ test('HTTP uses POST with exact payload and no retry, handles provider/configura
   await api.search(' Kyoto ');
   assert.equal(requests.length, 1);
   assert.equal(requests[0].url, '/api/places/search');
-  assert.deepEqual(JSON.parse(requests[0].init.body), { userQuery: 'Kyoto', languageCode: 'ko', regionCode: 'JP', pageSize: 8 });
+  assert.deepEqual(JSON.parse(requests[0].init.body), { userQuery: 'Kyoto', pageSize: 8 });
+  const locationBias = { rectangle: { low: { latitude: 35, longitude: 139 }, high: { latitude: 36, longitude: 140 } } };
+  await api.search(' Tokyo ', locationBias);
+  assert.deepEqual(JSON.parse(requests[1].init.body), { userQuery: 'Tokyo', pageSize: 8, locationBias });
   for (const status of [422, 429, 502, 503, 504]) {
     let calls = 0;
     const failing = createTravelApi('/api', async () => { calls++; return new Response('provider private details', { status }); });

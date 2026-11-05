@@ -21,7 +21,7 @@ export function harness({ mode = 'example', client = createTravelApi() } = {}) {
   const searchResults = { innerHTML: '' }, searchSelection = { innerHTML: '' }, searchConfirm = { disabled: true, textContent: '' };
   const toast = { textContent: '', classList: { add() {}, remove() {} } };
   const elements = { '#app': app, '#place-dialog': dialog, '#demo-search': search, '#search-results': searchResults, '#search-selection': searchSelection, '#search-confirm': searchConfirm, '#toast': toast };
-  const context = vm.createContext({ ...model, createTravelApi: () => client, formatJapanTime, URLSearchParams, renderDemoMarkup: (element, markup) => {
+  const context = vm.createContext({ ...model, AbortController, createTravelApi: () => client, formatJapanTime, URLSearchParams, renderDemoMarkup: (element, markup) => {
     // Validate the real render() output against the persistent renderer's shape contract.
     for (const pattern of [/class="site-header"/g, /class="planner"/g, /class="map-area"/g, /id="demo-map-slot"/g]) assert.equal([...markup.matchAll(pattern)].length, 1);
     element.innerHTML = markup;

@@ -8,6 +8,7 @@ const deferred = () => { let resolve, reject; const promise = new Promise((yes, 
 function clientHarness(overrides = {}) {
   const calls = [];
   const client = {
+    initial(draft, day, query) { return client.search(query); },
     async search(query) { calls.push(['search', query]); return { places: apiPlaces, clarification: null }; },
     async optimize(draft) { calls.push(['optimize', draft]); return parseRouteResponse(routeResponse(draft), draft); },
     async nearby(draft, result, day) { calls.push(['nearby', draft, result, day]); return [apiPlaces[2]]; },
@@ -98,6 +99,29 @@ test('live modal ignores late responses after close and shows clarification or s
   assert.match(failed.markup(), /키 설정이 필요해요/);
   assert.deepEqual(failed.state().initialPool, []);
 });
+test('current backend ambiguous search response shows guidance through the HTTP adapter in both views', async () => {
+  const calls = [];
+  const client = createTravelApi('/api', async (url, init) => {
+    const body = JSON.parse(init.body);
+    calls.push({ url, body });
+    assert.equal(url, '/api/places/search');
+    assert.deepEqual(Object.keys(body).sort(), ['pageSize', 'userQuery']);
+    return new Response(JSON.stringify({ userQuery: body.userQuery, textQueries: null, results: [] }));
+  });
+  const h = harness({ mode: 'api', client });
+  h.click('search'); h.filter('추천해줘'); h.searchKey('Enter'); await h.settle();
+  assert.match(h.searchMarkup(), /지역이나 장소.*구체적으로/);
+  assert.doesNotMatch(h.searchMarkup(), /응답 형식|조건에 맞는 장소가 없어요/);
+  assert.equal(h.confirm.disabled, true);
+  assert.deepEqual(h.state().draft.days[0].placeIds, []);
+  h.closeDialog(); h.input('initial-query', '추천해줘'); h.click('continue');
+  h.click('load-initial'); await h.settle();
+  assert.match(h.markup(), /지역이나 장소.*구체적으로/);
+  assert.doesNotMatch(h.markup(), /응답 형식|장소 검색 실패/);
+  assert.deepEqual(h.state().initialPool, []);
+  assert.equal(calls.length, 2);
+});
+
 test('initial API suggestions support multi-select and preserve owned picks after taste edits', async () => {
   const { h, calls } = clientHarness();
   h.change('day-count', '1'); h.click('continue');
@@ -116,15 +140,13 @@ test('query blur does not clear loaded candidates and explicit identical searche
   const previous = h.state().initialPool;
   h.change('choice-query', 'query after blur');
   assert.deepEqual(h.state().initialPool, previous);
-  h.click('choose-toggle', { id: apiPlaces[0].id });
-  assert.ok(h.state().draft.days[0].placeIds.includes(apiPlaces[0].id));
   h.click('load-initial'); await h.settle();
   assert.equal(calls.length, 1, 'unchanged request uses memory cache');
   for (let i = 0; i < 21; i++) {
     h.input('choice-query', `query ${i}`);
     h.click('load-initial'); await h.settle();
   }
-  h.input('choice-query', '교토 관광지'); h.click('load-initial'); await h.settle();
+  h.input('choice-query', ''); h.click('load-initial'); await h.settle();
   assert.equal(calls.length, 23, 'evicted query is fetched again');
 });
 test('live UI runs through real HTTP adapter, Enter search, request builder and response parser', async () => {

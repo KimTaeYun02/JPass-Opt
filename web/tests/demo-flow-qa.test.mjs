@@ -12,6 +12,7 @@ function deferred() {
 function setup(overrides = {}) {
   const calls = [];
   const client = {
+    initial(draft, day, query) { return client.search(query); },
     async search(query) { calls.push(['search', query]); return { places: apiPlaces, clarification: null }; },
     async optimize(draft) { calls.push(['optimize']); return parseRouteResponse(routeResponse(draft), draft); },
     async nearby() { calls.push(['nearby']); return [apiPlaces[2]]; },

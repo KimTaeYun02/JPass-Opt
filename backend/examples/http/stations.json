@@ -1,0 +1,13 @@
+{
+  "days": [
+    {
+      "dayIndex": 1,
+      "places": [
+        {
+          "googlePlaceId": "example-place-id-replace-with-search-result",
+          "location": {"lat": 35.6812, "lng": 139.7671}
+        }
+      ]
+    }
+  ]
+}

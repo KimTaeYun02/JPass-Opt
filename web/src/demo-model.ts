@@ -9,6 +9,7 @@ export type DemoPlace = {
   googlePlaceId?: string; address?: string | null; primaryType?: string | null;
   distanceMeters?: number;
   searchTags?: string[];
+  sources?: ('nearby' | 'text_search')[];
 };
 // These local IDs are not Google Place IDs; search and optimization use local fixtures.
 export const PLACES: DemoPlace[] = [
@@ -25,9 +26,9 @@ export const PLACES: DemoPlace[] = [
   { id: 'demo-railway', name: '교토 철도박물관', area: '우메코지', station: '우메코지교토니시역', lat: 34.9872, lng: 135.742, tags: ['activity', 'culture'], rank: 10 },
   { id: 'demo-park', name: '마루야마 공원', area: '기온', station: '기온시조역', lat: 35.0034, lng: 135.7803, tags: ['nature', 'relaxation'], rank: 11 },
 ];
-export type DemoDay = { placeIds: string[]; startTime: string };
+export type DemoDay = { placeIds: string[]; startTime: string; searchQuery?: string };
 export type Draft = { startDate: string; dayCount: number; days: DemoDay[]; tags: Tag[]; request: string; revision: number };
-export type RouteStation = { name: string; location: { lat: number; lng: number } };
+export type RouteStation = { name: string; location: { lat: number; lng: number }; line?: string };
 export type TransportStep = { fromStation: RouteStation; toStation: RouteStation; line: string };
 export type DemoLeg = { from: string; to: string; minutes: number; fare: number; line: string; route?: TransportStep[]; departureAt?: string; arrivalAt?: string };
 export type DemoResult = { revision: number; dataSource?: 'live'; days: { order: string[]; legs: DemoLeg[]; minutes: number; fare: number; startTime: string; arrivals?: Record<string, string>; stations?: Record<string, RouteStation> }[] };
@@ -37,6 +38,22 @@ export function registerPlaces(places: DemoPlace[]): void {
     if (index < 0) PLACES.push(place);
     else PLACES[index] = place;
   }
+}
+export function mergeCandidatePlaces(groups: DemoPlace[][]): DemoPlace[] {
+  const merged = new Map<string, DemoPlace>();
+  for (const place of groups.flat()) {
+    const key = place.googlePlaceId ?? place.id;
+    const previous = merged.get(key);
+    if (!previous) { merged.set(key, { ...place }); continue; }
+    merged.set(key, {
+      ...previous,
+      tags: [...new Set([...previous.tags, ...place.tags])],
+      searchTags: [...new Set([...(previous.searchTags ?? []), ...(place.searchTags ?? [])])],
+      sources: [...new Set([...(previous.sources ?? []), ...(place.sources ?? [])])],
+      distanceMeters: previous.distanceMeters === undefined ? place.distanceMeters : place.distanceMeters === undefined ? previous.distanceMeters : Math.min(previous.distanceMeters, place.distanceMeters),
+    });
+  }
+  return [...merged.values()];
 }
 export function emptyDraft(): Draft {
   const draft = initialDraft();

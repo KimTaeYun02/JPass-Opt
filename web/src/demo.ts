@@ -4,6 +4,7 @@ import { TAGS, addPlace, addPlaces, canApplyResult, clockAt, computeExample, dat
 import { createTravelApi, formatJapanTime } from './demo-api';
 import { renderDemoMarkup } from './demo-render';
 import type { DemoPlace, DemoResult, Tag } from './demo-model';
+import type { PlaceSearch } from './demo-api';
 import { createGoogleDemoMap } from './demo-map';
 import type { DemoMapView, MapPhase } from './demo-map-controller';
 
@@ -18,7 +19,9 @@ const toast = document.querySelector<HTMLElement>('#toast')!;
 const apiMode = new URLSearchParams(window.location.search).get('mode') !== 'example';
 const api = createTravelApi();
 let draft = apiMode ? emptyDraft() : initialDraft();
-let initialQuery = '교토 관광지';
+const initialQuery = (): string => draft.days[activeDay]?.searchQuery ?? '';
+const initialDays = new Map<number, { ids: string[]; message: string }>();
+let initialAbort: AbortController | undefined;
 let initialPool: string[] = [], nearbyPool: string[] = [], searchPool: string[] = [];
 const loading = { initial: false, nearby: false, search: false };
 const messages = { initial: '검색 버튼을 눌러 추천 장소를 불러오세요.', nearby: '추천 받기를 누르면 계산된 역 주변에서 조회해요.', search: '검색어를 입력하고 검색 버튼을 눌러주세요.' };
@@ -26,7 +29,7 @@ const tokens = { initial: 0, nearby: 0, search: 0 };
 let nearbyKind: 'nearby' | 'text' = 'nearby';
 let nearbyQuery = '';
 let operationError = '';
-const placeCache = new Map<string, { places: DemoPlace[]; clarification: string | null }>();
+const placeCache = new Map<string, PlaceSearch>();
 let activeDay = 0;
 let view: 'input' | 'choose' | 'result' = 'input';
 // Zero-based draft day indices; ownership is only for picks made in step 2.
@@ -79,6 +82,7 @@ function inputPanel(): string {
     ${!day.placeIds.length ? '<p class="empty-state">아직 비어 있는 하루예요.<br />가고 싶은 장소부터 하나 골라보세요.</p>' : ''}
     <button type="button" class="add-place" data-action="search" ${day.placeIds.length >= 8 ? 'disabled' : ''}><span aria-hidden="true">＋</span> 장소 추가하기</button>
     <p class="helper">방문 순서는 결과에서 확인할 수 있어요.</p>
+    ${apiMode ? `<label class="request-label" for="initial-query">이날 추천받을 지역·검색어 <span>선택</span></label><input id="initial-query" value="${html(initialQuery())}" placeholder="예: 교토의 조용한 정원과 카페" /><p class="helper">선택한 장소가 있으면 그 주변을 우선해 찾아요. 장소가 없는 날은 지역이나 검색어를 입력해 주세요.</p>` : ''}
     <div class="section-rule"></div><div class="taste-heading"><h2>3 · 여행 취향</h2><span>여러 개 선택</span></div>
     <div class="tag-list">${TAGS.map(([tag, label]) => `<button type="button" class="tag ${draft.tags.includes(tag) ? 'active' : ''}" data-action="tag" data-tag="${tag}" aria-pressed="${draft.tags.includes(tag)}">${draft.tags.includes(tag) ? '<span aria-hidden="true">✓</span> ' : ''}${label}</button>`).join('')}</div>
     <label class="request-label" for="extra-request">더 바라는 점 <span>선택</span></label><textarea id="extra-request" rows="2" placeholder="예: 사람이 적은 조용한 곳이 좋아요">${html(draft.request)}</textarea><p class="helper">${apiMode ? '추천 받기를 누르면 이 요청도 함께 전달해요.' : '추가 요청 문장은 실제 추천 연결 시 반영돼요.'}</p>`;
@@ -101,9 +105,8 @@ function choosePanel(): string {
   const ids = draft.days[activeDay]!.placeIds;
   const owned = ownedPicks();
   const base = ids.filter((id) => !owned.has(id));
-  const candidates = choiceCandidates();
   return `<div class="choice-intro"><span class="choice-example">${apiMode ? '관광지 추천' : '예시 추천'}</span><p>취향에 맞는 곳을 더 골라보세요.<br />선택한 장소를 포함해 다음 단계에서 동선을 만들어요.</p><button type="button" data-action="view" data-view="input">입력한 조건 수정</button></div>
-    ${apiMode ? `<div class="api-query"><label for="choice-query">추천받을 지역이나 요청사항</label><input id="choice-query" value="${html(initialQuery)}" placeholder="예: 교토에서 조용히 산책할 곳" /><button type="button" data-action="load-initial" ${loading.initial ? 'disabled' : ''}>${loading.initial ? '추천을 찾고 있어요…' : '취향으로 추천 받기'}</button><p role="status">${html(messages.initial)}</p></div>` : ''}
+    ${apiMode ? `<div class="api-query"><label for="choice-query">${activeDay + 1}일차 추천 지역·검색어</label><input id="choice-query" value="${html(initialQuery())}" placeholder="예: 교토에서 조용히 산책할 곳" /><button type="button" data-action="load-initial" ${loading.initial ? 'disabled' : ''}>${loading.initial ? '추천을 찾고 있어요…' : '주변 장소와 취향으로 추천 받기'}</button><p role="status">${html(messages.initial)}</p></div>` : ''}
     <div class="condition-chips choice-tastes">${draft.tags.length ? draft.tags.map((tag) => `<span>${tagLabel(tag)}</span>`).join('') : '<span>모든 취향 둘러보기</span>'}</div>
     <div class="day-tabs" aria-label="추천 장소를 넣을 일차">${dayButtons()}</div>
     <section class="choice-summary" aria-label="현재 일차의 선택 현황"><h2>${activeDay + 1}일차 <span>총 ${ids.length}/8곳</span></h2>
@@ -111,12 +114,29 @@ function choosePanel(): string {
       <div class="choice-picked"><span role="status">추천에서 고른 장소 · ${owned.size}곳</span><div class="selected-search-chips">${[...owned].map((id) => `<button type="button" data-action="choose-toggle" data-id="${id}" ${running ? 'disabled' : ''} aria-label="${html(placeById(id).name)} 추천 선택 취소">${html(placeById(id).name)} ×</button>`).join('') || '<p>아래에서 여러 곳을 선택할 수 있어요.</p>'}</div></div>
     </section>
     <div class="choice-heading"><h2>추가로 가보고 싶은 곳</h2><span>여러 곳 선택</span></div>
-    <div class="choice-candidates">${candidates.map((candidate) => {
+    <div class="choice-candidates">${choiceCards()}</div>
+    <p class="helper">${apiMode ? '선택한 장소의 기준역 주변 추천과 검색어·취향 검색 결과를 함께 보여줘요. 장소 검색은 주변을 우선하며 지역 밖 결과도 포함될 수 있어요.' : '교토 예시 후보입니다. 추가 요청 문장은 실제 추천 연결 시 반영돼요.'}<br />기존 장소만으로도 동선을 만들 수 있어요. 일차마다 최소 1곳이 필요해요.</p>`;
+}
+function choiceCards(): string {
+  const ids = draft.days[activeDay]!.placeIds, owned = ownedPicks();
+  return choiceCandidates().map((candidate) => {
       const id = candidate.demoPlaceId;
       const checked = owned.has(id);
-      return `<article class="recommend-card choice-card ${checked ? 'picked' : ''}"><div class="recommend-body"><button type="button" class="recommend-name" data-action="focus" data-id="${id}">${html(candidate.name)} <span aria-hidden="true">↗</span></button><p>${html(placeById(id).area)}</p><div class="small-tags">${candidate.searchTags.map((tag) => `<span>${tagLabel(tag)}</span>`).join('')}</div><button type="button" class="choice-toggle" data-action="choose-toggle" data-id="${id}" aria-pressed="${checked}" ${running || (!checked && ids.length >= 8) ? 'disabled' : ''}><span aria-hidden="true">${checked ? '✓' : '＋'}</span> ${checked ? `${activeDay + 1}일차에 선택됨 · 취소` : `${activeDay + 1}일차에 선택`}</button></div></article>`;
-    }).join('') || '<p class="empty-state">추가할 예시 후보가 없어요.<br />입력한 조건에서 다른 취향을 골라보세요.</p>'}</div>
-    <p class="helper">${apiMode ? '선택한 취향과 추가 요청을 함께 검색해요. 검색 지역 밖 결과도 포함될 수 있어요.' : '교토 예시 후보입니다. 추가 요청 문장은 실제 추천 연결 시 반영돼요.'}<br />기존 장소만으로도 동선을 만들 수 있어요. 일차마다 최소 1곳이 필요해요.</p>`;
+      const place = placeById(id);
+      return `<article class="recommend-card choice-card ${checked ? 'picked' : ''}"><div class="recommend-body"><button type="button" class="recommend-name" data-action="focus" data-id="${id}">${html(candidate.name)} <span aria-hidden="true">↗</span></button><p>${html(place.area)}</p><div class="small-tags">${candidate.searchTags.map((tag) => `<span>${tagLabel(tag)}</span>`).join('')}${(place.sources ?? []).map((source) => `<span>${source === 'nearby' ? '기준역 주변' : '검색어·취향 검색'}</span>`).join('')}</div><button type="button" class="choice-toggle" data-action="choose-toggle" data-id="${id}" aria-pressed="${checked}" ${running || (!checked && ids.length >= 8) ? 'disabled' : ''}><span aria-hidden="true">${checked ? '✓' : '＋'}</span> ${checked ? `${activeDay + 1}일차에 선택됨 · 취소` : `${activeDay + 1}일차에 선택`}</button></div></article>`;
+    }).join('') || `<p class="empty-state">${apiMode ? '추천 받기를 눌러 관광지를 찾아보세요.' : '추가할 예시 후보가 없어요.<br />입력한 조건에서 다른 취향을 골라보세요.'}</p>`;
+}
+function refreshQueryCandidates(): void {
+  // Keep the composing input connected; only dependent candidates/status change.
+  const cards = app.querySelector<HTMLElement>('.choice-candidates');
+  if (cards) cards.innerHTML = choiceCards();
+  const status = app.querySelector<HTMLElement>('.api-query [role="status"]');
+  if (status) status.textContent = messages.initial;
+  const button = app.querySelector<HTMLButtonElement>('[data-action="load-initial"]');
+  if (button) { button.disabled = false; button.textContent = '주변 장소와 취향으로 추천 받기'; }
+  app.querySelectorAll('.map-marker.nearby').forEach((node) => node.remove());
+  if (selected && !draft.days[activeDay]!.placeIds.includes(selected)) { selected = undefined; app.querySelector('.map-place-card')?.remove(); }
+  mapController?.update(mapView());
 }
 function enterChoose(): boolean {
   const errors = validateDraft(draft, true);
@@ -171,9 +191,15 @@ function resultDate(): string {
   const date = new Date(resultStartDate + 'T00:00:00Z'); date.setUTCDate(date.getUTCDate() + activeDay);
   return date.toISOString().slice(0, 10);
 }
-function invalidateRecommendations(): void {
+function cancelInitialRequest(): void {
+  initialAbort?.abort(); initialAbort = undefined;
+  tokens.initial++; loading.initial = false;
+}
+function invalidateRecommendations(currentDayOnly = false): void {
+  cancelInitialRequest();
+  if (currentDayOnly) initialDays.delete(activeDay); else initialDays.clear();
   initialPool = []; nearbyPool = [];
-  tokens.initial++; tokens.nearby++; loading.initial = false; loading.nearby = false;
+  tokens.nearby++; loading.nearby = false;
   messages.initial = '조건이 바뀌었어요. 추천 받기를 눌러 다시 조회하세요.';
   messages.nearby = '조건이 바뀌었어요. 추천 받기를 눌러 다시 조회하세요.';
 }
@@ -189,16 +215,16 @@ function apiNearbyPanel(): string {
     ${availableNearby().map((place) => `<article class="recommend-card"><div class="recommend-body"><button type="button" class="recommend-name" data-action="focus" data-id="${place.id}">${html(place.name)} <span aria-hidden="true">↗</span></button><p>${html(place.area)}</p>${place.distanceMeters !== undefined ? `<p>추천 기준역에서 직선 ${Math.round(place.distanceMeters)}m · 도보 거리 아님</p>` : ''}<button type="button" class="recommend-add" data-action="recommend-add" data-id="${place.id}" ${draft.days[activeDay]!.placeIds.length >= 8 ? 'disabled' : ''}>＋ ${activeDay + 1}일차에 추가</button></div></article>`).join('')}`;
 }
 function requestContext(kind: 'initial' | 'nearby' | 'search'): string {
-  return JSON.stringify([draft.revision, draft.tags, draft.request, activeDay, view, result?.revision, kind === 'search' ? [dialog.open, search.value] : kind === 'initial' ? initialQuery : [nearbyKind, nearbyQuery, nearbyOpen]]);
+  return JSON.stringify([draft.revision, draft.tags, draft.request, activeDay, view, result?.revision, kind === 'search' ? [dialog.open, search.value] : kind === 'initial' ? initialQuery() : [nearbyKind, nearbyQuery, nearbyOpen]]);
 }
 async function loadPlaces(kind: 'initial' | 'nearby' | 'search'): Promise<void> {
   if (!apiMode || loading[kind]) return;
   const context = requestContext(kind), token = ++tokens[kind];
   const snapshot = structuredClone(draft), computed = result;
   const mode = nearbyKind, day = activeDay;
-  const query = kind === 'search' ? search.value : `${kind === 'initial' ? initialQuery : nearbyQuery}. 여행 취향: ${draft.tags.map(tagLabel).join(', ')}. ${draft.request}`;
-  const key = JSON.stringify([kind, mode, query, kind === 'nearby' && mode === 'nearby' ? [computed, day, snapshot.tags, snapshot.request] : null]);
-  if (kind === 'initial') initialPool = [];
+  const query = kind === 'search' ? search.value : kind === 'initial' ? initialQuery() : `${nearbyQuery}. 여행 취향: ${draft.tags.map(tagLabel).join(', ')}. ${draft.request}`;
+  const key = JSON.stringify([kind, mode, query, kind === 'initial' ? [day, snapshot.days[day]!.placeIds.map((id) => { const place = placeById(id); return [place.googlePlaceId, place.name, place.lat, place.lng]; }), snapshot.tags, snapshot.request] : kind === 'nearby' && mode === 'nearby' ? [computed, day, snapshot.tags, snapshot.request] : null]);
+  if (kind === 'initial') { initialAbort = new AbortController(); }
   else if (kind === 'nearby') nearbyPool = [];
   else searchPool = [];
   loading[kind] = true;
@@ -207,8 +233,8 @@ async function loadPlaces(kind: 'initial' | 'nearby' | 'search'): Promise<void> 
   try {
     let data = placeCache.get(key);
     if (!data) {
-      data = kind === 'nearby' && mode === 'nearby' ? { places: await api.nearby(snapshot, computed!, day), clarification: null } : await api.search(query);
-      placeCache.set(key, data);
+      data = kind === 'initial' ? await api.initial(snapshot, day, query, initialAbort?.signal) : kind === 'nearby' && mode === 'nearby' ? { places: await api.nearby(snapshot, computed!, day), clarification: null } : await api.search(query);
+      if (!data.warnings?.length) placeCache.set(key, data);
       if (placeCache.size > 20) placeCache.delete(placeCache.keys().next().value!);
     }
     if (tokens[kind] !== token || requestContext(kind) !== context) return;
@@ -217,13 +243,15 @@ async function loadPlaces(kind: 'initial' | 'nearby' | 'search'): Promise<void> 
     if (kind === 'initial') initialPool = ids;
     else if (kind === 'nearby') nearbyPool = ids;
     else searchPool = ids;
-    messages[kind] = data.clarification ?? (ids.length ? `${ids.length}곳을 찾았어요.${kind === 'search' ? ' 여러 곳을 골라 한 번에 추가하세요.' : ' 이미 일정에 있는 장소는 제외해요.'}` : '조건에 맞는 장소가 없어요. 지역이나 요청사항을 바꿔보세요.');
+    messages[kind] = [ids.length ? `${ids.length}곳을 찾았어요.${kind === 'search' ? ' 여러 곳을 골라 한 번에 추가하세요.' : ' 이미 일정에 있는 장소는 제외해요.'}` : data.clarification ? '' : '조건에 맞는 장소가 없어요. 지역이나 요청사항을 바꿔보세요.', data.clarification, data.notice, ...(data.warnings ?? [])].filter(Boolean).join(' ');
+    if (kind === 'initial') initialDays.set(day, { ids, message: messages.initial });
   } catch (error) {
     if (tokens[kind] === token && requestContext(kind) === context) messages[kind] = (error as Error).message;
   } finally {
     if (tokens[kind] === token) {
       loading[kind] = false;
       if (requestContext(kind) !== context) messages[kind] = '조건이 바뀌었어요. 검색 버튼을 눌러 다시 조회해 주세요.';
+      if (kind === 'initial') initialAbort = undefined;
       if (kind === 'search') renderSearch(); else render();
     }
   }
@@ -404,8 +432,9 @@ app.addEventListener('click', (event) => {
     if (action === 'day') {
       const day = Number(button.dataset.day);
       if (day === activeDay) return;
-      if (apiMode) invalidateRecommendations();
+      if (apiMode) { cancelInitialRequest(); tokens.nearby++; loading.nearby = false; nearbyPool = []; messages.nearby = '추천 받기를 눌러 이날의 역 주변을 조회하세요.'; }
       activeDay = day; selected = undefined;
+      if (apiMode) { const saved = initialDays.get(day); initialPool = saved?.ids ?? []; messages.initial = saved?.message ?? '추천 받기를 눌러 이날의 관광지를 찾아보세요.'; }
     }
     else if (action === 'load-initial') { void loadPlaces('initial'); return; }
     else if (action === 'load-nearby') { void loadPlaces('nearby'); return; }
@@ -414,7 +443,7 @@ app.addEventListener('click', (event) => {
     else if (action === 'view') {
       const next = button.dataset.view;
       if (next === view) return;
-      if (apiMode) { tokens.initial++; loading.initial = false; tokens.nearby++; loading.nearby = false; }
+      if (apiMode) { cancelInitialRequest(); tokens.nearby++; loading.nearby = false; }
       if (next === 'choose') { if (!enterChoose()) return; }
       else if (next === 'input' || (next === 'result' && result)) { view = next; selected = undefined; }
       else return;
@@ -439,8 +468,7 @@ app.addEventListener('click', (event) => {
     else if (action === 'toggle-nearby') { if (apiMode) { tokens.nearby++; loading.nearby = false; } nearbyOpen = !nearbyOpen; selected = undefined; }
     else if (action === 'focus') selected = button.dataset.id;
     else if (action === 'clear-focus') selected = undefined;
-    else if (action === 'pending-remove') { draft = removePlace(draft, activeDay, button.dataset.id!); initialAddedIds.get(activeDay)?.delete(button.dataset.id!); if (selected === button.dataset.id) selected = undefined; }
-    else if (action === 'remove') { draft = removePlace(draft, activeDay, button.dataset.id!); initialAddedIds.get(activeDay)?.delete(button.dataset.id!); if (selected === button.dataset.id) selected = undefined; }
+    else if (action === 'pending-remove' || action === 'remove') { draft = removePlace(draft, activeDay, button.dataset.id!); initialAddedIds.get(activeDay)?.delete(button.dataset.id!); if (apiMode) invalidateRecommendations(true); if (selected === button.dataset.id) selected = undefined; }
     else if (action === 'tag') {
       if (apiMode) invalidateRecommendations();
       const tag = button.dataset.tag as Tag;
@@ -474,7 +502,12 @@ app.addEventListener('change', (event) => {
 app.addEventListener('input', (event) => {
   const field = event.target as HTMLTextAreaElement;
   if (field.id === 'extra-request') { if (apiMode) invalidateRecommendations(); draft = { ...draft, request: field.value }; }
-  else if (field.id === 'choice-query') initialQuery = field.value;
+  else if (field.id === 'choice-query' || field.id === 'initial-query') {
+    draft = { ...draft, days: draft.days.map((day, index) => index === activeDay ? { ...day, searchQuery: field.value } : day) };
+    cancelInitialRequest(); initialDays.delete(activeDay); initialPool = [];
+    messages.initial = '검색 조건이 바뀌었어요. 추천 받기를 눌러 조회하세요.';
+    refreshQueryCandidates();
+  }
   else if (field.id === 'nearby-query') nearbyQuery = field.value;
 });
 search.addEventListener('input', () => {
@@ -495,6 +528,7 @@ dialog.addEventListener('click', (event) => {
     try {
       const ids = [...stagedPlaces];
       draft = addPlaces(draft, activeDay, ids);
+      if (apiMode) invalidateRecommendations(true);
       selected = ids[ids.length - 1];
       stagedPlaces.clear(); dialog.close(); render();
       notify(`${ids.length}곳을 ${activeDay + 1}일차에 추가했어요.`);
