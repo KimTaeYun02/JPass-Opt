@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JR Pass Opt</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <span class="brand">JR Pass Opt<span class="brand-tag">일본 여행의 이동을 더 알뜰하게</span></span>
+      <ol class="stepper">
+        <li class="step is-active"><span class="step-no">1</span>정보 입력</li>
+        <li class="step-line" aria-hidden="true"></li>
+        <li class="step"><span class="step-no">2</span>경로·패스 결과</li>
+      </ol>
+      <span class="demo-badge">입력 화면 예시</span>
+    </header>
+
+    <main class="layout">
+      <section class="map-area">
+        <div id="map" class="map" aria-label="지도"></div>
+        <div id="map-status" class="map-status" role="status">지도를 불러오는 중...</div>
+        <div class="map-caption">
+          <span class="eyebrow">YOUR NEXT JAPAN TRIP</span>
+          <h2>가고 싶은 곳부터.<br />순서는 우리가 맞출게요.</h2>
+          <p>나에게 맞는 패스, 그 패스로 더 가볼 만한 곳까지.</p>
+          <span class="map-note">간사이 여행 · 예시 지도</span>
+        </div>
+      </section>
+
+      <aside class="panel trip-panel">
+        <div class="panel-heading"><span class="eyebrow">LET’S PLAN</span><span class="subtle">01 / 여행 정보</span></div>
+        <h1 class="panel-title">내 여행 시간표</h1>
+        <p class="panel-desc">꼭 가야 하는 일정만 시간표에 놓아보세요. 날짜가 자유로운 장소는 따로 모아둘 수 있어요.</p>
+        <form id="trip-form" novalidate>
+          <fieldset class="form-section trip-period">
+            <legend>여행 기간</legend>
+            <div class="field-row">
+              <label>시작일<input id="trip-start" name="start" type="date" value="2026-11-03" required /></label>
+              <label>종료일<input id="trip-end" name="end" type="date" value="2026-11-07" required /></label>
+            </div>
+            <p id="duration" class="field-help"></p>
+          </fieldset>
+          <section class="schedule-section" aria-labelledby="schedule-title">
+            <div class="schedule-title-row"><div><h2 id="schedule-title">여행 시간표 <span id="place-count" class="count"></span></h2><p>장소를 끌어서 놓고, 블록 위·아래 끝을 당겨 시간을 조절하세요.</p></div><button id="add-place" class="add-place-button" type="button">+ 장소 검색 · 추가</button></div>
+            <div id="place-tray" class="place-tray"></div>
+            <div class="board-toolbar"><div class="board-navigation"><button id="prev-days" type="button" aria-label="이전 5일">←</button><strong id="visible-range"></strong><button id="next-days" type="button" aria-label="다음 5일">→</button></div><label class="view-select">표시 시간<select id="view-hours" aria-label="시간표 표시 시간"><option value="day">08:00–22:00</option><option value="full">00:00–24:00</option></select></label></div>
+            <p id="gesture-status" class="gesture-status" role="status" aria-live="polite"></p>
+            <div class="timetable-scroll" tabindex="0" aria-label="여행 시간표, 좁은 화면에서는 좌우로 스크롤할 수 있습니다"><div id="timetable" class="timetable"></div></div>
+            <p class="field-help">새 장소는 기본 2시간 · 30분 단위로 조절 · 모든 시각은 일본 현지 시간입니다.<br />날짜 제목에 놓으면 날짜만 고정됩니다. 클릭하거나 Enter를 누르면 편집창에서도 수정할 수 있어요. 이동 시간은 아직 반영되지 않았어요.</p>
+          </section>
+          <details class="optional-section">
+            <summary>도착·출발과 숙소 <span>선택 입력</span></summary>
+            <div class="optional-fields">
+              <label>도착 장소<input name="arrivalPlace" type="text" placeholder="예: 간사이 국제공항" maxlength="80" /></label>
+              <div class="field-row">
+                <label>도착 날짜<input name="arrivalDate" type="date" /></label>
+                <label>도착 시간<input name="arrivalTime" type="time" /></label>
+              </div>
+              <label>출발 장소<input name="departurePlace" type="text" placeholder="예: 간사이 국제공항" maxlength="80" /></label>
+              <div class="field-row">
+                <label>출발 날짜<input name="departureDate" type="date" /></label>
+                <label>출발 시간<input name="departureTime" type="time" /></label>
+              </div>
+              <label>숙소 위치<input name="stay" type="text" placeholder="예: 오사카 난바역 근처" maxlength="120" /></label>
+            </div>
+          </details>
+          <fieldset class="form-section preference-section">
+            <legend>어떤 여행을 선호하나요?</legend>
+            <div class="segmented">
+              <label><input type="radio" name="preference" value="cost" /><span>비용 절약</span></label>
+              <label><input type="radio" name="preference" value="balance" checked /><span>균형 있게</span></label>
+              <label><input type="radio" name="preference" value="time" /><span>이동 시간 단축</span></label>
+            </div>
+          </fieldset>
+          <p id="form-error" class="form-error" role="alert" hidden></p>
+          <section id="input-summary" class="input-summary" tabindex="-1" hidden></section>
+          <div class="form-footer">
+            <button class="submit-button" type="submit">추천 일정과 패스 보기 <span aria-hidden="true">→</span></button>
+            <p>예시 화면 · 실제 경로 검색 및 패스 추천은 아직 연결되지 않았어요.</p>
+          </div>
+        </form>
+        <dialog id="place-editor" class="place-editor" aria-labelledby="editor-title">
+          <form id="place-editor-form" novalidate>
+            <div class="editor-heading"><div><span class="eyebrow">ADD TO YOUR TRIP</span><h2 id="editor-title">장소 배치</h2></div><button id="close-editor" type="button" aria-label="장소 편집 닫기">×</button></div>
+            <label>이미 추가한 장소<select id="place-choice" aria-label="배치할 기존 장소"></select></label>
+            <div class="place-search-field"><label for="place-query">새 장소 검색</label><input id="place-query" type="search" maxlength="100" placeholder="예: 오사카성, 교토역, 기요미즈데라" autocomplete="off" /><ul id="place-results" class="place-results" aria-label="장소 검색 결과"></ul><p id="search-status" class="field-help" role="status"></p></div>
+            <div id="chosen-place" class="chosen-place" hidden></div>
+            <div class="editor-settings">
+              <label>배치 방식<select id="placement-mode"><option value="free">날짜 자유 · 나중에 정하기</option><option value="date">날짜만 고정</option><option value="time">날짜와 시간 고정</option></select></label>
+              <div id="editor-date-field"><label>방문 날짜<input id="editor-date" type="date" /></label></div>
+              <div id="editor-time-fields" class="field-row"><label>시작 시간 <span class="subtle">30분 단위</span><input id="editor-time" type="time" step="1800" /></label><label>방문 시간<select id="editor-duration"><option value="30">30분</option><option value="60">1시간</option><option value="90">1시간 30분</option><option value="120">2시간</option><option value="180">3시간</option><option value="240">4시간</option></select></label></div>
+              <label>방문 여부<select id="editor-priority"><option value="required">꼭 방문할 곳</option><option value="optional">시간이 남으면 방문</option></select></label>
+            </div>
+            <p id="editor-error" class="form-error" role="alert" hidden></p>
+            <div class="editor-actions"><button id="delete-place" class="delete-place" type="button" hidden>장소 삭제</button><button id="cancel-editor" type="button">취소</button><button class="save-place" type="submit">배치 저장</button></div>
+          </form>
+        </dialog>
+      </aside>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
