@@ -1,0 +1,13 @@
+# Only send application sources and dependency manifests to the build.
+**
+!Dockerfile
+!backend/
+!backend/pyproject.toml
+!backend/poetry.lock
+!backend/app/
+!backend/app/**
+
+# Exclude local caches and secrets even inside the application directory.
+**/__pycache__/
+**/*.py[cod]
+**/.env*

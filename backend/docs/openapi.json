@@ -1,0 +1,996 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "JPass 여행 API",
+    "description": "자연어 장소 검색, 관광지 방문 순서 최적화, 역·환승역 좌표와 역 주변 관광지 추천",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/routes/optimize": {
+      "post": {
+        "tags": [
+          "동선 최적화"
+        ],
+        "summary": "일차별 최적 방문 순서와 역 위치 조회",
+        "description": "관광지별 실제 Google Place ID와 좌표를 받아 방문 순서, 역·환승역 좌표, 이동 시간과 교통비를 반환합니다. 시각은 체류·도보를 제외한 역 간 이동 기준입니다.",
+        "operationId": "optimize_api_routes_optimize_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "입력이 올바르지 않거나 유효한 역·경로를 찾지 못함"
+          },
+          "502": {
+            "description": "외부 역·경로 정보 서비스 조회 오류"
+          },
+          "504": {
+            "description": "외부 역·경로 정보 서비스 응답 시간 초과"
+          }
+        }
+      }
+    },
+    "/api/nearby/recommend": {
+      "post": {
+        "tags": [
+          "주변 관광지 추천"
+        ],
+        "summary": "선택한 역 주변 관광지 추천",
+        "description": "사용자 요청사항과 취향 태그를 바탕으로 LLM이 기준 역을 선택하고, 각 역의 검색 반경 내 관광지를 최대 placeCount개 반환합니다. 단일 태그는 검색 순서를 유지하고, 복수 태그의 후보가 2개 이상이면 LLM이 사용자 요청에 맞춰 최종 장소와 순서를 선택합니다. 후보가 placeCount개 이하여도 순위를 정하며, 0~1개이면 순위 선정을 생략합니다.",
+        "operationId": "recommend_api_nearby_recommend_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NearbyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NearbyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "입력이 올바르지 않음"
+          },
+          "429": {
+            "description": "외부 추천 서비스의 요청 한도 초과"
+          },
+          "502": {
+            "description": "외부 추천 서비스 조회 오류"
+          },
+          "503": {
+            "description": "추천 서비스 설정 누락"
+          },
+          "504": {
+            "description": "외부 추천 서비스 응답 시간 초과"
+          }
+        }
+      }
+    },
+    "/api/places/search": {
+      "post": {
+        "tags": [
+          "장소 검색"
+        ],
+        "summary": "자연어로 일본 장소 검색",
+        "description": "사용자 요청을 일본어 검색어로 증강하고 검색어별 Google Places 첫 페이지를 반환합니다. Google 응답 언어는 한국어(ko), 지역 코드는 JP로 고정합니다. 검색어는 최대 세 개이며 요청이 모호해 검색어를 만들 수 없으면 장소 검색 없이 textQueries는 null, results는 빈 배열로 반환합니다. 다음 페이지는 자동으로 조회하지 않습니다.",
+        "operationId": "search_api_places_search_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlaceSearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlaceSearchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "입력이 올바르지 않음"
+          },
+          "429": {
+            "description": "외부 검색 서비스의 요청 한도 초과"
+          },
+          "502": {
+            "description": "외부 검색 서비스 조회 오류"
+          },
+          "503": {
+            "description": "검색 서비스 설정 누락"
+          },
+          "504": {
+            "description": "외부 검색 서비스 응답 시간 초과"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CircleBias": {
+        "properties": {
+          "center": {
+            "$ref": "#/components/schemas/PlaceCoordinate"
+          },
+          "radius": {
+            "type": "number",
+            "maximum": 50000.0,
+            "minimum": 0.0,
+            "title": "Radius",
+            "description": "검색 중심에서의 반경(미터). 영역 밖 장소도 반환될 수 있습니다."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "center",
+          "radius"
+        ],
+        "title": "CircleBias"
+      },
+      "DayInput": {
+        "properties": {
+          "dayIndex": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Dayindex"
+          },
+          "dailyStartTime": {
+            "type": "string",
+            "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$",
+            "title": "Dailystarttime",
+            "default": "08:00"
+          },
+          "places": {
+            "items": {
+              "$ref": "#/components/schemas/PlaceInput"
+            },
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 1,
+            "title": "Places"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dayIndex",
+          "places"
+        ],
+        "title": "DayInput"
+      },
+      "Leg": {
+        "properties": {
+          "fromVisitId": {
+            "type": "string",
+            "title": "Fromvisitid"
+          },
+          "toVisitId": {
+            "type": "string",
+            "title": "Tovisitid"
+          },
+          "departureAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Departureat"
+          },
+          "arrivalAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Arrivalat"
+          },
+          "durationMinutes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Durationminutes"
+          },
+          "fare": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Fare"
+          },
+          "route": {
+            "items": {
+              "$ref": "#/components/schemas/TransportStep"
+            },
+            "type": "array",
+            "title": "Route"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fromVisitId",
+          "toVisitId",
+          "departureAt",
+          "arrivalAt",
+          "durationMinutes",
+          "fare",
+          "route"
+        ],
+        "title": "Leg"
+      },
+      "Location": {
+        "properties": {
+          "lat": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Lat"
+          },
+          "lng": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Lng"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lat",
+          "lng"
+        ],
+        "title": "Location"
+      },
+      "LocationBias": {
+        "properties": {
+          "circle": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CircleBias"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "rectangle": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RectangleBias"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "LocationBias",
+        "description": "원 또는 사각형 중 하나로 지정하는 검색 위치 우선 조건."
+      },
+      "NearbyRequest": {
+        "properties": {
+          "travelTypes": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "culture",
+                "nature",
+                "anime",
+                "shopping",
+                "relaxation",
+                "activity"
+              ]
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Traveltypes"
+          },
+          "userRequest": {
+            "type": "string",
+            "title": "Userrequest",
+            "default": ""
+          },
+          "stations": {
+            "items": {
+              "$ref": "#/components/schemas/StationInput"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Stations"
+          },
+          "placeCount": {
+            "type": "integer",
+            "maximum": 20.0,
+            "minimum": 1.0,
+            "title": "Placecount"
+          },
+          "radius": {
+            "type": "number",
+            "maximum": 50000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Radius"
+          },
+          "maxAnchorCount": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maxanchorcount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "travelTypes",
+          "stations",
+          "placeCount",
+          "radius"
+        ],
+        "title": "NearbyRequest"
+      },
+      "NearbyResponse": {
+        "properties": {
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/StationRecommendations"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Results"
+          }
+        },
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "title": "NearbyResponse"
+      },
+      "OptimizedDay": {
+        "properties": {
+          "dayIndex": {
+            "type": "integer",
+            "title": "Dayindex"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "title": "Date"
+          },
+          "startAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Startat"
+          },
+          "endAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Endat"
+          },
+          "visits": {
+            "items": {
+              "$ref": "#/components/schemas/Visit"
+            },
+            "type": "array",
+            "title": "Visits"
+          },
+          "legs": {
+            "items": {
+              "$ref": "#/components/schemas/Leg"
+            },
+            "type": "array",
+            "title": "Legs"
+          },
+          "totalTravelMinutes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Totaltravelminutes"
+          },
+          "totalTransportFare": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Totaltransportfare"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dayIndex",
+          "date",
+          "startAt",
+          "endAt",
+          "visits",
+          "legs",
+          "totalTravelMinutes",
+          "totalTransportFare"
+        ],
+        "title": "OptimizedDay"
+      },
+      "PlaceCoordinate": {
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "maximum": 90.0,
+            "minimum": -90.0,
+            "title": "Latitude"
+          },
+          "longitude": {
+            "type": "number",
+            "maximum": 180.0,
+            "minimum": -180.0,
+            "title": "Longitude"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "latitude",
+          "longitude"
+        ],
+        "title": "PlaceCoordinate"
+      },
+      "PlaceInput": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "googlePlaceId": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Googleplaceid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "location",
+          "googlePlaceId"
+        ],
+        "title": "PlaceInput"
+      },
+      "PlaceSearchRequest": {
+        "properties": {
+          "userQuery": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Userquery",
+            "description": "찾고 싶은 장소를 자연어로 입력합니다.",
+            "examples": [
+              "에노시마 근처 고깃집과 카페를 찾아줘"
+            ]
+          },
+          "pageSize": {
+            "type": "integer",
+            "maximum": 20.0,
+            "minimum": 1.0,
+            "title": "Pagesize",
+            "description": "검색어별 첫 페이지의 최대 장소 수",
+            "default": 20
+          },
+          "rankPreference": {
+            "type": "string",
+            "enum": [
+              "RELEVANCE",
+              "DISTANCE"
+            ],
+            "title": "Rankpreference",
+            "default": "RELEVANCE"
+          },
+          "locationBias": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocationBias"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "주변 장소를 우선 검색할 원 또는 사각형. 지역 밖 결과도 포함될 수 있습니다."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "userQuery"
+        ],
+        "title": "PlaceSearchRequest"
+      },
+      "PlaceSearchResponse": {
+        "properties": {
+          "userQuery": {
+            "type": "string",
+            "title": "Userquery"
+          },
+          "textQueries": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array",
+                "maxItems": 3,
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Textqueries",
+            "description": "증강된 일본어 검색어. 요청이 모호해 검색어를 만들 수 없으면 null"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/PlaceSearchResult"
+            },
+            "type": "array",
+            "maxItems": 3,
+            "title": "Results",
+            "description": "검색어별 첫 페이지 응답. 검색어를 만들 수 없으면 빈 배열"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "userQuery",
+          "textQueries"
+        ],
+        "title": "PlaceSearchResponse"
+      },
+      "PlaceSearchResult": {
+        "properties": {
+          "textQuery": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Textquery"
+          },
+          "response": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Response",
+            "description": "Google Places Text Search의 원본 JSON 응답입니다. places와 nextPageToken 등 반환된 필드를 그대로 보존하며, 장소 데이터가 없으면 일부 키가 생략될 수 있습니다."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "textQuery",
+          "response"
+        ],
+        "title": "PlaceSearchResult"
+      },
+      "RecommendedPlace": {
+        "properties": {
+          "googlePlaceId": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Googleplaceid"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address"
+          },
+          "primaryType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Primarytype"
+          },
+          "searchTags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Searchtags"
+          },
+          "distanceMeters": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Distancemeters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "googlePlaceId",
+          "name",
+          "location",
+          "searchTags",
+          "distanceMeters"
+        ],
+        "title": "RecommendedPlace"
+      },
+      "RectangleBias": {
+        "properties": {
+          "low": {
+            "$ref": "#/components/schemas/PlaceCoordinate",
+            "description": "검색 영역의 남서쪽 좌표"
+          },
+          "high": {
+            "$ref": "#/components/schemas/PlaceCoordinate",
+            "description": "검색 영역의 북동쪽 좌표"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "low",
+          "high"
+        ],
+        "title": "RectangleBias"
+      },
+      "RouteRequest": {
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "title": "Startdate"
+          },
+          "dayCount": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Daycount"
+          },
+          "days": {
+            "items": {
+              "$ref": "#/components/schemas/DayInput"
+            },
+            "type": "array",
+            "title": "Days"
+          }
+        },
+        "type": "object",
+        "required": [
+          "startDate",
+          "dayCount",
+          "days"
+        ],
+        "title": "RouteRequest"
+      },
+      "RouteResponse": {
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "format": "date",
+            "title": "Startdate"
+          },
+          "dayCount": {
+            "type": "integer",
+            "title": "Daycount"
+          },
+          "timezone": {
+            "type": "string",
+            "const": "Asia/Tokyo",
+            "title": "Timezone",
+            "default": "Asia/Tokyo"
+          },
+          "currency": {
+            "type": "string",
+            "const": "JPY",
+            "title": "Currency",
+            "default": "JPY"
+          },
+          "dataSource": {
+            "type": "string",
+            "const": "live",
+            "title": "Datasource",
+            "default": "live"
+          },
+          "timingBasis": {
+            "type": "string",
+            "const": "stationTravelOnly",
+            "title": "Timingbasis",
+            "default": "stationTravelOnly"
+          },
+          "days": {
+            "items": {
+              "$ref": "#/components/schemas/OptimizedDay"
+            },
+            "type": "array",
+            "title": "Days"
+          },
+          "totalTravelMinutes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Totaltravelminutes"
+          },
+          "totalTransportFare": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Totaltransportfare"
+          }
+        },
+        "type": "object",
+        "required": [
+          "startDate",
+          "dayCount",
+          "days",
+          "totalTravelMinutes",
+          "totalTransportFare"
+        ],
+        "title": "RouteResponse"
+      },
+      "Station": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "prefecture": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prefecture"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "location"
+        ],
+        "title": "Station"
+      },
+      "StationInput": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "stationId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stationid"
+          },
+          "line": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          }
+        },
+        "type": "object",
+        "required": [
+          "location"
+        ],
+        "title": "StationInput"
+      },
+      "StationOutput": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "stationId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stationid"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          }
+        },
+        "type": "object",
+        "required": [
+          "location"
+        ],
+        "title": "StationOutput"
+      },
+      "StationRecommendations": {
+        "properties": {
+          "station": {
+            "$ref": "#/components/schemas/StationOutput"
+          },
+          "radius": {
+            "type": "number",
+            "title": "Radius"
+          },
+          "requestedCount": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Requestedcount"
+          },
+          "returnedCount": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Returnedcount"
+          },
+          "recommendedPlaces": {
+            "items": {
+              "$ref": "#/components/schemas/RecommendedPlace"
+            },
+            "type": "array",
+            "title": "Recommendedplaces"
+          }
+        },
+        "type": "object",
+        "required": [
+          "station",
+          "radius",
+          "requestedCount",
+          "returnedCount",
+          "recommendedPlaces"
+        ],
+        "title": "StationRecommendations"
+      },
+      "TransportStep": {
+        "properties": {
+          "fromStation": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "toStation": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "line": {
+            "type": "string",
+            "title": "Line"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fromStation",
+          "toStation",
+          "line"
+        ],
+        "title": "TransportStep"
+      },
+      "Visit": {
+        "properties": {
+          "visitId": {
+            "type": "string",
+            "title": "Visitid"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Order"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          },
+          "googlePlaceId": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Googleplaceid"
+          },
+          "station": {
+            "$ref": "#/components/schemas/Station"
+          },
+          "estimatedArrivalAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Estimatedarrivalat"
+          },
+          "estimatedDepartureAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimateddepartureat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "visitId",
+          "order",
+          "name",
+          "location",
+          "googlePlaceId",
+          "station",
+          "estimatedArrivalAt"
+        ],
+        "title": "Visit"
+      }
+    }
+  }
+}

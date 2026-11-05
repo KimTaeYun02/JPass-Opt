@@ -1,0 +1,15 @@
+{
+  "travelTypes": ["culture"],
+  "userRequest": "조용히 둘러볼 수 있는 곳을 추천해줘.",
+  "stations": [
+    {
+      "stationId": "station-1",
+      "name": "浅草",
+      "line": "都営浅草線",
+      "location": {"lat": 35.711883, "lng": 139.798214}
+    }
+  ],
+  "placeCount": 1,
+  "radius": 1000,
+  "maxAnchorCount": 1
+}
