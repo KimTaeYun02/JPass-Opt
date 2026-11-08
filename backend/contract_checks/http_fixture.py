@@ -25,6 +25,25 @@ PLACES = [
 
 
 @contextmanager
+def contract_env():
+    """설정 정책을 유지하면서 외부 인증에 쓰이지 않는 테스트 값을 제공한다."""
+    with (
+        patch.dict(
+            os.environ,
+            {
+                "GOOGLE_PLACE_API_KEY": "contract-only-not-a-key",
+                "GEMINI_API_KEY": "contract-only-not-a-key",
+                "GEMINI_MODEL": "contract-only-model",
+                "GEMINI_NEARBY_MODEL": "",
+                "CORS_ORIGINS": "http://localhost:5173",
+            },
+        ),
+        patch("app.main.load_dotenv"),
+    ):
+        yield
+
+
+@contextmanager
 def controlled_api():
     audit = {"nearest": [], "text": [], "nearby": [], "crawl": [], "blocked": []}
 
@@ -32,17 +51,28 @@ def controlled_api():
         def __init__(self, **kwargs):
             pass
 
-        def request(self, *, user_prompt, response_schema, **kwargs):
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            self.close()
+
+        def request(
+            self, *, user_prompt, response_schema, response_validator=None, **kwargs
+        ):
             prompt = json.loads(user_prompt)
             if "userQuery" in prompt:
-                return {
+                result = {
                     "textQueries": None
                     if "ambiguous" in prompt["userQuery"]
                     else ["東京 庭園"]
                 }
-            if "stations" in prompt:
-                return {"candidateIds": [prompt["stations"][0]["candidateId"]]}
-            return {"indices": list(range(prompt["placeCount"]))}
+            elif "stations" in prompt:
+                result = {"candidateIds": [prompt["stations"][0]["candidateId"]]}
+            else:
+                result = {"indices": list(range(prompt["placeCount"]))}
+            validator = response_validator or response_schema
+            return validator.model_validate(result)
 
         def close(self):
             pass
@@ -88,15 +118,7 @@ def controlled_api():
         raise AssertionError("Unstubbed outbound provider call")
 
     with ExitStack() as stack:
-        stack.enter_context(
-            patch.dict(
-                os.environ,
-                {
-                    "GOOGLE_PLACE_API_KEY": "contract-only-not-a-key",
-                    "GEMINI_API_KEY": "contract-only-not-a-key",
-                },
-            )
-        )
+        stack.enter_context(contract_env())
         for target, replacement in [
             ("app.services.route_service.get_nearest_stations", nearest),
             ("app.services.route_service.crawl_route", crawl),
@@ -105,8 +127,8 @@ def controlled_api():
             ("app.services.place_search_service.GeminiWrapper", ControlledLLM),
             ("app.services.nearby_service.GeminiWrapper", ControlledLLM),
             ("requests.sessions.Session.request", block_network),
-            ("httpx.Client.send", block_network),
-            ("httpx.AsyncClient.send", block_network),
+            ("httpx.HTTPTransport.handle_request", block_network),
+            ("httpx.AsyncHTTPTransport.handle_async_request", block_network),
         ]:
             stack.enter_context(patch(target, replacement))
         yield create_app(), audit

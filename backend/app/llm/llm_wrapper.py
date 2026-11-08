@@ -1,7 +1,68 @@
+import json
+import logging
+from contextlib import contextmanager
+
+import httpx
+import requests
 from google import genai
 from google.genai import types
-from openai import OpenAI
-from pydantic import BaseModel
+from google.genai.errors import APIError as GeminiAPIError
+from openai import (
+    APIConnectionError,
+    APIResponseValidationError,
+    APIStatusError,
+    APITimeoutError,
+    OpenAI,
+)
+from pydantic import BaseModel, ValidationError
+
+from app.errors import (
+    ProviderError,
+    ProviderResponseError,
+    ProviderTimeoutError,
+    provider_error_for_status,
+)
+
+logger = logging.getLogger(__name__)
+
+
+@contextmanager
+def _provider_request(provider: str):
+    """SDK 호출에서 발생하는 외부 오류만 공통 오류로 바꾼다."""
+    try:
+        yield
+    except GeminiAPIError as exc:
+        raise provider_error_for_status(
+            exc.code, f"{provider} 요청에 실패했습니다."
+        ) from exc
+    except (APIStatusError, httpx.HTTPStatusError, requests.HTTPError) as exc:
+        status = exc.response.status_code if exc.response is not None else None
+        raise provider_error_for_status(
+            status, f"{provider} 요청에 실패했습니다."
+        ) from exc
+    except (APITimeoutError, httpx.TimeoutException, requests.Timeout) as exc:
+        raise ProviderTimeoutError(f"{provider} 응답 시간이 초과됐습니다.") from exc
+    except (APIConnectionError, httpx.RequestError, requests.RequestException) as exc:
+        raise ProviderError(f"{provider}에 연결할 수 없습니다.") from exc
+    except (APIResponseValidationError, json.JSONDecodeError, ValidationError) as exc:
+        raise ProviderResponseError(
+            f"{provider}가 유효하지 않은 응답을 반환했습니다."
+        ) from exc
+
+
+class _LLMWrapper:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        self.close()
+
+    def close(self) -> None:
+        try:
+            self.client.close()
+        except Exception as exc:
+            # 연결 정리 실패가 성공 결과나 원래 오류를 덮어쓰지 않게 한다.
+            logger.warning("LLM 연결 정리 실패: %s", type(exc).__name__)
 
 
 def _response_model(response_schema, response_validator):
@@ -12,19 +73,24 @@ def _response_model(response_schema, response_validator):
     return None
 
 
-def _parse_response(text, parsed, response_validator):
-    if response_validator is not None and parsed is not None:
-        if isinstance(parsed, BaseModel):
-            parsed = parsed.model_dump()
-        return response_validator.model_validate(parsed)
-    if not text or not text.strip():
-        raise RuntimeError("LLM이 빈 응답을 반환했습니다.")
-    if response_validator is not None:
-        return response_validator.model_validate_json(text)
-    return text
+def _parse_response(text, parsed, response_validator, *, expect_json: bool):
+    try:
+        if response_validator is not None and parsed is not None:
+            if isinstance(parsed, BaseModel):
+                parsed = parsed.model_dump()
+            return response_validator.model_validate(parsed)
+        if not text or not text.strip():
+            raise ProviderResponseError("LLM이 빈 응답을 반환했습니다.")
+        if response_validator is not None:
+            return response_validator.model_validate_json(text)
+        if expect_json:
+            json.loads(text)
+        return text
+    except (json.JSONDecodeError, ValidationError) as exc:
+        raise ProviderResponseError("LLM 응답이 요청한 형식과 다릅니다.") from exc
 
 
-class GPTWrapper:
+class GPTWrapper(_LLMWrapper):
     def __init__(self, api_key: str, model_name: str):
         self.model_name = model_name
         self.client = OpenAI(api_key=api_key, timeout=30)
@@ -50,36 +116,41 @@ class GPTWrapper:
         if temperature is not None:
             options["temperature"] = temperature
 
-        if isinstance(schema, type) and issubclass(schema, BaseModel):
-            response = self.client.responses.parse(**options, text_format=schema)
-        else:
-            if schema is not None:
-                options["text"] = {
-                    "format": {
-                        "type": "json_schema",
-                        "name": "response",
-                        "schema": schema,
-                        "strict": True,
-                    }
+        if schema is not None and not (
+            isinstance(schema, type) and issubclass(schema, BaseModel)
+        ):
+            options["text"] = {
+                "format": {
+                    "type": "json_schema",
+                    "name": "response",
+                    "schema": schema,
+                    "strict": True,
                 }
-            response = self.client.responses.create(**options)
+            }
+        with _provider_request("GPT"):
+            if isinstance(schema, type) and issubclass(schema, BaseModel):
+                response = self.client.responses.parse(**options, text_format=schema)
+            else:
+                response = self.client.responses.create(**options)
 
         if response.status != "completed":
-            raise RuntimeError(f"GPT 응답이 완료되지 않았습니다: {response.status}")
+            raise ProviderResponseError(
+                f"GPT 응답이 완료되지 않았습니다: {response.status}"
+            )
         for item in response.output:
             if item.type == "message":
                 for content in item.content:
                     if content.type == "refusal":
-                        raise RuntimeError("GPT가 요청을 거절했습니다.")
+                        raise ProviderResponseError("GPT가 요청을 거절했습니다.")
         return _parse_response(
-            response.output_text, getattr(response, "output_parsed", None), validator
+            response.output_text,
+            getattr(response, "output_parsed", None),
+            validator,
+            expect_json=schema is not None,
         )
 
-    def close(self):
-        self.client.close()
 
-
-class GeminiWrapper:
+class GeminiWrapper(_LLMWrapper):
     def __init__(self, api_key: str, model_name: str):
         self.model_name = model_name
         self.client = genai.Client(
@@ -111,17 +182,17 @@ class GeminiWrapper:
             response_schema=None if is_json_schema else schema,
             response_json_schema=schema if is_json_schema else None,
         )
-        response = self.client.models.generate_content(
-            model=self.model_name, contents=user_prompt, config=config
-        )
+        with _provider_request("Gemini"):
+            response = self.client.models.generate_content(
+                model=self.model_name, contents=user_prompt, config=config
+            )
         if response.prompt_feedback and response.prompt_feedback.block_reason:
-            raise RuntimeError("Gemini가 요청을 차단했습니다.")
+            raise ProviderResponseError("Gemini가 요청을 차단했습니다.")
         for candidate in response.candidates or []:
             if candidate.finish_reason not in (None, types.FinishReason.STOP):
-                raise RuntimeError(
+                raise ProviderResponseError(
                     f"Gemini 응답이 완료되지 않았습니다: {candidate.finish_reason}"
                 )
-        return _parse_response(response.text, response.parsed, validator)
-
-    def close(self):
-        self.client.close()
+        return _parse_response(
+            response.text, response.parsed, validator, expect_json=schema is not None
+        )

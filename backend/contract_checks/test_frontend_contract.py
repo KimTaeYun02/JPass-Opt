@@ -6,11 +6,15 @@ import unittest
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
+from http_fixture import contract_env, controlled_api
 
 from app.main import create_app
 
 
 class FrontendContract(unittest.TestCase):
+    def setUp(self):
+        self.enterContext(contract_env())
+
     def test_route_uses_real_optimizer_with_controlled_travel_matrix(self):
         costs = {
             ("A", "B"): (12, 220),
@@ -94,35 +98,46 @@ class FrontendContract(unittest.TestCase):
         self.assertEqual(len(day["legs"]), 2)
         self.assertEqual(day["legs"][0]["route"][0]["line"], "test line")
 
-    def test_validation_and_missing_keys_are_errors_not_fake_success(self):
-        with (
-            patch.dict(os.environ, {"GOOGLE_PLACE_API_KEY": "", "GEMINI_API_KEY": ""}),
-            TestClient(create_app()) as client,
-        ):
+    def test_validation_rejects_invalid_input_before_provider_calls(self):
+        with controlled_api() as (app, audit), TestClient(app) as client:
             self.assertEqual(
                 client.post("/api/routes/optimize", json={}).status_code, 422
             )
             self.assertEqual(
-                client.post(
-                    "/api/places/search", json={"userQuery": "Kyoto"}
-                ).status_code,
-                503,
+                client.post("/api/places/search", json={}).status_code,
+                422,
             )
             self.assertEqual(
                 client.post(
                     "/api/nearby/recommend",
-                    json={
-                        "travelTypes": ["culture"],
-                        "userRequest": "",
-                        "stations": [
-                            {"name": "test", "location": {"lat": 35, "lng": 139}}
-                        ],
-                        "placeCount": 3,
-                        "radius": 1000,
-                    },
+                    json={},
                 ).status_code,
-                503,
+                422,
             )
+        self.assertTrue(all(not calls for calls in audit.values()))
+
+    def test_missing_required_setting_prevents_server_startup(self):
+        settings = ("GOOGLE_PLACE_API_KEY", "GEMINI_API_KEY", "GEMINI_MODEL")
+        for setting in settings:
+            for value in (None, "", " "):
+                with (
+                    self.subTest(setting=setting, value=value),
+                    patch.dict(os.environ),
+                    patch("app.main.load_dotenv"),
+                ):
+                    os.environ.pop(setting, None)
+                    if value is not None:
+                        os.environ[setting] = value
+                    with self.assertRaisesRegex(RuntimeError, setting) as raised:
+                        with TestClient(create_app()):
+                            self.fail("The server must reject missing configuration")
+                    self.assertNotIn("contract-only-not-a-key", str(raised.exception))
+        with patch.dict(os.environ, clear=True), patch("app.main.load_dotenv"):
+            with self.assertRaises(RuntimeError) as raised:
+                with TestClient(create_app()):
+                    self.fail("The server must reject missing configuration")
+            for setting in settings:
+                self.assertIn(setting, str(raised.exception))
 
 
 if __name__ == "__main__":

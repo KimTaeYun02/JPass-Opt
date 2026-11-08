@@ -1,14 +1,15 @@
 """기준역 조회의 HTTP 계약과 실패 격리를 외부 호출 없이 검증한다."""
 
 import json
-import os
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
-from requests import RequestException, Response, Timeout
+from http_fixture import contract_env
+from requests import Response
 
+from app.errors import ProviderError, ProviderResponseError, ProviderTimeoutError
 from app.main import create_app
 from app.schemas.place_search import QueryRewrite
 
@@ -22,13 +23,39 @@ def nearest(lat, lng, limit=3):
 
 
 class StationContract(unittest.TestCase):
+    def setUp(self):
+        self.enterContext(contract_env())
+
     def test_openapi_snapshot_matches_registered_app(self):
         snapshot = Path(__file__).resolve().parents[1] / "docs/openapi.json"
         self.assertEqual(
             json.loads(snapshot.read_text(encoding="utf-8")), create_app().openapi()
         )
 
-    def test_maximum_days_and_places_need_no_google_or_gemini_keys(self):
+    def test_maximum_days_and_places_make_no_google_or_gemini_calls(self):
+        def transport(method, url, **kwargs):
+            self.assertEqual(method, "GET")
+            self.assertEqual(url, "https://www.heartrails-express.com/api/json")
+            self.assertEqual(kwargs["timeout"], 10)
+            params = kwargs["params"]
+            response = Response()
+            response.status_code = 200
+            response._content = json.dumps(
+                {
+                    "response": {
+                        "station": [
+                            {
+                                "name": "test",
+                                "line": "test",
+                                "x": params["x"],
+                                "y": params["y"],
+                            }
+                        ]
+                    }
+                }
+            ).encode()
+            return response
+
         request = {
             "days": [
                 {
@@ -42,12 +69,23 @@ class StationContract(unittest.TestCase):
             ]
         }
         with (
-            patch.dict(os.environ, {"GOOGLE_PLACE_API_KEY": "", "GEMINI_API_KEY": ""}),
             patch(
-                "app.services.route_service.get_nearest_stations",
+                "app.clients.http_client.requests.request",
                 autospec=True,
-                side_effect=nearest,
+                side_effect=transport,
             ) as lookup,
+            patch(
+                "requests.sessions.Session.request",
+                side_effect=AssertionError("Unexpected HTTP"),
+            ) as requests_http,
+            patch(
+                "httpx.HTTPTransport.handle_request",
+                side_effect=AssertionError("Unexpected HTTP"),
+            ) as httpx_http,
+            patch(
+                "httpx.AsyncHTTPTransport.handle_async_request",
+                side_effect=AssertionError("Unexpected HTTP"),
+            ) as async_http,
             TestClient(create_app()) as client,
         ):
             response = client.post("/api/stations/resolve", json=request)
@@ -55,6 +93,16 @@ class StationContract(unittest.TestCase):
         self.assertEqual(len(response.json()["days"]), 7)
         self.assertTrue(all(len(day["places"]) == 8 for day in response.json()["days"]))
         self.assertEqual(lookup.call_count, 56)
+        self.assertTrue(
+            all(
+                item["status"] == "ok"
+                for day in response.json()["days"]
+                for item in day["places"]
+            )
+        )
+        requests_http.assert_not_called()
+        httpx_http.assert_not_called()
+        async_http.assert_not_called()
 
     def test_id_mapping_same_station_and_request_scoped_coordinate_reuse(self):
         request = {
@@ -102,20 +150,22 @@ class StationContract(unittest.TestCase):
             if lat == 36:
                 return []
             if lat == 37:
-                raise Timeout("private provider detail")
+                raise ProviderTimeoutError("private provider detail")
             if lat == 38:
-                raise RequestException("private provider detail")
+                raise ProviderError("private provider detail")
             if lat == 39:
                 return [{"name": "bad", "latitude": float("nan"), "longitude": lng}]
             if lat == 40:
                 raise RuntimeError("private unexpected client detail")
+            if lat == 41:
+                raise ProviderResponseError("private malformed response")
             return nearest(lat, lng)
 
         request = {
             "days": [
                 {
                     "dayIndex": 1,
-                    "places": [place(str(lat), lat) for lat in range(35, 41)],
+                    "places": [place(str(lat), lat) for lat in range(35, 42)],
                 }
             ]
         }
@@ -132,16 +182,24 @@ class StationContract(unittest.TestCase):
         items = response.json()["days"][0]["places"]
         self.assertEqual(
             [item["status"] for item in items],
-            ["ok", "not_found", "error", "error", "error", "error"],
+            ["ok", "not_found", "error", "error", "error", "error", "error"],
         )
         self.assertEqual(
             [item["reason"] for item in items],
-            [None, None, "timeout", "unavailable", "invalid_response", "unavailable"],
+            [
+                None,
+                None,
+                "timeout",
+                "unavailable",
+                "invalid_response",
+                "unavailable",
+                "invalid_response",
+            ],
         )
         self.assertTrue(all(item["station"] is None for item in items[1:]))
         self.assertNotIn("private", response.text)
 
-    def test_real_heartrails_client_mapping_accepts_numeric_and_string_coordinates(
+    def test_real_heartrails_client_mapping_validates_provider_coordinates(
         self,
     ):
         # Exercise the real existing get_nearest_stations; stub only its HTTP transport.
@@ -167,7 +225,7 @@ class StationContract(unittest.TestCase):
             with (
                 self.subTest(raw_lat=raw_lat),
                 patch(
-                    "app.clients.heartrails.requests.get",
+                    "app.clients.http_client.requests.request",
                     autospec=True,
                     return_value=raw_response,
                 ) as transport,
@@ -179,14 +237,24 @@ class StationContract(unittest.TestCase):
                 )
                 self.assertEqual(response.status_code, 200, response.text)
                 resolved = response.json()["days"][0]["places"][0]
-                self.assertEqual(resolved["status"], "ok")
-                self.assertEqual(
-                    resolved["station"]["location"], {"lat": 35.68, "lng": 139.76}
-                )
+                if isinstance(raw_lat, str):
+                    self.assertEqual(resolved["status"], "error")
+                    self.assertEqual(resolved["reason"], "invalid_response")
+                    self.assertIsNone(resolved["station"])
+                else:
+                    self.assertEqual(resolved["status"], "ok")
+                    self.assertEqual(
+                        resolved["station"]["location"], {"lat": 35.68, "lng": 139.76}
+                    )
                 self.assertEqual(
                     transport.call_args.kwargs["params"],
                     {"method": "getStations", "x": 139, "y": 35},
                 )
+                self.assertEqual(
+                    transport.call_args.args,
+                    ("GET", "https://www.heartrails-express.com/api/json"),
+                )
+                self.assertEqual(transport.call_args.kwargs["timeout"], 10)
 
     def test_text_search_accepts_frontend_rectangle_and_passes_it_to_google_adapter(
         self,
@@ -198,18 +266,9 @@ class StationContract(unittest.TestCase):
             }
         }
         with (
-            patch.dict(
-                os.environ,
-                {
-                    "GOOGLE_PLACE_API_KEY": "contract-stub",
-                    "GEMINI_API_KEY": "contract-stub",
-                },
-            ),
-            patch("app.services.place_search_service.GeminiWrapper", autospec=True),
             patch(
-                "app.services.place_search_service.rewrite_query",
-                return_value=QueryRewrite(textQueries=["test query"]),
-            ),
+                "app.services.place_search_service.GeminiWrapper", autospec=True
+            ) as gemini,
             patch(
                 "app.services.place_search_service.search_text",
                 autospec=True,
@@ -217,6 +276,9 @@ class StationContract(unittest.TestCase):
             ) as search,
             TestClient(create_app()) as client,
         ):
+            gemini.return_value.__enter__.return_value.request.return_value = (
+                QueryRewrite(textQueries=["test query"])
+            )
             response = client.post(
                 "/api/places/search",
                 json={"userQuery": "gardens", "pageSize": 8, "locationBias": bias},

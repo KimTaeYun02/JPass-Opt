@@ -3,8 +3,8 @@
 import logging
 
 from pydantic import ValidationError
-from requests import RequestException, Timeout
 
+from app.errors import ProviderError, ProviderResponseError, ProviderTimeoutError
 from app.schemas.station import (
     ResolvedStation,
     StationDayResult,
@@ -56,9 +56,11 @@ def _lookup(lat: float, lng: float):
             line=raw.get("line"),
         )
         return "ok", station, None
-    except Timeout:
+    except ProviderTimeoutError:
         return "error", None, "timeout"
-    except RequestException:
+    except ProviderResponseError:
+        return "error", None, "invalid_response"
+    except ProviderError:
         return "error", None, "unavailable"
     except (
         ValidationError,

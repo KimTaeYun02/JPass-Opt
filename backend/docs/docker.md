@@ -18,11 +18,14 @@ cp -n .env.example .env
 GOOGLE_PLACE_API_KEY=발급받은_Google_Places_API_키
 GEMINI_API_KEY=발급받은_Gemini_API_키
 GEMINI_MODEL=gemini-3.5-flash-lite
+GEMINI_NEARBY_MODEL=gemini-3.5-flash-lite
 CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 API_PORT=8000
 ```
 
-`GEMINI_MODEL`은 선택 설정이다. 키가 없어도 앱과 동선 최적화 API는 사용할 수 있으며, 장소 검색·주변 추천은 `503`을 반환한다. Compose가 `env_file: .env`를 읽으므로 `.env` 파일 자체는 준비해야 한다. 키는 이미지에 복사하지 않고 컨테이너 실행 시 환경 변수로 주입한다. `.env`는 Git에 올리지 않는다.
+`GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL`은 필수 설정이다. `lifespan`에서 하나라도 미설정·빈 문자열·공백뿐이면 앱 시작이 실패하고 컨테이너가 종료된다. 시작 시 실제 외부 API를 호출해 키나 모델의 유효성을 확인하지는 않는다. `GEMINI_MODEL`은 공통 기본 모델이며, 주변 추천용 `GEMINI_NEARBY_MODEL`은 선택 사항으로 미설정·빈 문자열·공백뿐이면 `GEMINI_MODEL`을 사용한다. 모델의 앞뒤 공백은 제거하며 코드에 고정된 모델명으로 대체하지 않는다. 위 모델명은 설정 예시이며 nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다.
+
+Compose가 `env_file: .env`를 읽으므로 `.env` 파일 자체는 준비해야 한다. 키는 이미지에 복사하지 않고 컨테이너 실행 시 환경 변수로 주입한다. `.env`는 Git에 올리지 않는다.
 
 `CORS_ORIGINS`에는 **브라우저에서 실제 접속하는 프론트엔드 주소**를 지정한다. 예를 들어 프론트가 `https://travel.example.com`에서 열리면 다음처럼 설정한다.
 
@@ -114,7 +117,7 @@ python backend/scripts/test_api_http.py --api places --input path.json
 python backend/scripts/test_api_http.py --api places --base-url http://localhost:8001 --input path.json --timeout 300 --output /tmp/jpass-response.json
 ```
 
-HTTP 상태는 표준 오류(stderr), 응답 JSON은 표준 출력(stdout)에 표시한다. HTTP 오류 응답도 본문을 표시한다. 응답 상태가 `--expect-status`와 같으면 종료 코드 `0`, 다르면 `1`, 입력 파일·옵션 또는 연결 오류는 `2`다. 서버가 반환한 `422`, `503` 등의 `detail`도 출력에서 확인할 수 있다.
+HTTP 상태는 표준 오류(stderr), 응답 JSON은 표준 출력(stdout)에 표시한다. HTTP 오류 응답도 본문을 표시한다. 응답 상태가 `--expect-status`와 같으면 종료 코드 `0`, 다르면 `1`, 입력 파일·옵션 또는 연결 오류는 `2`다. 서버가 반환한 `422`, `502` 등의 `detail`도 출력에서 확인할 수 있다.
 
 같은 JSON 파일을 `curl`로 보낼 수도 있다.
 

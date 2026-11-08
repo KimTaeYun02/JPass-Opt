@@ -14,7 +14,7 @@
 | Request model | `NearbyRequest` |
 | Response model | `NearbyResponse` |
 
-API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 않는다. 서버에 `GOOGLE_PLACE_API_KEY`와 `GEMINI_API_KEY`가 모두 필요하다. `GEMINI_MODEL`의 기본값은 `gemini-3.5-flash-lite`다.
+API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 않는다. 앱의 `lifespan`에서 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL`을 검증하며, 하나라도 미설정·빈 문자열·공백뿐이면 앱 시작이 실패한다. 서비스는 요청마다 설정 누락을 다시 확인하지 않는다. 시작 시 실제 외부 API를 호출해 키나 모델의 유효성을 확인하지는 않는다. 주변 추천 모델은 선택 설정인 `GEMINI_NEARBY_MODEL`을 우선 사용하며, 해당 값이 미설정·빈 문자열·공백뿐이면 공통 기본 모델인 `GEMINI_MODEL`을 사용한다. 모델의 앞뒤 공백은 제거하며 코드에 고정된 모델명으로 대체하지 않는다. 저장소의 모델 설정 예시는 모두 `gemini-3.5-flash-lite`이며, nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다.
 
 ## Source code
 
@@ -27,7 +27,9 @@ API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 �
 | 장소 재순위화 프롬프트 | [app/prompts/nearby_ranking.py](../app/prompts/nearby_ranking.py) |
 | 여행 태그·Google 장소 유형 매핑 | [app/constants/place_types.py](../app/constants/place_types.py) |
 | Google Nearby Search | [app/clients/google_maps.py](../app/clients/google_maps.py)의 `search_nearby()` |
+| 공통 HTTP 요청·예외 변환·JSON 파싱 | [app/clients/http_client.py](../app/clients/http_client.py)의 `request_json()` |
 | Gemini 요청·구조화 출력 파싱 | [app/llm/llm_wrapper.py](../app/llm/llm_wrapper.py)의 `GeminiWrapper` |
+| 외부 서비스의 공통 오류 타입·상태 분류 | [app/errors.py](../app/errors.py) |
 | 앱 등록·환경 변수·CORS | [app/main.py](../app/main.py) |
 
 ## Input Schema
@@ -170,7 +172,7 @@ Google 원본 응답의 `types`, `displayName.languageCode`, 평점·영업시�
 ## Flow
 
 1. FastAPI가 요청을 검증하고 중복 여행 태그를 제거한다. 검증 실패는 외부 호출 전에 `422`로 끝난다.
-2. 서버가 두 API 키를 확인하고 Gemini 클라이언트 하나를 생성한다. 키 누락은 `503`이다.
+2. 서버가 시작 시 검증한 설정으로 Gemini 클라이언트 하나를 생성한다.
 3. 각 입력 역에 위치 기반 ID `candidate-1`, `candidate-2`, …를 부여한다. Gemini에 `userRequest`, `travelTypes`, 후보 역의 이름·ID·노선·좌표, 최소·최대 선택 개수를 보낸다. LLM 결과의 고유 후보 ID를 검증한 뒤 원래 입력 역 객체로 연결한다. 입력 역이 하나여도 이 호출은 수행한다.
 4. 선택된 역을 LLM 반환 순서대로 하나씩 처리한다. 역마다 검색 계획을 새로 만든다. 단일 태그면 최대 `N=placeCount`개, 복수 태그면 전체 후보 예산 `2N`을 태그별로 나눈다.
 5. 해당 역의 검색 계획 순서대로 Google Nearby Search를 호출한다. `includedTypes`는 태그별 상수 목록, 중심은 역 좌표, 반경은 입력 `radius`, `rankPreference`는 `DISTANCE`, `languageCode`는 `ko`, `regionCode`는 `JP`다. 태그에 배정된 개수를 `maxResultCount`로 보낸다.
@@ -178,12 +180,12 @@ Google 원본 응답의 `types`, `displayName.languageCode`, 평점·영업시�
 7. 같은 역의 장소를 `googlePlaceId`로 병합한다. 첫 등장 장소 정보를 유지하고 후속 검색 태그만 `searchTags`에 추가한다. 서로 다른 역 사이에서는 중복을 제거하지 않는다.
 8. 단일 태그면 Google 검색 순서를 유지해 앞쪽 최대 `N`개를 반환한다. 복수 태그여도 유효 후보가 0~1개면 그대로 반환한다. **복수 태그이며 정제·중복 제거 후 후보가 2개 이상이면 Gemini를 한 번 더 호출한다.** 후보가 `N`개 이하여도 순서를 정하기 위해 호출한다.
 9. 재순위화는 `min(N, 후보 수)`개의 고유 인덱스를 검증하고 그 순서대로 원래 장소 객체를 선택한다. 역별 응답을 조립하고 다음 역을 처리한다.
-10. 모든 역을 마치면 `NearbyResponse`를 반환하고 `finally`에서 Gemini 클라이언트를 닫는다. 도중 외부 호출·응답 검증이 실패하면 전체 요청이 실패하며 앞서 완료된 역의 부분 결과도 반환하지 않는다.
+10. 모든 역을 마치면 `NearbyResponse`를 반환하고 `with` 블록을 나가며 Gemini 클라이언트를 닫는다. 정리 실패는 래퍼가 로그로 남기며 기존 결과·오류를 유지한다. 도중 외부 호출·응답 검증이 실패하면 전체 요청이 실패하며 앞서 완료된 역의 부분 결과도 반환하지 않는다.
 
 ```mermaid
 flowchart TD
     A[POST JSON] --> B[요청 검증과 태그 중복 제거]
-    B --> C[API 키 확인과 Gemini 클라이언트 생성]
+    B --> C[Gemini 클라이언트 생성]
     C --> D[Gemini로 앵커 역 선택]
     D --> E[다음 앵커 역과 검색 예산 결정]
     E --> F[다음 태그로 Google Nearby Search]
@@ -241,10 +243,11 @@ LLM 입력은 `userRequest`, `travelTypes`, 선택 개수, 후보의 `index`, `n
 | `422` | 필수값 누락, 미지원 태그, 빈 역·태그 목록, 잘못된 개수·반경·좌표 등 FastAPI/Pydantic 요청 검증 실패 | 검증 오류 배열 |
 | `429` | Gemini `APIError.code == 429`, Google HTTP 429 | `외부 추천 서비스의 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요.` |
 | `502` | 그 외 Gemini API 오류·Google HTTP 오류, 연결 오류, 잘못된 JSON·응답 형식, 앵커·순위 결과 검증 실패, 차단·미완료·빈 LLM 출력 등 | `외부 추천 서비스에서 정상적인 응답을 받지 못했습니다.` |
-| `503` | 두 서버 API 키 중 하나 이상 누락·공백 | `주변 관광지 추천 서비스를 사용할 수 없습니다.` |
 | `504` | `requests.Timeout`, `httpx.TimeoutException`, Gemini 또는 Google의 408·504 | `외부 추천 서비스 응답 시간이 초과되었습니다.` |
 
 서비스 오류 형식은 `{"detail": "설명"}`이다. 외부 응답 본문이나 API 키를 HTTP detail에 넣지 않는다. 오류가 나면 전체 요청을 종료하며 부분 성공·애플리케이션의 명시적 재시도·재순위화 실패 시 대체 결과는 없다. 위 표는 코드가 변환하는 예외에 대한 계약이며 처리되지 않은 예외까지 모두 이 표의 상태로 변환하는 것은 아니다.
+
+LLM 래퍼와 Google 클라이언트는 호출 제한·시간 초과·연결 실패·응답 형식 오류를 공통 `Provider*` 예외로 변환한다. 서비스는 검증된 LLM 모델을 사용하며 현재 요청의 후보 ID·선택 개수·인덱스 범위만 추가로 검사한다. API는 공통 예외를 HTTP 상태로 변환하며, 내부 코드의 일반 `TypeError`·`AttributeError` 등을 외부 서비스 오류로 묶지 않는다.
 
 ## 호출 수와 동시성
 
@@ -258,7 +261,7 @@ LLM 입력은 `userRequest`, `travelTypes`, 선택 개수, 후보의 `index`, `n
 
 앵커 수는 항상 1 이상이며, 기본 상한은 `max(1, 입력 역 수 // 2)`다. 명시한 `maxAnchorCount`는 선택을 허용하는 상한이므로 LLM이 그보다 적게 선택할 수 있다.
 
-Google `requests.post`의 timeout은 호출당 30초, Gemini SDK HTTP timeout은 호출당 30,000ms다. 전체 API 요청의 별도 총 시간 제한은 없다. 표는 코드 수준의 호출 수로 SDK 내부의 네트워크 재시도까지 센 값은 아니다.
+Google Places HTTP POST의 timeout은 호출당 30초, Gemini SDK HTTP timeout은 호출당 30,000ms다. 전체 API 요청의 별도 총 시간 제한은 없다. 표는 코드 수준의 호출 수로 SDK 내부의 네트워크 재시도까지 센 값은 아니다.
 
 라우터는 동기 `def`로 FastAPI 작업 스레드에서 실행한다. 요청 하나 안에서는 앵커 선정 → 첫 역의 태그별 검색 → 해당 역 재순위화 → 다음 역 순서로 모두 직렬 실행한다. 별도 병렬 처리·캐시·요청 간 잠금은 없다. 서로 다른 HTTP 요청은 FastAPI 실행 환경에서 동시에 진행할 수 있다. 한 HTTP 요청 안에서는 동일 Gemini 클라이언트를 재사용한다.
 

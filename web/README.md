@@ -39,7 +39,7 @@ JPASS_API_TARGET=http://127.0.0.1:8000
 
 브라우저 키는 Maps JavaScript API·Places API (New)와 허용 HTTP 리퍼러로 제한하세요. `VITE_` 변수는 브라우저 번들에 포함됩니다. 서버의 `GOOGLE_PLACE_API_KEY`·`GEMINI_API_KEY`는 백엔드 환경에만 넣으세요. 과금·쿼터는 사용하는 GCP 프로젝트 설정을 확인하세요. 개인 프로젝트의 예전 제한값을 저장소 기본값으로 간주하지 않습니다.
 
-팀원이 백엔드 서버에 Places·Gemini 키를 설정했다면 프론트 담당자가 그 키를 발급하거나 복사할 필요는 없습니다. 전달받은 서버 주소만 `JPASS_API_TARGET`에 설정하세요. 프론트 지도용 브라우저 키는 별도입니다. 기준역 조회 자체에는 API 키가 필요하지 않습니다.
+팀원이 백엔드 서버에 Places·Gemini 키를 설정했다면 프론트 담당자가 그 키를 발급하거나 복사할 필요는 없습니다. 전달받은 서버 주소만 `JPASS_API_TARGET`에 설정하세요. 프론트 지도용 브라우저 키는 별도입니다. 기준역 조회는 Google·Gemini를 호출하지 않지만 공통 백엔드 시작에는 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL` 설정이 필요합니다.
 
 개발 중 `/api`는 Vite가 `JPASS_API_TARGET`으로 전달하며 기본값은 `http://127.0.0.1:8000`입니다. `.env.local` 변경 후 Vite를 재시작하세요. `-ApiTarget`은 해당 실행에만 적용됩니다. 빌드와 `npm run preview`에는 개발 프록시가 없으므로 배포할 때는 `/api` 리버스 프록시가 필요합니다.
 

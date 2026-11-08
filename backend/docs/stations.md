@@ -1,6 +1,6 @@
 # 계산 전 기준역 조회
 
-`POST /api/stations/resolve`는 관광지별 Google Place ID와 좌표를 받아 기존 HeartRails 클라이언트로 가장 가까운 역 하나를 조회한다. 동선 계산·경로 크롤링·Google Places·Gemini 호출은 하지 않으며 API 키도 필요하지 않다. 프론트는 응답의 역을 `/api/nearby/recommend`에 보내고 Text Search 결과와 합칠 수 있다.
+`POST /api/stations/resolve`는 관광지별 Google Place ID와 좌표를 받아 기존 HeartRails 클라이언트로 가장 가까운 역 하나를 조회한다. 동선 계산·경로 크롤링·Google Places·Gemini 호출은 하지 않는다. 다만 공통 서버의 시작 검증에는 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL` 설정이 필요하다. 프론트는 응답의 역을 `/api/nearby/recommend`에 보내고 Text Search 결과와 합칠 수 있다.
 
 ## 요청
 

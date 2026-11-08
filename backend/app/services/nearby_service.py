@@ -6,14 +6,12 @@ import math
 import os
 import random
 from time import perf_counter
+from typing import cast
 
-import httpx
-from google.genai.errors import APIError as GeminiAPIError
 from pydantic import ValidationError
-from requests import HTTPError, RequestException
-from requests import Timeout as RequestsTimeout
 
 from app.clients.google_maps import search_nearby
+from app.errors import ProviderResponseError
 from app.llm import GeminiWrapper
 from app.prompts.nearby_ranking import RERANK_SYSTEM_PROMPT
 from app.schemas.nearby import (
@@ -29,22 +27,6 @@ from app.schemas.nearby import (
 from app.schemas.route import Location
 
 logger = logging.getLogger(__name__)
-
-
-class NearbyConfigurationError(RuntimeError):
-    """주변 추천에 필요한 서버 설정이 없다."""
-
-
-class NearbyProviderError(RuntimeError):
-    """외부 추천 서비스 호출 또는 응답 검증에 실패했다."""
-
-
-class NearbyProviderTimeout(NearbyProviderError):
-    """외부 추천 서비스 응답 시간이 초과됐다."""
-
-
-class NearbyRateLimitError(NearbyProviderError):
-    """외부 추천 서비스의 요청 한도를 초과했다."""
 
 
 ANCHOR_SYSTEM_PROMPT = """너는 일본 여행에서 주변 관광지를 검색할 기준 역을 선택한다.
@@ -102,27 +84,22 @@ def select_anchor_station(
         len(candidates),
         max_anchor_count,
     )
-    try:
-        selection = AnchorStationSelection.model_validate(
-            llm.request(
-                system_prompt=ANCHOR_SYSTEM_PROMPT,
-                user_prompt=user_prompt,
-                response_schema=response_schema,
-                response_validator=AnchorStationSelection,
-            )
-        )
-    except (ValidationError, RuntimeError) as exc:
-        logger.warning("LLM 앵커 응답 검증 실패: 오류=%s", type(exc).__name__)
-        raise NearbyProviderError(
-            "LLM이 유효한 앵커 역 목록을 반환하지 않았습니다."
-        ) from exc
+    selection = cast(
+        AnchorStationSelection,
+        llm.request(
+            system_prompt=ANCHOR_SYSTEM_PROMPT,
+            user_prompt=user_prompt,
+            response_schema=response_schema,
+            response_validator=AnchorStationSelection,
+        ),
+    )
     if len(selection.candidateIds) > max_anchor_count:
         logger.warning(
             "LLM 앵커 선택 상한 초과: 선택=%d개, 상한=%d개",
             len(selection.candidateIds),
             max_anchor_count,
         )
-        raise NearbyProviderError(
+        raise ProviderResponseError(
             f"LLM은 앵커 역을 최대 {max_anchor_count}개 선택할 수 있습니다."
         )
     unknown_ids = [value for value in selection.candidateIds if value not in candidates]
@@ -130,7 +107,7 @@ def select_anchor_station(
         logger.warning(
             "LLM 앵커 응답에 입력에 없는 후보 ID가 %d개 있음", len(unknown_ids)
         )
-        raise NearbyProviderError(
+        raise ProviderResponseError(
             f"LLM이 입력에 없는 역을 선택했습니다: {', '.join(unknown_ids)}"
         )
     logger.info(
@@ -140,18 +117,6 @@ def select_anchor_station(
         perf_counter() - started_at,
     )
     return [candidates[value].model_copy(deep=True) for value in selection.candidateIds]
-
-
-def build_search_plan(request: NearbyRequest) -> list[tuple[str, int]]:
-    """2. 태그 하나면 N개, 복수면 전체 2N개를 태그별로 나누어 조회한다."""
-    if len(request.travelTypes) == 1:
-        return [(request.travelTypes[0], request.placeCount)]
-
-    budget = 2 * request.placeCount
-    # 태그 수가 2N보다 많으면 이번 실행에서 조회할 태그도 무작위로 고른다.
-    tags = random.sample(request.travelTypes, k=min(len(request.travelTypes), budget))
-    quota, remainder = divmod(budget, len(tags))
-    return [(tag, quota + (index < remainder)) for index, tag in enumerate(tags)]
 
 
 def distance_meters(origin: Location, destination: Location) -> float:
@@ -211,16 +176,13 @@ def normalize_place(
     )
 
 
-def select_recommendations(
+def rank_places_with_llm(
     request: NearbyRequest,
     candidates: list[RecommendedPlace],
     *,
     llm: GeminiWrapper,
 ) -> list[RecommendedPlace]:
-    """4. 복수 태그 후보를 LLM으로 정렬하고 선택한 인덱스를 장소로 복원한다."""
-    if len(request.travelTypes) == 1 or len(candidates) <= 1:
-        return candidates[: request.placeCount]
-
+    """LLM으로 장소 후보를 정렬하고 선택한 인덱스를 장소로 복원한다."""
     selection_count = min(request.placeCount, len(candidates))
     user_prompt = json.dumps(
         {
@@ -253,33 +215,23 @@ def select_recommendations(
         len(candidates),
         selection_count,
     )
-    try:
-        raw = llm.request(
+    ranking = cast(
+        RecommendedPlaceRanking,
+        llm.request(
             system_prompt=RERANK_SYSTEM_PROMPT,
             user_prompt=user_prompt,
             max_output_tokens=256,
             response_schema=response_schema,
             response_validator=RecommendedPlaceRanking,
-        )
-        if isinstance(raw, RecommendedPlaceRanking):
-            raw = raw.model_dump()
-        ranking = (
-            RecommendedPlaceRanking.model_validate_json(raw)
-            if isinstance(raw, str)
-            else RecommendedPlaceRanking.model_validate(raw)
-        )
-    except (ValidationError, RuntimeError) as exc:
-        logger.warning("LLM 재순위화 응답 검증 실패: 오류=%s", type(exc).__name__)
-        raise NearbyProviderError(
-            "LLM이 유효한 추천 인덱스를 반환하지 않았습니다."
-        ) from exc
+        ),
+    )
 
     if len(ranking.indices) != selection_count:
-        raise NearbyProviderError(
+        raise ProviderResponseError(
             "LLM이 요청한 개수의 추천 인덱스를 반환하지 않았습니다."
         )
     if any(index >= len(candidates) for index in ranking.indices):
-        raise NearbyProviderError("LLM이 후보에 없는 추천 인덱스를 반환했습니다.")
+        raise ProviderResponseError("LLM이 후보에 없는 추천 인덱스를 반환했습니다.")
 
     logger.info(
         "LLM 장소 재순위화 완료: 선택=%d개, 소요=%.2f초",
@@ -287,30 +239,6 @@ def select_recommendations(
         perf_counter() - started_at,
     )
     return [candidates[index] for index in ranking.indices]
-
-
-def run_flow(
-    payload: NearbyRequest | dict,
-    *,
-    api_key: str,
-    llm: GeminiWrapper,
-    max_anchor_count: int | None = None,
-) -> NearbyResponse:
-    """입력 검증 → 복수 앵커 선정 → 역별 검색·중복 병합·최종 추천."""
-    request = NearbyRequest.model_validate(payload)
-    if not api_key.strip():
-        raise ValueError("GOOGLE_PLACE_API_KEY가 필요합니다.")
-    if max_anchor_count is None:
-        max_anchor_count = request.maxAnchorCount
-    stations = select_anchor_station(
-        request, llm=llm, max_anchor_count=max_anchor_count
-    )
-    return NearbyResponse(
-        results=[
-            recommend_for_station(request, station, api_key=api_key, llm=llm)
-            for station in stations
-        ]
-    )
 
 
 def recommend_for_station(
@@ -327,8 +255,22 @@ def recommend_for_station(
         station.stationId,
         station.name,
     )
+    single_tag = len(request.travelTypes) == 1
+    if single_tag:
+        search_plan = [(request.travelTypes[0], request.placeCount)]
+    else:
+        budget = 2 * request.placeCount
+        # 태그 수가 2N보다 많으면 이번 실행에서 조회할 태그도 무작위로 고른다.
+        tags = random.sample(
+            request.travelTypes, k=min(len(request.travelTypes), budget)
+        )
+        quota, remainder = divmod(budget, len(tags))
+        search_plan = [
+            (tag, quota + (index < remainder)) for index, tag in enumerate(tags)
+        ]
+
     candidates: dict[str, RecommendedPlace] = {}
-    for tag, count in build_search_plan(request):
+    for tag, count in search_plan:
         logger.info(
             "주변 검색 시작: stationId=%s, 태그=%s, 최대=%d개, 반경=%sm",
             station.stationId,
@@ -345,8 +287,6 @@ def recommend_for_station(
             radius=request.radius,
             max_results=count,
         )
-        if not isinstance(places, list):
-            raise NearbyProviderError("주변 검색의 장소 목록 형식이 올바르지 않습니다.")
         logger.info(
             "주변 검색 완료: stationId=%s, 태그=%s, 수신=%d개, 소요=%.2f초",
             station.stationId,
@@ -363,12 +303,13 @@ def recommend_for_station(
                 candidates[place.googlePlaceId] = place
             elif tag not in existing.searchTags:
                 existing.searchTags.append(tag)
-    selected = select_recommendations(request, list(candidates.values()), llm=llm)
-    if len(request.travelTypes) == 1:
-        selection_method = "거리순"
-    elif len(candidates) <= 1:
-        selection_method = "후보 순서"
+
+    candidate_places = list(candidates.values())
+    if single_tag or len(candidate_places) <= 1:
+        selected = candidate_places[: request.placeCount]
+        selection_method = "거리순" if single_tag else "후보 순서"
     else:
+        selected = rank_places_with_llm(request, candidate_places, llm=llm)
         selection_method = "LLM 재순위화"
     logger.info(
         "역별 추천 완료: stationId=%s, 유효한 중복 제거 후보=%d개, 추천=%d개, 방식=%s, 소요=%.2f초",
@@ -392,64 +333,21 @@ def recommend_for_station(
 
 
 def recommend_nearby(request: NearbyRequest) -> NearbyResponse:
-    """서버 키로 클라이언트를 만들고 외부 오류를 HTTP와 구분된 예외로 정리한다."""
-    places_key = os.getenv("GOOGLE_PLACE_API_KEY", "").strip()
-    gemini_key = os.getenv("GEMINI_API_KEY", "").strip()
-    if not places_key or not gemini_key:
-        missing_keys = [
-            name
-            for name, value in (
-                ("GOOGLE_PLACE_API_KEY", places_key),
-                ("GEMINI_API_KEY", gemini_key),
-            )
-            if not value
-        ]
-        logger.warning("주변 추천 설정 누락: %s", ",".join(missing_keys))
-        raise NearbyConfigurationError(
-            "주변 추천에 필요한 API 키가 설정되지 않았습니다."
+    """서버 설정으로 LLM 앵커 선정·역별 주변 검색·추천 응답 조립을 실행한다."""
+    places_key = os.environ["GOOGLE_PLACE_API_KEY"].strip()
+    gemini_key = os.environ["GEMINI_API_KEY"].strip()
+    model_name = (
+        os.getenv("GEMINI_NEARBY_MODEL", "").strip()
+        or os.environ["GEMINI_MODEL"].strip()
+    )
+    logger.info("Gemini 클라이언트 준비: 모델=%s", model_name)
+    with GeminiWrapper(api_key=gemini_key, model_name=model_name) as llm:
+        stations = select_anchor_station(
+            request, llm=llm, max_anchor_count=request.maxAnchorCount
         )
-
-    llm = None
-    try:
-        model_name = os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite")
-        logger.info("Gemini 클라이언트 준비: 모델=%s", model_name)
-        llm = GeminiWrapper(
-            api_key=gemini_key,
-            model_name=model_name,
+        return NearbyResponse(
+            results=[
+                recommend_for_station(request, station, api_key=places_key, llm=llm)
+                for station in stations
+            ]
         )
-        return run_flow(request, api_key=places_key, llm=llm)
-    except NearbyProviderError:
-        raise
-    except (RequestsTimeout, httpx.TimeoutException) as exc:
-        logger.warning("외부 추천 서비스 응답 시간 초과: 오류=%s", type(exc).__name__)
-        raise NearbyProviderTimeout(
-            "외부 추천 서비스 응답 시간이 초과되었습니다."
-        ) from exc
-    except GeminiAPIError as exc:
-        logger.warning("Gemini 요청 실패: status=%s", exc.code)
-        if exc.code == 429:
-            raise NearbyRateLimitError("Gemini 요청 한도를 초과했습니다.") from exc
-        if exc.code in (408, 504):
-            raise NearbyProviderTimeout("Gemini 응답 시간이 초과되었습니다.") from exc
-        raise NearbyProviderError("Gemini 요청에 실패했습니다.") from exc
-    except HTTPError as exc:
-        status = exc.response.status_code if exc.response is not None else None
-        logger.warning("Google 주변 검색 요청 실패: status=%s", status)
-        if status == 429:
-            raise NearbyRateLimitError("주변 검색 요청 한도를 초과했습니다.") from exc
-        if status in (408, 504):
-            raise NearbyProviderTimeout(
-                "주변 검색 응답 시간이 초과되었습니다."
-            ) from exc
-        raise NearbyProviderError("주변 검색 요청에 실패했습니다.") from exc
-    except (RequestException, httpx.HTTPError) as exc:
-        logger.warning("외부 추천 서비스 연결 실패: 오류=%s", type(exc).__name__)
-        raise NearbyProviderError("외부 추천 서비스에 연결할 수 없습니다.") from exc
-    except (ValueError, KeyError, TypeError, AttributeError, RuntimeError) as exc:
-        logger.warning("외부 추천 서비스 응답 형식 오류: 오류=%s", type(exc).__name__)
-        raise NearbyProviderError(
-            "외부 추천 서비스의 응답이 올바르지 않습니다."
-        ) from exc
-    finally:
-        if llm is not None:
-            llm.close()
