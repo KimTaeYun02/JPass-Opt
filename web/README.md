@@ -35,13 +35,25 @@ Windows에서는 다음 도우미도 사용할 수 있습니다. 다른 폴더�
 ```dotenv
 VITE_GOOGLE_MAPS_API_KEY=
 JPASS_API_TARGET=http://127.0.0.1:8000
+VITE_API_BASE=
 ```
 
-브라우저 키는 Maps JavaScript API·Places API (New)와 허용 HTTP 리퍼러로 제한하세요. `VITE_` 변수는 브라우저 번들에 포함됩니다. 서버의 `GOOGLE_PLACE_API_KEY`·`GEMINI_API_KEY`는 백엔드 환경에만 넣으세요. 과금·쿼터는 사용하는 GCP 프로젝트 설정을 확인하세요. 개인 프로젝트의 예전 제한값을 저장소 기본값으로 간주하지 않습니다.
+브라우저 키는 Maps JavaScript API와 허용 HTTP 리퍼러로 제한하세요. 장소 검색·Nearby는 서버에서 호출하므로 브라우저 키에 Places API 권한은 필요하지 않습니다. 개발용 키에는 `http://localhost:5173/*`, `http://127.0.0.1:5173/*`, preview를 쓰면 4173 포트의 같은 두 주소를 허용하세요. 배포용 키에는 실제 배포 도메인만 허용하고 개발용 키와 분리하세요. `VITE_` 변수는 브라우저 번들에 포함됩니다. 서버의 `GOOGLE_PLACE_API_KEY`·`GEMINI_API_KEY`는 백엔드 환경에만 넣으세요. 과금·쿼터는 사용하는 GCP 프로젝트 설정을 확인하세요.
 
 팀원이 백엔드 서버에 Places·Gemini 키를 설정했다면 프론트 담당자가 그 키를 발급하거나 복사할 필요는 없습니다. 전달받은 서버 주소만 `JPASS_API_TARGET`에 설정하세요. 프론트 지도용 브라우저 키는 별도입니다. 기준역 조회는 Google·Gemini를 호출하지 않지만 공통 백엔드 시작에는 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL` 설정이 필요합니다.
 
-개발 중 `/api`는 Vite가 `JPASS_API_TARGET`으로 전달하며 기본값은 `http://127.0.0.1:8000`입니다. `.env.local` 변경 후 Vite를 재시작하세요. `-ApiTarget`은 해당 실행에만 적용됩니다. 빌드와 `npm run preview`에는 개발 프록시가 없으므로 배포할 때는 `/api` 리버스 프록시가 필요합니다.
+개발 중 `/api`는 Vite가 `JPASS_API_TARGET`으로 전달하며 기본값은 `http://127.0.0.1:8000`입니다. `.env.local` 변경 후 Vite를 재시작하세요. `-ApiTarget`은 해당 실행에만 적용됩니다. [Vite preview도 기본적으로 이 프록시 설정을 상속합니다](https://vite.dev/config/preview-options#preview-proxy). 빌드 산출물 자체에는 프록시 서버가 포함되지 않으며 preview는 운영 서버가 아닙니다.
+
+### Vercel 등 정적 호스팅에서 백엔드 연결
+
+프론트와 별도로 HTTPS 백엔드 서버를 먼저 준비합니다. Docker·Chromium·Xvfb 실행은 [백엔드 배포 안내](../backend/docs/docker.md)를 따릅니다. 프론트만 Vercel에 배포해도 Python 백엔드가 함께 실행되지는 않습니다.
+
+1. 프론트 빌드 환경에 `VITE_API_BASE=https://실제-백엔드-호스트/api`를 설정합니다. `/api`까지 포함하고 쿼리·사용자 인증 정보를 넣지 않습니다. HTTPS 프론트에는 HTTPS 백엔드를 사용합니다.
+2. 백엔드에는 `CORS_ORIGINS=https://실제-프론트-호스트`를 설정합니다. 여러 주소는 쉼표로 구분하고 경로·끝의 `/`를 제외합니다. 잘못된 값이나 빈 값은 서버 시작 시 오류로 알립니다. Vercel preview 주소는 허용할 주소를 명시적으로 추가합니다.
+3. 프론트에 배포 도메인으로 제한한 `VITE_GOOGLE_MAPS_API_KEY`, 백엔드에 Places·Gemini 서버 키를 각각 설정합니다. 로컬 PC IP로 제한한 Places 키는 다른 서버에서 사용할 수 없으므로 서버의 고정 외부 IP로 제한한 키를 별도 준비합니다.
+4. 프론트를 다시 빌드·배포하고 API 요청과 CORS 응답을 확인합니다. [VITE 환경 변수는 빌드 시 포함되므로](https://vite.dev/guide/env-and-mode) 백엔드 주소나 지도 키를 변경하면 재빌드가 필요합니다. `JPASS_API_TARGET`만 바꿔서는 정적 배포의 API 주소가 바뀌지 않습니다.
+
+같은 도메인에 `/api` 리버스 프록시를 직접 제공한다면 `VITE_API_BASE`를 비워 기본 경로를 사용할 수 있습니다. 현재 최적화 요청의 프론트 대기 제한은 600초이므로 프록시·로드밸런서의 요청 시간 제한도 확인하세요. API 주소가 잘못되어 HTML·깨진 JSON이 돌아오면 화면에서 API 주소와 프록시 설정을 안내하며 응답 원문이나 공급자 비밀 정보를 표시하지 않습니다.
 
 ## API 계약
 

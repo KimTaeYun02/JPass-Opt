@@ -2,6 +2,7 @@ import './demo.css';
 import './demo-reference.css';
 import { TAGS, addPlace, addPlaces, canApplyResult, clockAt, computeExample, dateAt, emptyDraft, initialDraft, initialRecommendations, placeById, recommendations, registerPlaces, removePlace, searchPlaces, setDayCount, validateDraft } from './demo-model';
 import { createTravelApi, formatJapanTime } from './demo-api';
+import { travelApiBase } from './demo-config';
 import { renderDemoMarkup } from './demo-render';
 import type { DemoPlace, DemoResult, Tag } from './demo-model';
 import type { PlaceSearch } from './demo-api';
@@ -17,7 +18,7 @@ const searchConfirm = document.querySelector<HTMLButtonElement>('#search-confirm
 const stagedPlaces = new Set<string>();
 const toast = document.querySelector<HTMLElement>('#toast')!;
 const apiMode = new URLSearchParams(window.location.search).get('mode') !== 'example';
-const api = createTravelApi();
+const api = createTravelApi(travelApiBase);
 let draft = apiMode ? emptyDraft() : initialDraft();
 const initialQuery = (): string => draft.days[activeDay]?.searchQuery ?? '';
 const initialDays = new Map<number, { ids: string[]; message: string }>();
