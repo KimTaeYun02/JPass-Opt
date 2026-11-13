@@ -194,7 +194,3 @@ def optimize_visit_orders(places, quotes, limit=3):
             }
         )
     return plans
-
-
-def optimize_visit_order(places, quotes):
-    return optimize_visit_orders(places, quotes, limit=1)[0]

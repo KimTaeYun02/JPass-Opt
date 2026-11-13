@@ -2,13 +2,15 @@
 
 import asyncio
 import logging
+from contextlib import AsyncExitStack
 from copy import deepcopy
 from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
 
 from app.clients.heartrails import get_nearest_stations, get_stations
-from app.crawling import crawl_route
-from app.optimizer import optimize_visit_order, quotes_from_segments
+from app.crawling import browser_page, crawl_route
+from app.errors import ProviderResponseError
+from app.optimizer import optimize_visit_orders, quotes_from_segments
 from app.schemas.route import (
     Leg,
     Location,
@@ -57,32 +59,41 @@ def find_stations(day):
 
 
 async def collect_quotes(stations, start_at):
-    """2. 모든 방향의 역 간 후보를 조회하고 구간마다 가장 빠른 후보를 고른다."""
+    """2. 필요한 경우 페이지 하나를 열어 모든 방향의 역 간 후보를 조회한다."""
     quotes, cache = [], {}
-    for from_id, departure in stations.items():
-        for to_id, arrival in stations.items():
-            if from_id == to_id:
-                continue
-            key = departure.name, arrival.name
-            if key not in cache:
-                if departure.name == arrival.name:
-                    # 서로 다른 관광지라도 같은 역이면 역 간 비용만 0이다.
-                    # TODO: 실제 관광지 사이 도보 경로/시간은 별도 조회해야 한다.
-                    cache[key] = {
-                        "time": 0,
-                        "fee": 0,
-                        "route": [
-                            {"station": departure.name, "line": "동일 역"},
-                            {"station": arrival.name, "line": None},
-                        ],
-                    }
-                else:
-                    logger.info("경로 조회: %s → %s (%s)", *key, start_at.isoformat())
-                    # 이 환경은 Xvfb에서 화면 모드 Chromium으로 크롤링한다.
-                    result = await crawl_route(
-                        *key, departure_time=start_at, headless=False
-                    )
-                    try:
+    async with AsyncExitStack() as stack:
+        page = None
+        for from_id, departure in stations.items():
+            for to_id, arrival in stations.items():
+                if from_id == to_id:
+                    continue
+                key = departure.name, arrival.name
+                if key not in cache:
+                    if departure.name == arrival.name:
+                        # 서로 다른 관광지라도 같은 역이면 역 간 비용만 0이다.
+                        # TODO: 실제 관광지 사이 도보 경로/시간은 별도 조회해야 한다.
+                        cache[key] = {
+                            "time": 0,
+                            "fee": 0,
+                            "route": [
+                                {"station": departure.name, "line": "동일 역"},
+                                {"station": arrival.name, "line": None},
+                            ],
+                        }
+                    else:
+                        logger.info(
+                            "경로 조회: %s → %s (%s)", *key, start_at.isoformat()
+                        )
+                        if page is None:
+                            # 첫 실제 조회에서만 열고, 수집이 끝나면 정리한다.
+                            page = await stack.enter_async_context(
+                                browser_page(headless=False)
+                            )
+                        result = await crawl_route(page, *key, departure_time=start_at)
+                        if not result["routes"]:
+                            raise RouteDataError(
+                                f"{key[0]} → {key[1]}: 이동 경로가 없습니다."
+                            )
                         selected, _ = quotes_from_segments(
                             [
                                 {
@@ -93,20 +104,16 @@ async def collect_quotes(stations, start_at):
                             ],
                             selection="fastest",
                         )
-                    except ValueError as exc:
-                        raise RouteDataError(
-                            f"{key[0]} → {key[1]}: 유효한 이동 경로가 없습니다."
-                        ) from exc
-                    cache[key] = selected[0]["result"]
-            quotes.append(
-                {
-                    "from": from_id,
-                    "to": to_id,
-                    "stations": {"from": departure.name, "to": arrival.name},
-                    "source": "snapshot",
-                    "result": deepcopy(cache[key]),
-                }
-            )
+                        cache[key] = selected[0]["result"]
+                quotes.append(
+                    {
+                        "from": from_id,
+                        "to": to_id,
+                        "stations": {"from": departure.name, "to": arrival.name},
+                        "source": "snapshot",
+                        "result": deepcopy(cache[key]),
+                    }
+                )
     return quotes
 
 
@@ -119,7 +126,7 @@ def find_route_station(name, line, known_stations, cache):
         logger.info("환승역 좌표 조회: %s (%s)", name, line)
         results = get_stations(name, line=line)
         if not results:
-            raise RouteDataError(
+            raise ProviderResponseError(
                 f"{name} ({line}): HeartRails에서 역 좌표를 찾을 수 없습니다."
             )
         raw = results[0]
@@ -213,19 +220,16 @@ async def optimize_route(request: RouteRequest) -> RouteResponse:
             day_date, time.fromisoformat(day.dailyStartTime), tzinfo=JAPAN_TIMEZONE
         )
         logger.info("%s일차: 근처 역 조회", day.dayIndex)
+        # 1. 관광지마다 가장 가까운 역 하나를 연결한다. 방문 ID는 역과 별개다.
         stations = await asyncio.to_thread(find_stations, day)
+        # 2. 모든 방향의 역 간 후보를 조회하고 구간마다 가장 빠른 후보를 고른다.
         quotes = await collect_quotes(stations, start_at)
 
         # 3. 역 이름이 아닌 장소 ID를 최적화하므로 같은 역의 관광지도 유지된다.
         if len(stations) == 1:
             plan = {"order": list(stations), "legs": [], "time": 0, "fee": 0}
         else:
-            try:
-                plan = optimize_visit_order(list(stations), quotes)
-            except ValueError as exc:
-                raise RouteDataError(
-                    "입력한 관광지의 동선을 계산할 수 없습니다."
-                ) from exc
+            plan = optimize_visit_orders(list(stations), quotes, limit=1)[0]
         days.append(
             await asyncio.to_thread(
                 build_day_output, day, day_date, start_at, stations, plan

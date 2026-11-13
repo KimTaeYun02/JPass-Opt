@@ -9,13 +9,21 @@ def parse_duration(text: str) -> int | None:
     minutes = re.search(r"(\d+)\s*分", text)
     if not hours and not minutes:
         return None
-    return (int(hours.group(1)) * 60 if hours else 0) + (
-        int(minutes.group(1)) if minutes else 0
-    )
+    try:
+        return (int(hours.group(1)) * 60 if hours else 0) + (
+            int(minutes.group(1)) if minutes else 0
+        )
+    except ValueError:
+        return None
 
 
 def parse_fee(text: str) -> int | None:
     """일본어 운임을 엔 단위 정수로 변환한다. 인식할 수 없으면 None."""
     text = unicodedata.normalize("NFKC", text)
     match = re.search(r"([\d,]+)\s*円", text)
-    return int(match.group(1).replace(",", "")) if match else None
+    if not match:
+        return None
+    try:
+        return int(match.group(1).replace(",", ""))
+    except ValueError:
+        return None

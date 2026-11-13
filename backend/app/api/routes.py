@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
     responses={
         422: {"description": "입력이 올바르지 않거나 유효한 역·경로를 찾지 못함"},
         429: {"description": "외부 역·경로 정보 서비스의 요청 한도 초과"},
-        502: {"description": "외부 역·경로 정보 서비스 조회 오류"},
+        502: {"description": "외부 역·경로 정보 서비스 조회·응답 형식 오류"},
         504: {"description": "외부 역·경로 정보 서비스 응답 시간 초과"},
     },
 )

@@ -8,7 +8,6 @@ from playwright.async_api import Error as PlaywrightError
 from playwright.async_api import Locator, Page
 from playwright.async_api import TimeoutError as PlaywrightTimeoutError
 
-from app.crawling.browser import browser_page
 from app.crawling.parsers import parse_duration, parse_fee
 from app.errors import (
     ProviderError,
@@ -16,6 +15,7 @@ from app.errors import (
     ProviderTimeoutError,
     provider_error_for_status,
 )
+from app.optimizer import quotes_from_segments
 
 EKISPERT_URL = "https://roote.ekispert.net/"
 JAPAN_TIMEZONE = ZoneInfo("Asia/Tokyo")
@@ -100,14 +100,12 @@ async def search_route(
     departure: str,
     arrival: str,
     *,
-    departure_time: datetime | None = None,
+    departure_time: datetime,
     screenshot_dir: Path | None = None,
 ) -> None:
-    if departure_time is not None:
-        # 출발 시각이 있는 경우 해당 시간으로 페이지의 타이머를 고정한다.
-        departure_time = normalize_departure_time(departure_time)
-        await page.clock.set_fixed_time(departure_time)
-        print("검색 출발 시각:", departure_time.isoformat())
+    departure_time = normalize_departure_time(departure_time)
+    await page.clock.set_fixed_time(departure_time)
+    print("검색 출발 시각:", departure_time.isoformat())
 
     response = await page.goto(
         EKISPERT_URL, wait_until="domcontentloaded", timeout=60000
@@ -147,8 +145,7 @@ async def search_route(
     except PlaywrightTimeoutError:
         print("결과 페이지 이동을 확인하지 못했습니다. 결과 요소를 확인합니다.")
 
-    if departure_time is not None:
-        await ensure_departure_time(page, departure_time)
+    await ensure_departure_time(page, departure_time)
 
     await page.locator('[data-testid="course-detail"]').first.wait_for(state="visible")
     print("\n===== 검색 결과 =====")
@@ -225,39 +222,60 @@ async def extract_route(page: Page) -> RouteSearchResult:
 
 
 async def crawl_route(
+    page: Page,
     departure: str,
     arrival: str,
     *,
-    headless: bool = False,
-    departure_time: datetime | None = None,
+    departure_time: datetime,
     screenshot_dir: Path | None = None,
 ) -> RouteSearchResult:
-    """모든 경로를 반환한다. 출발 시각이 None이면 사이트의 현재 시각을 사용한다."""
-    if departure_time is not None:
-        departure_time = normalize_departure_time(departure_time)
+    """전달받은 페이지에서 지정한 출발 시각으로 조회한 모든 경로를 반환한다."""
+    departure_time = normalize_departure_time(departure_time)
     if screenshot_dir is not None:
         screenshot_dir.mkdir(parents=True, exist_ok=True)
 
     try:
-        async with browser_page(headless=headless) as page:
-            try:
-                await search_route(
-                    page,
-                    departure,
-                    arrival,
-                    departure_time=departure_time,
-                    screenshot_dir=screenshot_dir,
+        try:
+            await search_route(
+                page,
+                departure,
+                arrival,
+                departure_time=departure_time,
+                screenshot_dir=screenshot_dir,
+            )
+            result = await extract_route(page)
+            if not isinstance(result, dict) or not isinstance(
+                result.get("routes"), list
+            ):
+                raise ProviderResponseError(
+                    "외부 경로 정보의 응답 형식이 올바르지 않습니다."
                 )
-                return await extract_route(page)
-            except Exception:
-                if screenshot_dir is not None:
-                    try:
-                        await take_screenshot(
-                            page, screenshot_dir, "error.png", full_page=True
-                        )
-                    except Exception as screenshot_error:
-                        print("오류 스크린샷 저장 실패:", repr(screenshot_error))
-                raise
+            if result["routes"]:
+                try:
+                    quotes_from_segments(
+                        [
+                            {
+                                "departure": departure,
+                                "arrival": arrival,
+                                "routes": result["routes"],
+                            }
+                        ],
+                        selection="fastest",
+                    )
+                except ValueError as exc:
+                    raise ProviderResponseError(
+                        "외부 경로 정보의 응답 형식이 올바르지 않습니다."
+                    ) from exc
+            return result
+        except Exception:
+            if screenshot_dir is not None:
+                try:
+                    await take_screenshot(
+                        page, screenshot_dir, "error.png", full_page=True
+                    )
+                except Exception as screenshot_error:
+                    print("오류 스크린샷 저장 실패:", repr(screenshot_error))
+            raise
     except PlaywrightTimeoutError as exc:
         raise ProviderTimeoutError(
             "외부 경로 정보 조회 시간이 초과되었습니다."
