@@ -269,9 +269,10 @@ flowchart TD
     C --> D[HeartRails: 관광지 근처 역 조회]
     D --> E[Ekispert: 역 간 경로와 시간·요금 조회]
     E --> F[optimizer: 방문 순서 계산]
-    F --> G[환승역 좌표 조회와 응답 조립]
-    G --> H[Pydantic 응답 모델]
-    H --> I[HTTP 응답 JSON]
+    F --> G[선택 경로의 역·환승역 좌표 조회]
+    G --> H[준비된 좌표로 응답 조립]
+    H --> I[Pydantic 응답 모델]
+    I --> J[HTTP 응답 JSON]
 ```
 
 - **Uvicorn**은 HTTP 요청을 받는 서버 프로그램이다. `app.main:app`은 `app/main.py`의 `app` 객체를 실행한다는 뜻이다.

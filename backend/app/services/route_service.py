@@ -1,4 +1,4 @@
-"""근처 역 조회 → 경로 수집 → 방문 순서 최적화 → 환승역 좌표 보완."""
+"""근처 역 조회 → 경로 수집 → 방문 순서 최적화 → 좌표 보완 → 응답 조립."""
 
 import asyncio
 import logging
@@ -117,35 +117,44 @@ async def collect_quotes(stations, start_at):
     return quotes
 
 
-def find_route_station(name, line, known_stations, cache):
-    """관광지 근처 역을 재사용하고, 환승역은 노선 → 역명 순으로 조회한다."""
-    if name in known_stations:
-        return known_stations[name]
-    key = name, line
-    if key not in cache:
-        logger.info("환승역 좌표 조회: %s (%s)", name, line)
-        results = get_stations(name, line=line)
-        if not results:
-            raise ProviderResponseError(
-                f"{name} ({line}): HeartRails에서 역 좌표를 찾을 수 없습니다."
-            )
-        raw = results[0]
-        cache[key] = Station(
-            name=name,
-            location=Location(lat=raw["latitude"], lng=raw["longitude"]),
-            prefecture=raw.get("prefecture"),
-        )
-    return cache[key]
+def find_route_stations(stations, plan):
+    """4. 선택 경로의 역 좌표를 준비한다. 관광지 근처 역은 재사용한다."""
+    known_stations = {station.name: station for station in stations.values()}
+    route_stations = {}
+    for quote in plan["legs"]:
+        if quote["stations"]["from"] == quote["stations"]["to"]:
+            continue
+        route = quote["result"]["route"]
+        for origin, destination in zip(route, route[1:]):
+            line = origin["line"]
+            for name in (origin["station"], destination["station"]):
+                key = name, line
+                if key in route_stations:
+                    continue
+                if name in known_stations:
+                    route_stations[key] = known_stations[name]
+                    continue
+                logger.info("환승역 좌표 조회: %s (%s)", name, line)
+                results = get_stations(name, line=line)
+                if not results:
+                    raise ProviderResponseError(
+                        f"{name} ({line}): HeartRails에서 역 좌표를 찾을 수 없습니다."
+                    )
+                raw = results[0]
+                route_stations[key] = Station(
+                    name=name,
+                    location=Location(lat=raw["latitude"], lng=raw["longitude"]),
+                    prefecture=raw.get("prefecture"),
+                )
+    return route_stations
 
 
-def build_day_output(day, day_date, start_at, stations, plan):
-    """4. 최적 순서에 원래 관광지 정보를 붙이고 이동 기준 일시/요금을 정리한다."""
+def build_day_output(day, day_date, start_at, stations, plan, route_stations):
+    """5. 준비된 좌표와 최적 순서로 방문·이동 일시와 요금 응답을 조립한다."""
     places = {
         f"day-{day.dayIndex}-place-{index}": place
         for index, place in enumerate(day.places, start=1)
     }
-    station_by_name = {station.name: station for station in stations.values()}
-    transfer_stations = {}
     visits, legs = [], []
     current = start_at
     for order, visit_id in enumerate(plan["order"], start=1):
@@ -172,18 +181,10 @@ def build_day_output(day, day_date, start_at, stations, plan):
             for origin, destination in zip(result["route"], result["route"][1:]):
                 route.append(
                     TransportStep(
-                        fromStation=find_route_station(
-                            origin["station"],
-                            origin["line"],
-                            station_by_name,
-                            transfer_stations,
-                        ),
-                        toStation=find_route_station(
-                            destination["station"],
-                            origin["line"],
-                            station_by_name,
-                            transfer_stations,
-                        ),
+                        fromStation=route_stations[origin["station"], origin["line"]],
+                        toStation=route_stations[
+                            destination["station"], origin["line"]
+                        ],
                         line=origin["line"],
                     )
                 )
@@ -212,7 +213,7 @@ def build_day_output(day, day_date, start_at, stations, plan):
 
 
 async def optimize_route(request: RouteRequest) -> RouteResponse:
-    """근처 역 → 경로 수집 → 최적화 → 응답. 일차별로 독립 실행한다."""
+    """근처 역 → 경로 수집 → 최적화 → 좌표 보완 → 응답. 일차별로 독립 실행한다."""
     days = []
     for day in sorted(request.days, key=lambda item: item.dayIndex):
         day_date = request.startDate + timedelta(days=day.dayIndex - 1)
@@ -230,10 +231,11 @@ async def optimize_route(request: RouteRequest) -> RouteResponse:
             plan = {"order": list(stations), "legs": [], "time": 0, "fee": 0}
         else:
             plan = optimize_visit_orders(list(stations), quotes, limit=1)[0]
+        # 4. 선택한 경로의 역과 환승역 좌표를 조회한다.
+        route_stations = await asyncio.to_thread(find_route_stations, stations, plan)
+        # 5. 외부 조회 없이 준비된 데이터로 응답을 조립한다.
         days.append(
-            await asyncio.to_thread(
-                build_day_output, day, day_date, start_at, stations, plan
-            )
+            build_day_output(day, day_date, start_at, stations, plan, route_stations)
         )
 
     return RouteResponse(
