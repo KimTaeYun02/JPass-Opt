@@ -44,6 +44,7 @@ SDK의 `response_json_schema`로 전달한다. `additionalProperties: false` 같
 필요하면 지원하는 모델에서 `temperature=0.7`처럼 전달한다.
 `max_output_tokens`는 기본 1024다. SDK별 오류는 `app.errors`의 공통 오류로 변환한다.
 
+- `ProviderPaymentRequiredError`: 결제 설정·크레딧 확인 필요(402)
 - `ProviderRateLimitError`: 요청 한도 초과(429)
 - `ProviderTimeoutError`: 시간 초과, HTTP 408·504
 - `ProviderResponseError`: 빈 응답·거절·차단·미완료, JSON·모델 검증 실패
@@ -51,6 +52,8 @@ SDK의 `response_json_schema`로 전달한다. `additionalProperties: false` 같
 
 요청 구성은 오류 변환 범위 밖에서 처리하며, 일반 `ValueError`·`TypeError`·
 `RuntimeError`를 외부 오류로 바꾸지 않는다. 호출하는 API에서 공통 오류를 HTTP 응답으로 매핑한다.
+SDK 호출 실패는 원본 예외의 종류와 메시지를 한 줄로 기록하며 traceback은 출력하지 않는다.
+공급자 HTTP 402는 결제·크레딧 오류로 분류해 API에서도 402를 반환한다.
 
 키와 모델은 호출하는 코드에서 읽어 전달한다. 루트 `.env`를 사용한다면:
 

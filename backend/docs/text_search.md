@@ -13,7 +13,7 @@
 | Request model | `PlaceSearchRequest` |
 | Response model | `PlaceSearchResponse` |
 | 정상 상태 | `200`: 검색 수행 또는 검색어 생성 불가 |
-| 오류 상태 | `422`, `429`, `502`, `504` |
+| 오류 상태 | `402`, `422`, `429`, `502`, `504` |
 
 본문의 JSON 필드명은 대소문자를 구분한다. 이 문서는 현재 코드의 계약을 설명하며, 서버의 `/openapi.json`에서 Pydantic 기반 스키마를 확인할 수 있다. `clarificationQuestion`은 입력·출력 필드가 아니다.
 
@@ -267,7 +267,7 @@ flowchart TD
     B -- 아니요 --> E422["422 입력 오류"]
     B -- 예 --> D["Gemini 1회: 일본어 검색어 증강"]
     D --> V{"LLM 응답 유효?"}
-    V -- 아니요 --> E["오류 분류: 429 / 502 / 504"]
+    V -- 아니요 --> E["오류 분류: 402 / 429 / 502 / 504"]
     V -- 예 --> N{"textQueries가 null?"}
     N -- 예 --> Z["200: textQueries=null, results=[]"]
     N -- 아니요 --> Q["최대 3개 검색어를 순차 Google 검색"]
@@ -333,6 +333,7 @@ Google만 직접 호출하거나 수동으로 다음 페이지를 조회할 때�
 | HTTP 상태 | 실제 분류 조건 | `detail` |
 | --- | --- | --- |
 | `422` | FastAPI/Pydantic 요청 검증 실패. 빈 검색 문장, 결과 수·정렬·위치 오류, 정의되지 않은 입력 키 등 | Pydantic 오류 목록 |
+| `402` | Gemini 또는 Google HTTP `402`: 결제 설정 오류·크레딧 소진 | `외부 서비스의 결제 설정 또는 크레딧을 확인해주세요.` |
 | `429` | Gemini `APIError.code=429` 또는 Google HTTP `429` | `외부 검색 서비스의 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요.` |
 | `502` | 기타 Gemini API 오류·Google HTTP 오류, requests/httpx 연결 오류, LLM 차단·빈 응답·미완료·스키마 오류, Google 응답 구조 오류 | `외부 검색 서비스에서 정상적인 응답을 받지 못했습니다.` |
 | `504` | requests/httpx timeout 또는 Gemini/Google 상태 `408`, `504` | `외부 검색 서비스 응답 시간이 초과되었습니다.` |

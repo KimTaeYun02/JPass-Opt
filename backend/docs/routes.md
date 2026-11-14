@@ -277,6 +277,7 @@ HeartRails 클라이언트·브라우저 생성 함수·경로 크롤러는 외�
 | --- | --- | --- |
 | `422` | FastAPI/Pydantic의 입력 모델 검증 실패 | `{"detail":[...]}` 형태의 검증 오류 목록 |
 | `422` | `RouteDataError`: 근처 역 없음, 동명이역 구분 불가, 외부 서비스가 빈 경로 후보 배열을 반환함, 이동 시간을 더한 도착 일시가 지원 범위를 초과함 | `{"detail":"오류 설명"}` |
+| `402` | `ProviderPaymentRequiredError`: 외부 서비스의 HTTP 402, 결제 설정 오류·크레딧 소진 | `{"detail":"외부 서비스의 결제 설정 또는 크레딧을 확인해주세요."}` |
 | `429` | `ProviderRateLimitError`: 외부 서비스의 HTTP 429 | `{"detail":"외부 역·경로 정보 서비스의 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요."}` |
 | `502` | `ProviderError` 및 `ProviderResponseError`: 외부 연결·조회 실패, 외부 응답 형식 오류, 모든 경로 후보의 시간·요금 파싱 실패, 선택 경로의 역 좌표 없음 | `{"detail":"외부 역·경로 정보 서비스에서 정상적인 응답을 받지 못했습니다."}` |
 | `504` | `ProviderTimeoutError`: Requests·Playwright 시간 초과 또는 외부 서비스의 HTTP 408·504 | `{"detail":"외부 역·경로 정보 조회 시간이 초과되었습니다."}` |

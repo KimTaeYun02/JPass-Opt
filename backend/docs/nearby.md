@@ -241,6 +241,7 @@ LLM 입력은 `userRequest`, `travelTypes`, 선택 개수, 후보의 `index`, `n
 | Status | 실제 분류 | 응답 detail |
 | --- | --- | --- |
 | `422` | 필수값 누락, 미지원 태그, 빈 역·태그 목록, 잘못된 개수·반경·좌표 등 FastAPI/Pydantic 요청 검증 실패 | 검증 오류 배열 |
+| `402` | Gemini 또는 Google HTTP 402: 결제 설정 오류·크레딧 소진 | `외부 서비스의 결제 설정 또는 크레딧을 확인해주세요.` |
 | `429` | Gemini `APIError.code == 429`, Google HTTP 429 | `외부 추천 서비스의 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요.` |
 | `502` | 그 외 Gemini API 오류·Google HTTP 오류, 연결 오류, 잘못된 JSON·응답 형식, 앵커·순위 결과 검증 실패, 차단·미완료·빈 LLM 출력 등 | `외부 추천 서비스에서 정상적인 응답을 받지 못했습니다.` |
 | `504` | `requests.Timeout`, `httpx.TimeoutException`, Gemini 또는 Google의 408·504 | `외부 추천 서비스 응답 시간이 초과되었습니다.` |

@@ -28,26 +28,57 @@ logger = logging.getLogger(__name__)
 
 @contextmanager
 def _provider_request(provider: str):
-    """SDK 호출에서 발생하는 외부 오류만 공통 오류로 바꾼다."""
+    """SDK 오류의 원인을 서버 로그에 남기고 공통 오류로 바꾼다."""
     try:
         yield
-    except GeminiAPIError as exc:
-        raise provider_error_for_status(
-            exc.code, f"{provider} 요청에 실패했습니다."
-        ) from exc
-    except (APIStatusError, httpx.HTTPStatusError, requests.HTTPError) as exc:
-        status = exc.response.status_code if exc.response is not None else None
-        raise provider_error_for_status(
-            status, f"{provider} 요청에 실패했습니다."
-        ) from exc
-    except (APITimeoutError, httpx.TimeoutException, requests.Timeout) as exc:
-        raise ProviderTimeoutError(f"{provider} 응답 시간이 초과됐습니다.") from exc
-    except (APIConnectionError, httpx.RequestError, requests.RequestException) as exc:
-        raise ProviderError(f"{provider}에 연결할 수 없습니다.") from exc
-    except (APIResponseValidationError, json.JSONDecodeError, ValidationError) as exc:
-        raise ProviderResponseError(
-            f"{provider}가 유효하지 않은 응답을 반환했습니다."
-        ) from exc
+    except (
+        GeminiAPIError,
+        APIStatusError,
+        httpx.HTTPStatusError,
+        requests.HTTPError,
+        APITimeoutError,
+        httpx.TimeoutException,
+        requests.Timeout,
+        APIConnectionError,
+        httpx.RequestError,
+        requests.RequestException,
+        APIResponseValidationError,
+        json.JSONDecodeError,
+        ValidationError,
+    ) as exc:
+        status: int | None = None
+        error: ProviderError
+        if isinstance(exc, GeminiAPIError):
+            status = exc.code
+            error = provider_error_for_status(
+                status, f"{provider} 요청에 실패했습니다."
+            )
+        elif isinstance(
+            exc, (APIStatusError, httpx.HTTPStatusError, requests.HTTPError)
+        ):
+            status = exc.response.status_code if exc.response is not None else None
+            error = provider_error_for_status(
+                status, f"{provider} 요청에 실패했습니다."
+            )
+        elif isinstance(
+            exc, (APITimeoutError, httpx.TimeoutException, requests.Timeout)
+        ):
+            error = ProviderTimeoutError(f"{provider} 응답 시간이 초과됐습니다.")
+        elif isinstance(
+            exc, (APIConnectionError, httpx.RequestError, requests.RequestException)
+        ):
+            error = ProviderError(f"{provider}에 연결할 수 없습니다.")
+        else:
+            error = ProviderResponseError(
+                f"{provider}가 유효하지 않은 응답을 반환했습니다."
+            )
+        logger.error(
+            "%s.%s: %s",
+            type(exc).__module__,
+            type(exc).__qualname__,
+            " ".join(str(exc).splitlines()),
+        )
+        raise error from exc
 
 
 class _LLMWrapper:
