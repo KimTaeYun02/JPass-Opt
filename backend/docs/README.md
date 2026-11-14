@@ -7,6 +7,7 @@
 | 작업 | Method / Path | 상세 문서 | 요청 / 응답 모델 |
 | --- | --- | --- | --- |
 | 자연어로 장소 찾기 | `POST /api/places/search` | [text_search.md](text_search.md) | `PlaceSearchRequest` / `PlaceSearchResponse` |
+| 계산 전 기준역 조회 | `POST /api/stations/resolve` | [stations.md](stations.md) | `StationResolveRequest` / `StationResolveResponse` |
 | 일차별 방문 순서 계산 | `POST /api/routes/optimize` | [routes.md](routes.md) | `RouteRequest` / `RouteResponse` |
 | 후보 역 주변 관광지 추천 | `POST /api/nearby/recommend` | [nearby.md](nearby.md) | `NearbyRequest` / `NearbyResponse` |
 
@@ -55,6 +56,9 @@ JSON 형태·필수 필드·타입은 OpenAPI와 모델을 확인한다. 순차 
 flowchart TD
     A[자연어 검색 요청] --> B[POST /api/places/search]
     B --> C[프론트에서 장소 선택 및 일차 배정]
+    C --> H[POST /api/stations/resolve]
+    H --> I[POST /api/nearby/recommend + Text Search]
+    I --> G
     C --> D[POST /api/routes/optimize]
     D --> E[프론트에서 역·환승역 후보 구성]
     E --> F[POST /api/nearby/recommend]
@@ -63,6 +67,8 @@ flowchart TD
 ```
 
 각 API는 독립적이며 위 연결은 프론트가 구성한다. 동선 최적화 API가 주변 추천 API를 자동 호출하지 않는다.
+
+계산 전 추천에는 기준역 조회 결과의 `station`을 사용한다. 이 API는 장소별 `status`로 조회 실패를 분리하고, 경로 수집·최적화·Google Places 호출은 실행하지 않는다. 상세한 부분 실패 규칙은 [기준역 조회](stations.md)를 참고한다.
 
 | 원본 | 동선 최적화의 `days[].places[]` 필드 |
 | --- | --- |

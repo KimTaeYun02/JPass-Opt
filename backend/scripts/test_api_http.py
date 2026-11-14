@@ -19,6 +19,7 @@ ENDPOINTS = {
     "places": "/api/places/search",
     "nearby": "/api/nearby/recommend",
     "routes": "/api/routes/optimize",
+    "stations": "/api/stations/resolve",
 }
 EXAMPLES = Path(__file__).resolve().parents[1] / "examples" / "http"
 
