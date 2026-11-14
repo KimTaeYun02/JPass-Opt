@@ -5,14 +5,14 @@ from time import perf_counter
 
 from fastapi import APIRouter, HTTPException
 
-from app.schemas.nearby import NearbyRequest, NearbyResponse
-from app.services.nearby_service import (
-    NearbyConfigurationError,
-    NearbyProviderError,
-    NearbyProviderTimeout,
-    NearbyRateLimitError,
-    recommend_nearby,
+from app.errors import (
+    ProviderError,
+    ProviderPaymentRequiredError,
+    ProviderRateLimitError,
+    ProviderTimeoutError,
 )
+from app.schemas.nearby import NearbyRequest, NearbyResponse
+from app.services.nearby_service import recommend_nearby
 
 router = APIRouter(prefix="/api/nearby", tags=["주변 관광지 추천"])
 logger = logging.getLogger(__name__)
@@ -30,10 +30,10 @@ logger = logging.getLogger(__name__)
         "후보가 placeCount개 이하여도 순위를 정하며, 0~1개이면 순위 선정을 생략합니다."
     ),
     responses={
+        402: {"description": "외부 서비스의 결제 설정 또는 크레딧 확인 필요"},
         422: {"description": "입력이 올바르지 않음"},
         429: {"description": "외부 추천 서비스의 요청 한도 초과"},
         502: {"description": "외부 추천 서비스 조회 오류"},
-        503: {"description": "추천 서비스 설정 누락"},
         504: {"description": "외부 추천 서비스 응답 시간 초과"},
     },
 )
@@ -57,34 +57,39 @@ def recommend(payload: NearbyRequest) -> NearbyResponse:
             perf_counter() - started_at,
         )
         return result
-    except NearbyConfigurationError as exc:
+    except ProviderPaymentRequiredError as exc:
         logger.warning(
-            "주변 관광지 추천 실패: status=503, 설정 누락, 소요=%.2f초",
+            "주변 관광지 추천 실패: status=402, 오류=%s, 소요=%.2f초",
+            exc,
             perf_counter() - started_at,
         )
         raise HTTPException(
-            status_code=503, detail="주변 관광지 추천 서비스를 사용할 수 없습니다."
+            status_code=402,
+            detail="외부 서비스의 결제 설정 또는 크레딧을 확인해주세요.",
         ) from exc
-    except NearbyRateLimitError as exc:
+    except ProviderRateLimitError as exc:
         logger.warning(
-            "주변 관광지 추천 실패: status=429, 요청 한도 초과, 소요=%.2f초",
+            "주변 관광지 추천 실패: status=429, 오류=%s, 소요=%.2f초",
+            exc,
             perf_counter() - started_at,
         )
         raise HTTPException(
             status_code=429,
             detail="외부 추천 서비스의 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요.",
         ) from exc
-    except NearbyProviderTimeout as exc:
+    except ProviderTimeoutError as exc:
         logger.warning(
-            "주변 관광지 추천 실패: status=504, 응답 시간 초과, 소요=%.2f초",
+            "주변 관광지 추천 실패: status=504, 오류=%s, 소요=%.2f초",
+            exc,
             perf_counter() - started_at,
         )
         raise HTTPException(
             status_code=504, detail="외부 추천 서비스 응답 시간이 초과되었습니다."
         ) from exc
-    except NearbyProviderError as exc:
+    except ProviderError as exc:
         logger.warning(
-            "주변 관광지 추천 실패: status=502, 외부 서비스 오류, 소요=%.2f초",
+            "주변 관광지 추천 실패: status=502, 오류=%s, 소요=%.2f초",
+            exc,
             perf_counter() - started_at,
         )
         raise HTTPException(

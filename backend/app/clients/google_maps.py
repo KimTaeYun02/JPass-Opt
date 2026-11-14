@@ -2,7 +2,9 @@ from typing import TypedDict, cast
 
 import requests
 
+from app.clients.http_client import request_json
 from app.constants.place_types import PLACE_TYPES_BY_TRAVEL_TYPE, TRAVEL_TYPE
+from app.errors import ProviderResponseError
 
 
 class PlaceLocation(TypedDict, total=False):
@@ -24,6 +26,40 @@ class NearbyPlace(TypedDict, total=False):
     formattedAddress: str
     primaryType: str
     types: list[str]
+
+
+def _request_places(
+    endpoint: str,
+    *,
+    api_key: str,
+    field_mask: str,
+    payload: dict,
+    validate_place_objects: bool = False,
+) -> dict:
+    """Google Places 요청 설정과 응답 구조 검증을 처리한다."""
+    data = request_json(
+        "POST",
+        f"https://places.googleapis.com/v1/places:{endpoint}",
+        provider="Google 장소 검색",
+        headers={
+            "Content-Type": "application/json",
+            "X-Goog-Api-Key": api_key,
+            "X-Goog-FieldMask": field_mask,
+        },
+        json=payload,
+        timeout=30,
+    )
+
+    if not isinstance(data, dict) or "error" in data:
+        raise ProviderResponseError("Google 장소 검색 응답이 올바르지 않습니다.")
+    places = data.get("places", [])
+    if not isinstance(places, list) or (
+        validate_place_objects and any(not isinstance(place, dict) for place in places)
+    ):
+        raise ProviderResponseError("Google 장소 목록 형식이 올바르지 않습니다.")
+    if "nextPageToken" in data and not isinstance(data["nextPageToken"], str):
+        raise ProviderResponseError("Google 다음 페이지 토큰이 올바르지 않습니다.")
+    return data
 
 
 def search_text(
@@ -62,18 +98,13 @@ def search_text(
             raise ValueError("page_token에 이전 응답의 nextPageToken을 입력해주세요.")
         payload["pageToken"] = page_token
 
-    response = requests.post(
-        "https://places.googleapis.com/v1/places:searchText",
-        headers={
-            "Content-Type": "application/json",
-            "X-Goog-Api-Key": api_key.strip(),
-            "X-Goog-FieldMask": FIELD_MASK,
-        },
-        json=payload,
-        timeout=30,
+    return _request_places(
+        "searchText",
+        api_key=api_key.strip(),
+        field_mask=FIELD_MASK,
+        payload=payload,
+        validate_place_objects=True,
     )
-    response.raise_for_status()
-    return response.json()
 
 
 def get_coordinates(
@@ -167,21 +198,18 @@ def search_nearby(
             f"검색할 장소 타입이 설정되지 않은 여행 유형입니다: {travel_type}"
         )
 
-    response = requests.post(
-        "https://places.googleapis.com/v1/places:searchNearby",
-        headers={
-            "Content-Type": "application/json",
-            "X-Goog-Api-Key": api_key,
-            "X-Goog-FieldMask": (
-                "places.id,"
-                "places.displayName,"
-                "places.location,"
-                "places.formattedAddress,"
-                "places.primaryType,"
-                "places.types"
-            ),
-        },
-        json={
+    data = _request_places(
+        "searchNearby",
+        api_key=api_key,
+        field_mask=(
+            "places.id,"
+            "places.displayName,"
+            "places.location,"
+            "places.formattedAddress,"
+            "places.primaryType,"
+            "places.types"
+        ),
+        payload={
             "includedTypes": list(included_types),
             "maxResultCount": max_results,
             "rankPreference": rank_preference,
@@ -197,7 +225,5 @@ def search_nearby(
             "languageCode": "ko",
             "regionCode": "JP",
         },
-        timeout=30,
     )
-    response.raise_for_status()
-    return cast(list[NearbyPlace], response.json().get("places", []))
+    return cast(list[NearbyPlace], data.get("places", []))
