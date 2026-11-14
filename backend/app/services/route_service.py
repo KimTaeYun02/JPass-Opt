@@ -196,7 +196,12 @@ def build_day_output(
             break
         quote = plan["legs"][order - 1]
         result = quote["result"]
-        arrival_at = current + timedelta(minutes=result["time"])
+        try:
+            arrival_at = current + timedelta(minutes=result["time"])
+        except OverflowError as exc:
+            raise RouteDataError(
+                f"{day.dayIndex}일차: 이동 시간을 더한 도착 일시가 지원하는 날짜 범위를 초과했습니다."
+            ) from exc
         route: list[TransportStep] = []
         pair = cast(StationPair, quote.get("stations"))
         if pair["from"] != pair["to"]:
