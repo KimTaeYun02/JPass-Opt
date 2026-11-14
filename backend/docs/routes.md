@@ -24,6 +24,7 @@
 - 역 API: [heartrails.py](../app/clients/heartrails.py)
 - 경로 수집·파싱: [ekispert.py](../app/crawling/ekispert.py), [parsers.py](../app/crawling/parsers.py), [browser.py](../app/crawling/browser.py)
 - 고정 비용 최적화: [matrix.py](../app/optimizer/matrix.py), [optimizer.py](../app/optimizer/optimizer.py)
+- 크롤링 후보·검증된 이동 구간·최적화 결과 타입: [types.py](../app/optimizer/types.py)
 - 앱 등록·요청 잠금·CORS: [main.py](../app/main.py)
 
 ## JSON Schema와 실행 의미

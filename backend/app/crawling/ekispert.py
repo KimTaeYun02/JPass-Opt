@@ -16,24 +16,14 @@ from app.errors import (
     provider_error_for_status,
 )
 from app.optimizer import quotes_from_segments
+from app.optimizer.types import RouteCandidate, RoutePoint
 
 EKISPERT_URL = "https://roote.ekispert.net/"
 JAPAN_TIMEZONE = ZoneInfo("Asia/Tokyo")
 
 
-class RoutePoint(TypedDict):
-    station: str
-    line: str | None
-
-
-class RouteResult(TypedDict):
-    time: int | None
-    fee: int | None
-    route: list[RoutePoint]
-
-
 class RouteSearchResult(TypedDict):
-    routes: list[RouteResult]
+    routes: list[RouteCandidate]
 
 
 def normalize_departure_time(departure_time: datetime) -> datetime:
@@ -173,7 +163,7 @@ async def extract_line(element: Locator) -> str | None:
     return line
 
 
-async def extract_course(section: Locator) -> RouteResult:
+async def extract_course(section: Locator) -> RouteCandidate:
     """경로 하나의 소요시간, 운임, 역과 이동 노선을 추출한다."""
     await section.wait_for(state="visible")
     time_text = await section.locator(
@@ -215,7 +205,7 @@ async def extract_route(page: Page) -> RouteSearchResult:
     """모든 검색 결과를 화면 순서대로 routes 배열에 담아 반환한다."""
     sections = page.locator('[data-testid="course-detail"]')
     await sections.first.wait_for(state="visible")
-    routes: list[RouteResult] = []
+    routes: list[RouteCandidate] = []
     for index in range(await sections.count()):
         routes.append(await extract_course(sections.nth(index)))
     return {"routes": routes}

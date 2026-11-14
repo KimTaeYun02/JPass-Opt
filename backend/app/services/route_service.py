@@ -4,14 +4,19 @@ import asyncio
 import logging
 from contextlib import AsyncExitStack
 from copy import deepcopy
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
+from typing import cast
 from zoneinfo import ZoneInfo
+
+from playwright.async_api import Page
 
 from app.clients.heartrails import get_nearest_stations, get_stations
 from app.crawling import browser_page, crawl_route
 from app.errors import ProviderResponseError
 from app.optimizer import optimize_visit_orders, quotes_from_segments
+from app.optimizer.types import Plan, Quote, RouteResult, StationPair
 from app.schemas.route import (
+    DayInput,
     Leg,
     Location,
     OptimizedDay,
@@ -30,9 +35,9 @@ class RouteDataError(ValueError):
     """입력한 여행지로 유효한 동선을 만들 수 없다."""
 
 
-def find_stations(day):
+def find_stations(day: DayInput) -> dict[str, Station]:
     """1. 관광지마다 가장 가까운 역 하나를 연결한다. 방문 ID는 역과 별개다."""
-    stations = {}
+    stations: dict[str, Station] = {}
     for index, place in enumerate(day.places, start=1):
         visit_id = f"day-{day.dayIndex}-place-{index}"
         results = get_nearest_stations(place.location.lat, place.location.lng, limit=1)
@@ -48,7 +53,7 @@ def find_stations(day):
         )
 
     # 크롤러가 역 이름만 받으므로, 동명이역을 같은 역으로 취급하지 않는다.
-    by_name = {}
+    by_name: dict[str, Station] = {}
     for station in stations.values():
         if station.name in by_name and station != by_name[station.name]:
             raise RouteDataError(
@@ -58,11 +63,14 @@ def find_stations(day):
     return stations
 
 
-async def collect_quotes(stations, start_at):
+async def collect_quotes(
+    stations: dict[str, Station], start_at: datetime
+) -> list[Quote]:
     """2. 필요한 경우 페이지 하나를 열어 모든 방향의 역 간 후보를 조회한다."""
-    quotes, cache = [], {}
+    quotes: list[Quote] = []
+    cache: dict[tuple[str, str], RouteResult] = {}
     async with AsyncExitStack() as stack:
-        page = None
+        page: Page | None = None
         for from_id, departure in stations.items():
             for to_id, arrival in stations.items():
                 if from_id == to_id:
@@ -117,16 +125,21 @@ async def collect_quotes(stations, start_at):
     return quotes
 
 
-def find_route_stations(stations, plan):
+def find_route_stations(
+    stations: dict[str, Station], plan: Plan
+) -> dict[tuple[str, str], Station]:
     """4. 선택 경로의 역 좌표를 준비한다. 관광지 근처 역은 재사용한다."""
     known_stations = {station.name: station for station in stations.values()}
-    route_stations = {}
+    route_stations: dict[tuple[str, str], Station] = {}
     for quote in plan["legs"]:
-        if quote["stations"]["from"] == quote["stations"]["to"]:
+        # collect_quotes()에서 채운 역 정보는 최적화 이후에도 유지된다.
+        pair = cast(StationPair, quote.get("stations"))
+        if pair["from"] == pair["to"]:
             continue
         route = quote["result"]["route"]
         for origin, destination in zip(route, route[1:]):
-            line = origin["line"]
+            # 마지막 역은 출발점에서 제외되며, 나머지 노선은 이미 검증됐다.
+            line = cast(str, origin["line"])
             for name in (origin["station"], destination["station"]):
                 key = name, line
                 if key in route_stations:
@@ -149,13 +162,21 @@ def find_route_stations(stations, plan):
     return route_stations
 
 
-def build_day_output(day, day_date, start_at, stations, plan, route_stations):
+def build_day_output(
+    day: DayInput,
+    day_date: date,
+    start_at: datetime,
+    stations: dict[str, Station],
+    plan: Plan,
+    route_stations: dict[tuple[str, str], Station],
+) -> OptimizedDay:
     """5. 준비된 좌표와 최적 순서로 방문·이동 일시와 요금 응답을 조립한다."""
     places = {
         f"day-{day.dayIndex}-place-{index}": place
         for index, place in enumerate(day.places, start=1)
     }
-    visits, legs = [], []
+    visits: list[Visit] = []
+    legs: list[Leg] = []
     current = start_at
     for order, visit_id in enumerate(plan["order"], start=1):
         place = places[visit_id]
@@ -176,16 +197,16 @@ def build_day_output(day, day_date, start_at, stations, plan, route_stations):
         quote = plan["legs"][order - 1]
         result = quote["result"]
         arrival_at = current + timedelta(minutes=result["time"])
-        route = []
-        if quote["stations"]["from"] != quote["stations"]["to"]:
+        route: list[TransportStep] = []
+        pair = cast(StationPair, quote.get("stations"))
+        if pair["from"] != pair["to"]:
             for origin, destination in zip(result["route"], result["route"][1:]):
+                line = cast(str, origin["line"])
                 route.append(
                     TransportStep(
-                        fromStation=route_stations[origin["station"], origin["line"]],
-                        toStation=route_stations[
-                            destination["station"], origin["line"]
-                        ],
-                        line=origin["line"],
+                        fromStation=route_stations[origin["station"], line],
+                        toStation=route_stations[destination["station"], line],
+                        line=line,
                     )
                 )
         legs.append(
@@ -214,7 +235,7 @@ def build_day_output(day, day_date, start_at, stations, plan, route_stations):
 
 async def optimize_route(request: RouteRequest) -> RouteResponse:
     """근처 역 → 경로 수집 → 최적화 → 좌표 보완 → 응답. 일차별로 독립 실행한다."""
-    days = []
+    days: list[OptimizedDay] = []
     for day in sorted(request.days, key=lambda item: item.dayIndex):
         day_date = request.startDate + timedelta(days=day.dayIndex - 1)
         start_at = datetime.combine(
@@ -227,6 +248,7 @@ async def optimize_route(request: RouteRequest) -> RouteResponse:
         quotes = await collect_quotes(stations, start_at)
 
         # 3. 역 이름이 아닌 장소 ID를 최적화하므로 같은 역의 관광지도 유지된다.
+        plan: Plan
         if len(stations) == 1:
             plan = {"order": list(stations), "legs": [], "time": 0, "fee": 0}
         else:
