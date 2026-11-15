@@ -13,7 +13,7 @@ Docker, minikube, kubectl, Python 3이 필요하다. Python 스크립트는 표�
 | [configmap.yaml](../../k8s/local/configmap.yaml) | 모델 이름·CORS 같은 일반 설정 |
 | [deployment.yaml](../../k8s/local/deployment.yaml) | 이미지·Pod 수·환경 변수 연결·상태 확인·자원 설정 |
 | [service.yaml](../../k8s/local/service.yaml) | API Pod에 연결하는 내부 Service |
-| [apply_k8s_secret.py](../scripts/apply_k8s_secret.py) | 루트 `.env`의 API 키 두 개를 로컬 Secret에 적용 |
+| [apply_k8s_secret.py](../scripts/apply_k8s_secret.py) | 루트 `.env`의 설정된 API 키를 로컬 Secret에 적용 |
 
 실제 Secret YAML이나 API 키는 Git에 저장하지 않는다. Secret은 다음 단계의 스크립트로 별도 생성하며 Kustomize 리소스 목록에는 없다.
 
@@ -41,18 +41,18 @@ minikube image load jpass-api:local -p jpass-local
 
 ## 3. namespace와 API 키 준비
 
-루트 `.env`에 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`가 설정되어 있어야 한다. 기존 Compose 실행에 사용한 값을 그대로 사용한다.
+루트 `.env`에 `GOOGLE_PLACE_API_KEY`와 사용할 모델에 맞는 `GEMINI_API_KEY` / `OPENAI_API_KEY`를 설정한다. 두 공급자를 함께 사용하면 두 키 모두 필요하다.
 
 ```bash
 kubectl --context jpass-local apply -f k8s/local/namespace.yaml
 python backend/scripts/apply_k8s_secret.py
 ```
 
-스크립트는 Docker Compose가 해석한 환경 값을 메모리에서 읽고, API 키 두 개만 `jpass/jpass-api-secrets`에 server-side apply한다. 키를 화면·명령 인자·파일에 출력하지 않는다. `GEMINI_MODEL`, `GEMINI_NEARBY_MODEL`, `CORS_ORIGINS`, `API_PORT`는 Secret에 복사하지 않는다. API 키가 비어 있으면 적용하지 않고 종료한다. 이미 존재하는 `.env`를 수정하거나 컨테이너를 실행하지 않는다.
+스크립트는 Docker Compose가 해석한 환경 값을 메모리에서 읽고, 값이 있는 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `OPENAI_API_KEY`만 `jpass/jpass-api-secrets`에 server-side apply한다. Google 키는 필수이며 Gemini·OpenAI 키도 하나 이상 필요하다. 실제 설정된 모델에 필요한 키는 앱 시작 시 검사한다. 키는 화면·명령 인자·파일에 출력하지 않으며 모델·CORS 등 일반 설정은 Secret에 복사하지 않는다. 기존 `.env`를 수정하거나 컨테이너를 실행하지 않는다.
 
 일반 설정은 [configmap.yaml](../../k8s/local/configmap.yaml)에서 바꾼다. Kubernetes는 Compose의 `env_file`을 자동으로 읽지 않는다. Deployment가 ConfigMap과 Secret을 참조하면 컨테이너의 환경 변수로 전달된다. 현재 앱이 읽는 환경 변수 이름을 유지하므로 `Settings` 리팩터링 없이 실행할 수 있다.
 
-앱의 `lifespan`에서 Secret의 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`와 ConfigMap의 `GEMINI_MODEL`을 검증하며, 하나라도 미설정·빈 문자열·공백뿐이면 앱 시작이 실패한다. `GEMINI_MODEL`은 공통 기본 모델이다. 주변 추천용 `GEMINI_NEARBY_MODEL`은 선택 사항으로, 미설정·빈 문자열·공백뿐이면 `GEMINI_MODEL`을 사용한다. 예시 모델명 `gemini-3.5-flash-lite`는 설정값이며 코드의 기본값으로 사용하지 않는다.
+`OPENAI_MODEL`은 요청에 별도 모델이 없을 때 사용하는 필수 기본 모델이다. 주변 추천의 앵커 선정·순위 선정은 `LLM_NEARBY_MODEL`이 있으면 사용하고, 미설정·빈 문자열·공백뿐이면 `OPENAI_MODEL`을 사용한다. 모델명으로 공급자를 구분하여 Gemini는 `GEMINI_API_KEY`, GPT는 `OPENAI_API_KEY`를 읽는다. 두 공급자의 모델을 함께 쓰면 두 키 모두 필요하다. `GOOGLE_PLACE_API_KEY`, 기본 모델과 설정된 모델들의 API 키를 시작 시 검증하며 누락되면 앱 시작이 실패한다. 검증 과정에서 외부 API를 호출하지 않는다. 모델과 출력 토큰 수는 요청 시 결정하며, 토큰 한도는 코드의 `max_output_tokens`로 관리한다. 자세한 선택 순서는 [공통 LLM 래퍼 안내](../app/llm/README.md)를 참고한다.
 
 ## 4. API 배포
 
@@ -167,7 +167,7 @@ kubectl --context jpass-local -n jpass logs -f deployment/jpass-api --tail=100
 kubectl --context jpass-local -n jpass get events --sort-by=.metadata.creationTimestamp
 ```
 
-`ErrImageNeverPull`이면 이미지 로딩을, `CreateContainerConfigError`이면 API 키 Secret 생성과 키 이름을 확인한다. GHCR 배포의 `ImagePullBackOff`이면 이미지 주소와 `ghcr-pull-secret`의 인증을 확인한다. `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL` 중 하나라도 누락·빈 문자열·공백뿐이면 Pod 객체는 생성될 수 있지만 앱 프로세스가 시작 중 종료되어 `Ready`가 되지 않고 컨테이너 재시작이 반복되면 `CrashLoopBackOff`가 표시될 수 있다. 앱 로그에서 누락된 설정 이름을 확인하고 ConfigMap이나 Secret을 수정한다. 시작 검증은 필수 설정값의 존재 여부만 확인하며 모델 사용 가능 여부나 API 키 유효성을 외부 호출로 확인하지 않는다. 외부 연결 오류가 의심되면 API 키를 노출하지 않고 DNS만 확인한다.
+`ErrImageNeverPull`이면 이미지 로딩을, `CreateContainerConfigError`이면 API 키 Secret 생성과 키 이름을 확인한다. GHCR 배포의 `ImagePullBackOff`이면 이미지 주소와 `ghcr-pull-secret`의 인증을 확인한다. `GOOGLE_PLACE_API_KEY`, `OPENAI_MODEL` 또는 사용 모델의 API 키 중 하나라도 누락·빈 문자열·공백뿐이면 Pod 객체는 생성될 수 있지만 앱 프로세스가 시작 중 종료되어 `Ready`가 되지 않고 컨테이너 재시작이 반복되면 `CrashLoopBackOff`가 표시될 수 있다. 앱 로그에서 누락된 설정 이름을 확인하고 ConfigMap이나 Secret을 수정한다. 시작 검증은 필수 설정값의 존재 여부만 확인하며 모델 사용 가능 여부나 API 키 유효성을 외부 호출로 확인하지 않는다. 외부 연결 오류가 의심되면 API 키를 노출하지 않고 DNS만 확인한다.
 
 ```bash
 kubectl --context jpass-local -n jpass exec deployment/jpass-api -- python -c 'import socket; print(socket.getaddrinfo("generativelanguage.googleapis.com", 443))'

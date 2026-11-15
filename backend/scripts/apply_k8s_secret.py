@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-KEYS = ("GOOGLE_PLACE_API_KEY", "GEMINI_API_KEY")
+KEYS = ("GOOGLE_PLACE_API_KEY", "GEMINI_API_KEY", "OPENAI_API_KEY")
 
 
 def main() -> int:
@@ -49,7 +49,11 @@ def main() -> int:
         return 2
 
     values = {key: str(environment.get(key) or "").strip() for key in KEYS}
-    missing = [key for key in KEYS if not values[key]]
+    missing = []
+    if not values["GOOGLE_PLACE_API_KEY"]:
+        missing.append("GOOGLE_PLACE_API_KEY")
+    if not (values["GEMINI_API_KEY"] or values["OPENAI_API_KEY"]):
+        missing.append("GEMINI_API_KEY 또는 OPENAI_API_KEY")
     if missing:
         print("API 키가 비어 있습니다: " + ", ".join(missing), file=sys.stderr)
         return 2
@@ -62,6 +66,7 @@ def main() -> int:
         "data": {
             key: base64.b64encode(values[key].encode("utf-8")).decode("ascii")
             for key in KEYS
+            if values[key]
         },
     }
     try:

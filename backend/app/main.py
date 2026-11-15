@@ -12,20 +12,22 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.nearby import router as nearby_router
 from app.api.places import router as places_router
 from app.api.routes import router as routes_router
+from app.llm import LLMSettings
 from app.logging_config import configure_logging
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    missing_settings = [
-        name
-        for name in ("GOOGLE_PLACE_API_KEY", "GEMINI_API_KEY", "GEMINI_MODEL")
-        if not os.getenv(name, "").strip()
-    ]
-    if missing_settings:
-        raise RuntimeError(
-            f"필수 서버 환경 변수가 설정되지 않았습니다: {', '.join(missing_settings)}"
-        )
+    errors = []
+    if not os.getenv("GOOGLE_PLACE_API_KEY", "").strip():
+        errors.append("필수 서버 환경 변수: GOOGLE_PLACE_API_KEY")
+    for model_env in (None, "LLM_NEARBY_MODEL"):
+        try:
+            LLMSettings.from_env(model_env=model_env)
+        except RuntimeError as exc:
+            errors.append(str(exc))
+    if errors:
+        raise RuntimeError("; ".join(dict.fromkeys(errors)))
     app.state.route_lock = asyncio.Lock()
     yield
 

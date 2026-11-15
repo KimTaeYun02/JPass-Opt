@@ -47,6 +47,13 @@ spec:
                 secretKeyRef:
                   name: jpass-api-secrets
                   key: GEMINI_API_KEY
+                  optional: true
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jpass-api-secrets
+                  key: OPENAI_API_KEY
+                  optional: true
           resources:
             requests:
               cpu: 250m

@@ -1,3 +1,4 @@
-from .llm_wrapper import GeminiWrapper, GPTWrapper
+from .config import LLMSettings
+from .llm_wrapper import GeminiWrapper, GPTWrapper, LLMWrapper
 
-__all__ = ["GeminiWrapper", "GPTWrapper"]
+__all__ = ["GeminiWrapper", "GPTWrapper", "LLMSettings", "LLMWrapper"]
