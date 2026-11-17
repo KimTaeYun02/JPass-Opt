@@ -285,7 +285,6 @@ class LLMWrapper:
         *,
         model_name: str | None = None,
         model_env: str | None = None,
-        provider: LLMProvider | None = None,
     ) -> BaseModel | str:
         if (
             isinstance(max_output_tokens, bool)
@@ -294,7 +293,7 @@ class LLMWrapper:
         ):
             raise ValueError("max_output_tokens는 1 이상의 정수여야 합니다.")
         settings = LLMSettings.from_env(
-            model_name=model_name, model_env=model_env, provider=provider
+            model_name=model_name, model_env=model_env
         )
         cache_key = (settings.provider, settings.model_name)
         adapter = self._adapters.get(cache_key)

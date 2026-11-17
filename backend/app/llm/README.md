@@ -42,7 +42,6 @@ LLM_NEARBY_MODEL=
 - 주변 추천의 앵커 선정·순위 선정: `LLM_NEARBY_MODEL`, 없으면 `OPENAI_MODEL`.
 - `gemini-...`, `models/gemini-...` 모델은 `GEMINI_API_KEY` 사용.
 - `gpt-...`, `chatgpt-...`, `o숫자...`, `ft:...` 모델은 `OPENAI_API_KEY` 사용.
-- 공급자를 구분할 수 없는 별칭은 `request(provider="gpt" 또는 "gemini")`로 명시한다.
 - 환경변수에 지정할 때는 공급자를 구분할 수 있는 모델 ID를 사용한다.
 
 기본 모델은 `OPENAI_MODEL`로 지정하며, 값으로 GPT·Gemini 모델 ID를 사용할 수 있다.
