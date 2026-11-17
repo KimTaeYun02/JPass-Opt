@@ -14,7 +14,7 @@
 | Request model | `NearbyRequest` |
 | Response model | `NearbyResponse` |
 
-API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 않는다. 앱의 `lifespan`에서 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL`을 검증하며, 하나라도 미설정·빈 문자열·공백뿐이면 앱 시작이 실패한다. 서비스는 요청마다 설정 누락을 다시 확인하지 않는다. 시작 시 실제 외부 API를 호출해 키나 모델의 유효성을 확인하지는 않는다. 주변 추천 모델은 선택 설정인 `GEMINI_NEARBY_MODEL`을 우선 사용하며, 해당 값이 미설정·빈 문자열·공백뿐이면 공통 기본 모델인 `GEMINI_MODEL`을 사용한다. 모델의 앞뒤 공백은 제거하며 코드에 고정된 모델명으로 대체하지 않는다. 저장소의 모델 설정 예시는 모두 `gemini-3.5-flash-lite`이며, nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다.
+API 키는 서버 환경변수에서 읽으며 요청 본문에 전달하지 않는다. `OPENAI_MODEL`은 요청에 별도 모델이 없을 때 사용하는 필수 기본 모델이다. 주변 추천의 앵커 선정·순위 선정은 `LLM_NEARBY_MODEL`이 있으면 사용하고, 미설정·빈 문자열·공백뿐이면 `OPENAI_MODEL`을 사용한다. 모델명으로 공급자를 구분하여 Gemini는 `GEMINI_API_KEY`, GPT는 `OPENAI_API_KEY`를 읽는다. 두 공급자의 모델을 함께 쓰면 두 키 모두 필요하다. `GOOGLE_PLACE_API_KEY`, 기본 모델과 설정된 모델들의 API 키를 시작 시 검증하며 누락되면 앱 시작이 실패한다. 검증 과정에서 외부 API를 호출하지 않는다. 모델과 출력 토큰 수는 요청 시 결정하며, 토큰 한도는 코드의 `max_output_tokens`로 관리한다. 자세한 선택 순서는 [공통 LLM 래퍼 안내](../app/llm/README.md)를 참고한다.
 
 ## Source code
 
@@ -28,7 +28,7 @@ API 키는 서버 환경 변수에서 읽으며 요청 본문에 전달하지 �
 | 여행 태그·Google 장소 유형 매핑 | [app/constants/place_types.py](../app/constants/place_types.py) |
 | Google Nearby Search | [app/clients/google_maps.py](../app/clients/google_maps.py)의 `search_nearby()` |
 | 공통 HTTP 요청·예외 변환·JSON 파싱 | [app/clients/http_client.py](../app/clients/http_client.py)의 `request_json()` |
-| Gemini 요청·구조화 출력 파싱 | [app/llm/llm_wrapper.py](../app/llm/llm_wrapper.py)의 `GeminiWrapper` |
+| 공통 LLM 요청·구조화 출력 파싱 | [app/llm/llm_wrapper.py](../app/llm/llm_wrapper.py)의 `LLMWrapper` |
 | 외부 서비스의 공통 오류 타입·상태 분류 | [app/errors.py](../app/errors.py) |
 | 앱 등록·환경 변수·CORS | [app/main.py](../app/main.py) |
 
@@ -178,9 +178,9 @@ Google 원본 응답의 `types`, `displayName.languageCode`, 평점·영업시�
 5. 해당 역의 검색 계획 순서대로 Google Nearby Search를 호출한다. `includedTypes`는 태그별 상수 목록, 중심은 역 좌표, 반경은 입력 `radius`, `rankPreference`는 `DISTANCE`, `languageCode`는 `ko`, `regionCode`는 `JP`다. 태그에 배정된 개수를 `maxResultCount`로 보낸다.
 6. 태그별 응답의 앞쪽 배정 개수만 확인한다. ID·이름·좌표가 누락되거나 올바르지 않은 장소, 서버가 다시 계산한 직선거리가 반경보다 큰 장소를 제거한다.
 7. 같은 역의 장소를 `googlePlaceId`로 병합한다. 첫 등장 장소 정보를 유지하고 후속 검색 태그만 `searchTags`에 추가한다. 서로 다른 역 사이에서는 중복을 제거하지 않는다.
-8. 단일 태그면 Google 검색 순서를 유지해 앞쪽 최대 `N`개를 반환한다. 복수 태그여도 유효 후보가 0~1개면 그대로 반환한다. **복수 태그이며 정제·중복 제거 후 후보가 2개 이상이면 Gemini를 한 번 더 호출한다.** 후보가 `N`개 이하여도 순서를 정하기 위해 호출한다.
+8. 단일 태그면 Google 검색 순서를 유지해 앞쪽 최대 `N`개를 반환한다. 복수 태그여도 유효 후보가 0~1개면 그대로 반환한다. **복수 태그이며 정제·중복 제거 후 후보가 2개 이상이면 선택한 LLM을 한 번 더 호출한다.** 후보가 `N`개 이하여도 순서를 정하기 위해 호출한다.
 9. 재순위화는 `min(N, 후보 수)`개의 고유 인덱스를 검증하고 그 순서대로 원래 장소 객체를 선택한다. 역별 응답을 조립하고 다음 역을 처리한다.
-10. 모든 역을 마치면 `NearbyResponse`를 반환하고 `with` 블록을 나가며 Gemini 클라이언트를 닫는다. 정리 실패는 래퍼가 로그로 남기며 기존 결과·오류를 유지한다. 도중 외부 호출·응답 검증이 실패하면 전체 요청이 실패하며 앞서 완료된 역의 부분 결과도 반환하지 않는다.
+10. 모든 역을 마치면 `NearbyResponse`를 반환하고 `with` 블록을 나가며 사용한 LLM 클라이언트를 닫는다. 정리 실패는 래퍼가 로그로 남기며 기존 결과·오류를 유지한다. 도중 외부 호출·응답 검증이 실패하면 전체 요청이 실패하며 앞서 완료된 역의 부분 결과도 반환하지 않는다.
 
 ```mermaid
 flowchart TD
@@ -214,7 +214,7 @@ flowchart TD
 
 ## Internal LLM contracts
 
-아래 JSON은 서버와 Gemini 사이의 내부 계약이다. 프론트 HTTP 요청·응답에는 `candidateIds`와 `indices`를 추가하지 않는다.
+아래 JSON은 서버와 LLM 사이의 내부 계약이다. 프론트 HTTP 요청·응답에는 `candidateIds`와 `indices`를 추가하지 않는다.
 
 ### 앵커 선정: AnchorStationSelection
 
@@ -224,7 +224,7 @@ flowchart TD
 
 `candidateIds`는 1개 이상 고유 문자열 배열이다. 요청마다 생성하는 JSON Schema에 선택 상한과 실제 후보 ID의 `enum`을 넣는다. 로컬에서도 중복, 최대 선택 개수, 입력에 없는 ID를 검증한다. 추가 키는 거부한다. 정보가 부족하거나 후보의 우열을 가릴 수 없으면 첫 후보 하나를 선택하도록 프롬프트에서 지시한다.
 
-앵커 선택의 출력 토큰 상한은 `GeminiWrapper.request()` 기본값인 1024다.
+앵커 선택의 출력 토큰 상한은 `LLMWrapper.request()` 기본값인 1024다.
 
 ### 재순위화: RecommendedPlaceRanking
 
@@ -234,7 +234,7 @@ flowchart TD
 
 LLM 입력은 `userRequest`, `travelTypes`, 선택 개수, 후보의 `index`, `name`, `primaryType`, `searchTags`, `distanceMeters`다. 장소 ID·주소·좌표는 보내지 않는다. 후보별 평점·영업시간 등 입력에 없는 사실을 추측하지 않도록 지시하며, 관련성이 불분명하거나 동률이면 가까운 거리와 작은 인덱스를 우선하도록 한다.
 
-`indices`는 엄격한 0 이상의 정수 배열이며 기본 모델 길이는 1~20이다. 동적 JSON Schema에는 길이를 정확히 `min(N, 후보 수)`로 지정하고 실제 후보 인덱스의 `enum`을 넣는다. 서버는 개수·고유성·정수 여부·범위·추가 키를 검증한다. 출력 토큰 상한은 256이다. 검증 실패 시 임의의 순위나 검색 순서로 대체하지 않고 `502`로 실패한다.
+`indices`는 엄격한 0 이상의 정수 배열이며 기본 모델 길이는 1~20이다. 동적 JSON Schema에는 길이를 정확히 `min(N, 후보 수)`로 지정하고 실제 후보 인덱스의 `enum`을 넣는다. 서버는 개수·고유성·정수 여부·범위·추가 키를 검증한다. 출력 토큰 상한은 코드의 기본값인 1024다. 검증 실패 시 임의의 순위나 검색 순서로 대체하지 않고 `502`로 실패한다.
 
 ## HTTP errors
 
@@ -264,7 +264,7 @@ LLM 래퍼와 Google 클라이언트는 호출 제한·시간 초과·연결 실
 
 Google Places HTTP POST의 timeout은 호출당 30초, Gemini SDK HTTP timeout은 호출당 30,000ms다. 전체 API 요청의 별도 총 시간 제한은 없다. 표는 코드 수준의 호출 수로 SDK 내부의 네트워크 재시도까지 센 값은 아니다.
 
-라우터는 동기 `def`로 FastAPI 작업 스레드에서 실행한다. 요청 하나 안에서는 앵커 선정 → 첫 역의 태그별 검색 → 해당 역 재순위화 → 다음 역 순서로 모두 직렬 실행한다. 별도 병렬 처리·캐시·요청 간 잠금은 없다. 서로 다른 HTTP 요청은 FastAPI 실행 환경에서 동시에 진행할 수 있다. 한 HTTP 요청 안에서는 동일 Gemini 클라이언트를 재사용한다.
+라우터는 동기 `def`로 FastAPI 작업 스레드에서 실행한다. 요청 하나 안에서는 앵커 선정 → 첫 역의 태그별 검색 → 해당 역 재순위화 → 다음 역 순서로 모두 직렬 실행한다. 별도 병렬 처리·캐시·요청 간 잠금은 없다. 서로 다른 HTTP 요청은 FastAPI 실행 환경에서 동시에 진행할 수 있다. 한 HTTP 요청 안에서는 동일한 모델의 LLM 클라이언트를 재사용한다.
 
 ## 경계 조건과 프론트 연결
 

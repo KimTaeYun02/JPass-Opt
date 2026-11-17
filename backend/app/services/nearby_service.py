@@ -12,7 +12,8 @@ from pydantic import ValidationError
 
 from app.clients.google_maps import search_nearby
 from app.errors import ProviderResponseError
-from app.llm import GeminiWrapper
+from app.llm import LLMWrapper
+from app.prompts.nearby_anchor import ANCHOR_SYSTEM_PROMPT
 from app.prompts.nearby_ranking import RERANK_SYSTEM_PROMPT
 from app.schemas.nearby import (
     AnchorStationSelection,
@@ -29,21 +30,10 @@ from app.schemas.route import Location
 logger = logging.getLogger(__name__)
 
 
-ANCHOR_SYSTEM_PROMPT = """너는 일본 여행에서 주변 관광지를 검색할 기준 역을 선택한다.
-규칙:
-1. stations에 제공된 후보 중 minAnchorCount개 이상 maxAnchorCount개 이하를 선택한다.
-2. userRequest와 travelTypes를 고려하고 역의 name, line, location을 참고한다.
-3. 적합한 후보가 여러 개면 여러 역을 선택하되 상한을 채우려고 불필요한 역을 고르지 않는다.
-4. 정보가 부족하거나 후보 간 우열을 가릴 수 없으면 첫 번째 후보 하나만 선택한다.
-5. candidateId는 입력 값을 그대로 사용하고 중복 선택하지 않는다. 역이나 좌표를 새로 만들지 않는다.
-6. 주어진 JSON 스키마에 맞춰 candidateIds 배열만 반환한다.
-"""
-
-
 def select_anchor_station(
     request: NearbyRequest,
     *,
-    llm: GeminiWrapper,
+    llm: LLMWrapper,
     max_anchor_count: int | None = None,
 ) -> list[StationInput]:
     """1. 기본적으로 입력 역 수의 절반까지 LLM으로 앵커 역을 선택한다."""
@@ -91,6 +81,7 @@ def select_anchor_station(
             user_prompt=user_prompt,
             response_schema=response_schema,
             response_validator=AnchorStationSelection,
+            model_env="LLM_NEARBY_MODEL",
         ),
     )
     if len(selection.candidateIds) > max_anchor_count:
@@ -180,7 +171,7 @@ def rank_places_with_llm(
     request: NearbyRequest,
     candidates: list[RecommendedPlace],
     *,
-    llm: GeminiWrapper,
+    llm: LLMWrapper,
 ) -> list[RecommendedPlace]:
     """LLM으로 장소 후보를 정렬하고 선택한 인덱스를 장소로 복원한다."""
     selection_count = min(request.placeCount, len(candidates))
@@ -220,9 +211,9 @@ def rank_places_with_llm(
         llm.request(
             system_prompt=RERANK_SYSTEM_PROMPT,
             user_prompt=user_prompt,
-            max_output_tokens=256,
             response_schema=response_schema,
             response_validator=RecommendedPlaceRanking,
+            model_env="LLM_NEARBY_MODEL",
         ),
     )
 
@@ -246,7 +237,7 @@ def recommend_for_station(
     station: StationInput,
     *,
     api_key: str,
-    llm: GeminiWrapper,
+    llm: LLMWrapper,
 ) -> StationRecommendations:
     """선택한 역 하나를 기준으로 최대 placeCount개의 장소를 추천한다."""
     started_at = perf_counter()
@@ -335,13 +326,7 @@ def recommend_for_station(
 def recommend_nearby(request: NearbyRequest) -> NearbyResponse:
     """서버 설정으로 LLM 앵커 선정·역별 주변 검색·추천 응답 조립을 실행한다."""
     places_key = os.environ["GOOGLE_PLACE_API_KEY"].strip()
-    gemini_key = os.environ["GEMINI_API_KEY"].strip()
-    model_name = (
-        os.getenv("GEMINI_NEARBY_MODEL", "").strip()
-        or os.environ["GEMINI_MODEL"].strip()
-    )
-    logger.info("Gemini 클라이언트 준비: 모델=%s", model_name)
-    with GeminiWrapper(api_key=gemini_key, model_name=model_name) as llm:
+    with LLMWrapper() as llm:
         stations = select_anchor_station(
             request, llm=llm, max_anchor_count=request.maxAnchorCount
         )

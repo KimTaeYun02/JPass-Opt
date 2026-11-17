@@ -1,6 +1,8 @@
 import json
 import logging
 from contextlib import contextmanager
+from copy import deepcopy
+from typing import Self
 
 import httpx
 import requests
@@ -22,6 +24,7 @@ from app.errors import (
     ProviderTimeoutError,
     provider_error_for_status,
 )
+from app.llm.config import LLMProvider, LLMSettings
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +124,34 @@ def _parse_response(text, parsed, response_validator, *, expect_json: bool):
         raise ProviderResponseError("LLM 응답이 요청한 형식과 다릅니다.") from exc
 
 
+def _openai_schema(schema: dict) -> dict:
+    """호출자의 스키마를 보존하며 OpenAI strict 형식으로 변환한다."""
+    result = deepcopy(schema)
+
+    def convert(node: dict) -> None:
+        # 중복 여부 등 업무 제약은 응답 모델의 validator에서도 검사한다.
+        node.pop("uniqueItems", None)
+        node.pop("default", None)
+        properties = node.get("properties")
+        if node.get("type") == "object" or isinstance(properties, dict):
+            node.setdefault("additionalProperties", False)
+            if isinstance(properties, dict):
+                node["required"] = list(properties)
+        for key in ("properties", "$defs", "definitions"):
+            for child in node.get(key, {}).values():
+                if isinstance(child, dict):
+                    convert(child)
+        if isinstance(node.get("items"), dict):
+            convert(node["items"])
+        for key in ("anyOf", "oneOf", "allOf"):
+            for child in node.get(key, []):
+                if isinstance(child, dict):
+                    convert(child)
+
+    convert(result)
+    return result
+
+
 class GPTWrapper(_LLMWrapper):
     def __init__(self, api_key: str, model_name: str):
         self.model_name = model_name
@@ -137,6 +168,8 @@ class GPTWrapper(_LLMWrapper):
     ) -> BaseModel | str:
         validator = _response_model(response_schema, response_validator)
         schema = response_schema if response_schema is not None else validator
+        if isinstance(schema, type) and issubclass(schema, BaseModel):
+            schema = schema.model_json_schema()
         options = {
             "model": self.model_name,
             "instructions": system_prompt,
@@ -147,22 +180,17 @@ class GPTWrapper(_LLMWrapper):
         if temperature is not None:
             options["temperature"] = temperature
 
-        if schema is not None and not (
-            isinstance(schema, type) and issubclass(schema, BaseModel)
-        ):
+        if schema is not None:
             options["text"] = {
                 "format": {
                     "type": "json_schema",
                     "name": "response",
-                    "schema": schema,
+                    "schema": _openai_schema(schema),
                     "strict": True,
                 }
             }
         with _provider_request("GPT"):
-            if isinstance(schema, type) and issubclass(schema, BaseModel):
-                response = self.client.responses.parse(**options, text_format=schema)
-            else:
-                response = self.client.responses.create(**options)
+            response = self.client.responses.create(**options)
 
         if response.status != "completed":
             raise ProviderResponseError(
@@ -226,4 +254,64 @@ class GeminiWrapper(_LLMWrapper):
                 )
         return _parse_response(
             response.text, response.parsed, validator, expect_json=schema is not None
+        )
+
+
+class LLMWrapper:
+    """요청마다 모델을 선택하고 공급자와 관계없이 같은 타입을 반환한다."""
+
+    def __init__(self):
+        self._adapters: dict[tuple[LLMProvider, str], _LLMWrapper] = {}
+
+    def __enter__(self) -> Self:
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        self.close()
+
+    def close(self) -> None:
+        for adapter in self._adapters.values():
+            adapter.close()
+        self._adapters.clear()
+
+    def request(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        temperature: float | None = None,
+        max_output_tokens: int = 1024,
+        response_schema: type[BaseModel] | dict | None = None,
+        response_validator: type[BaseModel] | None = None,
+        *,
+        model_name: str | None = None,
+        model_env: str | None = None,
+    ) -> BaseModel | str:
+        if (
+            isinstance(max_output_tokens, bool)
+            or not isinstance(max_output_tokens, int)
+            or max_output_tokens < 1
+        ):
+            raise ValueError("max_output_tokens는 1 이상의 정수여야 합니다.")
+        settings = LLMSettings.from_env(
+            model_name=model_name, model_env=model_env
+        )
+        cache_key = (settings.provider, settings.model_name)
+        adapter = self._adapters.get(cache_key)
+        if adapter is None:
+            adapter_type = GPTWrapper if settings.provider == "gpt" else GeminiWrapper
+            adapter = adapter_type(
+        
+                api_key=settings.api_key, model_name=settings.model_name
+            )
+            self._adapters[cache_key] = adapter
+        logger.info(
+            "LLM 요청: 공급자=%s, 모델=%s", settings.provider, settings.model_name
+        )
+        return adapter.request(
+            system_prompt=system_prompt,
+            user_prompt=user_prompt,
+            temperature=temperature,
+            max_output_tokens=max_output_tokens,
+            response_schema=response_schema,
+            response_validator=response_validator,
         )
