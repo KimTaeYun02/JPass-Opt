@@ -1,0 +1,2 @@
+# Preserve the original bytes used by the replay manifests.
+*.json -text whitespace=blank-at-eof,blank-at-eol,space-before-tab,cr-at-eol

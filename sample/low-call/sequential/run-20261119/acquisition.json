@@ -1,0 +1,65 @@
+{
+  "schemaVersion": "sequential-acquisition/1",
+  "status": "partial",
+  "stopReason": "TimeoutError",
+  "capturedAt": "2026-11-19T02:11:07.506913Z",
+  "headless": false,
+  "limits": {
+    "searchReservations": 10,
+    "deadlineSeconds": 300.0
+  },
+  "searchReservations": 1,
+  "routeSearchAttempts": 1,
+  "httpRequestsObserved": 776,
+  "stationRequests": 0,
+  "walkRequests": 0,
+  "retries": 0,
+  "v2Order": [
+    "meiji",
+    "tokyo-dome",
+    "nezu"
+  ],
+  "legacyFixed": null,
+  "legacySharedWithV2": false,
+  "providerOptions": null,
+  "captures": [
+    {
+      "profile": "snapshot",
+      "from": "meiji",
+      "to": "nezu",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22702",
+          "name": "参宮橋",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6786,
+            "lng": 139.6925
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29075",
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7176,
+            "lng": 139.7581
+          }
+        },
+        "preparedAt": "2026-11-20T00:00:00Z",
+        "options": {}
+      },
+      "file": "captures/01-snapshot.json",
+      "status": "failed",
+      "sha256": "36ce211836be5316c1eb81a81317de583a77291d4b7ec584b812af0ba04e2ecc"
+    }
+  ],
+  "sequences": {},
+  "elapsedSeconds": 40.657
+}

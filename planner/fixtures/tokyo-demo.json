@@ -1,0 +1,534 @@
+{
+  "fixtureId": "tokyo-demo",
+  "version": "2026-11-test-1",
+  "capabilities": {
+    "reuseExactQuotes": true,
+    "reusePrefixInRequest": true,
+    "ragDeliveryAllowed": true
+  },
+  "stations": {
+    "p1": [
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s1",
+          "name": "가상 1역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.666999999999994,
+            "lng": 139.694
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      },
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s1-alt",
+          "name": "가상 1역 대안",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.669,
+            "lng": 139.694
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      }
+    ],
+    "p2": [
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s2",
+          "name": "가상 2역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.672999999999995,
+            "lng": 139.698
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      },
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s2-alt",
+          "name": "가상 2역 대안",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.675,
+            "lng": 139.698
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      }
+    ],
+    "p3": [
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s3",
+          "name": "가상 3역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.678999999999995,
+            "lng": 139.702
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      },
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s3-alt",
+          "name": "가상 3역 대안",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.681,
+            "lng": 139.702
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      }
+    ],
+    "p4": [
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s4",
+          "name": "가상 4역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.684999999999995,
+            "lng": 139.706
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      },
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s4-alt",
+          "name": "가상 4역 대안",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.687,
+            "lng": 139.706
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      }
+    ],
+    "p5": [
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s5",
+          "name": "가상 5역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.690999999999995,
+            "lng": 139.71
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      },
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s5-alt",
+          "name": "가상 5역 대안",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.693,
+            "lng": 139.71
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      }
+    ],
+    "p6": [
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s6",
+          "name": "가상 6역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.696999999999996,
+            "lng": 139.714
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      },
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s6-alt",
+          "name": "가상 6역 대안",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.699,
+            "lng": 139.714
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      }
+    ],
+    "p7": [
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s7",
+          "name": "가상 7역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.702999999999996,
+            "lng": 139.718
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      },
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s7-alt",
+          "name": "가상 7역 대안",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.705,
+            "lng": 139.718
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      }
+    ],
+    "p8": [
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s8",
+          "name": "가상 8역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.708999999999996,
+            "lng": 139.722
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      },
+      {
+        "station": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s8-alt",
+          "name": "가상 8역 대안",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.711,
+            "lng": 139.722
+          }
+        },
+        "access": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egress": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        }
+      }
+    ]
+  },
+  "defaultEdge": {
+    "headwayMinutes": 10,
+    "rideMinutes": 12,
+    "fare": 220,
+    "transfers": 1
+  },
+  "edges": {
+    "s7>s8-alt": {
+      "headwayMinutes": 10,
+      "rideMinutes": 8,
+      "fare": 160,
+      "transfers": 0
+    }
+  },
+  "passResponses": [
+    {
+      "passId": "fixture-day-pass",
+      "eligibility": "eligible",
+      "coverage": "known",
+      "validity": "valid",
+      "validFrom": "2026-11-17T00:00:00+09:00",
+      "validUntil": "2026-11-18T00:00:00+09:00",
+      "purchasePrice": 900,
+      "uncoveredFarePerUnit": 0,
+      "supplementPerUnit": 0
+    }
+  ]
+}

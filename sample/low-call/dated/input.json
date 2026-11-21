@@ -1,0 +1,36 @@
+{
+  "inputVersion": "2",
+  "sessionId": "issued-by-cli",
+  "operationId": "dated-replay-example",
+  "dataSource": "replay",
+  "fixtureId": "headed-dated-20261119",
+  "startAt": "2026-11-19T00:00:00Z",
+  "places": [
+    {
+      "clientPlaceId": "dated-0",
+      "name": "東大前 (재생 입력)",
+      "location": {
+        "lat": 35.0,
+        "lng": 139.0
+      },
+      "stayMinutes": 0,
+      "anchorRole": "start",
+      "openingWindows": null
+    },
+    {
+      "clientPlaceId": "dated-1",
+      "name": "後楽園 (재생 입력)",
+      "location": {
+        "lat": 35.01,
+        "lng": 139.0
+      },
+      "stayMinutes": 0,
+      "anchorRole": "end",
+      "openingWindows": null
+    }
+  ],
+  "options": {
+    "allowRepair": false,
+    "allowPassEvaluation": false
+  }
+}

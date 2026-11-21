@@ -1,0 +1,203 @@
+{
+  "schemaVersion": "ekispert-replay/1",
+  "datasetId": "team-crawler-legacy-20261017",
+  "provenance": {
+    "kind": "legacy-team-crawler",
+    "sourceArtifact": "sample/team-crawler-route-matrix.json",
+    "sourceSha256": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+    "notice": "교통 응답은 저장된 실응답. 입력 좌표·역 바인딩·도보 1분은 재생 시나리오 가정. 실제 관광 동선 검증이 아님."
+  },
+  "bindings": [
+    {
+      "place": {
+        "clientPlaceId": "legacy-0",
+        "name": "東大前 (재생 입력)",
+        "location": {
+          "lat": 35.0,
+          "lng": 139.0
+        },
+        "stayMinutes": 0,
+        "anchorRole": "start",
+        "openingWindows": null
+      },
+      "candidates": [
+        {
+          "station": {
+            "namespace": "manual-replay-example",
+            "sourceVersion": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+            "providerStationId": null,
+            "name": "東大前",
+            "line": "미확인",
+            "prefecture": "미확인",
+            "location": {
+              "lat": 35.0,
+              "lng": 139.0
+            }
+          },
+          "access": {
+            "status": "estimated",
+            "minutes": 1,
+            "evidence": {
+              "source": "manual-replay-scenario-one-minute-walk-assumption",
+              "version": "1"
+            }
+          },
+          "egress": {
+            "status": "estimated",
+            "minutes": 1,
+            "evidence": {
+              "source": "manual-replay-scenario-one-minute-walk-assumption",
+              "version": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "place": {
+        "clientPlaceId": "legacy-1",
+        "name": "後楽園 (재생 입력)",
+        "location": {
+          "lat": 35.01,
+          "lng": 139.0
+        },
+        "stayMinutes": 0,
+        "anchorRole": "end",
+        "openingWindows": null
+      },
+      "candidates": [
+        {
+          "station": {
+            "namespace": "manual-replay-example",
+            "sourceVersion": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+            "providerStationId": null,
+            "name": "後楽園",
+            "line": "미확인",
+            "prefecture": "미확인",
+            "location": {
+              "lat": 35.01,
+              "lng": 139.0
+            }
+          },
+          "access": {
+            "status": "estimated",
+            "minutes": 1,
+            "evidence": {
+              "source": "manual-replay-scenario-one-minute-walk-assumption",
+              "version": "1"
+            }
+          },
+          "egress": {
+            "status": "estimated",
+            "minutes": 1,
+            "evidence": {
+              "source": "manual-replay-scenario-one-minute-walk-assumption",
+              "version": "1"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "query": {
+        "origin": {
+          "namespace": "manual-replay-example",
+          "sourceVersion": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+          "providerStationId": null,
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "미확인",
+          "location": {
+            "lat": 35.0,
+            "lng": 139.0
+          }
+        },
+        "destination": {
+          "namespace": "manual-replay-example",
+          "sourceVersion": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+          "providerStationId": null,
+          "name": "後楽園",
+          "line": "미확인",
+          "prefecture": "미확인",
+          "location": {
+            "lat": 35.01,
+            "lng": 139.0
+          }
+        },
+        "preparedAt": "2026-10-17T00:00:05Z",
+        "options": {}
+      },
+      "payload": {
+        "routes": [
+          {
+            "time": 2,
+            "fee": 178,
+            "route": [
+              {
+                "station": "東大前",
+                "line": "東京メトロ南北線・白金高輪行"
+              },
+              {
+                "station": "後楽園",
+                "line": null
+              }
+            ]
+          },
+          {
+            "time": 3,
+            "fee": 178,
+            "route": [
+              {
+                "station": "東大前",
+                "line": "東京メトロ南北線・白金高輪行"
+              },
+              {
+                "station": "後楽園",
+                "line": null
+              }
+            ]
+          },
+          {
+            "time": 2,
+            "fee": 178,
+            "route": [
+              {
+                "station": "東大前",
+                "line": "東京メトロ南北線急行・西谷行"
+              },
+              {
+                "station": "後楽園",
+                "line": null
+              }
+            ]
+          },
+          {
+            "time": 18,
+            "fee": 210,
+            "route": [
+              {
+                "station": "東大前",
+                "line": "徒歩"
+              },
+              {
+                "station": "東大農学部前／都営バス",
+                "line": "都営バス・上６０・池袋駅東口行"
+              },
+              {
+                "station": "春日駅前(東側)／都営バス",
+                "line": "徒歩"
+              },
+              {
+                "station": "後楽園",
+                "line": null
+              }
+            ]
+          }
+        ]
+      },
+      "absoluteTimes": null
+    }
+  ]
+}

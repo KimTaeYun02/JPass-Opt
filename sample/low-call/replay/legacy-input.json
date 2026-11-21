@@ -1,0 +1,36 @@
+{
+  "inputVersion": "2",
+  "dataSource": "replay",
+  "fixtureId": "team-crawler-legacy-20261017",
+  "sessionId": "issued-by-cli",
+  "operationId": "legacy-replay-example",
+  "startAt": "2026-10-16T23:59:05Z",
+  "places": [
+    {
+      "clientPlaceId": "legacy-0",
+      "name": "東大前 (재생 입력)",
+      "location": {
+        "lat": 35.0,
+        "lng": 139.0
+      },
+      "stayMinutes": 0,
+      "anchorRole": "start",
+      "openingWindows": null
+    },
+    {
+      "clientPlaceId": "legacy-1",
+      "name": "後楽園 (재생 입력)",
+      "location": {
+        "lat": 35.01,
+        "lng": 139.0
+      },
+      "stayMinutes": 0,
+      "anchorRole": "end",
+      "openingWindows": null
+    }
+  ],
+  "options": {
+    "allowRepair": false,
+    "allowPassEvaluation": false
+  }
+}

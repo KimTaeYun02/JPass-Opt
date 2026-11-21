@@ -1,0 +1,925 @@
+{
+  "schemaVersion": "ekispert-capture/1",
+  "dataSource": "live-capture",
+  "capturedAt": "2026-11-19T02:45:45.574280Z",
+  "query": {
+    "departure": "参宮橋",
+    "arrival": "テレコムセンター",
+    "preparedAt": "2026-11-20T00:00:00Z",
+    "options": {}
+  },
+  "status": "failed",
+  "stopReason": "ValueError",
+  "routeSearchAttempts": 1,
+  "stationRequests": 0,
+  "httpRequestsObserved": 479,
+  "documentRequestsObserved": 25,
+  "responseStatuses": {
+    "200": 151
+  },
+  "payload": null,
+  "absoluteTimes": null,
+  "stationCodes": null,
+  "retries": 0,
+  "liveModeEnabled": false,
+  "stage": "extract_route",
+  "headless": false,
+  "timeResolution": [],
+  "extractionDiagnostic": [
+    {
+      "text": "経路1\n09:01 ⇒ 09:55\n（54分：乗車 34 分 その他 20 分）\n\n1本前\n\n1本後\n\n乗換:\n\n4回\n\n片道:\n\n901円\n\n距離:\n\n18km\n\nCO2排出量:\n\n306g\n\nこの経路を元に条件変更\n\n定期代\n\n発\n09:01\n\n出発\n\n参宮橋地図\n\n136 円[IC]\n\n4分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線\n\n着\n09:05\n発\n09:11\n\n乗換\n\n新宿地図\n\n199 円[IC]\n\n座種自由席:0円\n\n4分\n\nＪＲ中央線快速・東京行\n\n前後のダイヤ\n\n[発]7番線\n\n[着]1番線\n\n着\n09:15\n発\n09:18\n\n乗換\n\n四ツ谷地図\n\n178 円[IC]\n\n2分\n\n東京メトロ丸ノ内線・茗荷谷行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]4番線\n\n着\n09:20\n発\n09:23\n\n乗換\n\n赤坂見附地図\n\n5分\n\n2駅\n\n東京メトロ銀座線・浅草行\n\n前後のダイヤ\n\n[発]3番線\n\n[着]2番線\n\n着\n09:28\n発\n09:36\n\n乗換\n\n新橋地図\n\n388 円[IC]\n\n19分\n\n7駅\n\nゆりかもめ・豊洲行\n\n前後のダイヤ\n\n[発]1番線\n\n[着]1番線\n\n着\n09:55\n\n到着\n\nテレコムセンター地図\n\nこの経路は役に立ちましたか？\n\nはい\n\nいいえ\n\nご意見・ご感想はこちらから",
+      "fields": [
+        {
+          "id": "course-detail-header-transfer-count",
+          "text": "乗換:"
+        },
+        {
+          "id": "course-detail-header-one-way-price",
+          "text": "片道:"
+        },
+        {
+          "id": "course-detail-header-distance",
+          "text": "距離:"
+        },
+        {
+          "id": "course-detail-header-co2-emissions",
+          "text": "CO2排出量:"
+        },
+        {
+          "id": "course-detail-body",
+          "text": "発\n09:01\n\n出発\n\n参宮橋地図\n\n136 円[IC]\n\n4分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線\n\n着\n09:05\n発\n09:11\n\n乗換\n\n新宿地図\n\n199 円[IC]\n\n座種自由席:0円\n\n4分\n\nＪＲ中央線快速・東京行\n\n前後のダイヤ\n\n[発]7番線\n\n[着]1番線\n\n着\n09:15\n発\n09:18\n\n乗換\n\n四ツ谷地図\n\n178 円[IC]\n\n2分\n\n東京メトロ丸ノ内線・茗荷谷行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]4番線\n\n着\n09:20"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "発\n09:01\n\n出発\n\n参宮橋地図\n\n136 円[IC]"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:01"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "参宮橋"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "136 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "4分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "4分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "小田急小田原線・新宿行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]2番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]10番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:05\n発\n09:11\n\n乗換\n\n新宿地図\n\n199 円[IC]\n\n座種自由席:0円"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:05"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:11"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "新宿"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "199 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-point-charge-label",
+          "text": "座種自由席:0円"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "4分\n\nＪＲ中央線快速・東京行\n\n前後のダイヤ\n\n[発]7番線\n\n[着]1番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "4分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "ＪＲ中央線快速・東京行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]7番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]1番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:15\n発\n09:18\n\n乗換\n\n四ツ谷地図\n\n178 円[IC]"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:15"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:18"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "四ツ谷"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "178 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "2分\n\n東京メトロ丸ノ内線・茗荷谷行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]4番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "2分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "東京メトロ丸ノ内線・茗荷谷行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]2番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]4番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:20\n発\n09:23\n\n乗換\n\n赤坂見附地図"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:20"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:23"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "赤坂見附"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": ""
+        },
+        {
+          "id": "course-detail-line",
+          "text": "5分\n\n2駅\n\n東京メトロ銀座線・浅草行\n\n前後のダイヤ\n\n[発]3番線\n\n[着]2番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "5分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "東京メトロ銀座線・浅草行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]3番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]2番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:28\n発\n09:36\n\n乗換\n\n新橋地図\n\n388 円[IC]"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:28"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:36"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "新橋"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "388 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "19分\n\n7駅\n\nゆりかもめ・豊洲行\n\n前後のダイヤ\n\n[発]1番線\n\n[着]1番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "19分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "ゆりかもめ・豊洲行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]1番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]1番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:55\n\n到着\n\nテレコムセンター地図"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:55"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "テレコムセンター"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "text": "経路2\n\n楽\n\n09:01 ⇒ 09:59\n（58分：乗車 41 分 その他 17 分）\n\n1本前\n\n1本後\n\n乗換:\n\n2回\n\n片道:\n\n744円\n\n距離:\n\n19km\n\nCO2排出量:\n\n323g\n\nこの経路を元に条件変更\n\n定期代\n\n発\n09:01\n\n出発\n\n参宮橋地図\n\n136 円[IC]\n\n4分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線\n\n着\n09:05\n発\n09:14\n\n乗換\n\n新宿地図\n\n220 円[IC]\n\n19分\n\n7駅\n\n都営大江戸線・六本木・大門方面・都庁前行\n\n前後のダイヤ\n\n[発]6番線\n\n[着]1番線\n\n着\n09:33\n発\n09:41\n\n乗換\n\n汐留地図\n\n388 円[IC]\n\n18分\n\n6駅\n\nゆりかもめ・豊洲行\n\n前後のダイヤ\n\n[発]1番線\n\n[着]1番線\n\n着\n09:59\n\n到着\n\nテレコムセンター地図\n\nこの経路は役に立ちましたか？\n\nはい\n\nいいえ\n\nご意見・ご感想はこちらから",
+      "fields": [
+        {
+          "id": "course-detail-header-transfer-count",
+          "text": "乗換:"
+        },
+        {
+          "id": "course-detail-header-one-way-price",
+          "text": "片道:"
+        },
+        {
+          "id": "course-detail-header-distance",
+          "text": "距離:"
+        },
+        {
+          "id": "course-detail-header-co2-emissions",
+          "text": "CO2排出量:"
+        },
+        {
+          "id": "course-detail-body",
+          "text": "発\n09:01\n\n出発\n\n参宮橋地図\n\n136 円[IC]\n\n4分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線\n\n着\n09:05\n発\n09:14\n\n乗換\n\n新宿地図\n\n220 円[IC]\n\n19分\n\n7駅\n\n都営大江戸線・六本木・大門方面・都庁前行\n\n前後のダイヤ\n\n[発]6番線\n\n[着]1番線\n\n着\n09:33\n発\n09:41\n\n乗換\n\n汐留地図\n\n388 円[IC]\n\n18分\n\n6駅\n\nゆりかもめ・豊洲行\n\n前後のダイヤ\n\n[発]1番線\n\n[着]1番線\n\n着\n09"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "発\n09:01\n\n出発\n\n参宮橋地図\n\n136 円[IC]"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:01"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "参宮橋"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "136 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "4分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "4分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "小田急小田原線・新宿行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]2番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]10番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:05\n発\n09:14\n\n乗換\n\n新宿地図\n\n220 円[IC]"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:05"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:14"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "新宿"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "220 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "19分\n\n7駅\n\n都営大江戸線・六本木・大門方面・都庁前行\n\n前後のダイヤ\n\n[発]6番線\n\n[着]1番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "19分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "都営大江戸線・六本木・大門方面・都庁前行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]6番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]1番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:33\n発\n09:41\n\n乗換\n\n汐留地図\n\n388 円[IC]"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:33"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:41"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "汐留"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "388 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "18分\n\n6駅\n\nゆりかもめ・豊洲行\n\n前後のダイヤ\n\n[発]1番線\n\n[着]1番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "18分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "ゆりかもめ・豊洲行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]1番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]1番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:59\n\n到着\n\nテレコムセンター地図"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:59"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "テレコムセンター"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "text": "経路3\n\n早\n\n楽\n\n09:19 ⇒ 10:09\n（50分：乗車 30 分 徒歩 5 分 その他 15 分）\n\n1本前\n\n1本後\n\n乗換:\n\n2回\n\n片道:\n\n890円\n\n距離:\n\n18.7km\n\nCO2排出量:\n\n369g\n\nこの経路を元に条件変更\n\n定期代\n\n発\n09:19\n\n出発\n\n参宮橋地図\n\n136 円[IC]\n\n3分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線\n\n着\n09:22\n発\n09:33\n\n乗換\n\n新宿地図\n\n544 円[IC]\n\n24分\n\n6駅\n\nＪＲ埼京線通勤快速・新木場行\n\n前後のダイヤ\n\n[発]1番線\n\n[着]2番線\n\n着\n09:57\n発\n09:58\n\n乗換\n\n東京テレポート地図\n\n3分\n\n徒歩\n\n着\n10:01\n発\n10:03\n東京テレポート駅前／都営バス地図\n\n210 円[IC]\n\n3分\n\n都営バス・海０１(門前仲町－東京テレポート・台場駅経由)・門前仲町行\n\n前後のダイヤ\n\n[発]4のりば\n\n[着]2のりば\n\n着\n10:06\n発\n10:07\nテレコムセンター駅前／都営バス地図\n\n2分\n\n徒歩\n\n着\n10:09\n\n到着\n\nテレコムセンター地図\n\nこの経路は役に立ちましたか？\n\nはい\n\nいいえ\n\nご意見・ご感想はこちらから",
+      "fields": [
+        {
+          "id": "course-detail-header-transfer-count",
+          "text": "乗換:"
+        },
+        {
+          "id": "course-detail-header-one-way-price",
+          "text": "片道:"
+        },
+        {
+          "id": "course-detail-header-distance",
+          "text": "距離:"
+        },
+        {
+          "id": "course-detail-header-co2-emissions",
+          "text": "CO2排出量:"
+        },
+        {
+          "id": "course-detail-body",
+          "text": "発\n09:19\n\n出発\n\n参宮橋地図\n\n136 円[IC]\n\n3分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線\n\n着\n09:22\n発\n09:33\n\n乗換\n\n新宿地図\n\n544 円[IC]\n\n24分\n\n6駅\n\nＪＲ埼京線通勤快速・新木場行\n\n前後のダイヤ\n\n[発]1番線\n\n[着]2番線\n\n着\n09:57\n発\n09:58\n\n乗換\n\n東京テレポート地図\n\n3分\n\n徒歩\n\n着\n10:01\n発\n10:03\n東京テレポート駅前／都営バス地図\n\n210 円[IC]\n\n3分\n\n都営バ"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "発\n09:19\n\n出発\n\n参宮橋地図\n\n136 円[IC]"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:19"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "参宮橋"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "136 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "3分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "3分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "小田急小田原線・新宿行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]2番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]10番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:22\n発\n09:33\n\n乗換\n\n新宿地図\n\n544 円[IC]"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:22"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:33"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "新宿"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "544 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "24分\n\n6駅\n\nＪＲ埼京線通勤快速・新木場行\n\n前後のダイヤ\n\n[発]1番線\n\n[着]2番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "24分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "ＪＲ埼京線通勤快速・新木場行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]1番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]2番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:57\n発\n09:58\n\n乗換\n\n東京テレポート地図"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:57"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:58"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "東京テレポート"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": ""
+        },
+        {
+          "id": "course-detail-line",
+          "text": "3分\n\n徒歩"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "3分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "徒歩"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n10:01\n発\n10:03\n東京テレポート駅前／都営バス地図\n\n210 円[IC]"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n10:01"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n10:03"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "東京テレポート駅前／都営バス"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "210 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "3分\n\n都営バス・海０１(門前仲町－東京テレポート・台場駅経由)・門前仲町行\n\n前後のダイヤ\n\n[発]4のりば\n\n[着]2のりば"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "3分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "都営バス・海０１(門前仲町－東京テレポート・台場駅経由)・門前仲町行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]4のりば"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]2のりば"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n10:06\n発\n10:07\nテレコムセンター駅前／都営バス地図"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n10:06"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n10:07"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "テレコムセンター駅前／都営バス"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": ""
+        },
+        {
+          "id": "course-detail-line",
+          "text": "2分\n\n徒歩"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "2分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "徒歩"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n10:09\n\n到着\n\nテレコムセンター地図"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n10:09"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "テレコムセンター"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "text": "経路4\n\n安\n\n楽\n\n09:01 ⇒ 10:42\n（ 1時間 41分 ：乗車 76 分 徒歩 6 分 その他 19 分）\n\n1本前\n\n1本後\n\n乗換:\n\n2回\n\n片道:\n\n618円\n\n距離:\n\n23.5km\n\nCO2排出量:\n\n747g\n\nこの経路を元に条件変更\n\n定期代\n\n発\n09:01\n\n出発\n\n参宮橋地図\n\n136 円[IC]\n\n4分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線\n\n着\n09:05\n発\n09:14\n\n乗換\n\n新宿地図\n\n272 円[IC]\n\n29分\n\n11駅\n\n都営大江戸線・六本木・大門方面・都庁前行\n\n前後のダイヤ\n\n[発]6番線\n\n[着]1番線\n\n着\n09:43\n発\n09:44\n\n乗換\n\n門前仲町地図\n\n4分\n\n徒歩\n\n着\n09:48\n発\n09:56\n門前仲町／都営バス地図\n\n210 円[IC]\n\n43分\n\n26駅\n\n都営バス・海０１(門前仲町－東京テレポート・台場駅経由)・東京テレポート駅前行\n\n前後のダイヤ\n\n[発]5のりば\n\n[着]1のりば\n\n着\n10:39\n発\n10:40\nテレコムセンター駅前／都営バス地図\n\n2分\n\n徒歩\n\n着\n10:42\n\n到着\n\nテレコムセンター地図\n\nこの経路は役に立ちましたか？\n\nはい\n\nいいえ\n\nご意見・ご感想はこちらから",
+      "fields": [
+        {
+          "id": "course-detail-header-transfer-count",
+          "text": "乗換:"
+        },
+        {
+          "id": "course-detail-header-one-way-price",
+          "text": "片道:"
+        },
+        {
+          "id": "course-detail-header-distance",
+          "text": "距離:"
+        },
+        {
+          "id": "course-detail-header-co2-emissions",
+          "text": "CO2排出量:"
+        },
+        {
+          "id": "course-detail-body",
+          "text": "発\n09:01\n\n出発\n\n参宮橋地図\n\n136 円[IC]\n\n4分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線\n\n着\n09:05\n発\n09:14\n\n乗換\n\n新宿地図\n\n272 円[IC]\n\n29分\n\n11駅\n\n都営大江戸線・六本木・大門方面・都庁前行\n\n前後のダイヤ\n\n[発]6番線\n\n[着]1番線\n\n着\n09:43\n発\n09:44\n\n乗換\n\n門前仲町地図\n\n4分\n\n徒歩\n\n着\n09:48\n発\n09:56\n門前仲町／都営バス地図\n\n210 円[IC]\n\n43分\n\n26駅"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "発\n09:01\n\n出発\n\n参宮橋地図\n\n136 円[IC]"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:01"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "参宮橋"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "136 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "4分\n\n1駅\n\n小田急小田原線・新宿行\n\n前後のダイヤ\n\n[発]2番線\n\n[着]10番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "4分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "小田急小田原線・新宿行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]2番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]10番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:05\n発\n09:14\n\n乗換\n\n新宿地図\n\n272 円[IC]"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:05"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:14"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "新宿"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "272 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "29分\n\n11駅\n\n都営大江戸線・六本木・大門方面・都庁前行\n\n前後のダイヤ\n\n[発]6番線\n\n[着]1番線"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "29分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "都営大江戸線・六本木・大門方面・都庁前行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]6番線"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]1番線"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:43\n発\n09:44\n\n乗換\n\n門前仲町地図"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:43"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:44"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "門前仲町"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": ""
+        },
+        {
+          "id": "course-detail-line",
+          "text": "4分\n\n徒歩"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "4分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "徒歩"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n09:48\n発\n09:56\n門前仲町／都営バス地図\n\n210 円[IC]"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n09:48"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n09:56"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "門前仲町／都営バス"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": "210 円[IC]"
+        },
+        {
+          "id": "course-detail-point-fee-type-label",
+          "text": "[IC]"
+        },
+        {
+          "id": "course-detail-line",
+          "text": "43分\n\n26駅\n\n都営バス・海０１(門前仲町－東京テレポート・台場駅経由)・東京テレポート駅前行\n\n前後のダイヤ\n\n[発]5のりば\n\n[着]1のりば"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "43分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "都営バス・海０１(門前仲町－東京テレポート・台場駅経由)・東京テレポート駅前行\n\n前後のダイヤ"
+        },
+        {
+          "id": "course-detail-point-departure-state-no-label",
+          "text": "[発]5のりば"
+        },
+        {
+          "id": "course-detail-point-arrival-state-no-label",
+          "text": "[着]1のりば"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n10:39\n発\n10:40\nテレコムセンター駅前／都営バス地図"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n10:39"
+        },
+        {
+          "id": "course-detail-point-departure-time",
+          "text": "発\n10:40"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "テレコムセンター駅前／都営バス"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": ""
+        },
+        {
+          "id": "course-detail-line",
+          "text": "2分\n\n徒歩"
+        },
+        {
+          "id": "course-detail-line-time-on-board",
+          "text": "2分"
+        },
+        {
+          "id": "course-detail-line-name",
+          "text": "徒歩"
+        },
+        {
+          "id": "course-detail-point",
+          "text": "着\n10:42\n\n到着\n\nテレコムセンター地図"
+        },
+        {
+          "id": "course-detail-point-arrival-time",
+          "text": "着\n10:42"
+        },
+        {
+          "id": "course-detail-point-station-name",
+          "text": "テレコムセンター"
+        },
+        {
+          "id": "course-detail-point-fee-label",
+          "text": ""
+        }
+      ]
+    }
+  ],
+  "errorDetail": "ambiguous_route_duration_or_fare",
+  "elapsedSeconds": 10.953,
+  "crawlerSourceSha256": "3eb0daa3ac33ecef0c83a37e7a5aca8d466b49555f319e96b48ca9854c0696ee"
+}

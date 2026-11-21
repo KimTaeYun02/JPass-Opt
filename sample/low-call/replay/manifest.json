@@ -1,0 +1,30 @@
+{
+  "dataSource": "replay",
+  "files": [
+    {
+      "path": "sample/low-call/replay/capture-blocked.json",
+      "sha256": "457e5723d768b5511a9a8466b7079b2105b2ca217ff71b1fbe8a22ef80091aac",
+      "bytes": 703
+    },
+    {
+      "path": "sample/low-call/replay/legacy-audit.json",
+      "sha256": "ebda288ad972a99156c282dc9d963ce94edf3aa0d1298f840333a80cfa2ca6f3",
+      "bytes": 775
+    },
+    {
+      "path": "sample/low-call/replay/legacy-input.json",
+      "sha256": "2d38a49e25ef9c47f11ccb3af20bf0d2670e23c05dc158069117211430f00ea1",
+      "bytes": 830
+    },
+    {
+      "path": "sample/low-call/replay/legacy-recording.json",
+      "sha256": "be5aa53647449ea6d051662263857d0d0dadc029114e215d2a0ff74f4782ce64",
+      "bytes": 5855
+    },
+    {
+      "path": "sample/low-call/replay/legacy-result.json",
+      "sha256": "3dbec4ef84b4696da3613323bf72e0154cce29ec679d5b67d6942ed99196e4d1",
+      "bytes": 8678
+    }
+  ]
+}

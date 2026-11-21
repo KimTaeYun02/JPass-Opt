@@ -1,0 +1,515 @@
+{
+  "schemaVersion": "sequential-acquisition/1",
+  "status": "complete",
+  "stopReason": null,
+  "capturedAt": "2026-11-19T02:15:41.291394Z",
+  "headless": false,
+  "limits": {
+    "searchReservations": 10,
+    "deadlineSeconds": 300.0
+  },
+  "searchReservations": 8,
+  "routeSearchAttempts": 8,
+  "httpRequestsObserved": 3787,
+  "stationRequests": 0,
+  "walkRequests": 0,
+  "retries": 0,
+  "v2Order": [
+    "meiji",
+    "tokyo-dome",
+    "nezu"
+  ],
+  "legacyFixed": {
+    "order": [
+      "meiji",
+      "tokyo-dome",
+      "nezu"
+    ],
+    "displayedTravelMinutes": 29,
+    "grossFare": 701,
+    "legs": [
+      {
+        "from": "meiji",
+        "to": "tokyo-dome",
+        "routeIndex": 0,
+        "result": {
+          "time": 27,
+          "fee": 523,
+          "route": [
+            {
+              "station": "参宮橋",
+              "line": "小田急小田原線・新宿行"
+            },
+            {
+              "station": "新宿",
+              "line": "ＪＲ中央線快速・東京行"
+            },
+            {
+              "station": "御茶ノ水",
+              "line": "東京メトロ丸ノ内線・池袋行"
+            },
+            {
+              "station": "後楽園",
+              "line": null
+            }
+          ]
+        }
+      },
+      {
+        "from": "tokyo-dome",
+        "to": "nezu",
+        "routeIndex": 0,
+        "result": {
+          "time": 2,
+          "fee": 178,
+          "route": [
+            {
+              "station": "後楽園",
+              "line": "東京メトロ南北線・浦和美園行"
+            },
+            {
+              "station": "東大前",
+              "line": null
+            }
+          ]
+        }
+      }
+    ],
+    "evaluatedOrders": 6,
+    "objective": "displayed-duration-then-fare",
+    "queryBasis": "fixed-09:00"
+  },
+  "legacySharedWithV2": true,
+  "providerOptions": {
+    "viaCode": "",
+    "viaName": "",
+    "shinkansen": "true",
+    "express": "true",
+    "highway": "true",
+    "local": "true",
+    "connectionBus": "true",
+    "plane": "true",
+    "ship": "true",
+    "sleep": "true",
+    "liner": "true",
+    "searchType": "departure",
+    "sort": "time",
+    "ticketType": "IC",
+    "transferTime": "normal",
+    "surchargeType": "non_reserved",
+    "isRealtime": "false",
+    "device": "PC",
+    "mockFileName": ""
+  },
+  "captures": [
+    {
+      "profile": "snapshot",
+      "from": "meiji",
+      "to": "nezu",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22702",
+          "name": "参宮橋",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6786,
+            "lng": 139.6925
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29075",
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7176,
+            "lng": 139.7581
+          }
+        },
+        "preparedAt": "2026-11-20T00:00:00Z",
+        "options": {}
+      },
+      "file": "captures/01-snapshot.json",
+      "status": "captured",
+      "sha256": "d222d60517a2376df17d1a2a5e406858ad8a72885a3110e753cd062e25ab1083"
+    },
+    {
+      "profile": "snapshot",
+      "from": "meiji",
+      "to": "tokyo-dome",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22702",
+          "name": "参宮橋",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6786,
+            "lng": 139.6925
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22675",
+          "name": "後楽園",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7081,
+            "lng": 139.7518
+          }
+        },
+        "preparedAt": "2026-11-20T00:00:00Z",
+        "options": {}
+      },
+      "file": "captures/02-snapshot.json",
+      "status": "captured",
+      "sha256": "1acf0e48c37c213510ade412e1c79d3927c03ed419b0b28b41fbfa76ebaa3880"
+    },
+    {
+      "profile": "snapshot",
+      "from": "nezu",
+      "to": "meiji",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29075",
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7176,
+            "lng": 139.7581
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22702",
+          "name": "参宮橋",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6786,
+            "lng": 139.6925
+          }
+        },
+        "preparedAt": "2026-11-20T00:00:00Z",
+        "options": {}
+      },
+      "file": "captures/03-snapshot.json",
+      "status": "captured",
+      "sha256": "b374af4af3382e56a427717e1a9abe02788052b6436654cfd48f91cc9b3e75a6"
+    },
+    {
+      "profile": "snapshot",
+      "from": "nezu",
+      "to": "tokyo-dome",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29075",
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7176,
+            "lng": 139.7581
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22675",
+          "name": "後楽園",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7081,
+            "lng": 139.7518
+          }
+        },
+        "preparedAt": "2026-11-20T00:00:00Z",
+        "options": {}
+      },
+      "file": "captures/04-snapshot.json",
+      "status": "captured",
+      "sha256": "45f08464cbd12c04d111b15da798b7e42f74ba768a6dde41bc84f62630b0ab9c"
+    },
+    {
+      "profile": "snapshot",
+      "from": "tokyo-dome",
+      "to": "meiji",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22675",
+          "name": "後楽園",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7081,
+            "lng": 139.7518
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22702",
+          "name": "参宮橋",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6786,
+            "lng": 139.6925
+          }
+        },
+        "preparedAt": "2026-11-20T00:00:00Z",
+        "options": {}
+      },
+      "file": "captures/05-snapshot.json",
+      "status": "captured",
+      "sha256": "003f1774c85cb4b935d93a67fe536d83f006a1153de4d1ef2a3c9578047d7360"
+    },
+    {
+      "profile": "snapshot",
+      "from": "tokyo-dome",
+      "to": "nezu",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22675",
+          "name": "後楽園",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7081,
+            "lng": 139.7518
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29075",
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7176,
+            "lng": 139.7581
+          }
+        },
+        "preparedAt": "2026-11-20T00:00:00Z",
+        "options": {}
+      },
+      "file": "captures/06-snapshot.json",
+      "status": "captured",
+      "sha256": "68680d91634e6aec824b4a641247b94a58fa95c013c56428f963ad18475a1e0e"
+    },
+    {
+      "profile": "v2",
+      "from": "meiji",
+      "to": "tokyo-dome",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22702",
+          "name": "参宮橋",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6786,
+            "lng": 139.6925
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22675",
+          "name": "後楽園",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7081,
+            "lng": 139.7518
+          }
+        },
+        "preparedAt": "2026-11-20T01:15:00Z",
+        "options": {}
+      },
+      "file": "captures/07-v2.json",
+      "status": "captured",
+      "sha256": "afb582cc764bc5d9c6d877f474d653cc85bfd92e0128030a2c74db0b50149a3a"
+    },
+    {
+      "profile": "v2",
+      "from": "tokyo-dome",
+      "to": "nezu",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22675",
+          "name": "後楽園",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7081,
+            "lng": 139.7518
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29075",
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7176,
+            "lng": 139.7581
+          }
+        },
+        "preparedAt": "2026-11-20T03:41:00Z",
+        "options": {}
+      },
+      "file": "captures/08-v2.json",
+      "status": "captured",
+      "sha256": "6bccf97a055bb6f13d6e796d0420c08af95b314aef0bfe49683eb4a0d08b53a3"
+    }
+  ],
+  "sequences": {
+    "v2": {
+      "order": [
+        "meiji",
+        "tokyo-dome",
+        "nezu"
+      ],
+      "visits": [
+        {
+          "clientPlaceId": "meiji",
+          "arrivalAt": "2026-11-20T00:00:00Z",
+          "visitStartAt": "2026-11-20T00:00:00Z",
+          "leaveAt": "2026-11-20T01:00:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 60,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "tokyo-dome",
+          "arrivalAt": "2026-11-20T02:03:00Z",
+          "visitStartAt": "2026-11-20T02:03:00Z",
+          "leaveAt": "2026-11-20T03:33:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 90,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "nezu",
+          "arrivalAt": "2026-11-20T03:51:00Z",
+          "visitStartAt": "2026-11-20T03:51:00Z",
+          "leaveAt": "2026-11-20T04:51:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 60,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        }
+      ],
+      "legs": [
+        {
+          "from": "meiji",
+          "to": "tokyo-dome",
+          "preparedAt": "2026-11-20T01:15:00Z",
+          "departureAt": "2026-11-20T01:26:00Z",
+          "arrivalAt": "2026-11-20T01:55:00Z",
+          "placeArrivalAt": "2026-11-20T02:03:00Z"
+        },
+        {
+          "from": "tokyo-dome",
+          "to": "nezu",
+          "preparedAt": "2026-11-20T03:41:00Z",
+          "departureAt": "2026-11-20T03:44:00Z",
+          "arrivalAt": "2026-11-20T03:46:00Z",
+          "placeArrivalAt": "2026-11-20T03:51:00Z"
+        }
+      ],
+      "completion": "complete",
+      "finishAt": "2026-11-20T04:51:00Z"
+    },
+    "legacy-validation": {
+      "order": [
+        "meiji",
+        "tokyo-dome",
+        "nezu"
+      ],
+      "visits": [
+        {
+          "clientPlaceId": "meiji",
+          "arrivalAt": "2026-11-20T00:00:00Z",
+          "visitStartAt": "2026-11-20T00:00:00Z",
+          "leaveAt": "2026-11-20T01:00:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 60,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "tokyo-dome",
+          "arrivalAt": "2026-11-20T02:03:00Z",
+          "visitStartAt": "2026-11-20T02:03:00Z",
+          "leaveAt": "2026-11-20T03:33:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 90,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "nezu",
+          "arrivalAt": "2026-11-20T03:51:00Z",
+          "visitStartAt": "2026-11-20T03:51:00Z",
+          "leaveAt": "2026-11-20T04:51:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 60,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        }
+      ],
+      "legs": [
+        {
+          "from": "meiji",
+          "to": "tokyo-dome",
+          "preparedAt": "2026-11-20T01:15:00Z",
+          "departureAt": "2026-11-20T01:26:00Z",
+          "arrivalAt": "2026-11-20T01:55:00Z",
+          "placeArrivalAt": "2026-11-20T02:03:00Z"
+        },
+        {
+          "from": "tokyo-dome",
+          "to": "nezu",
+          "preparedAt": "2026-11-20T03:41:00Z",
+          "departureAt": "2026-11-20T03:44:00Z",
+          "arrivalAt": "2026-11-20T03:46:00Z",
+          "placeArrivalAt": "2026-11-20T03:51:00Z"
+        }
+      ],
+      "completion": "complete",
+      "finishAt": "2026-11-20T04:51:00Z"
+    }
+  },
+  "elapsedSeconds": 75.671
+}

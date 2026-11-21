@@ -1,0 +1,1005 @@
+{
+  "schemaVersion": "ekispert-replay/1",
+  "datasetId": "tokyo-divergent-three-places-20261120",
+  "provenance": {
+    "kind": "captured-public-dom",
+    "sourceArtifact": "acquisition.json",
+    "sourceSha256": "b94bcc055a9d07db8103de96578eb707dc384bec7f1590ebecb6d642b49f7389",
+    "notice": "실제 검색 시각·운임. 관광지 좌표는 근사 입력, 도보·체류는 시험 가정. 최근접 역·영업시간·패스 절감액 검증이 아님."
+  },
+  "bindings": [
+    {
+      "place": {
+        "clientPlaceId": "nezu",
+        "name": "네즈 신사",
+        "location": {
+          "lat": 35.7202,
+          "lng": 139.7608
+        },
+        "googlePlaceId": null,
+        "stayMinutes": 60,
+        "anchorRole": null,
+        "openingWindows": null,
+        "fixedVisitAt": null
+      },
+      "candidates": [
+        {
+          "station": {
+            "namespace": "ekispert-roote",
+            "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+            "providerStationId": "29075",
+            "name": "東大前",
+            "line": "미확인",
+            "prefecture": "東京都",
+            "location": {
+              "lat": 35.7176,
+              "lng": 139.7581
+            }
+          },
+          "access": {
+            "status": "estimated",
+            "minutes": 5,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          },
+          "egress": {
+            "status": "estimated",
+            "minutes": 5,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "place": {
+        "clientPlaceId": "meiji",
+        "name": "메이지 신궁",
+        "location": {
+          "lat": 35.6764,
+          "lng": 139.6993
+        },
+        "googlePlaceId": null,
+        "stayMinutes": 60,
+        "anchorRole": null,
+        "openingWindows": null,
+        "fixedVisitAt": null
+      },
+      "candidates": [
+        {
+          "station": {
+            "namespace": "ekispert-roote",
+            "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+            "providerStationId": "22702",
+            "name": "参宮橋",
+            "line": "미확인",
+            "prefecture": "東京都",
+            "location": {
+              "lat": 35.6786,
+              "lng": 139.6925
+            }
+          },
+          "access": {
+            "status": "estimated",
+            "minutes": 15,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          },
+          "egress": {
+            "status": "estimated",
+            "minutes": 15,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "place": {
+        "clientPlaceId": "odaiba",
+        "name": "오다이바",
+        "location": {
+          "lat": 35.619,
+          "lng": 139.7768
+        },
+        "googlePlaceId": null,
+        "stayMinutes": 120,
+        "anchorRole": null,
+        "openingWindows": null,
+        "fixedVisitAt": null
+      },
+      "candidates": [
+        {
+          "station": {
+            "namespace": "ekispert-roote",
+            "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+            "providerStationId": "29057",
+            "name": "テレコムセンター",
+            "line": "미확인",
+            "prefecture": "東京都",
+            "location": {
+              "lat": 35.6178,
+              "lng": 139.7794
+            }
+          },
+          "access": {
+            "status": "estimated",
+            "minutes": 10,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          },
+          "egress": {
+            "status": "estimated",
+            "minutes": 10,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22702",
+          "name": "参宮橋",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6786,
+            "lng": 139.6925
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29075",
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7176,
+            "lng": 139.7581
+          }
+        },
+        "preparedAt": "2026-11-20T01:15:00Z",
+        "options": {}
+      },
+      "payload": {
+        "routes": [
+          {
+            "time": 32,
+            "fee": 513,
+            "route": [
+              {
+                "station": "参宮橋",
+                "line": "小田急小田原線・新宿行"
+              },
+              {
+                "station": "新宿",
+                "line": "ＪＲ中央・青梅線青梅特快・東京行"
+              },
+              {
+                "station": "四ツ谷",
+                "line": "東京メトロ南北線・浦和美園行"
+              },
+              {
+                "station": "東大前",
+                "line": null
+              }
+            ]
+          },
+          {
+            "time": 32,
+            "fee": 513,
+            "route": [
+              {
+                "station": "参宮橋",
+                "line": "小田急小田原線・新宿行"
+              },
+              {
+                "station": "新宿",
+                "line": "ＪＲ総武線・千葉行"
+              },
+              {
+                "station": "飯田橋",
+                "line": "東京メトロ南北線・浦和美園行"
+              },
+              {
+                "station": "東大前",
+                "line": null
+              }
+            ]
+          },
+          {
+            "time": 38,
+            "fee": 345,
+            "route": [
+              {
+                "station": "参宮橋",
+                "line": "小田急小田原線・新宿行"
+              },
+              {
+                "station": "新宿",
+                "line": "徒歩"
+              },
+              {
+                "station": "新宿(東京メトロ)",
+                "line": "東京メトロ丸ノ内線・池袋行"
+              },
+              {
+                "station": "四ツ谷",
+                "line": "東京メトロ南北線・赤羽岩淵行"
+              },
+              {
+                "station": "東大前",
+                "line": null
+              }
+            ]
+          },
+          {
+            "time": 50,
+            "fee": 555,
+            "route": [
+              {
+                "station": "参宮橋",
+                "line": "小田急小田原線・新宿行"
+              },
+              {
+                "station": "新宿",
+                "line": "ＪＲ中央・青梅線青梅特快・東京行"
+              },
+              {
+                "station": "御茶ノ水",
+                "line": "徒歩"
+              },
+              {
+                "station": "御茶ノ水駅前／都営バス",
+                "line": "都営バス・東４３(荒川土手－東京駅)・荒川土手行"
+              },
+              {
+                "station": "東大農学部前／都営バス",
+                "line": "徒歩"
+              },
+              {
+                "station": "東大前",
+                "line": null
+              }
+            ]
+          }
+        ]
+      },
+      "absoluteTimes": [
+        {
+          "departureAt": "2026-11-20T01:26:00Z",
+          "arrivalAt": "2026-11-20T01:58:00Z",
+          "evidence": "calendar_dom_clock",
+          "calendarEvidence": {
+            "departureName": "参宮橋",
+            "arrivalName": "東大前",
+            "preparedAt": "2026-11-20T01:15:00Z",
+            "resultSummary": "参宮橋 ⇒ 東大前 (2026年11月20日 10時15分 出発)",
+            "pointTimes": [
+              {
+                "pointIndex": 0,
+                "kind": "departure",
+                "rawText": "発\n10:26",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "arrival",
+                "rawText": "着\n10:29",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "departure",
+                "rawText": "発\n10:37",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "arrival",
+                "rawText": "着\n10:41",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "departure",
+                "rawText": "発\n10:50",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "arrival",
+                "rawText": "着\n10:58",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              }
+            ],
+            "displayedDurationMinutes": 32,
+            "timezone": "Asia/Tokyo",
+            "summarySelector": "body: exact result-summary line"
+          }
+        },
+        {
+          "departureAt": "2026-11-20T01:26:00Z",
+          "arrivalAt": "2026-11-20T01:58:00Z",
+          "evidence": "calendar_dom_clock",
+          "calendarEvidence": {
+            "departureName": "参宮橋",
+            "arrivalName": "東大前",
+            "preparedAt": "2026-11-20T01:15:00Z",
+            "resultSummary": "参宮橋 ⇒ 東大前 (2026年11月20日 10時15分 出発)",
+            "pointTimes": [
+              {
+                "pointIndex": 0,
+                "kind": "departure",
+                "rawText": "発\n10:26",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "arrival",
+                "rawText": "着\n10:29",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "departure",
+                "rawText": "発\n10:35",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "arrival",
+                "rawText": "着\n10:46",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "departure",
+                "rawText": "発\n10:54",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "arrival",
+                "rawText": "着\n10:58",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              }
+            ],
+            "displayedDurationMinutes": 32,
+            "timezone": "Asia/Tokyo",
+            "summarySelector": "body: exact result-summary line"
+          }
+        },
+        {
+          "departureAt": "2026-11-20T01:26:00Z",
+          "arrivalAt": "2026-11-20T02:04:00Z",
+          "evidence": "calendar_dom_clock",
+          "calendarEvidence": {
+            "departureName": "参宮橋",
+            "arrivalName": "東大前",
+            "preparedAt": "2026-11-20T01:15:00Z",
+            "resultSummary": "参宮橋 ⇒ 東大前 (2026年11月20日 10時15分 出発)",
+            "pointTimes": [
+              {
+                "pointIndex": 0,
+                "kind": "departure",
+                "rawText": "発\n10:26",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "arrival",
+                "rawText": "着\n10:29",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "departure",
+                "rawText": "発\n10:35",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "arrival",
+                "rawText": "着\n10:37",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "departure",
+                "rawText": "発\n10:41",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "arrival",
+                "rawText": "着\n10:48",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "departure",
+                "rawText": "発\n10:56",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 4,
+                "kind": "arrival",
+                "rawText": "着\n11:04",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              }
+            ],
+            "displayedDurationMinutes": 38,
+            "timezone": "Asia/Tokyo",
+            "summarySelector": "body: exact result-summary line"
+          }
+        },
+        {
+          "departureAt": "2026-11-20T01:26:00Z",
+          "arrivalAt": "2026-11-20T02:16:00Z",
+          "evidence": "calendar_dom_clock",
+          "calendarEvidence": {
+            "departureName": "参宮橋",
+            "arrivalName": "東大前",
+            "preparedAt": "2026-11-20T01:15:00Z",
+            "resultSummary": "参宮橋 ⇒ 東大前 (2026年11月20日 10時15分 出発)",
+            "pointTimes": [
+              {
+                "pointIndex": 0,
+                "kind": "departure",
+                "rawText": "発\n10:26",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "arrival",
+                "rawText": "着\n10:29",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "departure",
+                "rawText": "発\n10:37",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "arrival",
+                "rawText": "着\n10:46",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "departure",
+                "rawText": "発\n10:47",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "arrival",
+                "rawText": "着\n10:49",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "departure",
+                "rawText": "発\n10:59",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 4,
+                "kind": "arrival",
+                "rawText": "着\n11:10",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 4,
+                "kind": "departure",
+                "rawText": "発\n11:11",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 5,
+                "kind": "arrival",
+                "rawText": "着\n11:16",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              }
+            ],
+            "displayedDurationMinutes": 50,
+            "timezone": "Asia/Tokyo",
+            "summarySelector": "body: exact result-summary line"
+          }
+        }
+      ],
+      "providerOptions": {
+        "viaCode": "",
+        "viaName": "",
+        "shinkansen": "true",
+        "express": "true",
+        "highway": "true",
+        "local": "true",
+        "connectionBus": "true",
+        "plane": "true",
+        "ship": "true",
+        "sleep": "true",
+        "liner": "true",
+        "searchType": "departure",
+        "sort": "time",
+        "ticketType": "IC",
+        "transferTime": "normal",
+        "surchargeType": "non_reserved",
+        "isRealtime": "false",
+        "device": "PC",
+        "mockFileName": ""
+      }
+    },
+    {
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29075",
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7176,
+            "lng": 139.7581
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29057",
+          "name": "テレコムセンター",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6178,
+            "lng": 139.7794
+          }
+        },
+        "preparedAt": "2026-11-20T03:08:00Z",
+        "options": {}
+      },
+      "payload": {
+        "routes": [
+          {
+            "time": 51,
+            "fee": 534,
+            "route": [
+              {
+                "station": "東大前",
+                "line": "東京メトロ南北線・白金高輪行"
+              },
+              {
+                "station": "飯田橋",
+                "line": "東京メトロ有楽町線・新木場行"
+              },
+              {
+                "station": "豊洲",
+                "line": "ゆりかもめ・新橋行"
+              },
+              {
+                "station": "テレコムセンター",
+                "line": null
+              }
+            ]
+          },
+          {
+            "time": 51,
+            "fee": 534,
+            "route": [
+              {
+                "station": "東大前",
+                "line": "東京メトロ南北線・白金高輪行"
+              },
+              {
+                "station": "永田町",
+                "line": "東京メトロ有楽町線・新木場行"
+              },
+              {
+                "station": "豊洲",
+                "line": "ゆりかもめ・新橋行"
+              },
+              {
+                "station": "テレコムセンター",
+                "line": null
+              }
+            ]
+          },
+          {
+            "time": 70,
+            "fee": 807,
+            "route": [
+              {
+                "station": "東大前",
+                "line": "徒歩"
+              },
+              {
+                "station": "東大農学部前／都営バス",
+                "line": "都営バス・東４３(荒川土手－東京駅)・荒川土手行"
+              },
+              {
+                "station": "田端駅前／都営バス",
+                "line": "徒歩"
+              },
+              {
+                "station": "田端",
+                "line": "ＪＲ山手線外回り・上野・東京方面"
+              },
+              {
+                "station": "新橋",
+                "line": "ゆりかもめ・豊洲行"
+              },
+              {
+                "station": "テレコムセンター",
+                "line": null
+              }
+            ]
+          },
+          {
+            "time": 71,
+            "fee": 419,
+            "route": [
+              {
+                "station": "東大前",
+                "line": "東京メトロ南北線・日吉行"
+              },
+              {
+                "station": "後楽園",
+                "line": "東京メトロ丸ノ内線・荻窪行"
+              },
+              {
+                "station": "銀座",
+                "line": "徒歩(同駅)"
+              },
+              {
+                "station": "銀座一丁目",
+                "line": "東京メトロ有楽町線・新木場行"
+              },
+              {
+                "station": "豊洲",
+                "line": "徒歩"
+              },
+              {
+                "station": "豊洲駅前／都営バス",
+                "line": "都営バス・海０１(門前仲町－東京テレポート・台場駅経由)・東京テレポート駅前行"
+              },
+              {
+                "station": "テレコムセンター駅前／都営バス",
+                "line": "徒歩"
+              },
+              {
+                "station": "テレコムセンター",
+                "line": null
+              }
+            ]
+          }
+        ]
+      },
+      "absoluteTimes": [
+        {
+          "departureAt": "2026-11-20T03:12:00Z",
+          "arrivalAt": "2026-11-20T04:03:00Z",
+          "evidence": "calendar_dom_clock",
+          "calendarEvidence": {
+            "departureName": "東大前",
+            "arrivalName": "テレコムセンター",
+            "preparedAt": "2026-11-20T03:08:00Z",
+            "resultSummary": "東大前 ⇒ テレコムセンター (2026年11月20日 12時08分 出発)",
+            "pointTimes": [
+              {
+                "pointIndex": 0,
+                "kind": "departure",
+                "rawText": "発\n12:12",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "arrival",
+                "rawText": "着\n12:17",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "departure",
+                "rawText": "発\n12:23",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "arrival",
+                "rawText": "着\n12:40",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "departure",
+                "rawText": "発\n12:50",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "arrival",
+                "rawText": "着\n13:03",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              }
+            ],
+            "displayedDurationMinutes": 51,
+            "timezone": "Asia/Tokyo",
+            "summarySelector": "body: exact result-summary line"
+          }
+        },
+        {
+          "departureAt": "2026-11-20T03:12:00Z",
+          "arrivalAt": "2026-11-20T04:03:00Z",
+          "evidence": "calendar_dom_clock",
+          "calendarEvidence": {
+            "departureName": "東大前",
+            "arrivalName": "テレコムセンター",
+            "preparedAt": "2026-11-20T03:08:00Z",
+            "resultSummary": "東大前 ⇒ テレコムセンター (2026年11月20日 12時08分 出発)",
+            "pointTimes": [
+              {
+                "pointIndex": 0,
+                "kind": "departure",
+                "rawText": "発\n12:12",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "arrival",
+                "rawText": "着\n12:23",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "departure",
+                "rawText": "発\n12:29",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "arrival",
+                "rawText": "着\n12:40",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "departure",
+                "rawText": "発\n12:50",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "arrival",
+                "rawText": "着\n13:03",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              }
+            ],
+            "displayedDurationMinutes": 51,
+            "timezone": "Asia/Tokyo",
+            "summarySelector": "body: exact result-summary line"
+          }
+        },
+        {
+          "departureAt": "2026-11-20T03:14:00Z",
+          "arrivalAt": "2026-11-20T04:24:00Z",
+          "evidence": "calendar_dom_clock",
+          "calendarEvidence": {
+            "departureName": "東大前",
+            "arrivalName": "テレコムセンター",
+            "preparedAt": "2026-11-20T03:08:00Z",
+            "resultSummary": "東大前 ⇒ テレコムセンター (2026年11月20日 12時08分 出発)",
+            "pointTimes": [
+              {
+                "pointIndex": 0,
+                "kind": "departure",
+                "rawText": "発\n12:14",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "arrival",
+                "rawText": "着\n12:19",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "departure",
+                "rawText": "発\n12:20",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "arrival",
+                "rawText": "着\n12:35",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "departure",
+                "rawText": "発\n12:36",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "arrival",
+                "rawText": "着\n12:37",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "departure",
+                "rawText": "発\n12:38",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 4,
+                "kind": "arrival",
+                "rawText": "着\n12:57",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 4,
+                "kind": "departure",
+                "rawText": "発\n13:05",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 5,
+                "kind": "arrival",
+                "rawText": "着\n13:24",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              }
+            ],
+            "displayedDurationMinutes": 70,
+            "timezone": "Asia/Tokyo",
+            "summarySelector": "body: exact result-summary line"
+          }
+        },
+        {
+          "departureAt": "2026-11-20T03:24:00Z",
+          "arrivalAt": "2026-11-20T04:35:00Z",
+          "evidence": "calendar_dom_clock",
+          "calendarEvidence": {
+            "departureName": "東大前",
+            "arrivalName": "テレコムセンター",
+            "preparedAt": "2026-11-20T03:08:00Z",
+            "resultSummary": "東大前 ⇒ テレコムセンター (2026年11月20日 12時08分 出発)",
+            "pointTimes": [
+              {
+                "pointIndex": 0,
+                "kind": "departure",
+                "rawText": "発\n12:24",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "arrival",
+                "rawText": "着\n12:27",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 1,
+                "kind": "departure",
+                "rawText": "発\n12:33",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "arrival",
+                "rawText": "着\n12:44",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 2,
+                "kind": "departure",
+                "rawText": "発\n12:45",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "arrival",
+                "rawText": "着\n12:51",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 3,
+                "kind": "departure",
+                "rawText": "発\n12:52",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 4,
+                "kind": "arrival",
+                "rawText": "着\n12:58",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 4,
+                "kind": "departure",
+                "rawText": "発\n12:59",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 5,
+                "kind": "arrival",
+                "rawText": "着\n13:02",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 5,
+                "kind": "departure",
+                "rawText": "発\n13:05",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 6,
+                "kind": "arrival",
+                "rawText": "着\n13:32",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              },
+              {
+                "pointIndex": 6,
+                "kind": "departure",
+                "rawText": "発\n13:33",
+                "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+              },
+              {
+                "pointIndex": 7,
+                "kind": "arrival",
+                "rawText": "着\n13:35",
+                "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+              }
+            ],
+            "displayedDurationMinutes": 71,
+            "timezone": "Asia/Tokyo",
+            "summarySelector": "body: exact result-summary line"
+          }
+        }
+      ],
+      "providerOptions": {
+        "viaCode": "",
+        "viaName": "",
+        "shinkansen": "true",
+        "express": "true",
+        "highway": "true",
+        "local": "true",
+        "connectionBus": "true",
+        "plane": "true",
+        "ship": "true",
+        "sleep": "true",
+        "liner": "true",
+        "searchType": "departure",
+        "sort": "time",
+        "ticketType": "IC",
+        "transferTime": "normal",
+        "surchargeType": "non_reserved",
+        "isRealtime": "false",
+        "device": "PC",
+        "mockFileName": ""
+      }
+    }
+  ]
+}

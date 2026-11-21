@@ -1,0 +1,1512 @@
+{
+  "schemaVersion": "divergence-screening/1",
+  "sourceEvidence": {
+    "pool": {
+      "path": "sample/low-call/divergent/pool.json",
+      "sha256": "38026285c001c8401247c10ab67f92fd2db9526b9a8fde225c99971f937721eb",
+      "bytes": 10197
+    },
+    "matrix": {
+      "path": "sample/team-crawler-route-matrix.json",
+      "sha256": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+      "bytes": 53107
+    }
+  },
+  "selectionRule": "first-UTF16-ids-eligible-complete-different-undirected-path",
+  "eligibleIds": [
+    "meiji",
+    "nezu",
+    "odaiba",
+    "tokyo-dome"
+  ],
+  "rows": [
+    {
+      "ids": [
+        "enoshima",
+        "meiji",
+        "nezu"
+      ],
+      "eligible": false,
+      "geometric": {
+        "orders": [
+          {
+            "order": [
+              "enoshima",
+              "meiji",
+              "nezu"
+            ],
+            "geometricScore": 53719.685519703795,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "nezu",
+              "meiji",
+              "enoshima"
+            ],
+            "geometricScore": 53719.685519703795,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "enoshima",
+              "nezu",
+              "meiji"
+            ],
+            "geometricScore": 60582.812446195596,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "enoshima"
+          ],
+          [
+            "meiji"
+          ],
+          [
+            "nezu"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "historical": {
+        "order": [
+          "nezu",
+          "meiji",
+          "enoshima"
+        ],
+        "displayedTravelMinutes": 96,
+        "grossFare": 1571,
+        "legs": [
+          {
+            "from": "nezu",
+            "to": "meiji",
+            "routeIndex": 1,
+            "result": {
+              "time": 31,
+              "fee": 422,
+              "route": [
+                {
+                  "station": "東大前",
+                  "line": "東京メトロ南北線急行・西谷行"
+                },
+                {
+                  "station": "市ケ谷",
+                  "line": "都営新宿線急行・京王多摩センター行"
+                },
+                {
+                  "station": "新宿",
+                  "line": "小田急小田原線・本厚木行"
+                },
+                {
+                  "station": "参宮橋",
+                  "line": null
+                }
+              ]
+            }
+          },
+          {
+            "from": "meiji",
+            "to": "enoshima",
+            "routeIndex": 0,
+            "result": {
+              "time": 65,
+              "fee": 1149,
+              "route": [
+                {
+                  "station": "参宮橋",
+                  "line": "小田急小田原線・本厚木行"
+                },
+                {
+                  "station": "代々木上原",
+                  "line": "小田急小田原線快速急行・藤沢行"
+                },
+                {
+                  "station": "相模大野",
+                  "line": "小田急特急メトロえのしま 91号"
+                },
+                {
+                  "station": "片瀬江ノ島",
+                  "line": null
+                }
+              ]
+            }
+          }
+        ],
+        "evaluatedOrders": 6,
+        "objective": "displayed-duration-then-fare",
+        "queryBasis": "unknown-date",
+        "status": "complete",
+        "missingEdges": [],
+        "evidence": "historical-static-not-fixed-0900"
+      },
+      "pathDifference": "reversal"
+    },
+    {
+      "ids": [
+        "enoshima",
+        "meiji",
+        "odaiba"
+      ],
+      "eligible": false,
+      "geometric": {
+        "orders": [
+          {
+            "order": [
+              "enoshima",
+              "odaiba",
+              "meiji"
+            ],
+            "geometricScore": 53982.82799519354,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "meiji",
+              "odaiba",
+              "enoshima"
+            ],
+            "geometricScore": 53982.82799519354,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "enoshima",
+              "meiji",
+              "odaiba"
+            ],
+            "geometricScore": 55808.13420319685,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "enoshima"
+          ],
+          [
+            "meiji"
+          ],
+          [
+            "odaiba"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "historical": {
+        "order": [
+          "odaiba",
+          "meiji",
+          "enoshima"
+        ],
+        "displayedTravelMinutes": 119,
+        "grossFare": 2080,
+        "legs": [
+          {
+            "from": "odaiba",
+            "to": "meiji",
+            "routeIndex": 2,
+            "result": {
+              "time": 54,
+              "fee": 931,
+              "route": [
+                {
+                  "station": "テレコムセンター",
+                  "line": "ゆりかもめ・豊洲行"
+                },
+                {
+                  "station": "有明(東京都)",
+                  "line": "徒歩"
+                },
+                {
+                  "station": "国際展示場",
+                  "line": "東京臨海高速鉄道りんかい線・大宮行"
+                },
+                {
+                  "station": "新宿",
+                  "line": "小田急小田原線・本厚木行"
+                },
+                {
+                  "station": "参宮橋",
+                  "line": null
+                }
+              ]
+            }
+          },
+          {
+            "from": "meiji",
+            "to": "enoshima",
+            "routeIndex": 0,
+            "result": {
+              "time": 65,
+              "fee": 1149,
+              "route": [
+                {
+                  "station": "参宮橋",
+                  "line": "小田急小田原線・本厚木行"
+                },
+                {
+                  "station": "代々木上原",
+                  "line": "小田急小田原線快速急行・藤沢行"
+                },
+                {
+                  "station": "相模大野",
+                  "line": "小田急特急メトロえのしま 91号"
+                },
+                {
+                  "station": "片瀬江ノ島",
+                  "line": null
+                }
+              ]
+            }
+          }
+        ],
+        "evaluatedOrders": 6,
+        "objective": "displayed-duration-then-fare",
+        "queryBasis": "unknown-date",
+        "status": "complete",
+        "missingEdges": [],
+        "evidence": "historical-static-not-fixed-0900"
+      },
+      "pathDifference": "different"
+    },
+    {
+      "ids": [
+        "enoshima",
+        "meiji",
+        "tokyo-dome"
+      ],
+      "eligible": false,
+      "geometric": {
+        "orders": [
+          {
+            "order": [
+              "enoshima",
+              "meiji",
+              "tokyo-dome"
+            ],
+            "geometricScore": 52086.99261821621,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "tokyo-dome",
+              "meiji",
+              "enoshima"
+            ],
+            "geometricScore": 52086.99261821621,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "enoshima",
+              "tokyo-dome",
+              "meiji"
+            ],
+            "geometricScore": 57140.14559131021,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "enoshima"
+          ],
+          [
+            "meiji"
+          ],
+          [
+            "tokyo-dome"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "historical": {
+        "order": [
+          "tokyo-dome",
+          "meiji",
+          "enoshima"
+        ],
+        "displayedTravelMinutes": 93,
+        "grossFare": 1662,
+        "legs": [
+          {
+            "from": "tokyo-dome",
+            "to": "meiji",
+            "routeIndex": 0,
+            "result": {
+              "time": 28,
+              "fee": 513,
+              "route": [
+                {
+                  "station": "後楽園",
+                  "line": "東京メトロ南北線・白金高輪行"
+                },
+                {
+                  "station": "四ツ谷",
+                  "line": "ＪＲ中央線快速・高尾行"
+                },
+                {
+                  "station": "新宿",
+                  "line": "小田急小田原線・本厚木行"
+                },
+                {
+                  "station": "参宮橋",
+                  "line": null
+                }
+              ]
+            }
+          },
+          {
+            "from": "meiji",
+            "to": "enoshima",
+            "routeIndex": 0,
+            "result": {
+              "time": 65,
+              "fee": 1149,
+              "route": [
+                {
+                  "station": "参宮橋",
+                  "line": "小田急小田原線・本厚木行"
+                },
+                {
+                  "station": "代々木上原",
+                  "line": "小田急小田原線快速急行・藤沢行"
+                },
+                {
+                  "station": "相模大野",
+                  "line": "小田急特急メトロえのしま 91号"
+                },
+                {
+                  "station": "片瀬江ノ島",
+                  "line": null
+                }
+              ]
+            }
+          }
+        ],
+        "evaluatedOrders": 6,
+        "objective": "displayed-duration-then-fare",
+        "queryBasis": "unknown-date",
+        "status": "complete",
+        "missingEdges": [],
+        "evidence": "historical-static-not-fixed-0900"
+      },
+      "pathDifference": "reversal"
+    },
+    {
+      "ids": [
+        "enoshima",
+        "nezu",
+        "odaiba"
+      ],
+      "eligible": false,
+      "geometric": {
+        "orders": [
+          {
+            "order": [
+              "enoshima",
+              "odaiba",
+              "nezu"
+            ],
+            "geometricScore": 55853.142376471835,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "nezu",
+              "odaiba",
+              "enoshima"
+            ],
+            "geometricScore": 55853.142376471835,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "enoshima",
+              "nezu",
+              "odaiba"
+            ],
+            "geometricScore": 64541.575510966955,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "enoshima"
+          ],
+          [
+            "nezu"
+          ],
+          [
+            "odaiba"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "historical": {
+        "order": [
+          "enoshima",
+          "nezu",
+          "odaiba"
+        ],
+        "displayedTravelMinutes": 127,
+        "grossFare": 1913,
+        "legs": [
+          {
+            "from": "enoshima",
+            "to": "nezu",
+            "routeIndex": 1,
+            "result": {
+              "time": 81,
+              "fee": 1379,
+              "route": [
+                {
+                  "station": "片瀬江ノ島",
+                  "line": "小田急江ノ島線・藤沢行"
+                },
+                {
+                  "station": "藤沢",
+                  "line": "ＪＲ東海道本線(上野東京ライン)・小金井行"
+                },
+                {
+                  "station": "東京",
+                  "line": "東京メトロ丸ノ内線・池袋行"
+                },
+                {
+                  "station": "後楽園",
+                  "line": "東京メトロ南北線・赤羽岩淵行"
+                },
+                {
+                  "station": "東大前",
+                  "line": null
+                }
+              ]
+            }
+          },
+          {
+            "from": "nezu",
+            "to": "odaiba",
+            "routeIndex": 0,
+            "result": {
+              "time": 46,
+              "fee": 534,
+              "route": [
+                {
+                  "station": "東大前",
+                  "line": "東京メトロ南北線・白金高輪行"
+                },
+                {
+                  "station": "飯田橋",
+                  "line": "東京メトロ有楽町線・新木場行"
+                },
+                {
+                  "station": "豊洲",
+                  "line": "ゆりかもめ・新橋行"
+                },
+                {
+                  "station": "テレコムセンター",
+                  "line": null
+                }
+              ]
+            }
+          }
+        ],
+        "evaluatedOrders": 6,
+        "objective": "displayed-duration-then-fare",
+        "queryBasis": "unknown-date",
+        "status": "complete",
+        "missingEdges": [],
+        "evidence": "historical-static-not-fixed-0900"
+      },
+      "pathDifference": "different"
+    },
+    {
+      "ids": [
+        "enoshima",
+        "nezu",
+        "tokyo-dome"
+      ],
+      "eligible": false,
+      "geometric": {
+        "orders": [
+          {
+            "order": [
+              "enoshima",
+              "tokyo-dome",
+              "nezu"
+            ],
+            "geometricScore": 53197.641706122995,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "nezu",
+              "tokyo-dome",
+              "enoshima"
+            ],
+            "geometricScore": 53197.641706122995,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "enoshima",
+              "nezu",
+              "tokyo-dome"
+            ],
+            "geometricScore": 55007.615659520794,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "enoshima"
+          ],
+          [
+            "nezu"
+          ],
+          [
+            "tokyo-dome"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "historical": {
+        "order": [
+          "nezu",
+          "tokyo-dome",
+          "enoshima"
+        ],
+        "displayedTravelMinutes": 75,
+        "grossFare": 1557,
+        "legs": [
+          {
+            "from": "nezu",
+            "to": "tokyo-dome",
+            "routeIndex": 0,
+            "result": {
+              "time": 2,
+              "fee": 178,
+              "route": [
+                {
+                  "station": "東大前",
+                  "line": "東京メトロ南北線・白金高輪行"
+                },
+                {
+                  "station": "後楽園",
+                  "line": null
+                }
+              ]
+            }
+          },
+          {
+            "from": "tokyo-dome",
+            "to": "enoshima",
+            "routeIndex": 0,
+            "result": {
+              "time": 73,
+              "fee": 1379,
+              "route": [
+                {
+                  "station": "後楽園",
+                  "line": "東京メトロ丸ノ内線・荻窪行"
+                },
+                {
+                  "station": "東京",
+                  "line": "ＪＲ東海道本線・熱海行"
+                },
+                {
+                  "station": "藤沢",
+                  "line": "小田急江ノ島線・片瀬江ノ島行"
+                },
+                {
+                  "station": "片瀬江ノ島",
+                  "line": null
+                }
+              ]
+            }
+          }
+        ],
+        "evaluatedOrders": 6,
+        "objective": "displayed-duration-then-fare",
+        "queryBasis": "unknown-date",
+        "status": "complete",
+        "missingEdges": [],
+        "evidence": "historical-static-not-fixed-0900"
+      },
+      "pathDifference": "reversal"
+    },
+    {
+      "ids": [
+        "enoshima",
+        "odaiba",
+        "tokyo-dome"
+      ],
+      "eligible": false,
+      "geometric": {
+        "orders": [
+          {
+            "order": [
+              "enoshima",
+              "odaiba",
+              "tokyo-dome"
+            ],
+            "geometricScore": 54396.5157072404,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "tokyo-dome",
+              "odaiba",
+              "enoshima"
+            ],
+            "geometricScore": 54396.5157072404,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "enoshima",
+              "tokyo-dome",
+              "odaiba"
+            ],
+            "geometricScore": 61274.97488833772,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "enoshima"
+          ],
+          [
+            "odaiba"
+          ],
+          [
+            "tokyo-dome"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "historical": {
+        "order": [
+          "odaiba",
+          "tokyo-dome",
+          "enoshima"
+        ],
+        "displayedTravelMinutes": 117,
+        "grossFare": 2100,
+        "legs": [
+          {
+            "from": "odaiba",
+            "to": "tokyo-dome",
+            "routeIndex": 0,
+            "result": {
+              "time": 44,
+              "fee": 721,
+              "route": [
+                {
+                  "station": "テレコムセンター",
+                  "line": "ゆりかもめ・新橋行"
+                },
+                {
+                  "station": "新橋",
+                  "line": "ＪＲ上野東京ライン・土浦行"
+                },
+                {
+                  "station": "東京",
+                  "line": "東京メトロ丸ノ内線・池袋行"
+                },
+                {
+                  "station": "後楽園",
+                  "line": null
+                }
+              ]
+            }
+          },
+          {
+            "from": "tokyo-dome",
+            "to": "enoshima",
+            "routeIndex": 0,
+            "result": {
+              "time": 73,
+              "fee": 1379,
+              "route": [
+                {
+                  "station": "後楽園",
+                  "line": "東京メトロ丸ノ内線・荻窪行"
+                },
+                {
+                  "station": "東京",
+                  "line": "ＪＲ東海道本線・熱海行"
+                },
+                {
+                  "station": "藤沢",
+                  "line": "小田急江ノ島線・片瀬江ノ島行"
+                },
+                {
+                  "station": "片瀬江ノ島",
+                  "line": null
+                }
+              ]
+            }
+          }
+        ],
+        "evaluatedOrders": 6,
+        "objective": "displayed-duration-then-fare",
+        "queryBasis": "unknown-date",
+        "status": "complete",
+        "missingEdges": [],
+        "evidence": "historical-static-not-fixed-0900"
+      },
+      "pathDifference": "different"
+    },
+    {
+      "ids": [
+        "meiji",
+        "nezu",
+        "odaiba"
+      ],
+      "eligible": true,
+      "geometric": {
+        "orders": [
+          {
+            "order": [
+              "nezu",
+              "meiji",
+              "odaiba"
+            ],
+            "geometricScore": 16861.68977152118,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "odaiba",
+              "meiji",
+              "nezu"
+            ],
+            "geometricScore": 16861.68977152118,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "meiji",
+              "nezu",
+              "odaiba"
+            ],
+            "geometricScore": 18732.00415279948,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "meiji"
+          ],
+          [
+            "nezu"
+          ],
+          [
+            "odaiba"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "historical": {
+        "order": [
+          "meiji",
+          "nezu",
+          "odaiba"
+        ],
+        "displayedTravelMinutes": 78,
+        "grossFare": 1047,
+        "legs": [
+          {
+            "from": "meiji",
+            "to": "nezu",
+            "routeIndex": 0,
+            "result": {
+              "time": 32,
+              "fee": 513,
+              "route": [
+                {
+                  "station": "参宮橋",
+                  "line": "小田急小田原線・新宿行"
+                },
+                {
+                  "station": "新宿",
+                  "line": "ＪＲ中央線快速・東京行"
+                },
+                {
+                  "station": "四ツ谷",
+                  "line": "東京メトロ南北線・赤羽岩淵行"
+                },
+                {
+                  "station": "東大前",
+                  "line": null
+                }
+              ]
+            }
+          },
+          {
+            "from": "nezu",
+            "to": "odaiba",
+            "routeIndex": 0,
+            "result": {
+              "time": 46,
+              "fee": 534,
+              "route": [
+                {
+                  "station": "東大前",
+                  "line": "東京メトロ南北線・白金高輪行"
+                },
+                {
+                  "station": "飯田橋",
+                  "line": "東京メトロ有楽町線・新木場行"
+                },
+                {
+                  "station": "豊洲",
+                  "line": "ゆりかもめ・新橋行"
+                },
+                {
+                  "station": "テレコムセンター",
+                  "line": null
+                }
+              ]
+            }
+          }
+        ],
+        "evaluatedOrders": 6,
+        "objective": "displayed-duration-then-fare",
+        "queryBasis": "unknown-date",
+        "status": "complete",
+        "missingEdges": [],
+        "evidence": "historical-static-not-fixed-0900"
+      },
+      "pathDifference": "different"
+    },
+    {
+      "ids": [
+        "meiji",
+        "nezu",
+        "tokyo-dome"
+      ],
+      "eligible": true,
+      "geometric": {
+        "orders": [
+          {
+            "order": [
+              "meiji",
+              "tokyo-dome",
+              "nezu"
+            ],
+            "geometricScore": 7565.35139986574,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "nezu",
+              "tokyo-dome",
+              "meiji"
+            ],
+            "geometricScore": 7565.35139986574,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "meiji",
+              "nezu",
+              "tokyo-dome"
+            ],
+            "geometricScore": 9198.044301353322,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "meiji"
+          ],
+          [
+            "nezu"
+          ],
+          [
+            "tokyo-dome"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "historical": {
+        "order": [
+          "meiji",
+          "tokyo-dome",
+          "nezu"
+        ],
+        "displayedTravelMinutes": 29,
+        "grossFare": 701,
+        "legs": [
+          {
+            "from": "meiji",
+            "to": "tokyo-dome",
+            "routeIndex": 0,
+            "result": {
+              "time": 26,
+              "fee": 523,
+              "route": [
+                {
+                  "station": "参宮橋",
+                  "line": "小田急小田原線・新宿行"
+                },
+                {
+                  "station": "新宿",
+                  "line": "ＪＲ中央線快速・東京行"
+                },
+                {
+                  "station": "御茶ノ水",
+                  "line": "東京メトロ丸ノ内線・池袋行"
+                },
+                {
+                  "station": "後楽園",
+                  "line": null
+                }
+              ]
+            }
+          },
+          {
+            "from": "tokyo-dome",
+            "to": "nezu",
+            "routeIndex": 0,
+            "result": {
+              "time": 3,
+              "fee": 178,
+              "route": [
+                {
+                  "station": "後楽園",
+                  "line": "東京メトロ南北線・浦和美園行"
+                },
+                {
+                  "station": "東大前",
+                  "line": null
+                }
+              ]
+            }
+          }
+        ],
+        "evaluatedOrders": 6,
+        "objective": "displayed-duration-then-fare",
+        "queryBasis": "unknown-date",
+        "status": "complete",
+        "missingEdges": [],
+        "evidence": "historical-static-not-fixed-0900"
+      },
+      "pathDifference": "same"
+    },
+    {
+      "ids": [
+        "meiji",
+        "odaiba",
+        "tokyo-dome"
+      ],
+      "eligible": true,
+      "geometric": {
+        "orders": [
+          {
+            "order": [
+              "odaiba",
+              "meiji",
+              "tokyo-dome"
+            ],
+            "geometricScore": 15228.996870033598,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "tokyo-dome",
+              "meiji",
+              "odaiba"
+            ],
+            "geometricScore": 15228.996870033598,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "meiji",
+              "tokyo-dome",
+              "odaiba"
+            ],
+            "geometricScore": 15642.68458208046,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "meiji"
+          ],
+          [
+            "odaiba"
+          ],
+          [
+            "tokyo-dome"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "historical": {
+        "order": [
+          "meiji",
+          "tokyo-dome",
+          "odaiba"
+        ],
+        "displayedTravelMinutes": 71,
+        "grossFare": 1057,
+        "legs": [
+          {
+            "from": "meiji",
+            "to": "tokyo-dome",
+            "routeIndex": 0,
+            "result": {
+              "time": 26,
+              "fee": 523,
+              "route": [
+                {
+                  "station": "参宮橋",
+                  "line": "小田急小田原線・新宿行"
+                },
+                {
+                  "station": "新宿",
+                  "line": "ＪＲ中央線快速・東京行"
+                },
+                {
+                  "station": "御茶ノ水",
+                  "line": "東京メトロ丸ノ内線・池袋行"
+                },
+                {
+                  "station": "後楽園",
+                  "line": null
+                }
+              ]
+            }
+          },
+          {
+            "from": "tokyo-dome",
+            "to": "odaiba",
+            "routeIndex": 0,
+            "result": {
+              "time": 45,
+              "fee": 534,
+              "route": [
+                {
+                  "station": "後楽園",
+                  "line": "東京メトロ南北線・新横浜行"
+                },
+                {
+                  "station": "飯田橋",
+                  "line": "東京メトロ有楽町線・新木場行"
+                },
+                {
+                  "station": "豊洲",
+                  "line": "ゆりかもめ・新橋行"
+                },
+                {
+                  "station": "テレコムセンター",
+                  "line": null
+                }
+              ]
+            }
+          }
+        ],
+        "evaluatedOrders": 6,
+        "objective": "displayed-duration-then-fare",
+        "queryBasis": "unknown-date",
+        "status": "complete",
+        "missingEdges": [],
+        "evidence": "historical-static-not-fixed-0900"
+      },
+      "pathDifference": "different"
+    },
+    {
+      "ids": [
+        "nezu",
+        "odaiba",
+        "tokyo-dome"
+      ],
+      "eligible": true,
+      "geometric": {
+        "orders": [
+          {
+            "order": [
+              "nezu",
+              "tokyo-dome",
+              "odaiba"
+            ],
+            "geometricScore": 11700.180696893243,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "odaiba",
+              "tokyo-dome",
+              "nezu"
+            ],
+            "geometricScore": 11700.180696893243,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "odaiba",
+              "nezu",
+              "tokyo-dome"
+            ],
+            "geometricScore": 13156.80736612468,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "nezu"
+          ],
+          [
+            "odaiba"
+          ],
+          [
+            "tokyo-dome"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "historical": {
+        "order": [
+          "nezu",
+          "tokyo-dome",
+          "odaiba"
+        ],
+        "displayedTravelMinutes": 47,
+        "grossFare": 712,
+        "legs": [
+          {
+            "from": "nezu",
+            "to": "tokyo-dome",
+            "routeIndex": 0,
+            "result": {
+              "time": 2,
+              "fee": 178,
+              "route": [
+                {
+                  "station": "東大前",
+                  "line": "東京メトロ南北線・白金高輪行"
+                },
+                {
+                  "station": "後楽園",
+                  "line": null
+                }
+              ]
+            }
+          },
+          {
+            "from": "tokyo-dome",
+            "to": "odaiba",
+            "routeIndex": 0,
+            "result": {
+              "time": 45,
+              "fee": 534,
+              "route": [
+                {
+                  "station": "後楽園",
+                  "line": "東京メトロ南北線・新横浜行"
+                },
+                {
+                  "station": "飯田橋",
+                  "line": "東京メトロ有楽町線・新木場行"
+                },
+                {
+                  "station": "豊洲",
+                  "line": "ゆりかもめ・新橋行"
+                },
+                {
+                  "station": "テレコムセンター",
+                  "line": null
+                }
+              ]
+            }
+          }
+        ],
+        "evaluatedOrders": 6,
+        "objective": "displayed-duration-then-fare",
+        "queryBasis": "unknown-date",
+        "status": "complete",
+        "missingEdges": [],
+        "evidence": "historical-static-not-fixed-0900"
+      },
+      "pathDifference": "same"
+    }
+  ],
+  "selected": {
+    "ids": [
+      "meiji",
+      "nezu",
+      "odaiba"
+    ],
+    "v2Order": [
+      "nezu",
+      "meiji",
+      "odaiba"
+    ],
+    "historicalOrder": [
+      "meiji",
+      "nezu",
+      "odaiba"
+    ],
+    "scenario": {
+      "schemaVersion": "sequential-scenario/1",
+      "request": {
+        "inputVersion": "2",
+        "sessionId": "issued-by-runner",
+        "operationId": "divergent-comparison",
+        "dataSource": "replay",
+        "fixtureId": "tokyo-divergent-three-places-20261120",
+        "startAt": "2026-11-20T09:00:00+09:00",
+        "endBy": null,
+        "places": [
+          {
+            "clientPlaceId": "nezu",
+            "name": "네즈 신사",
+            "location": {
+              "lat": 35.7202,
+              "lng": 139.7608
+            },
+            "googlePlaceId": null,
+            "stayMinutes": 60,
+            "anchorRole": null,
+            "openingWindows": null,
+            "fixedVisitAt": null
+          },
+          {
+            "clientPlaceId": "meiji",
+            "name": "메이지 신궁",
+            "location": {
+              "lat": 35.6764,
+              "lng": 139.6993
+            },
+            "googlePlaceId": null,
+            "stayMinutes": 60,
+            "anchorRole": null,
+            "openingWindows": null,
+            "fixedVisitAt": null
+          },
+          {
+            "clientPlaceId": "odaiba",
+            "name": "오다이바",
+            "location": {
+              "lat": 35.619,
+              "lng": 139.7768
+            },
+            "googlePlaceId": null,
+            "stayMinutes": 120,
+            "anchorRole": null,
+            "openingWindows": null,
+            "fixedVisitAt": null
+          }
+        ],
+        "mode": "reference",
+        "budget": {
+          "railAttempts": null
+        },
+        "options": {
+          "allowCache": false,
+          "allowPrefixReuse": false,
+          "allowStationAlternates": true,
+          "allowRepair": false,
+          "allowPassEvaluation": false
+        },
+        "candidateIndex": 0
+      },
+      "bindings": [
+        {
+          "place": {
+            "clientPlaceId": "nezu",
+            "name": "네즈 신사",
+            "location": {
+              "lat": 35.7202,
+              "lng": 139.7608
+            },
+            "googlePlaceId": null,
+            "stayMinutes": 60,
+            "anchorRole": null,
+            "openingWindows": null,
+            "fixedVisitAt": null
+          },
+          "candidates": [
+            {
+              "station": {
+                "namespace": "ekispert-roote",
+                "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+                "providerStationId": "29075",
+                "name": "東大前",
+                "line": "미확인",
+                "prefecture": "東京都",
+                "location": {
+                  "lat": 35.7176,
+                  "lng": 139.7581
+                }
+              },
+              "access": {
+                "status": "estimated",
+                "minutes": 5,
+                "evidence": {
+                  "source": "declared-scenario-walking-estimate",
+                  "version": "1"
+                }
+              },
+              "egress": {
+                "status": "estimated",
+                "minutes": 5,
+                "evidence": {
+                  "source": "declared-scenario-walking-estimate",
+                  "version": "1"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "place": {
+            "clientPlaceId": "meiji",
+            "name": "메이지 신궁",
+            "location": {
+              "lat": 35.6764,
+              "lng": 139.6993
+            },
+            "googlePlaceId": null,
+            "stayMinutes": 60,
+            "anchorRole": null,
+            "openingWindows": null,
+            "fixedVisitAt": null
+          },
+          "candidates": [
+            {
+              "station": {
+                "namespace": "ekispert-roote",
+                "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+                "providerStationId": "22702",
+                "name": "参宮橋",
+                "line": "미확인",
+                "prefecture": "東京都",
+                "location": {
+                  "lat": 35.6786,
+                  "lng": 139.6925
+                }
+              },
+              "access": {
+                "status": "estimated",
+                "minutes": 15,
+                "evidence": {
+                  "source": "declared-scenario-walking-estimate",
+                  "version": "1"
+                }
+              },
+              "egress": {
+                "status": "estimated",
+                "minutes": 15,
+                "evidence": {
+                  "source": "declared-scenario-walking-estimate",
+                  "version": "1"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "place": {
+            "clientPlaceId": "odaiba",
+            "name": "오다이바",
+            "location": {
+              "lat": 35.619,
+              "lng": 139.7768
+            },
+            "googlePlaceId": null,
+            "stayMinutes": 120,
+            "anchorRole": null,
+            "openingWindows": null,
+            "fixedVisitAt": null
+          },
+          "candidates": [
+            {
+              "station": {
+                "namespace": "ekispert-roote",
+                "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+                "providerStationId": "29057",
+                "name": "テレコムセンター",
+                "line": "미확인",
+                "prefecture": "東京都",
+                "location": {
+                  "lat": 35.6178,
+                  "lng": 139.7794
+                }
+              },
+              "access": {
+                "status": "estimated",
+                "minutes": 10,
+                "evidence": {
+                  "source": "declared-scenario-walking-estimate",
+                  "version": "1"
+                }
+              },
+              "egress": {
+                "status": "estimated",
+                "minutes": 10,
+                "evidence": {
+                  "source": "declared-scenario-walking-estimate",
+                  "version": "1"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "assumptions": [
+        "과거 팀 샘플 5곳의 모든 3곳 조합을 조사한다. 다음 실검색 대상은 에노시마를 제외한 도시권 4곳으로 제한한다.",
+        "선정은 무향 경로 자체가 달라지는 조합 중 ID 사전식 최초다. 평균 성능 측정이 아닌 목적 선택한 스트레스 사례다.",
+        "관광지·역 좌표는 근사 시험 입력이며 실제 최근접 역·출입구·보행 경로를 검증한 값이 아니다.",
+        "편도 도보 추정: 네즈 5분, 도쿄돔 8분, 메이지 15분, 오다이바 10분, 에노시마 20분.",
+        "체류 시험 조건: 네즈 60분, 도쿄돔 90분, 메이지 60분, 오다이바·에노시마 각 120분.",
+        "일본 시간 2026-11-20 09:00 시작, 자유 시작·종료, 숙소·복귀 없음. 영업시간·입장·패스 적용은 미검증.",
+        "과거 행렬에는 검증된 구간별 조회 날짜가 없다. 사례 선별에만 쓰며 현재 순차 경로 시각을 합성하지 않는다."
+      ],
+      "sources": [
+        "sample/low-call/sequential/scenario.json",
+        "web/fixtures/ekispert-browser-five-stops.json",
+        "sample/team-crawler-route-matrix.json",
+        "pool sha256:38026285c001c8401247c10ab67f92fd2db9526b9a8fde225c99971f937721eb",
+        "matrix sha256:52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491"
+      ]
+    }
+  },
+  "routeSearchAttempts": 0,
+  "httpRequestsObserved": 0,
+  "notice": "과거 정적 응답으로 목적 선택한 시험 사례. 현행 시각표·평균 개선율·최적성의 근거가 아님."
+}

@@ -1,0 +1,384 @@
+{
+  "dataSource": "replay",
+  "selected": {
+    "order": [
+      "meiji",
+      "nezu",
+      "odaiba"
+    ],
+    "visits": [
+      {
+        "clientPlaceId": "meiji",
+        "arrivalAt": "2026-11-20T00:00:00Z",
+        "visitStartAt": "2026-11-20T00:00:00Z",
+        "leaveAt": "2026-11-20T01:00:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 60,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      },
+      {
+        "clientPlaceId": "nezu",
+        "arrivalAt": "2026-11-20T02:03:00Z",
+        "visitStartAt": "2026-11-20T02:03:00Z",
+        "leaveAt": "2026-11-20T03:03:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 60,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      },
+      {
+        "clientPlaceId": "odaiba",
+        "arrivalAt": "2026-11-20T04:13:00Z",
+        "visitStartAt": "2026-11-20T04:13:00Z",
+        "leaveAt": "2026-11-20T06:13:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 120,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      }
+    ],
+    "legs": [
+      {
+        "from": "meiji",
+        "to": "nezu",
+        "requestedAt": "2026-11-20T01:15:00Z",
+        "preparedAt": "2026-11-20T01:15:00Z",
+        "departureAt": "2026-11-20T01:26:00Z",
+        "arrivalAt": "2026-11-20T01:58:00Z",
+        "placeArrivalAt": "2026-11-20T02:03:00Z",
+        "initialWaitMinutes": 11.0,
+        "rideMinutes": 32.0,
+        "accessWalking": {
+          "status": "estimated",
+          "minutes": 15,
+          "evidence": {
+            "source": "declared-scenario-walking-estimate",
+            "version": "1"
+          }
+        },
+        "egressWalking": {
+          "status": "estimated",
+          "minutes": 5,
+          "evidence": {
+            "source": "declared-scenario-walking-estimate",
+            "version": "1"
+          }
+        },
+        "samePhysicalStation": false,
+        "transfers": null,
+        "rideSegmentIds": [
+          "e61e6e96abd1e49cf80d4971ffa777be7094878fc7352108be21f6eaff72e678",
+          "555bd0d7704184d6fd93a0c2825cf4b1f9c63706bf05706097b3c5ffc5bcf456",
+          "75ab8673a4e80ba2b67d8c59c0de91ad844687a1791715eac6e3fb7ffc01b30b"
+        ],
+        "segments": [
+          {
+            "segmentId": "e61e6e96abd1e49cf80d4971ffa777be7094878fc7352108be21f6eaff72e678",
+            "operator": null,
+            "line": "小田急小田原線・新宿行",
+            "trainType": null
+          },
+          {
+            "segmentId": "555bd0d7704184d6fd93a0c2825cf4b1f9c63706bf05706097b3c5ffc5bcf456",
+            "operator": null,
+            "line": "ＪＲ総武線・千葉行",
+            "trainType": null
+          },
+          {
+            "segmentId": "75ab8673a4e80ba2b67d8c59c0de91ad844687a1791715eac6e3fb7ffc01b30b",
+            "operator": null,
+            "line": "東京メトロ南北線・浦和美園行",
+            "trainType": null
+          }
+        ],
+        "fareUnits": [
+          {
+            "fareUnitId": "292db59226489d6d5ac51e6d2b88f6eefee1c7d52c57a770d9b202f8f51e64b6",
+            "rideSegmentIds": [
+              "e61e6e96abd1e49cf80d4971ffa777be7094878fc7352108be21f6eaff72e678",
+              "555bd0d7704184d6fd93a0c2825cf4b1f9c63706bf05706097b3c5ffc5bcf456",
+              "75ab8673a4e80ba2b67d8c59c0de91ad844687a1791715eac6e3fb7ffc01b30b"
+            ],
+            "baseFare": null,
+            "supplement": null,
+            "quotedTotal": 513,
+            "currency": "JPY",
+            "evidence": {
+              "source": "ekispert-captured-public-dom",
+              "version": "3cb9fa83dc2ba2340a664eeda690dd47d0a3fa38d13ac428967fb059beacc896"
+            }
+          }
+        ],
+        "fareBasis": "independent_journey",
+        "providerEvidence": {
+          "source": "ekispert-captured-public-dom",
+          "version": "3cb9fa83dc2ba2340a664eeda690dd47d0a3fa38d13ac428967fb059beacc896"
+        },
+        "clockExact": false
+      },
+      {
+        "from": "nezu",
+        "to": "odaiba",
+        "requestedAt": "2026-11-20T03:08:00Z",
+        "preparedAt": "2026-11-20T03:08:00Z",
+        "departureAt": "2026-11-20T03:12:00Z",
+        "arrivalAt": "2026-11-20T04:03:00Z",
+        "placeArrivalAt": "2026-11-20T04:13:00Z",
+        "initialWaitMinutes": 4.0,
+        "rideMinutes": 51.0,
+        "accessWalking": {
+          "status": "estimated",
+          "minutes": 5,
+          "evidence": {
+            "source": "declared-scenario-walking-estimate",
+            "version": "1"
+          }
+        },
+        "egressWalking": {
+          "status": "estimated",
+          "minutes": 10,
+          "evidence": {
+            "source": "declared-scenario-walking-estimate",
+            "version": "1"
+          }
+        },
+        "samePhysicalStation": false,
+        "transfers": null,
+        "rideSegmentIds": [
+          "400874ab4fe4c73fbdb73ea0bc62bf995386f8c4a7035a84d9312a8fe750893f",
+          "a11ce41439d1ed34f4d5f5153fc71f44e917b35fb1befe9227ad74b5bc4f50ba",
+          "35cbad454f72d2eec4885ac41d29412303958e70272e135fcc5bf3ce1339bb6c"
+        ],
+        "segments": [
+          {
+            "segmentId": "400874ab4fe4c73fbdb73ea0bc62bf995386f8c4a7035a84d9312a8fe750893f",
+            "operator": null,
+            "line": "東京メトロ南北線・白金高輪行",
+            "trainType": null
+          },
+          {
+            "segmentId": "a11ce41439d1ed34f4d5f5153fc71f44e917b35fb1befe9227ad74b5bc4f50ba",
+            "operator": null,
+            "line": "東京メトロ有楽町線・新木場行",
+            "trainType": null
+          },
+          {
+            "segmentId": "35cbad454f72d2eec4885ac41d29412303958e70272e135fcc5bf3ce1339bb6c",
+            "operator": null,
+            "line": "ゆりかもめ・新橋行",
+            "trainType": null
+          }
+        ],
+        "fareUnits": [
+          {
+            "fareUnitId": "9ec500e3e2e74da63d8aaea88d9751fcf8aba38a078497f89aeca2a4d03b8109",
+            "rideSegmentIds": [
+              "400874ab4fe4c73fbdb73ea0bc62bf995386f8c4a7035a84d9312a8fe750893f",
+              "a11ce41439d1ed34f4d5f5153fc71f44e917b35fb1befe9227ad74b5bc4f50ba",
+              "35cbad454f72d2eec4885ac41d29412303958e70272e135fcc5bf3ce1339bb6c"
+            ],
+            "baseFare": null,
+            "supplement": null,
+            "quotedTotal": 534,
+            "currency": "JPY",
+            "evidence": {
+              "source": "ekispert-captured-public-dom",
+              "version": "65e5f4912f6643588a3145585e0b9f90043f67b5c29c43017daef4d3bea3a59b"
+            }
+          }
+        ],
+        "fareBasis": "independent_journey",
+        "providerEvidence": {
+          "source": "ekispert-captured-public-dom",
+          "version": "65e5f4912f6643588a3145585e0b9f90043f67b5c29c43017daef4d3bea3a59b"
+        },
+        "clockExact": false
+      }
+    ],
+    "constraints": [
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "opening_hours_missing",
+        "visitId": "meiji"
+      },
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "opening_hours_missing",
+        "visitId": "nezu"
+      },
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "opening_hours_missing",
+        "visitId": "odaiba"
+      }
+    ],
+    "completion": "complete",
+    "timing": "reference",
+    "accessWalking": "estimated",
+    "stopReason": null,
+    "finishAt": "2026-11-20T06:13:00Z",
+    "stationChoices": {
+      "meiji": {
+        "namespace": "ekispert-roote",
+        "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+        "providerStationId": "22702",
+        "name": "参宮橋",
+        "line": "미확인",
+        "prefecture": "東京都",
+        "location": {
+          "lat": 35.6786,
+          "lng": 139.6925
+        }
+      },
+      "nezu": {
+        "namespace": "ekispert-roote",
+        "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+        "providerStationId": "29075",
+        "name": "東大前",
+        "line": "미확인",
+        "prefecture": "東京都",
+        "location": {
+          "lat": 35.7176,
+          "lng": 139.7581
+        }
+      },
+      "odaiba": {
+        "namespace": "ekispert-roote",
+        "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+        "providerStationId": "29057",
+        "name": "テレコムセンター",
+        "line": "미확인",
+        "prefecture": "東京都",
+        "location": {
+          "lat": 35.6178,
+          "lng": 139.7794
+        }
+      }
+    },
+    "fare": {
+      "status": "known",
+      "noPassTotal": 1047,
+      "currency": "JPY",
+      "fareUnits": [
+        {
+          "fareUnitId": "292db59226489d6d5ac51e6d2b88f6eefee1c7d52c57a770d9b202f8f51e64b6",
+          "rideSegmentIds": [
+            "e61e6e96abd1e49cf80d4971ffa777be7094878fc7352108be21f6eaff72e678",
+            "555bd0d7704184d6fd93a0c2825cf4b1f9c63706bf05706097b3c5ffc5bcf456",
+            "75ab8673a4e80ba2b67d8c59c0de91ad844687a1791715eac6e3fb7ffc01b30b"
+          ],
+          "baseFare": null,
+          "supplement": null,
+          "quotedTotal": 513,
+          "currency": "JPY",
+          "evidence": {
+            "source": "ekispert-captured-public-dom",
+            "version": "3cb9fa83dc2ba2340a664eeda690dd47d0a3fa38d13ac428967fb059beacc896"
+          }
+        },
+        {
+          "fareUnitId": "9ec500e3e2e74da63d8aaea88d9751fcf8aba38a078497f89aeca2a4d03b8109",
+          "rideSegmentIds": [
+            "400874ab4fe4c73fbdb73ea0bc62bf995386f8c4a7035a84d9312a8fe750893f",
+            "a11ce41439d1ed34f4d5f5153fc71f44e917b35fb1befe9227ad74b5bc4f50ba",
+            "35cbad454f72d2eec4885ac41d29412303958e70272e135fcc5bf3ce1339bb6c"
+          ],
+          "baseFare": null,
+          "supplement": null,
+          "quotedTotal": 534,
+          "currency": "JPY",
+          "evidence": {
+            "source": "ekispert-captured-public-dom",
+            "version": "65e5f4912f6643588a3145585e0b9f90043f67b5c29c43017daef4d3bea3a59b"
+          }
+        }
+      ],
+      "scope": "independent-quoted-journeys"
+    },
+    "transfers": null,
+    "optimality": "not-guaranteed",
+    "elapsedMinutes": 373.0,
+    "digest": "c68bb262959a4fc6dd59c0b51d0362c35f592afb067d53dc73f306d30cbfbf6c",
+    "planId": "plan-c68bb262959a4fc6dd59"
+  },
+  "ledger": {
+    "limits": {
+      "rag": 0,
+      "rail": 2,
+      "station": 3,
+      "walk": 0
+    },
+    "railAttempts": 2,
+    "logicalAttempts": 2,
+    "stationAttempts": 3,
+    "walkAttempts": 0,
+    "ragRequests": 0,
+    "totalRoutingOperationAttempts": 5,
+    "baselineAttempts": 5,
+    "repairAttempts": 0,
+    "failedAttempts": 0,
+    "providerCalls": 0,
+    "httpRequestsObserved": 0,
+    "billingUnitsObserved": 0,
+    "measurementBasis": "replay-no-network",
+    "sessionUsage": {
+      "rag": {
+        "used": 0,
+        "limit": 12
+      },
+      "rail": {
+        "used": 2,
+        "limit": 120
+      },
+      "station": {
+        "used": 3,
+        "limit": 96
+      },
+      "walk": {
+        "used": 0,
+        "limit": 0
+      }
+    },
+    "attempts": [
+      {
+        "id": 1,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 2,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 3,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 4,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 5,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      }
+    ]
+  }
+}

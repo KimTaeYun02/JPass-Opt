@@ -1,0 +1,154 @@
+{
+  "schemaVersion": "ekispert-replay/1",
+  "datasetId": "tokyo-divergent-three-places-20261120",
+  "provenance": {
+    "kind": "captured-team-crawler",
+    "sourceArtifact": "acquisition.json",
+    "sourceSha256": "360311c599920fe372b46784fa978d4da22bd98ffe1f692408f3186faea72806",
+    "notice": "실제 검색 시각·운임. 관광지 좌표는 근사 입력, 도보·체류는 시험 가정. 최근접 역·영업시간·패스 절감액 검증이 아님."
+  },
+  "bindings": [
+    {
+      "place": {
+        "clientPlaceId": "nezu",
+        "name": "네즈 신사",
+        "location": {
+          "lat": 35.7202,
+          "lng": 139.7608
+        },
+        "googlePlaceId": null,
+        "stayMinutes": 60,
+        "anchorRole": null,
+        "openingWindows": null,
+        "fixedVisitAt": null
+      },
+      "candidates": [
+        {
+          "station": {
+            "namespace": "ekispert-roote",
+            "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+            "providerStationId": "29075",
+            "name": "東大前",
+            "line": "미확인",
+            "prefecture": "東京都",
+            "location": {
+              "lat": 35.7176,
+              "lng": 139.7581
+            }
+          },
+          "access": {
+            "status": "estimated",
+            "minutes": 5,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          },
+          "egress": {
+            "status": "estimated",
+            "minutes": 5,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "place": {
+        "clientPlaceId": "meiji",
+        "name": "메이지 신궁",
+        "location": {
+          "lat": 35.6764,
+          "lng": 139.6993
+        },
+        "googlePlaceId": null,
+        "stayMinutes": 60,
+        "anchorRole": null,
+        "openingWindows": null,
+        "fixedVisitAt": null
+      },
+      "candidates": [
+        {
+          "station": {
+            "namespace": "ekispert-roote",
+            "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+            "providerStationId": "22702",
+            "name": "参宮橋",
+            "line": "미확인",
+            "prefecture": "東京都",
+            "location": {
+              "lat": 35.6786,
+              "lng": 139.6925
+            }
+          },
+          "access": {
+            "status": "estimated",
+            "minutes": 15,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          },
+          "egress": {
+            "status": "estimated",
+            "minutes": 15,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "place": {
+        "clientPlaceId": "odaiba",
+        "name": "오다이바",
+        "location": {
+          "lat": 35.619,
+          "lng": 139.7768
+        },
+        "googlePlaceId": null,
+        "stayMinutes": 120,
+        "anchorRole": null,
+        "openingWindows": null,
+        "fixedVisitAt": null
+      },
+      "candidates": [
+        {
+          "station": {
+            "namespace": "ekispert-roote",
+            "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+            "providerStationId": "29057",
+            "name": "テレコムセンター",
+            "line": "미확인",
+            "prefecture": "東京都",
+            "location": {
+              "lat": 35.6178,
+              "lng": 139.7794
+            }
+          },
+          "access": {
+            "status": "estimated",
+            "minutes": 10,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          },
+          "egress": {
+            "status": "estimated",
+            "minutes": 10,
+            "evidence": {
+              "source": "declared-scenario-walking-estimate",
+              "version": "1"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "records": []
+}

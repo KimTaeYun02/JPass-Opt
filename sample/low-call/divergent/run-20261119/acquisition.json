@@ -1,0 +1,122 @@
+{
+  "schemaVersion": "sequential-acquisition/1",
+  "status": "partial",
+  "stopReason": "ValueError",
+  "capturedAt": "2026-11-19T02:45:36.420381Z",
+  "headless": false,
+  "limits": {
+    "searchReservations": 10,
+    "deadlineSeconds": 300.0
+  },
+  "searchReservations": 2,
+  "routeSearchAttempts": 2,
+  "httpRequestsObserved": 1030,
+  "stationRequests": 0,
+  "walkRequests": 0,
+  "retries": 0,
+  "v2Order": [
+    "nezu",
+    "meiji",
+    "odaiba"
+  ],
+  "legacyFixed": null,
+  "legacySharedWithV2": false,
+  "providerOptions": {
+    "viaCode": "",
+    "viaName": "",
+    "shinkansen": "true",
+    "express": "true",
+    "highway": "true",
+    "local": "true",
+    "connectionBus": "true",
+    "plane": "true",
+    "ship": "true",
+    "sleep": "true",
+    "liner": "true",
+    "searchType": "departure",
+    "sort": "time",
+    "ticketType": "IC",
+    "transferTime": "normal",
+    "surchargeType": "non_reserved",
+    "isRealtime": "false",
+    "device": "PC",
+    "mockFileName": ""
+  },
+  "extractionMethod": "public-dom-layout-compat",
+  "captures": [
+    {
+      "profile": "snapshot",
+      "from": "meiji",
+      "to": "nezu",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22702",
+          "name": "参宮橋",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6786,
+            "lng": 139.6925
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29075",
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.7176,
+            "lng": 139.7581
+          }
+        },
+        "preparedAt": "2026-11-20T00:00:00Z",
+        "options": {}
+      },
+      "file": "captures/01-snapshot.json",
+      "status": "captured",
+      "sha256": "c8a172a9288f47d34dcf1b51ce56cfc3cf7d505f0ffdceeadf0ed66a48d79278"
+    },
+    {
+      "profile": "snapshot",
+      "from": "meiji",
+      "to": "odaiba",
+      "query": {
+        "origin": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "22702",
+          "name": "参宮橋",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6786,
+            "lng": 139.6925
+          }
+        },
+        "destination": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34",
+          "providerStationId": "29057",
+          "name": "テレコムセンター",
+          "line": "미확인",
+          "prefecture": "東京都",
+          "location": {
+            "lat": 35.6178,
+            "lng": 139.7794
+          }
+        },
+        "preparedAt": "2026-11-20T00:00:00Z",
+        "options": {}
+      },
+      "file": "captures/02-snapshot.json",
+      "status": "failed",
+      "sha256": "60a8cf2370f7899dd3d0b7ea9554ddda8450d5984d778442c611ce294b35c806"
+    }
+  ],
+  "sequences": {},
+  "elapsedSeconds": 20.109
+}

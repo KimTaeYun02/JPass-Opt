@@ -1,0 +1,1954 @@
+{
+  "schemaVersion": "order-policy-benchmark/1",
+  "httpRequestsObserved": 0,
+  "referenceScope": "all-anchor-compatible-orders-fixed-stations-earliest-arrival-per-leg",
+  "synthetic": [
+    {
+      "case": "dense",
+      "places": 3,
+      "ordersEnumerated": 6,
+      "feasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 110.0,
+        "grossFare": 240,
+        "stopReason": null
+      },
+      "referenceCheapestFare": 240,
+      "policies": {
+        "first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 110.0,
+          "grossFare": 240,
+          "stopReason": null,
+          "railAttempts": 2,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 2,
+            "limit": 1000
+          },
+          "alternateStatus": null,
+          "alternate": null,
+          "alternateMetrics": null,
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        },
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 110.0,
+          "grossFare": 240,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 110.0,
+            "grossFare": 240,
+            "stopReason": null
+          },
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        },
+        "geometricTopTwoUncapped": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 110.0,
+          "grossFare": 240,
+          "stopReason": null,
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        }
+      }
+    },
+    {
+      "case": "sparse",
+      "places": 4,
+      "ordersEnumerated": 24,
+      "feasibleOrders": 24,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p2",
+          "p4",
+          "p3"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 268.0,
+        "grossFare": 2130,
+        "stopReason": null
+      },
+      "referenceCheapestFare": 2130,
+      "policies": {
+        "first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 343.0,
+          "grossFare": 2330,
+          "stopReason": null,
+          "railAttempts": 3,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 3,
+            "limit": 1000
+          },
+          "alternateStatus": null,
+          "alternate": null,
+          "alternateMetrics": null,
+          "minutesBehindFastest": 75.0,
+          "yenAboveFastest": 200,
+          "yenAboveCheapest": 200
+        },
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p4",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 268.0,
+          "grossFare": 2130,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 268.0,
+            "grossFare": 2130,
+            "stopReason": null
+          },
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        },
+        "geometricTopTwoUncapped": {
+          "order": [
+            "p4",
+            "p3",
+            "p2",
+            "p1"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 268.0,
+          "grossFare": 2130,
+          "stopReason": null,
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        }
+      }
+    },
+    {
+      "case": "rail_detour",
+      "places": 3,
+      "ordersEnumerated": 6,
+      "feasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p2",
+          "p1",
+          "p3"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 135.0,
+        "grossFare": 440,
+        "stopReason": null
+      },
+      "referenceCheapestFare": 440,
+      "policies": {
+        "first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 1120,
+          "stopReason": null,
+          "railAttempts": 2,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 2,
+            "limit": 1000
+          },
+          "alternateStatus": null,
+          "alternate": null,
+          "alternateMetrics": null,
+          "minutesBehindFastest": 43.0,
+          "yenAboveFastest": 680,
+          "yenAboveCheapest": 680
+        },
+        "diverse": {
+          "order": [
+            "p2",
+            "p1",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 135.0,
+            "grossFare": 440,
+            "stopReason": null
+          },
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        },
+        "geometricTopTwoUncapped": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 1120,
+          "stopReason": null,
+          "minutesBehindFastest": 43.0,
+          "yenAboveFastest": 680,
+          "yenAboveCheapest": 680
+        }
+      }
+    },
+    {
+      "case": "directional",
+      "places": 3,
+      "ordersEnumerated": 6,
+      "feasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p3",
+          "p1",
+          "p2"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 135.0,
+        "grossFare": 440,
+        "stopReason": null
+      },
+      "referenceCheapestFare": 440,
+      "policies": {
+        "first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 1120,
+          "stopReason": null,
+          "railAttempts": 2,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 2,
+            "limit": 1000
+          },
+          "alternateStatus": null,
+          "alternate": null,
+          "alternateMetrics": null,
+          "minutesBehindFastest": 43.0,
+          "yenAboveFastest": 680,
+          "yenAboveCheapest": 680
+        },
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 1120,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 188.0,
+            "grossFare": 1150,
+            "stopReason": null
+          },
+          "minutesBehindFastest": 43.0,
+          "yenAboveFastest": 680,
+          "yenAboveCheapest": 680
+        },
+        "geometricTopTwoUncapped": {
+          "order": [
+            "p3",
+            "p2",
+            "p1"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        }
+      }
+    },
+    {
+      "case": "long_headway",
+      "places": 4,
+      "ordersEnumerated": 6,
+      "feasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p3",
+          "p2",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 185.0,
+        "grossFare": 660,
+        "stopReason": null
+      },
+      "referenceCheapestFare": 620,
+      "policies": {
+        "first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 215.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "railAttempts": 3,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 3,
+            "limit": 1000
+          },
+          "alternateStatus": null,
+          "alternate": null,
+          "alternateMetrics": null,
+          "minutesBehindFastest": 30.0,
+          "yenAboveFastest": -40,
+          "yenAboveCheapest": 0
+        },
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 215.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 215.0,
+            "grossFare": 620,
+            "stopReason": null
+          },
+          "minutesBehindFastest": 30.0,
+          "yenAboveFastest": -40,
+          "yenAboveCheapest": 0
+        },
+        "geometricTopTwoUncapped": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 215.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "minutesBehindFastest": 30.0,
+          "yenAboveFastest": -40,
+          "yenAboveCheapest": 0
+        }
+      }
+    },
+    {
+      "case": "long_headway_later",
+      "places": 4,
+      "ordersEnumerated": 6,
+      "feasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 178.0,
+        "grossFare": 620,
+        "stopReason": null
+      },
+      "referenceCheapestFare": 620,
+      "policies": {
+        "first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "railAttempts": 3,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 3,
+            "limit": 1000
+          },
+          "alternateStatus": null,
+          "alternate": null,
+          "alternateMetrics": null,
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        },
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 178.0,
+            "grossFare": 620,
+            "stopReason": null
+          },
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        },
+        "geometricTopTwoUncapped": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        }
+      }
+    },
+    {
+      "case": "opening_window",
+      "places": 4,
+      "ordersEnumerated": 24,
+      "feasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p3",
+          "p1",
+          "p2",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 185.0,
+        "grossFare": 660,
+        "stopReason": null
+      },
+      "referenceCheapestFare": 660,
+      "policies": {
+        "first": {
+          "order": [
+            "p4",
+            "p3",
+            "p2",
+            "p1"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 3,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 3,
+            "limit": 1000
+          },
+          "alternateStatus": null,
+          "alternate": null,
+          "alternateMetrics": null,
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null
+        },
+        "diverse": {
+          "order": [
+            "p3",
+            "p4",
+            "p2",
+            "p1"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p3",
+              "p4",
+              "p2",
+              "p1"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p3",
+              "p4",
+              "p2",
+              "p1"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 185.0,
+            "grossFare": 660,
+            "stopReason": null
+          },
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        },
+        "geometricTopTwoUncapped": {
+          "order": [
+            "p3",
+            "p4",
+            "p2",
+            "p1"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        }
+      }
+    },
+    {
+      "case": "fixed_visit",
+      "places": 4,
+      "ordersEnumerated": 6,
+      "feasibleOrders": 2,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p3",
+          "p2",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 215.0,
+        "grossFare": 660,
+        "stopReason": null
+      },
+      "referenceCheapestFare": 660,
+      "policies": {
+        "first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 3,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 3,
+            "limit": 1000
+          },
+          "alternateStatus": null,
+          "alternate": null,
+          "alternateMetrics": null,
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null
+        },
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p1",
+              "p4",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p4",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 185.0,
+            "grossFare": 660,
+            "stopReason": null
+          },
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null
+        },
+        "geometricTopTwoUncapped": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null
+        }
+      }
+    },
+    {
+      "case": "no_feasible",
+      "places": 3,
+      "ordersEnumerated": 6,
+      "feasibleOrders": 0,
+      "referenceFastest": null,
+      "referenceCheapestFare": null,
+      "policies": {
+        "first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "railAttempts": 2,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 2,
+            "limit": 1000
+          },
+          "alternateStatus": null,
+          "alternate": null,
+          "alternateMetrics": null,
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null
+        },
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 135.0,
+            "grossFare": 440,
+            "stopReason": null
+          },
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null
+        },
+        "geometricTopTwoUncapped": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null
+        }
+      }
+    },
+    {
+      "case": "five_visits",
+      "places": 5,
+      "ordersEnumerated": 120,
+      "feasibleOrders": 120,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 235.0,
+        "grossFare": 880,
+        "stopReason": null
+      },
+      "referenceCheapestFare": 880,
+      "policies": {
+        "first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 235.0,
+          "grossFare": 880,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 7,
+          "stationAttempts": 5,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": null,
+          "alternate": null,
+          "alternateMetrics": null,
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        },
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 235.0,
+          "grossFare": 880,
+          "stopReason": null,
+          "railAttempts": 7,
+          "railLimit": 7,
+          "stationAttempts": 5,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 7,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p5",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 5,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p5",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 235.0,
+            "grossFare": 880,
+            "stopReason": null
+          },
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        },
+        "geometricTopTwoUncapped": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 235.0,
+          "grossFare": 880,
+          "stopReason": null,
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0
+        }
+      }
+    }
+  ],
+  "scaling": [
+    {
+      "places": 3,
+      "cap": 4,
+      "fullOnly": {
+        "order": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 135.0,
+        "grossFare": 440,
+        "stopReason": null,
+        "railAttempts": 4,
+        "railLimit": 4,
+        "stationAttempts": 3,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 4,
+          "limit": 120
+        },
+        "alternateStatus": "baseline_kept",
+        "alternate": {
+          "order": [
+            "p2",
+            "p1",
+            "p3"
+          ],
+          "geometricRank": 3,
+          "kind": "different_path",
+          "reusedLegs": 0,
+          "requiredRailUpperBound": 2
+        },
+        "alternateMetrics": {
+          "order": [
+            "p2",
+            "p1",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null
+        }
+      },
+      "withPrefix": {
+        "order": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 135.0,
+        "grossFare": 440,
+        "stopReason": null,
+        "railAttempts": 4,
+        "railLimit": 4,
+        "stationAttempts": 3,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 4,
+          "limit": 120
+        },
+        "alternateStatus": "baseline_kept",
+        "alternate": {
+          "order": [
+            "p2",
+            "p1",
+            "p3"
+          ],
+          "geometricRank": 3,
+          "kind": "different_path",
+          "reusedLegs": 0,
+          "requiredRailUpperBound": 2
+        },
+        "alternateMetrics": {
+          "order": [
+            "p2",
+            "p1",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null
+        }
+      }
+    },
+    {
+      "places": 4,
+      "cap": 6,
+      "fullOnly": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 185.0,
+        "grossFare": 660,
+        "stopReason": null,
+        "railAttempts": 6,
+        "railLimit": 6,
+        "stationAttempts": 4,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 6,
+          "limit": 120
+        },
+        "alternateStatus": "baseline_kept",
+        "alternate": {
+          "order": [
+            "p1",
+            "p2",
+            "p4",
+            "p3"
+          ],
+          "geometricRank": 3,
+          "kind": "different_path",
+          "reusedLegs": 0,
+          "requiredRailUpperBound": 3
+        },
+        "alternateMetrics": {
+          "order": [
+            "p1",
+            "p2",
+            "p4",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null
+        }
+      },
+      "withPrefix": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 185.0,
+        "grossFare": 660,
+        "stopReason": null,
+        "railAttempts": 5,
+        "railLimit": 6,
+        "stationAttempts": 4,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 5,
+          "limit": 120
+        },
+        "alternateStatus": "baseline_kept",
+        "alternate": {
+          "order": [
+            "p1",
+            "p2",
+            "p4",
+            "p3"
+          ],
+          "geometricRank": 3,
+          "kind": "different_path",
+          "reusedLegs": 1,
+          "requiredRailUpperBound": 2
+        },
+        "alternateMetrics": {
+          "order": [
+            "p1",
+            "p2",
+            "p4",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null
+        }
+      }
+    },
+    {
+      "places": 5,
+      "cap": 7,
+      "fullOnly": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 235.0,
+        "grossFare": 880,
+        "stopReason": null,
+        "railAttempts": 4,
+        "railLimit": 7,
+        "stationAttempts": 5,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 4,
+          "limit": 120
+        },
+        "alternateStatus": "skipped_budget",
+        "alternate": null,
+        "alternateMetrics": null
+      },
+      "withPrefix": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 235.0,
+        "grossFare": 880,
+        "stopReason": null,
+        "railAttempts": 7,
+        "railLimit": 7,
+        "stationAttempts": 5,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 7,
+          "limit": 120
+        },
+        "alternateStatus": "baseline_kept",
+        "alternate": {
+          "order": [
+            "p1",
+            "p2",
+            "p5",
+            "p4",
+            "p3"
+          ],
+          "geometricRank": 5,
+          "kind": "different_path",
+          "reusedLegs": 1,
+          "requiredRailUpperBound": 3
+        },
+        "alternateMetrics": {
+          "order": [
+            "p1",
+            "p2",
+            "p5",
+            "p4",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 235.0,
+          "grossFare": 880,
+          "stopReason": null
+        }
+      }
+    },
+    {
+      "places": 6,
+      "cap": 8,
+      "fullOnly": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5",
+          "p6"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 285.0,
+        "grossFare": 1100,
+        "stopReason": null,
+        "railAttempts": 5,
+        "railLimit": 8,
+        "stationAttempts": 6,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 5,
+          "limit": 120
+        },
+        "alternateStatus": "skipped_budget",
+        "alternate": null,
+        "alternateMetrics": null
+      },
+      "withPrefix": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5",
+          "p6"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 285.0,
+        "grossFare": 1100,
+        "stopReason": null,
+        "railAttempts": 7,
+        "railLimit": 8,
+        "stationAttempts": 6,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 7,
+          "limit": 120
+        },
+        "alternateStatus": "baseline_kept",
+        "alternate": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p6",
+            "p5"
+          ],
+          "geometricRank": 3,
+          "kind": "different_path",
+          "reusedLegs": 3,
+          "requiredRailUpperBound": 2
+        },
+        "alternateMetrics": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p6",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 285.0,
+          "grossFare": 1100,
+          "stopReason": null
+        }
+      }
+    },
+    {
+      "places": 7,
+      "cap": 9,
+      "fullOnly": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5",
+          "p6",
+          "p7"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 335.0,
+        "grossFare": 1320,
+        "stopReason": null,
+        "railAttempts": 6,
+        "railLimit": 9,
+        "stationAttempts": 7,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 6,
+          "limit": 120
+        },
+        "alternateStatus": "skipped_budget",
+        "alternate": null,
+        "alternateMetrics": null
+      },
+      "withPrefix": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5",
+          "p6",
+          "p7"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 335.0,
+        "grossFare": 1320,
+        "stopReason": null,
+        "railAttempts": 9,
+        "railLimit": 9,
+        "stationAttempts": 7,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 9,
+          "limit": 120
+        },
+        "alternateStatus": "baseline_kept",
+        "alternate": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p7",
+            "p6",
+            "p5"
+          ],
+          "geometricRank": 5,
+          "kind": "different_path",
+          "reusedLegs": 3,
+          "requiredRailUpperBound": 3
+        },
+        "alternateMetrics": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p7",
+            "p6",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 335.0,
+          "grossFare": 1320,
+          "stopReason": null
+        }
+      }
+    },
+    {
+      "places": 8,
+      "cap": 10,
+      "fullOnly": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5",
+          "p6",
+          "p7",
+          "p8"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 385.0,
+        "grossFare": 1540,
+        "stopReason": null,
+        "railAttempts": 7,
+        "railLimit": 10,
+        "stationAttempts": 8,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 7,
+          "limit": 120
+        },
+        "alternateStatus": "skipped_budget",
+        "alternate": null,
+        "alternateMetrics": null
+      },
+      "withPrefix": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5",
+          "p6",
+          "p7",
+          "p8"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 385.0,
+        "grossFare": 1540,
+        "stopReason": null,
+        "railAttempts": 9,
+        "railLimit": 10,
+        "stationAttempts": 8,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 9,
+          "limit": 120
+        },
+        "alternateStatus": "baseline_kept",
+        "alternate": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5",
+            "p6",
+            "p8",
+            "p7"
+          ],
+          "geometricRank": 3,
+          "kind": "different_path",
+          "reusedLegs": 5,
+          "requiredRailUpperBound": 2
+        },
+        "alternateMetrics": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5",
+            "p6",
+            "p8",
+            "p7"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 385.0,
+          "grossFare": 1540,
+          "stopReason": null
+        }
+      }
+    }
+  ],
+  "replay": [
+    {
+      "case": "different_orders",
+      "scope": "exact-saved-time-and-station-queries",
+      "first": {
+        "order": [
+          "nezu",
+          "meiji",
+          "odaiba"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 3,
+        "elapsedMinutes": 379.0,
+        "grossFare": 1246,
+        "stopReason": null,
+        "railAttempts": 2,
+        "railLimit": 4,
+        "stationAttempts": 3,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 2,
+          "limit": 1000
+        },
+        "alternateStatus": null,
+        "alternate": null,
+        "alternateMetrics": null
+      },
+      "diverse": {
+        "order": [
+          "meiji",
+          "nezu",
+          "odaiba"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 3,
+        "elapsedMinutes": 373.0,
+        "grossFare": 1047,
+        "stopReason": null,
+        "railAttempts": 4,
+        "railLimit": 4,
+        "stationAttempts": 3,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 4,
+          "limit": 1000
+        },
+        "alternateStatus": "selected",
+        "alternate": {
+          "order": [
+            "meiji",
+            "nezu",
+            "odaiba"
+          ],
+          "geometricRank": 3,
+          "kind": "different_path",
+          "reusedLegs": 0,
+          "requiredRailUpperBound": 2
+        },
+        "alternateMetrics": {
+          "order": [
+            "meiji",
+            "nezu",
+            "odaiba"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 3,
+          "elapsedMinutes": 373.0,
+          "grossFare": 1047,
+          "stopReason": null
+        }
+      }
+    },
+    {
+      "case": "baseline_only",
+      "scope": "exact-saved-time-and-station-queries",
+      "first": {
+        "order": [
+          "meiji",
+          "tokyo-dome",
+          "nezu"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 3,
+        "elapsedMinutes": 291.0,
+        "grossFare": 691,
+        "stopReason": null,
+        "railAttempts": 2,
+        "railLimit": 4,
+        "stationAttempts": 3,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 2,
+          "limit": 1000
+        },
+        "alternateStatus": null,
+        "alternate": null,
+        "alternateMetrics": null
+      },
+      "diverse": {
+        "order": [
+          "meiji",
+          "tokyo-dome",
+          "nezu"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 3,
+        "elapsedMinutes": 291.0,
+        "grossFare": 691,
+        "stopReason": null,
+        "railAttempts": 3,
+        "railLimit": 4,
+        "stationAttempts": 3,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 3,
+          "limit": 1000
+        },
+        "alternateStatus": "incomplete",
+        "alternate": {
+          "order": [
+            "meiji",
+            "nezu",
+            "tokyo-dome"
+          ],
+          "geometricRank": 3,
+          "kind": "different_path",
+          "reusedLegs": 0,
+          "requiredRailUpperBound": 2
+        },
+        "alternateMetrics": {
+          "order": [
+            "meiji",
+            "nezu",
+            "tokyo-dome"
+          ],
+          "completion": "partial",
+          "feasible": false,
+          "knownViolations": 0,
+          "unknownConstraints": 2,
+          "elapsedMinutes": null,
+          "grossFare": null,
+          "stopReason": "replay_query_miss"
+        }
+      }
+    }
+  ]
+}

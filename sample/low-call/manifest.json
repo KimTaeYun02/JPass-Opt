@@ -1,0 +1,15 @@
+{
+  "dataSource": "fixture",
+  "files": [
+    {
+      "path": "sample/low-call/eight-node-result.json",
+      "sha256": "068d30e5509c61ba5849c6c9be1112159508e94eddf99476a12f287369251802",
+      "bytes": 65493
+    },
+    {
+      "path": "sample/low-call/benchmark-result.json",
+      "sha256": "09c1f78cc6edb5e56e8bc470f3f382564470a9701152d463c973fca996309599",
+      "bytes": 2027
+    }
+  ]
+}

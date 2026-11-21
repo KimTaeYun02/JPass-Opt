@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "dated-capture-manifest/1",
+  "dataSource": "recorded-live-and-offline-replay",
+  "artifacts": [
+    {
+      "file": "capture.json",
+      "bytes": 9052,
+      "sha256": "e567a2ec5c3b048ae653eb93798a8e1ce5b7589cea164cffafc2924eadea51a2"
+    },
+    {
+      "file": "recording.json",
+      "bytes": 11911,
+      "sha256": "a9ee0a98d27674282dd1387c87d725e72e126f542656698ffcaca3e4a64c5134"
+    },
+    {
+      "file": "input.json",
+      "bytes": 820,
+      "sha256": "9d1cb578eb93814029a111d477bd47f86beed7a66fb001fb0b012cc83ec59090"
+    },
+    {
+      "file": "result.json",
+      "bytes": 14947,
+      "sha256": "4a807c95459c42b9cde3abc12672612b902b9c667b0335e3d4d5ac067b43b69b"
+    },
+    {
+      "file": "midnight-audit.json",
+      "bytes": 4456,
+      "sha256": "ca5556503b5b5ad61ef3db4355604db68ec9f37eec100ec0cbb9f3651f23b34c"
+    }
+  ],
+  "liveSearchAttemptsThisTask": 2,
+  "liveBrowserHttpRequestEvents": 994,
+  "retries": 0,
+  "replayHttpRequests": 0,
+  "notice": "Actual route times and gross fares; illustrative POI coordinates/bindings/one-minute walks; same-day calendar DOM interpretation only. Unmarked midnight candidates stay unresolved.",
+  "sourceEvidence": [
+    {
+      "file": "sample/crawler-diagnostics/calendar-20261118T104311Z/capture.json",
+      "bytes": 2799,
+      "sha256": "120f143e4948e55b2ca741ab098e0e2e78a4e64ef5dce2c397de96c68a456d98"
+    },
+    {
+      "file": "sample/crawler-diagnostics/calendar-20261118T104311Z/dom-evidence.json",
+      "bytes": 33591,
+      "sha256": "5a627a6ce898ab2b21825402ebfb9678ad85931900b9ef58a83556e84ec35258"
+    },
+    {
+      "file": "sample/crawler-diagnostics/calendar-20261118T104311Z/page.png",
+      "bytes": 216462,
+      "sha256": "f068191c9ca77f1c0b8738a84ca21dc2355b53707f2baf00df66b0e841939ee4"
+    }
+  ]
+}

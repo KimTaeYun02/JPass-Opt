@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "divergence-manifest/1",
+  "artifacts": [
+    {
+      "file": "parser-regression.json",
+      "bytes": 4954,
+      "sha256": "3b3c008c269758ec813c44e11019bd5a81c6609ae785a72ae4320f2165da997d"
+    },
+    {
+      "file": "pool.json",
+      "bytes": 10197,
+      "sha256": "38026285c001c8401247c10ab67f92fd2db9526b9a8fde225c99971f937721eb"
+    },
+    {
+      "file": "result.json",
+      "bytes": 4296,
+      "sha256": "dc64a2fce8eafc72c772b5c67c8bfde1470570bb04161c603d08ddd67350d978"
+    },
+    {
+      "file": "run-20261119/acquisition.json",
+      "bytes": 3514,
+      "sha256": "360311c599920fe372b46784fa978d4da22bd98ffe1f692408f3186faea72806"
+    },
+    {
+      "file": "run-20261119/analysis/comparison.json",
+      "bytes": 2382,
+      "sha256": "c96de3f78f028af867ce0be43a5bad0ca5de0aa826aeb079ce2c76f93f6b16a9"
+    },
+    {
+      "file": "run-20261119/analysis/legacy-validation-recording.json",
+      "bytes": 4471,
+      "sha256": "ffe1181e18098019c0ea9bf84c8f919bb6e9a9506cf17a9e1af2e834a27706fb"
+    },
+    {
+      "file": "run-20261119/analysis/v2-recording.json",
+      "bytes": 4471,
+      "sha256": "ffe1181e18098019c0ea9bf84c8f919bb6e9a9506cf17a9e1af2e834a27706fb"
+    },
+    {
+      "file": "run-20261119/analysis/v2-result.json",
+      "bytes": 10821,
+      "sha256": "0e421a07c6f3d2406d8c5345a4f29a208319862390085299ae1652b3f1c691b5"
+    },
+    {
+      "file": "run-20261119/captures/01-snapshot.json",
+      "bytes": 19657,
+      "sha256": "c8a172a9288f47d34dcf1b51ce56cfc3cf7d505f0ffdceeadf0ed66a48d79278"
+    },
+    {
+      "file": "run-20261119/captures/02-snapshot.json",
+      "bytes": 34538,
+      "sha256": "60a8cf2370f7899dd3d0b7ea9554ddda8450d5984d778442c611ce294b35c806"
+    },
+    {
+      "file": "run-20261119/scenario.json",
+      "bytes": 6974,
+      "sha256": "9f51cceac668d28f66178d754558e8136a9f866e2f90d5cd7bf56ec6efc076d8"
+    },
+    {
+      "file": "screened/scenario.json",
+      "bytes": 6974,
+      "sha256": "9f51cceac668d28f66178d754558e8136a9f866e2f90d5cd7bf56ec6efc076d8"
+    },
+    {
+      "file": "screened/screening.json",
+      "bytes": 47971,
+      "sha256": "448b0f9b84baebac716f16d3d060eed36fa2b0735db58da3e50669e947a4058e"
+    },
+    {
+      "file": "screened/screening.original.json",
+      "bytes": 43120,
+      "sha256": "6f99fe9bcc789e1b7f3996b6c73da5c2b5df86dbd4aa4cbc1ca364609b9f2366"
+    }
+  ],
+  "sources": [
+    {
+      "file": "sample/team-crawler-route-matrix.json",
+      "bytes": 53107,
+      "sha256": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491"
+    },
+    {
+      "file": "web/fixtures/ekispert-browser-five-stops.json",
+      "bytes": 12488,
+      "sha256": "5dcaab59dba84a8c5948d3f2724f22dd83eb7edc9b99db17eec9b71a245fbc34"
+    },
+    {
+      "file": "sample/low-call/sequential/scenario.json",
+      "bytes": 6483,
+      "sha256": "aa5a138b1e0a9e60c277999be91dd735c578b3282d75efe53e83d3dde34e71f8"
+    },
+    {
+      "file": "planner/screen_divergence.py",
+      "bytes": 7523,
+      "sha256": "9e3707478525b1801713b08cf7f1cbda4c742a0ec539f7ba7e26ac950b9b20ef"
+    },
+    {
+      "file": "planner/adapters/ekispert_dom.py",
+      "bytes": 3492,
+      "sha256": "25777b262d52f71d8e4f2e35954462f0d21637ea1437dfb082d297c662011d01"
+    },
+    {
+      "file": "planner/ordering.py",
+      "bytes": 3976,
+      "sha256": "03361b9277720d410bd9384b6fe9e553b179a36ee49f49a6fdaeb97f3a690e79"
+    },
+    {
+      "file": "planner/sequential_benchmark.py",
+      "bytes": 9192,
+      "sha256": "c34a2464da158af42fa73f1c922a4ad97f5f1d40dfad0ff162d33f7ba06c3110"
+    },
+    {
+      "file": "planner/collect_sequential.py",
+      "bytes": 16398,
+      "sha256": "1adbb6d3f5c80ffd090a17ad4884ba47d01e73df32b555364c2e98709eba4f09"
+    },
+    {
+      "file": "planner/capture.py",
+      "bytes": 12562,
+      "sha256": "75c37dda170699496c7bdfae3a391a91ac307815b3534f9e69f65c4ebf323515"
+    }
+  ],
+  "totals": {
+    "newRouteSearches": 2,
+    "browserHttpRequestsObserved": 1030,
+    "automaticRetries": 0,
+    "additionalSearchesAfterFailure": 0,
+    "stationNetworkRequests": 0,
+    "walkNetworkRequests": 0,
+    "replayHttpRequests": 0
+  }
+}

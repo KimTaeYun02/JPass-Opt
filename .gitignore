@@ -11,3 +11,5 @@ __pycache__/
 extensions.txt
 backend/tests/*
 .env
+/tmp/low-call-ledger.sqlite3*
+/tmp/v2-replay/

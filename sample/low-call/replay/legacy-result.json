@@ -1,0 +1,325 @@
+{
+  "completion": "partial",
+  "timing": "unknown",
+  "accessWalking": "unknown",
+  "pricing": "unknown",
+  "constraints": [
+    {
+      "kind": "opening",
+      "status": "unknown",
+      "reason": "opening_hours_missing",
+      "visitId": "legacy-0"
+    },
+    {
+      "kind": "evaluation",
+      "status": "unknown",
+      "reason": "missing_dated_trip",
+      "visitId": null
+    }
+  ],
+  "improvement": "not_attempted",
+  "repairLog": [],
+  "candidates": {
+    "orders": [
+      {
+        "order": [
+          "legacy-0",
+          "legacy-1"
+        ],
+        "geometricScore": 1111.9508023352598,
+        "scoreBasis": "distance-and-soft-group-penalty-meters"
+      }
+    ],
+    "groups": [
+      [
+        "legacy-0"
+      ],
+      [
+        "legacy-1"
+      ]
+    ],
+    "clusterDiameterLimitMeters": 800,
+    "thresholdStatus": "experimental",
+    "routeProviderAttempts": 0,
+    "optimality": "geometric-ranking-only"
+  },
+  "baseline": {
+    "planId": "plan-f48b7ab063173d292b8e",
+    "digest": "f48b7ab063173d292b8e968a52b8b38d56e65dc935f9af8ba2f8c35d8cd0970c",
+    "preserved": false,
+    "reason": "baseline_incomplete",
+    "plan": {
+      "order": [
+        "legacy-0",
+        "legacy-1"
+      ],
+      "visits": [
+        {
+          "clientPlaceId": "legacy-0",
+          "arrivalAt": "2026-10-16T23:59:05Z",
+          "visitStartAt": "2026-10-16T23:59:05Z",
+          "leaveAt": "2026-10-16T23:59:05Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 0,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        }
+      ],
+      "legs": [],
+      "constraints": [
+        {
+          "kind": "opening",
+          "status": "unknown",
+          "reason": "opening_hours_missing",
+          "visitId": "legacy-0"
+        },
+        {
+          "kind": "evaluation",
+          "status": "unknown",
+          "reason": "missing_dated_trip",
+          "visitId": null
+        }
+      ],
+      "completion": "partial",
+      "timing": "unknown",
+      "accessWalking": "unknown",
+      "stopReason": "missing_dated_trip",
+      "finishAt": null,
+      "stationChoices": {
+        "legacy-0": {
+          "namespace": "manual-replay-example",
+          "sourceVersion": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+          "providerStationId": null,
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "미확인",
+          "location": {
+            "lat": 35.0,
+            "lng": 139.0
+          }
+        },
+        "legacy-1": {
+          "namespace": "manual-replay-example",
+          "sourceVersion": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+          "providerStationId": null,
+          "name": "後楽園",
+          "line": "미확인",
+          "prefecture": "미확인",
+          "location": {
+            "lat": 35.01,
+            "lng": 139.0
+          }
+        }
+      },
+      "fare": {
+        "status": "unknown",
+        "noPassTotal": null,
+        "currency": "JPY",
+        "fareUnits": [],
+        "scope": "independent-quoted-journeys",
+        "quotedSubtotal": 0
+      },
+      "transfers": 0,
+      "optimality": "not-guaranteed",
+      "digest": "f48b7ab063173d292b8e968a52b8b38d56e65dc935f9af8ba2f8c35d8cd0970c",
+      "planId": "plan-f48b7ab063173d292b8e"
+    }
+  },
+  "selected": {
+    "order": [
+      "legacy-0",
+      "legacy-1"
+    ],
+    "visits": [
+      {
+        "clientPlaceId": "legacy-0",
+        "arrivalAt": "2026-10-16T23:59:05Z",
+        "visitStartAt": "2026-10-16T23:59:05Z",
+        "leaveAt": "2026-10-16T23:59:05Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 0,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      }
+    ],
+    "legs": [],
+    "constraints": [
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "opening_hours_missing",
+        "visitId": "legacy-0"
+      },
+      {
+        "kind": "evaluation",
+        "status": "unknown",
+        "reason": "missing_dated_trip",
+        "visitId": null
+      }
+    ],
+    "completion": "partial",
+    "timing": "unknown",
+    "accessWalking": "unknown",
+    "stopReason": "missing_dated_trip",
+    "finishAt": null,
+    "stationChoices": {
+      "legacy-0": {
+        "namespace": "manual-replay-example",
+        "sourceVersion": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+        "providerStationId": null,
+        "name": "東大前",
+        "line": "미확인",
+        "prefecture": "미확인",
+        "location": {
+          "lat": 35.0,
+          "lng": 139.0
+        }
+      },
+      "legacy-1": {
+        "namespace": "manual-replay-example",
+        "sourceVersion": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+        "providerStationId": null,
+        "name": "後楽園",
+        "line": "미확인",
+        "prefecture": "미확인",
+        "location": {
+          "lat": 35.01,
+          "lng": 139.0
+        }
+      }
+    },
+    "fare": {
+      "status": "unknown",
+      "noPassTotal": null,
+      "currency": "JPY",
+      "fareUnits": [],
+      "scope": "independent-quoted-journeys",
+      "quotedSubtotal": 0
+    },
+    "transfers": 0,
+    "optimality": "not-guaranteed",
+    "digest": "f48b7ab063173d292b8e968a52b8b38d56e65dc935f9af8ba2f8c35d8cd0970c",
+    "planId": "plan-f48b7ab063173d292b8e"
+  },
+  "passComparison": null,
+  "stopReasons": [
+    "missing_dated_trip",
+    "missing_dated_trip"
+  ],
+  "comparisonScope": "completed-candidates-only",
+  "optimality": "not-guaranteed",
+  "inputVersion": "2",
+  "dataSource": "replay",
+  "fixtureId": "team-crawler-legacy-20261017",
+  "fixtureLabel": "저장된 크롤러 응답 재생 (실시간 아님)",
+  "echoInput": {
+    "inputVersion": "2",
+    "dataSource": "replay",
+    "fixtureId": "team-crawler-legacy-20261017",
+    "sessionId": "dd41d2d1-7c91-4477-ad04-5dc6daff383f",
+    "operationId": "legacy-replay-example",
+    "startAt": "2026-10-16T23:59:05Z",
+    "places": [
+      {
+        "clientPlaceId": "legacy-0",
+        "name": "東大前 (재생 입력)",
+        "location": {
+          "lat": 35.0,
+          "lng": 139.0
+        },
+        "stayMinutes": 0,
+        "anchorRole": "start",
+        "openingWindows": null
+      },
+      {
+        "clientPlaceId": "legacy-1",
+        "name": "後楽園 (재생 입력)",
+        "location": {
+          "lat": 35.01,
+          "lng": 139.0
+        },
+        "stayMinutes": 0,
+        "anchorRole": "end",
+        "openingWindows": null
+      }
+    ],
+    "options": {
+      "allowRepair": false,
+      "allowPassEvaluation": false
+    }
+  },
+  "replayProvenance": {
+    "kind": "legacy-team-crawler",
+    "sourceArtifact": "sample/team-crawler-route-matrix.json",
+    "sourceSha256": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+    "notice": "교통 응답은 저장된 실응답. 입력 좌표·역 바인딩·도보 1분은 재생 시나리오 가정. 실제 관광 동선 검증이 아님."
+  },
+  "ledger": {
+    "limits": {
+      "rag": 1,
+      "rail": 2,
+      "station": 2,
+      "walk": 0
+    },
+    "railAttempts": 1,
+    "logicalAttempts": 1,
+    "stationAttempts": 2,
+    "walkAttempts": 0,
+    "ragRequests": 0,
+    "totalRoutingOperationAttempts": 3,
+    "baselineAttempts": 3,
+    "repairAttempts": 0,
+    "failedAttempts": 0,
+    "providerCalls": 0,
+    "httpRequestsObserved": 0,
+    "billingUnitsObserved": 0,
+    "measurementBasis": "replay-no-network",
+    "sessionUsage": {
+      "rag": {
+        "used": 0,
+        "limit": 12
+      },
+      "rail": {
+        "used": 1,
+        "limit": 120
+      },
+      "station": {
+        "used": 2,
+        "limit": 96
+      },
+      "walk": {
+        "used": 0,
+        "limit": 0
+      }
+    },
+    "attempts": [
+      {
+        "id": 1,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 2,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 3,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      }
+    ],
+    "cacheHits": 0,
+    "sharedRequests": 0,
+    "budgetExhausted": false,
+    "stopReasons": [
+      "missing_dated_trip"
+    ]
+  }
+}

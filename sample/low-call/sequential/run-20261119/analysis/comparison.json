@@ -1,0 +1,56 @@
+{
+  "status": "partial",
+  "legacyFixed0900": null,
+  "legacyOrderAtActualTimes": {
+    "completion": "unknown",
+    "elapsedMinutes": null,
+    "initialWaitMinutes": null,
+    "rideMinutes": null,
+    "walkingMinutes": null,
+    "stayMinutes": null,
+    "grossFare": null,
+    "finishAt": null
+  },
+  "v2AtActualTimes": {
+    "completion": "partial",
+    "elapsedMinutes": null,
+    "initialWaitMinutes": null,
+    "rideMinutes": null,
+    "walkingMinutes": null,
+    "stayMinutes": null,
+    "grossFare": null,
+    "finishAt": null
+  },
+  "v2ElapsedMinutesSaved": null,
+  "v2GrossFareSaved": null,
+  "timingOutcome": "unknown",
+  "scope": "one-three-place-case-with-estimated-walks-and-fixed-station-bindings",
+  "optimality": "not-guaranteed",
+  "passSavingsVerified": false,
+  "schemaVersion": "sequential-comparison/1",
+  "acquisitionStatus": "partial",
+  "stopReason": "TimeoutError",
+  "assumptions": [
+    "관광지 3개·일본 시간 09:00·자유 시작/종료·복귀 없음. 기존 샘플의 역 연결을 고정한다.",
+    "관광지·역 좌표는 근사 시험 입력이며 실제 최근접 역/출입구 좌표를 검증한 값이 아니다.",
+    "네즈·도쿄돔·메이지의 편도 접근/이탈 도보는 각 5/8/15분의 명시적 추정값이다.",
+    "체류 60/90/60분은 시험 조건. 영업시간·입장 가능 여부·교통 패스는 미검증.",
+    "공식 접근 안내는 역 연결을 교차 확인하는 용도이며 추정 보행 경로 전체의 근거가 아니다."
+  ],
+  "acquisition": {
+    "searchReservations": 1,
+    "routeSearchAttempts": 1,
+    "httpRequestsObserved": 776,
+    "stationRequests": 0,
+    "walkRequests": 0,
+    "retries": 0
+  },
+  "searchesByProfile": {
+    "snapshot": 1,
+    "v2": 0,
+    "legacy-validation": 0
+  },
+  "legacySharedWithV2": false,
+  "replayHttpRequests": 0,
+  "legacyStaticClaim": "station-leg-duration-only; excludes initial wait, stays and access walks"
+}
