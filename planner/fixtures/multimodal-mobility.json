@@ -1,0 +1,125 @@
+{
+  "source": "fixture",
+  "walks": [
+    {
+      "origin": {
+        "lat": 35.666,
+        "lng": 139.694
+      },
+      "destination": {
+        "lat": 35.672,
+        "lng": 139.698
+      },
+      "route": {
+        "status": "routed",
+        "minutes": 8,
+        "evidence": {
+          "source": "synthetic-mobility-demo",
+          "version": "1"
+        }
+      }
+    },
+    {
+      "origin": {
+        "lat": 35.672,
+        "lng": 139.698
+      },
+      "destination": {
+        "lat": 35.6731,
+        "lng": 139.698
+      },
+      "route": {
+        "status": "routed",
+        "minutes": 2,
+        "evidence": {
+          "source": "synthetic-mobility-demo",
+          "version": "1"
+        }
+      }
+    },
+    {
+      "origin": {
+        "lat": 35.6791,
+        "lng": 139.702
+      },
+      "destination": {
+        "lat": 35.678,
+        "lng": 139.702
+      },
+      "route": {
+        "status": "routed",
+        "minutes": 2,
+        "evidence": {
+          "source": "synthetic-mobility-demo",
+          "version": "1"
+        }
+      }
+    }
+  ],
+  "connections": [
+    {
+      "origin": {
+        "lat": 35.672,
+        "lng": 139.698
+      },
+      "destination": {
+        "lat": 35.678,
+        "lng": 139.702
+      },
+      "boarding": {
+        "stopId": "1",
+        "operator": "fixture-bus",
+        "name": "가상 정류장 1",
+        "location": {
+          "lat": 35.6731,
+          "lng": 139.698
+        }
+      },
+      "alighting": {
+        "stopId": "2",
+        "operator": "fixture-bus",
+        "name": "가상 정류장 2",
+        "location": {
+          "lat": 35.6791,
+          "lng": 139.702
+        }
+      }
+    }
+  ],
+  "searches": [
+    {
+      "boarding": {
+        "stopId": "1",
+        "operator": "fixture-bus",
+        "name": "가상 정류장 1",
+        "location": {
+          "lat": 35.6731,
+          "lng": 139.698
+        }
+      },
+      "alighting": {
+        "stopId": "2",
+        "operator": "fixture-bus",
+        "name": "가상 정류장 2",
+        "location": {
+          "lat": 35.6791,
+          "lng": 139.702
+        }
+      },
+      "preparedAt": "2026-11-17T10:10:00+09:00",
+      "timetable": "verified",
+      "evidence": {
+        "source": "synthetic-mobility-demo",
+        "version": "1"
+      },
+      "trips": [
+        {
+          "departureAt": "2026-11-17T10:13:00+09:00",
+          "arrivalAt": "2026-11-17T10:16:00+09:00",
+          "fareYen": 230,
+          "line": "가상 버스"
+        }
+      ]
+    }
+  ]
+}

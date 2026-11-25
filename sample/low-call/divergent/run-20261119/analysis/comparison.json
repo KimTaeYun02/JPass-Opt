@@ -1,0 +1,58 @@
+{
+  "status": "partial",
+  "legacyFixed0900": null,
+  "legacyOrderAtActualTimes": {
+    "completion": "unknown",
+    "elapsedMinutes": null,
+    "initialWaitMinutes": null,
+    "rideMinutes": null,
+    "walkingMinutes": null,
+    "stayMinutes": null,
+    "grossFare": null,
+    "finishAt": null
+  },
+  "v2AtActualTimes": {
+    "completion": "partial",
+    "elapsedMinutes": null,
+    "initialWaitMinutes": null,
+    "rideMinutes": null,
+    "walkingMinutes": null,
+    "stayMinutes": null,
+    "grossFare": null,
+    "finishAt": null
+  },
+  "v2ElapsedMinutesSaved": null,
+  "v2GrossFareSaved": null,
+  "timingOutcome": "unknown",
+  "scope": "one-three-place-case-with-estimated-walks-and-fixed-station-bindings",
+  "optimality": "not-guaranteed",
+  "passSavingsVerified": false,
+  "schemaVersion": "sequential-comparison/1",
+  "acquisitionStatus": "partial",
+  "stopReason": "ValueError",
+  "assumptions": [
+    "과거 팀 샘플 5곳의 모든 3곳 조합을 조사한다. 다음 실검색 대상은 에노시마를 제외한 도시권 4곳으로 제한한다.",
+    "선정은 무향 경로 자체가 달라지는 조합 중 ID 사전식 최초다. 평균 성능 측정이 아닌 목적 선택한 스트레스 사례다.",
+    "관광지·역 좌표는 근사 시험 입력이며 실제 최근접 역·출입구·보행 경로를 검증한 값이 아니다.",
+    "편도 도보 추정: 네즈 5분, 도쿄돔 8분, 메이지 15분, 오다이바 10분, 에노시마 20분.",
+    "체류 시험 조건: 네즈 60분, 도쿄돔 90분, 메이지 60분, 오다이바·에노시마 각 120분.",
+    "일본 시간 2026-11-20 09:00 시작, 자유 시작·종료, 숙소·복귀 없음. 영업시간·입장·패스 적용은 미검증.",
+    "과거 행렬에는 검증된 구간별 조회 날짜가 없다. 사례 선별에만 쓰며 현재 순차 경로 시각을 합성하지 않는다."
+  ],
+  "acquisition": {
+    "searchReservations": 2,
+    "routeSearchAttempts": 2,
+    "httpRequestsObserved": 1030,
+    "stationRequests": 0,
+    "walkRequests": 0,
+    "retries": 0
+  },
+  "searchesByProfile": {
+    "snapshot": 2,
+    "v2": 0,
+    "legacy-validation": 0
+  },
+  "legacySharedWithV2": false,
+  "replayHttpRequests": 0,
+  "legacyStaticClaim": "station-leg-duration-only; excludes initial wait, stays and access walks"
+}

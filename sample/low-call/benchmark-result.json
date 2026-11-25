@@ -1,0 +1,102 @@
+{
+  "dataSource": "fixture",
+  "fixtureModification": "s1>s2 headway=70min",
+  "nodeCount": 4,
+  "referenceScope": "all-6-orders-with-fixed-start-and-primary-stations-using-earliest-arrival-evaluator",
+  "globalTransitOrPassOptimum": false,
+  "httpRequestsObserved": 0,
+  "candidate": {
+    "order": [
+      "p1",
+      "p2",
+      "p3",
+      "p4"
+    ],
+    "elapsedMinutes": 215.0,
+    "noPassTotal": 660,
+    "railAttempts": 3,
+    "stationAttempts": 4,
+    "evaluationMs": 36.37489999528043
+  },
+  "referenceBest": {
+    "order": [
+      "p1",
+      "p3",
+      "p2",
+      "p4"
+    ],
+    "elapsedMinutes": 185.0,
+    "noPassTotal": 660,
+    "railAttempts": 3
+  },
+  "referenceOrders": [
+    {
+      "order": [
+        "p1",
+        "p3",
+        "p2",
+        "p4"
+      ],
+      "elapsedMinutes": 185.0,
+      "noPassTotal": 660,
+      "railAttempts": 3
+    },
+    {
+      "order": [
+        "p1",
+        "p3",
+        "p4",
+        "p2"
+      ],
+      "elapsedMinutes": 185.0,
+      "noPassTotal": 660,
+      "railAttempts": 3
+    },
+    {
+      "order": [
+        "p1",
+        "p4",
+        "p2",
+        "p3"
+      ],
+      "elapsedMinutes": 185.0,
+      "noPassTotal": 660,
+      "railAttempts": 3
+    },
+    {
+      "order": [
+        "p1",
+        "p4",
+        "p3",
+        "p2"
+      ],
+      "elapsedMinutes": 185.0,
+      "noPassTotal": 660,
+      "railAttempts": 3
+    },
+    {
+      "order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
+      "elapsedMinutes": 215.0,
+      "noPassTotal": 660,
+      "railAttempts": 3
+    },
+    {
+      "order": [
+        "p1",
+        "p2",
+        "p4",
+        "p3"
+      ],
+      "elapsedMinutes": 215.0,
+      "noPassTotal": 660,
+      "railAttempts": 3
+    }
+  ],
+  "gapMinutes": 30.0,
+  "note": "전수 참조 조회는 오프라인 비교용이며 실제 한 요청의 호출 예산 안에서 전수 최적화했다는 의미가 아님"
+}

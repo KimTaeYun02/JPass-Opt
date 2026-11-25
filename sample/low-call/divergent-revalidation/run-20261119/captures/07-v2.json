@@ -1,0 +1,698 @@
+{
+  "schemaVersion": "ekispert-capture/1",
+  "dataSource": "live-capture",
+  "capturedAt": "2026-11-19T07:45:52.195317Z",
+  "query": {
+    "departure": "東大前",
+    "arrival": "参宮橋",
+    "preparedAt": "2026-11-20T01:05:00Z",
+    "options": {}
+  },
+  "status": "captured",
+  "stopReason": null,
+  "routeSearchAttempts": 1,
+  "stationRequests": 0,
+  "httpRequestsObserved": 498,
+  "documentRequestsObserved": 34,
+  "responseStatuses": {
+    "200": 146
+  },
+  "payload": {
+    "routes": [
+      {
+        "time": 32,
+        "fee": 513,
+        "route": [
+          {
+            "station": "東大前",
+            "line": "東京メトロ南北線・白金高輪行"
+          },
+          {
+            "station": "四ツ谷",
+            "line": "ＪＲ中央・青梅線快速・青梅行"
+          },
+          {
+            "station": "新宿",
+            "line": "小田急小田原線・本厚木行"
+          },
+          {
+            "station": "参宮橋",
+            "line": null
+          }
+        ]
+      },
+      {
+        "time": 32,
+        "fee": 513,
+        "route": [
+          {
+            "station": "東大前",
+            "line": "東京メトロ南北線・白金高輪行"
+          },
+          {
+            "station": "飯田橋",
+            "line": "東京メトロ有楽町線・新木場行"
+          },
+          {
+            "station": "市ケ谷",
+            "line": "ＪＲ総武線・中野行"
+          },
+          {
+            "station": "新宿",
+            "line": "小田急小田原線・本厚木行"
+          },
+          {
+            "station": "参宮橋",
+            "line": null
+          }
+        ]
+      },
+      {
+        "time": 36,
+        "fee": 345,
+        "route": [
+          {
+            "station": "東大前",
+            "line": "東京メトロ南北線・白金高輪行"
+          },
+          {
+            "station": "四ツ谷",
+            "line": "東京メトロ丸ノ内線・方南町行"
+          },
+          {
+            "station": "新宿(東京メトロ)",
+            "line": "徒歩"
+          },
+          {
+            "station": "新宿",
+            "line": "小田急小田原線・本厚木行"
+          },
+          {
+            "station": "参宮橋",
+            "line": null
+          }
+        ]
+      },
+      {
+        "time": 45,
+        "fee": 555,
+        "route": [
+          {
+            "station": "東大前",
+            "line": "徒歩"
+          },
+          {
+            "station": "東大農学部前／都営バス",
+            "line": "都営バス・茶５１(駒込駅南口－秋葉原駅前)・秋葉原駅前行"
+          },
+          {
+            "station": "御茶ノ水駅前／都営バス",
+            "line": "徒歩"
+          },
+          {
+            "station": "御茶ノ水",
+            "line": "ＪＲ中央線快速・高尾行"
+          },
+          {
+            "station": "新宿",
+            "line": "小田急小田原線・本厚木行"
+          },
+          {
+            "station": "参宮橋",
+            "line": null
+          }
+        ]
+      }
+    ]
+  },
+  "absoluteTimes": [
+    {
+      "departureAt": "2026-11-20T01:06:00Z",
+      "arrivalAt": "2026-11-20T01:38:00Z",
+      "evidence": "calendar_dom_clock",
+      "calendarEvidence": {
+        "departureName": "東大前",
+        "arrivalName": "参宮橋",
+        "preparedAt": "2026-11-20T01:05:00Z",
+        "resultSummary": "東大前 ⇒ 参宮橋 (2026年11月20日 10時05分 出発)",
+        "pointTimes": [
+          {
+            "pointIndex": 0,
+            "kind": "departure",
+            "rawText": "発\n10:06",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "arrival",
+            "rawText": "着\n10:15",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "departure",
+            "rawText": "発\n10:23",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 2,
+            "kind": "arrival",
+            "rawText": "着\n10:28",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 2,
+            "kind": "departure",
+            "rawText": "発\n10:35",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 3,
+            "kind": "arrival",
+            "rawText": "着\n10:38",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          }
+        ],
+        "displayedDurationMinutes": 32,
+        "timezone": "Asia/Tokyo",
+        "summarySelector": "body: exact result-summary line"
+      }
+    },
+    {
+      "departureAt": "2026-11-20T01:06:00Z",
+      "arrivalAt": "2026-11-20T01:38:00Z",
+      "evidence": "calendar_dom_clock",
+      "calendarEvidence": {
+        "departureName": "東大前",
+        "arrivalName": "参宮橋",
+        "preparedAt": "2026-11-20T01:05:00Z",
+        "resultSummary": "東大前 ⇒ 参宮橋 (2026年11月20日 10時05分 出発)",
+        "pointTimes": [
+          {
+            "pointIndex": 0,
+            "kind": "departure",
+            "rawText": "発\n10:06",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "arrival",
+            "rawText": "着\n10:11",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "departure",
+            "rawText": "発\n10:14",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 2,
+            "kind": "arrival",
+            "rawText": "着\n10:15",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 2,
+            "kind": "departure",
+            "rawText": "発\n10:19",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 3,
+            "kind": "arrival",
+            "rawText": "着\n10:30",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 3,
+            "kind": "departure",
+            "rawText": "発\n10:35",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 4,
+            "kind": "arrival",
+            "rawText": "着\n10:38",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          }
+        ],
+        "displayedDurationMinutes": 32,
+        "timezone": "Asia/Tokyo",
+        "summarySelector": "body: exact result-summary line"
+      }
+    },
+    {
+      "departureAt": "2026-11-20T01:12:00Z",
+      "arrivalAt": "2026-11-20T01:48:00Z",
+      "evidence": "calendar_dom_clock",
+      "calendarEvidence": {
+        "departureName": "東大前",
+        "arrivalName": "参宮橋",
+        "preparedAt": "2026-11-20T01:05:00Z",
+        "resultSummary": "東大前 ⇒ 参宮橋 (2026年11月20日 10時05分 出発)",
+        "pointTimes": [
+          {
+            "pointIndex": 0,
+            "kind": "departure",
+            "rawText": "発\n10:12",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "arrival",
+            "rawText": "着\n10:21",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "departure",
+            "rawText": "発\n10:29",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 2,
+            "kind": "arrival",
+            "rawText": "着\n10:35",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 2,
+            "kind": "departure",
+            "rawText": "発\n10:37",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 3,
+            "kind": "arrival",
+            "rawText": "着\n10:39",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 3,
+            "kind": "departure",
+            "rawText": "発\n10:45",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 4,
+            "kind": "arrival",
+            "rawText": "着\n10:48",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          }
+        ],
+        "displayedDurationMinutes": 36,
+        "timezone": "Asia/Tokyo",
+        "summarySelector": "body: exact result-summary line"
+      }
+    },
+    {
+      "departureAt": "2026-11-20T01:23:00Z",
+      "arrivalAt": "2026-11-20T02:08:00Z",
+      "evidence": "calendar_dom_clock",
+      "calendarEvidence": {
+        "departureName": "東大前",
+        "arrivalName": "参宮橋",
+        "preparedAt": "2026-11-20T01:05:00Z",
+        "resultSummary": "東大前 ⇒ 参宮橋 (2026年11月20日 10時05分 出発)",
+        "pointTimes": [
+          {
+            "pointIndex": 0,
+            "kind": "departure",
+            "rawText": "発\n10:23",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "arrival",
+            "rawText": "着\n10:28",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "departure",
+            "rawText": "発\n10:29",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 2,
+            "kind": "arrival",
+            "rawText": "着\n10:39",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 2,
+            "kind": "departure",
+            "rawText": "発\n10:40",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 3,
+            "kind": "arrival",
+            "rawText": "着\n10:42",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 3,
+            "kind": "departure",
+            "rawText": "発\n10:49",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 4,
+            "kind": "arrival",
+            "rawText": "着\n10:58",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 4,
+            "kind": "departure",
+            "rawText": "発\n11:05",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 5,
+            "kind": "arrival",
+            "rawText": "着\n11:08",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          }
+        ],
+        "displayedDurationMinutes": 45,
+        "timezone": "Asia/Tokyo",
+        "summarySelector": "body: exact result-summary line"
+      }
+    }
+  ],
+  "stationCodes": {
+    "depCode": "29075",
+    "arrCode": "22702"
+  },
+  "retries": 0,
+  "liveModeEnabled": false,
+  "stage": "complete",
+  "headless": false,
+  "timeResolution": [
+    {
+      "candidateIndex": 0,
+      "method": "calendar_dom_clock",
+      "reason": null,
+      "summarySelector": "body: exact result-summary line",
+      "pointSelectors": {
+        "departure": "[data-testid=\"course-detail-point-departure-time\"]",
+        "arrival": "[data-testid=\"course-detail-point-arrival-time\"]"
+      }
+    },
+    {
+      "candidateIndex": 1,
+      "method": "calendar_dom_clock",
+      "reason": null,
+      "summarySelector": "body: exact result-summary line",
+      "pointSelectors": {
+        "departure": "[data-testid=\"course-detail-point-departure-time\"]",
+        "arrival": "[data-testid=\"course-detail-point-arrival-time\"]"
+      }
+    },
+    {
+      "candidateIndex": 2,
+      "method": "calendar_dom_clock",
+      "reason": null,
+      "summarySelector": "body: exact result-summary line",
+      "pointSelectors": {
+        "departure": "[data-testid=\"course-detail-point-departure-time\"]",
+        "arrival": "[data-testid=\"course-detail-point-arrival-time\"]"
+      }
+    },
+    {
+      "candidateIndex": 3,
+      "method": "calendar_dom_clock",
+      "reason": null,
+      "summarySelector": "body: exact result-summary line",
+      "pointSelectors": {
+        "departure": "[data-testid=\"course-detail-point-departure-time\"]",
+        "arrival": "[data-testid=\"course-detail-point-arrival-time\"]"
+      }
+    }
+  ],
+  "extractionMethod": "public-dom-layout-compat",
+  "layoutEvidence": [
+    {
+      "headerText": "経路1\n\n早\n\n楽\n\n10:06 ⇒ 10:38\n（32分：乗車 17 分 その他 15 分）\n\n1本前\n\n1本後\n\n乗換:\n\n2回\n\n片道:\n\n513円\n\n距離:\n\n10km\n\nCO2排出量:\n\n170g\n\nこの経路を元に条件変更\n\n定期代\n\n",
+      "elements": [
+        {
+          "kind": "point",
+          "names": [
+            "東大前"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "東京メトロ南北線・白金高輪行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "四ツ谷"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "ＪＲ中央・青梅線快速・青梅行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "新宿"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "小田急小田原線・本厚木行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "参宮橋"
+          ]
+        }
+      ]
+    },
+    {
+      "headerText": "経路2\n\n早\n\n10:06 ⇒ 10:38\n（32分：乗車 20 分 その他 12 分）\n\n1本前\n\n1本後\n\n乗換:\n\n3回\n\n片道:\n\n513円\n\n距離:\n\n9.8km\n\nCO2排出量:\n\n166g\n\nこの経路を元に条件変更\n\n定期代\n\n",
+      "elements": [
+        {
+          "kind": "point",
+          "names": [
+            "東大前"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "東京メトロ南北線・白金高輪行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "飯田橋"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "東京メトロ有楽町線・新木場行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "市ケ谷"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "ＪＲ総武線・中野行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "新宿"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "小田急小田原線・本厚木行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "参宮橋"
+          ]
+        }
+      ]
+    },
+    {
+      "headerText": "経路3\n\n安\n\n楽\n\n10:12 ⇒ 10:48\n（36分：乗車 18 分 徒歩 2 分 その他 16 分）\n\n1本前\n\n1本後\n\n乗換:\n\n2回\n\n片道:\n\n345円\n\n距離:\n\n9.2km\n\nCO2排出量:\n\n156g\n\nこの経路を元に条件変更\n\n定期代\n\n",
+      "elements": [
+        {
+          "kind": "point",
+          "names": [
+            "東大前"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "東京メトロ南北線・白金高輪行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "四ツ谷"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "東京メトロ丸ノ内線・方南町行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "新宿(東京メトロ)"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "徒歩"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "新宿"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "小田急小田原線・本厚木行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "参宮橋"
+          ]
+        }
+      ]
+    },
+    {
+      "headerText": "経路4\n\n楽\n\n10:23 ⇒ 11:08\n（45分：乗車 22 分 徒歩 7 分 その他 16 分）\n\n1本前\n\n1本後\n\n乗換:\n\n2回\n\n片道:\n\n555円\n\n距離:\n\n11km\n\nCO2排出量:\n\n259g\n\nこの経路を元に条件変更\n\n定期代\n\n",
+      "elements": [
+        {
+          "kind": "point",
+          "names": [
+            "東大前"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "徒歩"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "東大農学部前／都営バス"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "都営バス・茶５１(駒込駅南口－秋葉原駅前)・秋葉原駅前行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "御茶ノ水駅前／都営バス"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "徒歩"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "御茶ノ水"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "ＪＲ中央線快速・高尾行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "新宿"
+          ]
+        },
+        {
+          "kind": "line",
+          "names": [
+            "小田急小田原線・本厚木行\n\n前後のダイヤ"
+          ]
+        },
+        {
+          "kind": "point",
+          "names": [
+            "参宮橋"
+          ]
+        }
+      ]
+    }
+  ],
+  "providerOptions": {
+    "viaCode": "",
+    "viaName": "",
+    "shinkansen": "true",
+    "express": "true",
+    "highway": "true",
+    "local": "true",
+    "connectionBus": "true",
+    "plane": "true",
+    "ship": "true",
+    "sleep": "true",
+    "liner": "true",
+    "searchType": "departure",
+    "sort": "time",
+    "ticketType": "IC",
+    "transferTime": "normal",
+    "surchargeType": "non_reserved",
+    "isRealtime": "false",
+    "device": "PC",
+    "mockFileName": ""
+  },
+  "elapsedSeconds": 10.562,
+  "crawlerSourceSha256": "3eb0daa3ac33ecef0c83a37e7a5aca8d466b49555f319e96b48ca9854c0696ee"
+}

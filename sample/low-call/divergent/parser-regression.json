@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "dom-parser-regression/1",
+  "mode": "offline-diagnostic-fields-only",
+  "sourceArtifact": {
+    "file": "run-20261119/captures/02-snapshot.json",
+    "bytes": 34538,
+    "sha256": "60a8cf2370f7899dd3d0b7ea9554ddda8450d5984d778442c611ce294b35c806"
+  },
+  "originalCaptureStatus": "failed",
+  "originalError": "ambiguous_route_duration_or_fare",
+  "offlineParsingStatus": "parsed",
+  "headerTexts": [
+    "経路1\n09:01 ⇒ 09:55\n（54分：乗車 34 分 その他 20 分）\n\n1本前\n\n1本後\n\n乗換:\n\n4回\n\n片道:\n\n901円\n\n距離:\n\n18km\n\nCO2排出量:\n\n306g\n\nこの経路を元に条件変更\n\n定期代\n\n",
+    "経路2\n\n楽\n\n09:01 ⇒ 09:59\n（58分：乗車 41 分 その他 17 分）\n\n1本前\n\n1本後\n\n乗換:\n\n2回\n\n片道:\n\n744円\n\n距離:\n\n19km\n\nCO2排出量:\n\n323g\n\nこの経路を元に条件変更\n\n定期代\n\n",
+    "経路3\n\n早\n\n楽\n\n09:19 ⇒ 10:09\n（50分：乗車 30 分 徒歩 5 分 その他 15 分）\n\n1本前\n\n1本後\n\n乗換:\n\n2回\n\n片道:\n\n890円\n\n距離:\n\n18.7km\n\nCO2排出量:\n\n369g\n\nこの経路を元に条件変更\n\n定期代\n\n",
+    "経路4\n\n安\n\n楽\n\n09:01 ⇒ 10:42\n（ 1時間 41分 ：乗車 76 分 徒歩 6 分 その他 19 分）\n\n1本前\n\n1本後\n\n乗換:\n\n2回\n\n片道:\n\n618円\n\n距離:\n\n23.5km\n\nCO2排出量:\n\n747g\n\nこの経路を元に条件変更\n\n定期代\n\n"
+  ],
+  "payload": {
+    "routes": [
+      {
+        "time": 54,
+        "fee": 901,
+        "route": [
+          {
+            "station": "参宮橋",
+            "line": "小田急小田原線・新宿行"
+          },
+          {
+            "station": "新宿",
+            "line": "ＪＲ中央線快速・東京行"
+          },
+          {
+            "station": "四ツ谷",
+            "line": "東京メトロ丸ノ内線・茗荷谷行"
+          },
+          {
+            "station": "赤坂見附",
+            "line": "東京メトロ銀座線・浅草行"
+          },
+          {
+            "station": "新橋",
+            "line": "ゆりかもめ・豊洲行"
+          },
+          {
+            "station": "テレコムセンター",
+            "line": null
+          }
+        ]
+      },
+      {
+        "time": 58,
+        "fee": 744,
+        "route": [
+          {
+            "station": "参宮橋",
+            "line": "小田急小田原線・新宿行"
+          },
+          {
+            "station": "新宿",
+            "line": "都営大江戸線・六本木・大門方面・都庁前行"
+          },
+          {
+            "station": "汐留",
+            "line": "ゆりかもめ・豊洲行"
+          },
+          {
+            "station": "テレコムセンター",
+            "line": null
+          }
+        ]
+      },
+      {
+        "time": 50,
+        "fee": 890,
+        "route": [
+          {
+            "station": "参宮橋",
+            "line": "小田急小田原線・新宿行"
+          },
+          {
+            "station": "新宿",
+            "line": "ＪＲ埼京線通勤快速・新木場行"
+          },
+          {
+            "station": "東京テレポート",
+            "line": "徒歩"
+          },
+          {
+            "station": "東京テレポート駅前／都営バス",
+            "line": "都営バス・海０１(門前仲町－東京テレポート・台場駅経由)・門前仲町行"
+          },
+          {
+            "station": "テレコムセンター駅前／都営バス",
+            "line": "徒歩"
+          },
+          {
+            "station": "テレコムセンター",
+            "line": null
+          }
+        ]
+      },
+      {
+        "time": 101,
+        "fee": 618,
+        "route": [
+          {
+            "station": "参宮橋",
+            "line": "小田急小田原線・新宿行"
+          },
+          {
+            "station": "新宿",
+            "line": "都営大江戸線・六本木・大門方面・都庁前行"
+          },
+          {
+            "station": "門前仲町",
+            "line": "徒歩"
+          },
+          {
+            "station": "門前仲町／都営バス",
+            "line": "都営バス・海０１(門前仲町－東京テレポート・台場駅経由)・東京テレポート駅前行"
+          },
+          {
+            "station": "テレコムセンター駅前／都営バス",
+            "line": "徒歩"
+          },
+          {
+            "station": "テレコムセンター",
+            "line": null
+          }
+        ]
+      }
+    ]
+  },
+  "absoluteTimes": null,
+  "datedTripsVerified": false,
+  "httpRequestsObserved": 0,
+  "notice": "저장된 공개 필드로 검증한 회귀 자료. 실패한 실수집을 성공하거나 날짜가 확인된 경로로 바꾸지 않는다."
+}

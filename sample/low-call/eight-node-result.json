@@ -1,0 +1,2160 @@
+{
+  "completion": "complete",
+  "timing": "reference",
+  "accessWalking": "estimated",
+  "pricing": "known",
+  "constraints": [
+    {
+      "kind": "opening",
+      "status": "satisfied",
+      "reason": null,
+      "visitId": "p1"
+    },
+    {
+      "kind": "opening",
+      "status": "unknown",
+      "reason": "conditional_arrival",
+      "visitId": "p2"
+    },
+    {
+      "kind": "opening",
+      "status": "unknown",
+      "reason": "conditional_arrival",
+      "visitId": "p3"
+    },
+    {
+      "kind": "opening",
+      "status": "unknown",
+      "reason": "conditional_arrival",
+      "visitId": "p4"
+    },
+    {
+      "kind": "opening",
+      "status": "unknown",
+      "reason": "conditional_arrival",
+      "visitId": "p5"
+    },
+    {
+      "kind": "opening",
+      "status": "unknown",
+      "reason": "conditional_arrival",
+      "visitId": "p6"
+    },
+    {
+      "kind": "opening",
+      "status": "unknown",
+      "reason": "conditional_arrival",
+      "visitId": "p7"
+    },
+    {
+      "kind": "opening",
+      "status": "unknown",
+      "reason": "conditional_arrival",
+      "visitId": "p8"
+    },
+    {
+      "kind": "end_by",
+      "status": "unknown",
+      "reason": "conditional_arrival",
+      "visitId": null
+    }
+  ],
+  "improvement": "completed",
+  "repairLog": [
+    {
+      "placeId": "p8",
+      "status": "completed",
+      "digest": "c93af4a3ac5e665b4649fbe6370d8cfecc699433e5ce0f2dadb1cc20566a7f05",
+      "requiredRailUpperBound": 1,
+      "stopReason": null
+    }
+  ],
+  "candidates": {
+    "orders": [
+      {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5",
+          "p6",
+          "p7",
+          "p8"
+        ],
+        "geometricScore": 5310.89007504314,
+        "scoreBasis": "distance-and-soft-group-penalty-meters"
+      },
+      {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p6",
+          "p5",
+          "p7",
+          "p8"
+        ],
+        "geometricScore": 6828.261365406638,
+        "scoreBasis": "distance-and-soft-group-penalty-meters"
+      },
+      {
+        "order": [
+          "p1",
+          "p2",
+          "p4",
+          "p3",
+          "p5",
+          "p6",
+          "p7",
+          "p8"
+        ],
+        "geometricScore": 6828.313116118902,
+        "scoreBasis": "distance-and-soft-group-penalty-meters"
+      }
+    ],
+    "groups": [
+      [
+        "p1",
+        "p2"
+      ],
+      [
+        "p3",
+        "p4"
+      ],
+      [
+        "p5",
+        "p6"
+      ],
+      [
+        "p7",
+        "p8"
+      ]
+    ],
+    "clusterDiameterLimitMeters": 800,
+    "thresholdStatus": "experimental",
+    "routeProviderAttempts": 0,
+    "optimality": "geometric-ranking-only"
+  },
+  "baseline": {
+    "planId": "plan-09984cc553badc93270e",
+    "digest": "09984cc553badc93270edbb5a1630e5945e1ec71afffdd6834685f576c8c7d0b",
+    "preserved": true,
+    "reason": "immutable_completed_baseline",
+    "plan": {
+      "order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4",
+        "p5",
+        "p6",
+        "p7",
+        "p8"
+      ],
+      "visits": [
+        {
+          "clientPlaceId": "p1",
+          "arrivalAt": "2026-11-17T00:00:00Z",
+          "visitStartAt": "2026-11-17T00:00:00Z",
+          "leaveAt": "2026-11-17T00:30:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 30,
+          "arrivalClockExact": true,
+          "leaveClockExact": true
+        },
+        {
+          "clientPlaceId": "p2",
+          "arrivalAt": "2026-11-17T00:55:00Z",
+          "visitStartAt": "2026-11-17T00:55:00Z",
+          "leaveAt": "2026-11-17T01:25:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 30,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "p3",
+          "arrivalAt": "2026-11-17T01:45:00Z",
+          "visitStartAt": "2026-11-17T01:45:00Z",
+          "leaveAt": "2026-11-17T02:15:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 30,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "p4",
+          "arrivalAt": "2026-11-17T02:35:00Z",
+          "visitStartAt": "2026-11-17T02:35:00Z",
+          "leaveAt": "2026-11-17T03:05:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 30,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "p5",
+          "arrivalAt": "2026-11-17T03:25:00Z",
+          "visitStartAt": "2026-11-17T03:25:00Z",
+          "leaveAt": "2026-11-17T03:55:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 30,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "p6",
+          "arrivalAt": "2026-11-17T04:15:00Z",
+          "visitStartAt": "2026-11-17T04:15:00Z",
+          "leaveAt": "2026-11-17T04:45:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 30,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "p7",
+          "arrivalAt": "2026-11-17T05:05:00Z",
+          "visitStartAt": "2026-11-17T05:05:00Z",
+          "leaveAt": "2026-11-17T05:35:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 30,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "p8",
+          "arrivalAt": "2026-11-17T05:55:00Z",
+          "visitStartAt": "2026-11-17T05:55:00Z",
+          "leaveAt": "2026-11-17T06:25:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 30,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        }
+      ],
+      "legs": [
+        {
+          "from": "p1",
+          "to": "p2",
+          "requestedAt": "2026-11-17T00:33:00Z",
+          "preparedAt": "2026-11-17T00:33:00Z",
+          "departureAt": "2026-11-17T00:40:00Z",
+          "arrivalAt": "2026-11-17T00:52:00Z",
+          "placeArrivalAt": "2026-11-17T00:55:00Z",
+          "initialWaitMinutes": 7.0,
+          "rideMinutes": 12.0,
+          "accessWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "egressWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "samePhysicalStation": false,
+          "transfers": 1,
+          "rideSegmentIds": [
+            "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+          ],
+          "segments": [
+            {
+              "segmentId": "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba",
+              "operator": "fixture-rail",
+              "line": "시험 노선",
+              "trainType": "fixture"
+            }
+          ],
+          "fareUnits": [
+            {
+              "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+              "rideSegmentIds": [
+                "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            }
+          ],
+          "fareBasis": "independent_journey",
+          "providerEvidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          },
+          "clockExact": false
+        },
+        {
+          "from": "p2",
+          "to": "p3",
+          "requestedAt": "2026-11-17T01:28:00Z",
+          "preparedAt": "2026-11-17T01:28:00Z",
+          "departureAt": "2026-11-17T01:30:00Z",
+          "arrivalAt": "2026-11-17T01:42:00Z",
+          "placeArrivalAt": "2026-11-17T01:45:00Z",
+          "initialWaitMinutes": 2.0,
+          "rideMinutes": 12.0,
+          "accessWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "egressWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "samePhysicalStation": false,
+          "transfers": 1,
+          "rideSegmentIds": [
+            "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+          ],
+          "segments": [
+            {
+              "segmentId": "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc",
+              "operator": "fixture-rail",
+              "line": "시험 노선",
+              "trainType": "fixture"
+            }
+          ],
+          "fareUnits": [
+            {
+              "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+              "rideSegmentIds": [
+                "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            }
+          ],
+          "fareBasis": "independent_journey",
+          "providerEvidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          },
+          "clockExact": false
+        },
+        {
+          "from": "p3",
+          "to": "p4",
+          "requestedAt": "2026-11-17T02:18:00Z",
+          "preparedAt": "2026-11-17T02:18:00Z",
+          "departureAt": "2026-11-17T02:20:00Z",
+          "arrivalAt": "2026-11-17T02:32:00Z",
+          "placeArrivalAt": "2026-11-17T02:35:00Z",
+          "initialWaitMinutes": 2.0,
+          "rideMinutes": 12.0,
+          "accessWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "egressWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "samePhysicalStation": false,
+          "transfers": 1,
+          "rideSegmentIds": [
+            "d02133ba908b7ede7826406dd7a00329ed9e4f2d6cd7f526d31749e8b8ebd78f"
+          ],
+          "segments": [
+            {
+              "segmentId": "d02133ba908b7ede7826406dd7a00329ed9e4f2d6cd7f526d31749e8b8ebd78f",
+              "operator": "fixture-rail",
+              "line": "시험 노선",
+              "trainType": "fixture"
+            }
+          ],
+          "fareUnits": [
+            {
+              "fareUnitId": "5cb0a877a4562272f7bb83e1ec4cab57a1573711c737e7b3d91fb537537e2dec",
+              "rideSegmentIds": [
+                "d02133ba908b7ede7826406dd7a00329ed9e4f2d6cd7f526d31749e8b8ebd78f"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            }
+          ],
+          "fareBasis": "independent_journey",
+          "providerEvidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          },
+          "clockExact": false
+        },
+        {
+          "from": "p4",
+          "to": "p5",
+          "requestedAt": "2026-11-17T03:08:00Z",
+          "preparedAt": "2026-11-17T03:08:00Z",
+          "departureAt": "2026-11-17T03:10:00Z",
+          "arrivalAt": "2026-11-17T03:22:00Z",
+          "placeArrivalAt": "2026-11-17T03:25:00Z",
+          "initialWaitMinutes": 2.0,
+          "rideMinutes": 12.0,
+          "accessWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "egressWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "samePhysicalStation": false,
+          "transfers": 1,
+          "rideSegmentIds": [
+            "c22b9d951ba751b8e9478a9486da2be9f6c0d6f0fa5f2c9d6a1628f941448622"
+          ],
+          "segments": [
+            {
+              "segmentId": "c22b9d951ba751b8e9478a9486da2be9f6c0d6f0fa5f2c9d6a1628f941448622",
+              "operator": "fixture-rail",
+              "line": "시험 노선",
+              "trainType": "fixture"
+            }
+          ],
+          "fareUnits": [
+            {
+              "fareUnitId": "b629e76d66f40f45f354c4ead82c9fa414e520c4664c058959c0efc1750c3e3f",
+              "rideSegmentIds": [
+                "c22b9d951ba751b8e9478a9486da2be9f6c0d6f0fa5f2c9d6a1628f941448622"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            }
+          ],
+          "fareBasis": "independent_journey",
+          "providerEvidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          },
+          "clockExact": false
+        },
+        {
+          "from": "p5",
+          "to": "p6",
+          "requestedAt": "2026-11-17T03:58:00Z",
+          "preparedAt": "2026-11-17T03:58:00Z",
+          "departureAt": "2026-11-17T04:00:00Z",
+          "arrivalAt": "2026-11-17T04:12:00Z",
+          "placeArrivalAt": "2026-11-17T04:15:00Z",
+          "initialWaitMinutes": 2.0,
+          "rideMinutes": 12.0,
+          "accessWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "egressWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "samePhysicalStation": false,
+          "transfers": 1,
+          "rideSegmentIds": [
+            "dc1170dbc219fc6f5f6bf1c9e78e319800ef48ab223d04596022cae85620a58d"
+          ],
+          "segments": [
+            {
+              "segmentId": "dc1170dbc219fc6f5f6bf1c9e78e319800ef48ab223d04596022cae85620a58d",
+              "operator": "fixture-rail",
+              "line": "시험 노선",
+              "trainType": "fixture"
+            }
+          ],
+          "fareUnits": [
+            {
+              "fareUnitId": "297eebf1464bc7f179433cd50bcddbee3b2fa8c9092398359a9bc92fdf05c280",
+              "rideSegmentIds": [
+                "dc1170dbc219fc6f5f6bf1c9e78e319800ef48ab223d04596022cae85620a58d"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            }
+          ],
+          "fareBasis": "independent_journey",
+          "providerEvidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          },
+          "clockExact": false
+        },
+        {
+          "from": "p6",
+          "to": "p7",
+          "requestedAt": "2026-11-17T04:48:00Z",
+          "preparedAt": "2026-11-17T04:48:00Z",
+          "departureAt": "2026-11-17T04:50:00Z",
+          "arrivalAt": "2026-11-17T05:02:00Z",
+          "placeArrivalAt": "2026-11-17T05:05:00Z",
+          "initialWaitMinutes": 2.0,
+          "rideMinutes": 12.0,
+          "accessWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "egressWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "samePhysicalStation": false,
+          "transfers": 1,
+          "rideSegmentIds": [
+            "6c57c92c8a38f000f5875a013f210ab26488c1965938c6d7f4f06110b2b3253c"
+          ],
+          "segments": [
+            {
+              "segmentId": "6c57c92c8a38f000f5875a013f210ab26488c1965938c6d7f4f06110b2b3253c",
+              "operator": "fixture-rail",
+              "line": "시험 노선",
+              "trainType": "fixture"
+            }
+          ],
+          "fareUnits": [
+            {
+              "fareUnitId": "f6250a903e4eb7988b24a46ae539617dd458d2765d1fafe9b4ef665efe2aa8cb",
+              "rideSegmentIds": [
+                "6c57c92c8a38f000f5875a013f210ab26488c1965938c6d7f4f06110b2b3253c"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            }
+          ],
+          "fareBasis": "independent_journey",
+          "providerEvidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          },
+          "clockExact": false
+        },
+        {
+          "from": "p7",
+          "to": "p8",
+          "requestedAt": "2026-11-17T05:38:00Z",
+          "preparedAt": "2026-11-17T05:38:00Z",
+          "departureAt": "2026-11-17T05:40:00Z",
+          "arrivalAt": "2026-11-17T05:52:00Z",
+          "placeArrivalAt": "2026-11-17T05:55:00Z",
+          "initialWaitMinutes": 2.0,
+          "rideMinutes": 12.0,
+          "accessWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "egressWalking": {
+            "status": "estimated",
+            "minutes": 3,
+            "evidence": {
+              "source": "synthetic-walk",
+              "version": "2026-11-test-1"
+            }
+          },
+          "samePhysicalStation": false,
+          "transfers": 1,
+          "rideSegmentIds": [
+            "8818450efb5f482bc21d7df6aaecf51a9b29a095dd552f6013b0c9edbcc01752"
+          ],
+          "segments": [
+            {
+              "segmentId": "8818450efb5f482bc21d7df6aaecf51a9b29a095dd552f6013b0c9edbcc01752",
+              "operator": "fixture-rail",
+              "line": "시험 노선",
+              "trainType": "fixture"
+            }
+          ],
+          "fareUnits": [
+            {
+              "fareUnitId": "2a841d935a044e574d92eb79da410b7b6319dfe23353a841b0e84f53d42d7491",
+              "rideSegmentIds": [
+                "8818450efb5f482bc21d7df6aaecf51a9b29a095dd552f6013b0c9edbcc01752"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            }
+          ],
+          "fareBasis": "independent_journey",
+          "providerEvidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          },
+          "clockExact": false
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "opening",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": "p1"
+        },
+        {
+          "kind": "opening",
+          "status": "unknown",
+          "reason": "conditional_arrival",
+          "visitId": "p2"
+        },
+        {
+          "kind": "opening",
+          "status": "unknown",
+          "reason": "conditional_arrival",
+          "visitId": "p3"
+        },
+        {
+          "kind": "opening",
+          "status": "unknown",
+          "reason": "conditional_arrival",
+          "visitId": "p4"
+        },
+        {
+          "kind": "opening",
+          "status": "unknown",
+          "reason": "conditional_arrival",
+          "visitId": "p5"
+        },
+        {
+          "kind": "opening",
+          "status": "unknown",
+          "reason": "conditional_arrival",
+          "visitId": "p6"
+        },
+        {
+          "kind": "opening",
+          "status": "unknown",
+          "reason": "conditional_arrival",
+          "visitId": "p7"
+        },
+        {
+          "kind": "opening",
+          "status": "unknown",
+          "reason": "conditional_arrival",
+          "visitId": "p8"
+        },
+        {
+          "kind": "end_by",
+          "status": "unknown",
+          "reason": "conditional_arrival",
+          "visitId": null
+        }
+      ],
+      "completion": "complete",
+      "timing": "reference",
+      "accessWalking": "estimated",
+      "stopReason": null,
+      "finishAt": "2026-11-17T06:25:00Z",
+      "stationChoices": {
+        "p1": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s1",
+          "name": "가상 1역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.666999999999994,
+            "lng": 139.694
+          }
+        },
+        "p2": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s2",
+          "name": "가상 2역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.672999999999995,
+            "lng": 139.698
+          }
+        },
+        "p3": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s3",
+          "name": "가상 3역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.678999999999995,
+            "lng": 139.702
+          }
+        },
+        "p4": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s4",
+          "name": "가상 4역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.684999999999995,
+            "lng": 139.706
+          }
+        },
+        "p5": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s5",
+          "name": "가상 5역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.690999999999995,
+            "lng": 139.71
+          }
+        },
+        "p6": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s6",
+          "name": "가상 6역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.696999999999996,
+            "lng": 139.714
+          }
+        },
+        "p7": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s7",
+          "name": "가상 7역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.702999999999996,
+            "lng": 139.718
+          }
+        },
+        "p8": {
+          "namespace": "fixture",
+          "sourceVersion": "2026-11-test-1",
+          "providerStationId": "s8",
+          "name": "가상 8역",
+          "line": "시험 노선",
+          "prefecture": "fixture-tokyo",
+          "location": {
+            "lat": 35.708999999999996,
+            "lng": 139.722
+          }
+        }
+      },
+      "fare": {
+        "status": "known",
+        "noPassTotal": 1540,
+        "currency": "JPY",
+        "fareUnits": [
+          {
+            "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+            "rideSegmentIds": [
+              "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          },
+          {
+            "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+            "rideSegmentIds": [
+              "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          },
+          {
+            "fareUnitId": "5cb0a877a4562272f7bb83e1ec4cab57a1573711c737e7b3d91fb537537e2dec",
+            "rideSegmentIds": [
+              "d02133ba908b7ede7826406dd7a00329ed9e4f2d6cd7f526d31749e8b8ebd78f"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          },
+          {
+            "fareUnitId": "b629e76d66f40f45f354c4ead82c9fa414e520c4664c058959c0efc1750c3e3f",
+            "rideSegmentIds": [
+              "c22b9d951ba751b8e9478a9486da2be9f6c0d6f0fa5f2c9d6a1628f941448622"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          },
+          {
+            "fareUnitId": "297eebf1464bc7f179433cd50bcddbee3b2fa8c9092398359a9bc92fdf05c280",
+            "rideSegmentIds": [
+              "dc1170dbc219fc6f5f6bf1c9e78e319800ef48ab223d04596022cae85620a58d"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          },
+          {
+            "fareUnitId": "f6250a903e4eb7988b24a46ae539617dd458d2765d1fafe9b4ef665efe2aa8cb",
+            "rideSegmentIds": [
+              "6c57c92c8a38f000f5875a013f210ab26488c1965938c6d7f4f06110b2b3253c"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          },
+          {
+            "fareUnitId": "2a841d935a044e574d92eb79da410b7b6319dfe23353a841b0e84f53d42d7491",
+            "rideSegmentIds": [
+              "8818450efb5f482bc21d7df6aaecf51a9b29a095dd552f6013b0c9edbcc01752"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          }
+        ],
+        "scope": "independent-quoted-journeys"
+      },
+      "transfers": 7,
+      "optimality": "not-guaranteed",
+      "elapsedMinutes": 385.0,
+      "digest": "09984cc553badc93270edbb5a1630e5945e1ec71afffdd6834685f576c8c7d0b",
+      "planId": "plan-09984cc553badc93270e"
+    }
+  },
+  "selected": {
+    "order": [
+      "p1",
+      "p2",
+      "p3",
+      "p4",
+      "p5",
+      "p6",
+      "p7",
+      "p8"
+    ],
+    "visits": [
+      {
+        "clientPlaceId": "p1",
+        "arrivalAt": "2026-11-17T00:00:00Z",
+        "visitStartAt": "2026-11-17T00:00:00Z",
+        "leaveAt": "2026-11-17T00:30:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 30,
+        "arrivalClockExact": true,
+        "leaveClockExact": true
+      },
+      {
+        "clientPlaceId": "p2",
+        "arrivalAt": "2026-11-17T00:55:00Z",
+        "visitStartAt": "2026-11-17T00:55:00Z",
+        "leaveAt": "2026-11-17T01:25:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 30,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      },
+      {
+        "clientPlaceId": "p3",
+        "arrivalAt": "2026-11-17T01:45:00Z",
+        "visitStartAt": "2026-11-17T01:45:00Z",
+        "leaveAt": "2026-11-17T02:15:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 30,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      },
+      {
+        "clientPlaceId": "p4",
+        "arrivalAt": "2026-11-17T02:35:00Z",
+        "visitStartAt": "2026-11-17T02:35:00Z",
+        "leaveAt": "2026-11-17T03:05:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 30,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      },
+      {
+        "clientPlaceId": "p5",
+        "arrivalAt": "2026-11-17T03:25:00Z",
+        "visitStartAt": "2026-11-17T03:25:00Z",
+        "leaveAt": "2026-11-17T03:55:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 30,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      },
+      {
+        "clientPlaceId": "p6",
+        "arrivalAt": "2026-11-17T04:15:00Z",
+        "visitStartAt": "2026-11-17T04:15:00Z",
+        "leaveAt": "2026-11-17T04:45:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 30,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      },
+      {
+        "clientPlaceId": "p7",
+        "arrivalAt": "2026-11-17T05:05:00Z",
+        "visitStartAt": "2026-11-17T05:05:00Z",
+        "leaveAt": "2026-11-17T05:35:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 30,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      },
+      {
+        "clientPlaceId": "p8",
+        "arrivalAt": "2026-11-17T05:55:00Z",
+        "visitStartAt": "2026-11-17T05:55:00Z",
+        "leaveAt": "2026-11-17T06:25:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 30,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      }
+    ],
+    "legs": [
+      {
+        "from": "p1",
+        "to": "p2",
+        "requestedAt": "2026-11-17T00:33:00Z",
+        "preparedAt": "2026-11-17T00:33:00Z",
+        "departureAt": "2026-11-17T00:40:00Z",
+        "arrivalAt": "2026-11-17T00:52:00Z",
+        "placeArrivalAt": "2026-11-17T00:55:00Z",
+        "initialWaitMinutes": 7.0,
+        "rideMinutes": 12.0,
+        "accessWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egressWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "samePhysicalStation": false,
+        "transfers": 1,
+        "rideSegmentIds": [
+          "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+        ],
+        "segments": [
+          {
+            "segmentId": "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba",
+            "operator": "fixture-rail",
+            "line": "시험 노선",
+            "trainType": "fixture"
+          }
+        ],
+        "fareUnits": [
+          {
+            "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+            "rideSegmentIds": [
+              "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          }
+        ],
+        "fareBasis": "independent_journey",
+        "providerEvidence": {
+          "source": "synthetic-timetable",
+          "version": "2026-11-test-1"
+        },
+        "clockExact": false
+      },
+      {
+        "from": "p2",
+        "to": "p3",
+        "requestedAt": "2026-11-17T01:28:00Z",
+        "preparedAt": "2026-11-17T01:28:00Z",
+        "departureAt": "2026-11-17T01:30:00Z",
+        "arrivalAt": "2026-11-17T01:42:00Z",
+        "placeArrivalAt": "2026-11-17T01:45:00Z",
+        "initialWaitMinutes": 2.0,
+        "rideMinutes": 12.0,
+        "accessWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egressWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "samePhysicalStation": false,
+        "transfers": 1,
+        "rideSegmentIds": [
+          "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+        ],
+        "segments": [
+          {
+            "segmentId": "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc",
+            "operator": "fixture-rail",
+            "line": "시험 노선",
+            "trainType": "fixture"
+          }
+        ],
+        "fareUnits": [
+          {
+            "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+            "rideSegmentIds": [
+              "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          }
+        ],
+        "fareBasis": "independent_journey",
+        "providerEvidence": {
+          "source": "synthetic-timetable",
+          "version": "2026-11-test-1"
+        },
+        "clockExact": false
+      },
+      {
+        "from": "p3",
+        "to": "p4",
+        "requestedAt": "2026-11-17T02:18:00Z",
+        "preparedAt": "2026-11-17T02:18:00Z",
+        "departureAt": "2026-11-17T02:20:00Z",
+        "arrivalAt": "2026-11-17T02:32:00Z",
+        "placeArrivalAt": "2026-11-17T02:35:00Z",
+        "initialWaitMinutes": 2.0,
+        "rideMinutes": 12.0,
+        "accessWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egressWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "samePhysicalStation": false,
+        "transfers": 1,
+        "rideSegmentIds": [
+          "d02133ba908b7ede7826406dd7a00329ed9e4f2d6cd7f526d31749e8b8ebd78f"
+        ],
+        "segments": [
+          {
+            "segmentId": "d02133ba908b7ede7826406dd7a00329ed9e4f2d6cd7f526d31749e8b8ebd78f",
+            "operator": "fixture-rail",
+            "line": "시험 노선",
+            "trainType": "fixture"
+          }
+        ],
+        "fareUnits": [
+          {
+            "fareUnitId": "5cb0a877a4562272f7bb83e1ec4cab57a1573711c737e7b3d91fb537537e2dec",
+            "rideSegmentIds": [
+              "d02133ba908b7ede7826406dd7a00329ed9e4f2d6cd7f526d31749e8b8ebd78f"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          }
+        ],
+        "fareBasis": "independent_journey",
+        "providerEvidence": {
+          "source": "synthetic-timetable",
+          "version": "2026-11-test-1"
+        },
+        "clockExact": false
+      },
+      {
+        "from": "p4",
+        "to": "p5",
+        "requestedAt": "2026-11-17T03:08:00Z",
+        "preparedAt": "2026-11-17T03:08:00Z",
+        "departureAt": "2026-11-17T03:10:00Z",
+        "arrivalAt": "2026-11-17T03:22:00Z",
+        "placeArrivalAt": "2026-11-17T03:25:00Z",
+        "initialWaitMinutes": 2.0,
+        "rideMinutes": 12.0,
+        "accessWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egressWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "samePhysicalStation": false,
+        "transfers": 1,
+        "rideSegmentIds": [
+          "c22b9d951ba751b8e9478a9486da2be9f6c0d6f0fa5f2c9d6a1628f941448622"
+        ],
+        "segments": [
+          {
+            "segmentId": "c22b9d951ba751b8e9478a9486da2be9f6c0d6f0fa5f2c9d6a1628f941448622",
+            "operator": "fixture-rail",
+            "line": "시험 노선",
+            "trainType": "fixture"
+          }
+        ],
+        "fareUnits": [
+          {
+            "fareUnitId": "b629e76d66f40f45f354c4ead82c9fa414e520c4664c058959c0efc1750c3e3f",
+            "rideSegmentIds": [
+              "c22b9d951ba751b8e9478a9486da2be9f6c0d6f0fa5f2c9d6a1628f941448622"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          }
+        ],
+        "fareBasis": "independent_journey",
+        "providerEvidence": {
+          "source": "synthetic-timetable",
+          "version": "2026-11-test-1"
+        },
+        "clockExact": false
+      },
+      {
+        "from": "p5",
+        "to": "p6",
+        "requestedAt": "2026-11-17T03:58:00Z",
+        "preparedAt": "2026-11-17T03:58:00Z",
+        "departureAt": "2026-11-17T04:00:00Z",
+        "arrivalAt": "2026-11-17T04:12:00Z",
+        "placeArrivalAt": "2026-11-17T04:15:00Z",
+        "initialWaitMinutes": 2.0,
+        "rideMinutes": 12.0,
+        "accessWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egressWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "samePhysicalStation": false,
+        "transfers": 1,
+        "rideSegmentIds": [
+          "dc1170dbc219fc6f5f6bf1c9e78e319800ef48ab223d04596022cae85620a58d"
+        ],
+        "segments": [
+          {
+            "segmentId": "dc1170dbc219fc6f5f6bf1c9e78e319800ef48ab223d04596022cae85620a58d",
+            "operator": "fixture-rail",
+            "line": "시험 노선",
+            "trainType": "fixture"
+          }
+        ],
+        "fareUnits": [
+          {
+            "fareUnitId": "297eebf1464bc7f179433cd50bcddbee3b2fa8c9092398359a9bc92fdf05c280",
+            "rideSegmentIds": [
+              "dc1170dbc219fc6f5f6bf1c9e78e319800ef48ab223d04596022cae85620a58d"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          }
+        ],
+        "fareBasis": "independent_journey",
+        "providerEvidence": {
+          "source": "synthetic-timetable",
+          "version": "2026-11-test-1"
+        },
+        "clockExact": false
+      },
+      {
+        "from": "p6",
+        "to": "p7",
+        "requestedAt": "2026-11-17T04:48:00Z",
+        "preparedAt": "2026-11-17T04:48:00Z",
+        "departureAt": "2026-11-17T04:50:00Z",
+        "arrivalAt": "2026-11-17T05:02:00Z",
+        "placeArrivalAt": "2026-11-17T05:05:00Z",
+        "initialWaitMinutes": 2.0,
+        "rideMinutes": 12.0,
+        "accessWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egressWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "samePhysicalStation": false,
+        "transfers": 1,
+        "rideSegmentIds": [
+          "6c57c92c8a38f000f5875a013f210ab26488c1965938c6d7f4f06110b2b3253c"
+        ],
+        "segments": [
+          {
+            "segmentId": "6c57c92c8a38f000f5875a013f210ab26488c1965938c6d7f4f06110b2b3253c",
+            "operator": "fixture-rail",
+            "line": "시험 노선",
+            "trainType": "fixture"
+          }
+        ],
+        "fareUnits": [
+          {
+            "fareUnitId": "f6250a903e4eb7988b24a46ae539617dd458d2765d1fafe9b4ef665efe2aa8cb",
+            "rideSegmentIds": [
+              "6c57c92c8a38f000f5875a013f210ab26488c1965938c6d7f4f06110b2b3253c"
+            ],
+            "baseFare": 220,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          }
+        ],
+        "fareBasis": "independent_journey",
+        "providerEvidence": {
+          "source": "synthetic-timetable",
+          "version": "2026-11-test-1"
+        },
+        "clockExact": false
+      },
+      {
+        "from": "p7",
+        "to": "p8",
+        "requestedAt": "2026-11-17T05:38:00Z",
+        "preparedAt": "2026-11-17T05:38:00Z",
+        "departureAt": "2026-11-17T05:40:00Z",
+        "arrivalAt": "2026-11-17T05:48:00Z",
+        "placeArrivalAt": "2026-11-17T05:55:00Z",
+        "initialWaitMinutes": 2.0,
+        "rideMinutes": 8.0,
+        "accessWalking": {
+          "status": "estimated",
+          "minutes": 3,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "egressWalking": {
+          "status": "estimated",
+          "minutes": 7,
+          "evidence": {
+            "source": "synthetic-walk",
+            "version": "2026-11-test-1"
+          }
+        },
+        "samePhysicalStation": false,
+        "transfers": 0,
+        "rideSegmentIds": [
+          "4419f548fabff14fe5c1ef92046a523440888454a47c098acd8fbb4b8e3240fa"
+        ],
+        "segments": [
+          {
+            "segmentId": "4419f548fabff14fe5c1ef92046a523440888454a47c098acd8fbb4b8e3240fa",
+            "operator": "fixture-rail",
+            "line": "시험 노선",
+            "trainType": "fixture"
+          }
+        ],
+        "fareUnits": [
+          {
+            "fareUnitId": "b7318942f2f41cf04dc1a611054e31e49d6e2c399d3f02f2dbbc3e5a15812513",
+            "rideSegmentIds": [
+              "4419f548fabff14fe5c1ef92046a523440888454a47c098acd8fbb4b8e3240fa"
+            ],
+            "baseFare": 160,
+            "supplement": 0,
+            "currency": "JPY",
+            "evidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            }
+          }
+        ],
+        "fareBasis": "independent_journey",
+        "providerEvidence": {
+          "source": "synthetic-timetable",
+          "version": "2026-11-test-1"
+        },
+        "clockExact": false
+      }
+    ],
+    "constraints": [
+      {
+        "kind": "opening",
+        "status": "satisfied",
+        "reason": null,
+        "visitId": "p1"
+      },
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "conditional_arrival",
+        "visitId": "p2"
+      },
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "conditional_arrival",
+        "visitId": "p3"
+      },
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "conditional_arrival",
+        "visitId": "p4"
+      },
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "conditional_arrival",
+        "visitId": "p5"
+      },
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "conditional_arrival",
+        "visitId": "p6"
+      },
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "conditional_arrival",
+        "visitId": "p7"
+      },
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "conditional_arrival",
+        "visitId": "p8"
+      },
+      {
+        "kind": "end_by",
+        "status": "unknown",
+        "reason": "conditional_arrival",
+        "visitId": null
+      }
+    ],
+    "completion": "complete",
+    "timing": "reference",
+    "accessWalking": "estimated",
+    "stopReason": null,
+    "finishAt": "2026-11-17T06:25:00Z",
+    "stationChoices": {
+      "p1": {
+        "namespace": "fixture",
+        "sourceVersion": "2026-11-test-1",
+        "providerStationId": "s1",
+        "name": "가상 1역",
+        "line": "시험 노선",
+        "prefecture": "fixture-tokyo",
+        "location": {
+          "lat": 35.666999999999994,
+          "lng": 139.694
+        }
+      },
+      "p2": {
+        "namespace": "fixture",
+        "sourceVersion": "2026-11-test-1",
+        "providerStationId": "s2",
+        "name": "가상 2역",
+        "line": "시험 노선",
+        "prefecture": "fixture-tokyo",
+        "location": {
+          "lat": 35.672999999999995,
+          "lng": 139.698
+        }
+      },
+      "p3": {
+        "namespace": "fixture",
+        "sourceVersion": "2026-11-test-1",
+        "providerStationId": "s3",
+        "name": "가상 3역",
+        "line": "시험 노선",
+        "prefecture": "fixture-tokyo",
+        "location": {
+          "lat": 35.678999999999995,
+          "lng": 139.702
+        }
+      },
+      "p4": {
+        "namespace": "fixture",
+        "sourceVersion": "2026-11-test-1",
+        "providerStationId": "s4",
+        "name": "가상 4역",
+        "line": "시험 노선",
+        "prefecture": "fixture-tokyo",
+        "location": {
+          "lat": 35.684999999999995,
+          "lng": 139.706
+        }
+      },
+      "p5": {
+        "namespace": "fixture",
+        "sourceVersion": "2026-11-test-1",
+        "providerStationId": "s5",
+        "name": "가상 5역",
+        "line": "시험 노선",
+        "prefecture": "fixture-tokyo",
+        "location": {
+          "lat": 35.690999999999995,
+          "lng": 139.71
+        }
+      },
+      "p6": {
+        "namespace": "fixture",
+        "sourceVersion": "2026-11-test-1",
+        "providerStationId": "s6",
+        "name": "가상 6역",
+        "line": "시험 노선",
+        "prefecture": "fixture-tokyo",
+        "location": {
+          "lat": 35.696999999999996,
+          "lng": 139.714
+        }
+      },
+      "p7": {
+        "namespace": "fixture",
+        "sourceVersion": "2026-11-test-1",
+        "providerStationId": "s7",
+        "name": "가상 7역",
+        "line": "시험 노선",
+        "prefecture": "fixture-tokyo",
+        "location": {
+          "lat": 35.702999999999996,
+          "lng": 139.718
+        }
+      },
+      "p8": {
+        "namespace": "fixture",
+        "sourceVersion": "2026-11-test-1",
+        "providerStationId": "s8-alt",
+        "name": "가상 8역 대안",
+        "line": "시험 노선",
+        "prefecture": "fixture-tokyo",
+        "location": {
+          "lat": 35.711,
+          "lng": 139.722
+        }
+      }
+    },
+    "fare": {
+      "status": "known",
+      "noPassTotal": 1480,
+      "currency": "JPY",
+      "fareUnits": [
+        {
+          "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+          "rideSegmentIds": [
+            "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+          ],
+          "baseFare": 220,
+          "supplement": 0,
+          "currency": "JPY",
+          "evidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          }
+        },
+        {
+          "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+          "rideSegmentIds": [
+            "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+          ],
+          "baseFare": 220,
+          "supplement": 0,
+          "currency": "JPY",
+          "evidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          }
+        },
+        {
+          "fareUnitId": "5cb0a877a4562272f7bb83e1ec4cab57a1573711c737e7b3d91fb537537e2dec",
+          "rideSegmentIds": [
+            "d02133ba908b7ede7826406dd7a00329ed9e4f2d6cd7f526d31749e8b8ebd78f"
+          ],
+          "baseFare": 220,
+          "supplement": 0,
+          "currency": "JPY",
+          "evidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          }
+        },
+        {
+          "fareUnitId": "b629e76d66f40f45f354c4ead82c9fa414e520c4664c058959c0efc1750c3e3f",
+          "rideSegmentIds": [
+            "c22b9d951ba751b8e9478a9486da2be9f6c0d6f0fa5f2c9d6a1628f941448622"
+          ],
+          "baseFare": 220,
+          "supplement": 0,
+          "currency": "JPY",
+          "evidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          }
+        },
+        {
+          "fareUnitId": "297eebf1464bc7f179433cd50bcddbee3b2fa8c9092398359a9bc92fdf05c280",
+          "rideSegmentIds": [
+            "dc1170dbc219fc6f5f6bf1c9e78e319800ef48ab223d04596022cae85620a58d"
+          ],
+          "baseFare": 220,
+          "supplement": 0,
+          "currency": "JPY",
+          "evidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          }
+        },
+        {
+          "fareUnitId": "f6250a903e4eb7988b24a46ae539617dd458d2765d1fafe9b4ef665efe2aa8cb",
+          "rideSegmentIds": [
+            "6c57c92c8a38f000f5875a013f210ab26488c1965938c6d7f4f06110b2b3253c"
+          ],
+          "baseFare": 220,
+          "supplement": 0,
+          "currency": "JPY",
+          "evidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          }
+        },
+        {
+          "fareUnitId": "b7318942f2f41cf04dc1a611054e31e49d6e2c399d3f02f2dbbc3e5a15812513",
+          "rideSegmentIds": [
+            "4419f548fabff14fe5c1ef92046a523440888454a47c098acd8fbb4b8e3240fa"
+          ],
+          "baseFare": 160,
+          "supplement": 0,
+          "currency": "JPY",
+          "evidence": {
+            "source": "synthetic-timetable",
+            "version": "2026-11-test-1"
+          }
+        }
+      ],
+      "scope": "independent-quoted-journeys"
+    },
+    "transfers": 6,
+    "optimality": "not-guaranteed",
+    "elapsedMinutes": 385.0,
+    "digest": "c93af4a3ac5e665b4649fbe6370d8cfecc699433e5ce0f2dadb1cc20566a7f05",
+    "planId": "plan-c93af4a3ac5e665b4649"
+  },
+  "passComparison": {
+    "status": "known",
+    "evaluations": [
+      {
+        "passId": "fixture-day-pass",
+        "routeDigest": "09984cc553badc93270edbb5a1630e5945e1ec71afffdd6834685f576c8c7d0b",
+        "status": "known",
+        "total": 900,
+        "savings": 640,
+        "reason": null,
+        "decision": {
+          "routeDigest": "09984cc553badc93270edbb5a1630e5945e1ec71afffdd6834685f576c8c7d0b",
+          "passId": "fixture-day-pass",
+          "documentVersion": "2026-11-test-1",
+          "eligibility": "eligible",
+          "coverage": "known",
+          "validity": "valid",
+          "validFrom": "2026-11-17T00:00:00+09:00",
+          "validUntil": "2026-11-18T00:00:00+09:00",
+          "purchasePrice": 900,
+          "allocations": [
+            {
+              "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "5cb0a877a4562272f7bb83e1ec4cab57a1573711c737e7b3d91fb537537e2dec",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "b629e76d66f40f45f354c4ead82c9fa414e520c4664c058959c0efc1750c3e3f",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "297eebf1464bc7f179433cd50bcddbee3b2fa8c9092398359a9bc92fdf05c280",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "f6250a903e4eb7988b24a46ae539617dd458d2765d1fafe9b4ef665efe2aa8cb",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "2a841d935a044e574d92eb79da410b7b6319dfe23353a841b0e84f53d42d7491",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            }
+          ],
+          "reportedTotal": 900,
+          "evidence": {
+            "source": "fixture-rag-response",
+            "version": "2026-11-test-1"
+          }
+        }
+      },
+      {
+        "passId": "fixture-day-pass",
+        "routeDigest": "c93af4a3ac5e665b4649fbe6370d8cfecc699433e5ce0f2dadb1cc20566a7f05",
+        "status": "known",
+        "total": 900,
+        "savings": 580,
+        "reason": null,
+        "decision": {
+          "routeDigest": "c93af4a3ac5e665b4649fbe6370d8cfecc699433e5ce0f2dadb1cc20566a7f05",
+          "passId": "fixture-day-pass",
+          "documentVersion": "2026-11-test-1",
+          "eligibility": "eligible",
+          "coverage": "known",
+          "validity": "valid",
+          "validFrom": "2026-11-17T00:00:00+09:00",
+          "validUntil": "2026-11-18T00:00:00+09:00",
+          "purchasePrice": 900,
+          "allocations": [
+            {
+              "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "5cb0a877a4562272f7bb83e1ec4cab57a1573711c737e7b3d91fb537537e2dec",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "b629e76d66f40f45f354c4ead82c9fa414e520c4664c058959c0efc1750c3e3f",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "297eebf1464bc7f179433cd50bcddbee3b2fa8c9092398359a9bc92fdf05c280",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "f6250a903e4eb7988b24a46ae539617dd458d2765d1fafe9b4ef665efe2aa8cb",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            },
+            {
+              "fareUnitId": "b7318942f2f41cf04dc1a611054e31e49d6e2c399d3f02f2dbbc3e5a15812513",
+              "uncoveredFare": 0,
+              "requiredSupplement": 0
+            }
+          ],
+          "reportedTotal": 900,
+          "evidence": {
+            "source": "fixture-rag-response",
+            "version": "2026-11-test-1"
+          }
+        }
+      }
+    ],
+    "recommendation": {
+      "routeDigest": "c93af4a3ac5e665b4649fbe6370d8cfecc699433e5ce0f2dadb1cc20566a7f05",
+      "passId": "fixture-day-pass",
+      "total": 900
+    },
+    "scope": "completed-candidates-only",
+    "purchasePriceCount": 1
+  },
+  "stopReasons": [],
+  "comparisonScope": "completed-candidates-only",
+  "optimality": "not-guaranteed",
+  "inputVersion": "2",
+  "dataSource": "fixture",
+  "fixtureId": "tokyo-demo",
+  "fixtureLabel": "가상 시간표·운임 시험 결과",
+  "echoInput": {
+    "inputVersion": "2",
+    "sessionId": "8786bf51-59a9-4c90-9800-93849c382269",
+    "operationId": "eight-node-demo",
+    "dataSource": "fixture",
+    "fixtureId": "tokyo-demo",
+    "startAt": "2026-11-17T09:00:00+09:00",
+    "endBy": "2026-11-17T20:00:00+09:00",
+    "places": [
+      {
+        "clientPlaceId": "p1",
+        "name": "가상 관광지 1",
+        "location": {
+          "lat": 35.666,
+          "lng": 139.694
+        },
+        "stayMinutes": 30,
+        "openingWindows": [
+          {
+            "startAt": "2026-11-17T08:00:00+09:00",
+            "endAt": "2026-11-18T01:00:00+09:00"
+          }
+        ],
+        "anchorRole": "start"
+      },
+      {
+        "clientPlaceId": "p2",
+        "name": "가상 관광지 2",
+        "location": {
+          "lat": 35.672,
+          "lng": 139.698
+        },
+        "stayMinutes": 30,
+        "openingWindows": [
+          {
+            "startAt": "2026-11-17T08:00:00+09:00",
+            "endAt": "2026-11-18T01:00:00+09:00"
+          }
+        ]
+      },
+      {
+        "clientPlaceId": "p3",
+        "name": "가상 관광지 3",
+        "location": {
+          "lat": 35.678,
+          "lng": 139.702
+        },
+        "stayMinutes": 30,
+        "openingWindows": [
+          {
+            "startAt": "2026-11-17T08:00:00+09:00",
+            "endAt": "2026-11-18T01:00:00+09:00"
+          }
+        ]
+      },
+      {
+        "clientPlaceId": "p4",
+        "name": "가상 관광지 4",
+        "location": {
+          "lat": 35.684,
+          "lng": 139.706
+        },
+        "stayMinutes": 30,
+        "openingWindows": [
+          {
+            "startAt": "2026-11-17T08:00:00+09:00",
+            "endAt": "2026-11-18T01:00:00+09:00"
+          }
+        ]
+      },
+      {
+        "clientPlaceId": "p5",
+        "name": "가상 관광지 5",
+        "location": {
+          "lat": 35.69,
+          "lng": 139.71
+        },
+        "stayMinutes": 30,
+        "openingWindows": [
+          {
+            "startAt": "2026-11-17T08:00:00+09:00",
+            "endAt": "2026-11-18T01:00:00+09:00"
+          }
+        ]
+      },
+      {
+        "clientPlaceId": "p6",
+        "name": "가상 관광지 6",
+        "location": {
+          "lat": 35.696,
+          "lng": 139.714
+        },
+        "stayMinutes": 30,
+        "openingWindows": [
+          {
+            "startAt": "2026-11-17T08:00:00+09:00",
+            "endAt": "2026-11-18T01:00:00+09:00"
+          }
+        ]
+      },
+      {
+        "clientPlaceId": "p7",
+        "name": "가상 관광지 7",
+        "location": {
+          "lat": 35.702,
+          "lng": 139.718
+        },
+        "stayMinutes": 30,
+        "openingWindows": [
+          {
+            "startAt": "2026-11-17T08:00:00+09:00",
+            "endAt": "2026-11-18T01:00:00+09:00"
+          }
+        ]
+      },
+      {
+        "clientPlaceId": "p8",
+        "name": "가상 관광지 8",
+        "location": {
+          "lat": 35.708,
+          "lng": 139.722
+        },
+        "stayMinutes": 30,
+        "openingWindows": [
+          {
+            "startAt": "2026-11-17T08:00:00+09:00",
+            "endAt": "2026-11-18T01:00:00+09:00"
+          }
+        ],
+        "anchorRole": "end"
+      }
+    ],
+    "mode": "reference",
+    "options": {
+      "allowPrefixReuse": true
+    }
+  },
+  "ledger": {
+    "limits": {
+      "rag": 1,
+      "rail": 10,
+      "station": 8,
+      "walk": 0
+    },
+    "railAttempts": 8,
+    "logicalAttempts": 8,
+    "stationAttempts": 8,
+    "walkAttempts": 0,
+    "ragRequests": 1,
+    "totalRoutingOperationAttempts": 16,
+    "baselineAttempts": 15,
+    "repairAttempts": 1,
+    "failedAttempts": 0,
+    "providerCalls": 0,
+    "httpRequestsObserved": 0,
+    "billingUnitsObserved": 0,
+    "measurementBasis": "fixture-no-network",
+    "sessionUsage": {
+      "rag": {
+        "used": 1,
+        "limit": 12
+      },
+      "rail": {
+        "used": 8,
+        "limit": 120
+      },
+      "station": {
+        "used": 8,
+        "limit": 96
+      },
+      "walk": {
+        "used": 0,
+        "limit": 0
+      }
+    },
+    "attempts": [
+      {
+        "id": 1,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 2,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 3,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 4,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 5,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 6,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 7,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 8,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 9,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 10,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 11,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 12,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 13,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 14,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 15,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 16,
+        "kind": "rail",
+        "phase": "repair",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 17,
+        "kind": "rag",
+        "phase": "pricing",
+        "outcome": "ok",
+        "error": null
+      }
+    ],
+    "cacheHits": 0,
+    "sharedRequests": 0,
+    "budgetExhausted": false,
+    "stopReasons": []
+  }
+}

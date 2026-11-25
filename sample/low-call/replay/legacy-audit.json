@@ -1,0 +1,20 @@
+{
+  "stationPairs": 20,
+  "candidates": 80,
+  "endpointsMatch": true,
+  "displayedDurationKnown": 80,
+  "grossFareKnown": 80,
+  "datedDepartureArrivalKnown": 0,
+  "stationCodesKnown": 0,
+  "fareBreakdownKnown": 0,
+  "verifiedTransferCountKnown": 0,
+  "sequentialTimeEvaluationSupported": false,
+  "reason": "legacy_payload_has_no_dated_trips_or_component_fares",
+  "comparisonScope": "fixed-query-time-station-journey-snapshots-only",
+  "sourceArtifact": "sample/team-crawler-route-matrix.json",
+  "sourceSha256": "52e166ab623847ab3f7fb24c21159cf4ce39f0168f25580120e232cc58e25491",
+  "normalizedCandidates": 80,
+  "normalizedGrossFareKnown": 80,
+  "networkRequestsDuringAudit": 0,
+  "qualityComparison": "not_measurable_without_dated_sequential_quotes"
+}

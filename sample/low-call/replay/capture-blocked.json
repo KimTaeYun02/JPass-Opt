@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "ekispert-capture-probe/1",
+  "dataSource": "live-capture",
+  "recordedAt": "2026-11-18T03:40:00.873770Z",
+  "status": "blocked",
+  "stopReason": "http_403",
+  "routeSearchAttempts": 1,
+  "stationRequests": 0,
+  "httpRequestsObserved": null,
+  "confirmedMainDocumentStatus": 403,
+  "retries": 0,
+  "query": {
+    "departure": "東京",
+    "arrival": "上野",
+    "preparedAt": "2026-11-19T09:00:00+09:00"
+  },
+  "evidence": "Initial existing-crawler probe returned HTTP 403 before result DOM; observer totals were not persisted. No further network collection attempted.",
+  "probeLogSha256": "9e122434dbdb2f236231bb551b1c6f0e6ea18c6c003f5d7e005070a7327dd199"
+}

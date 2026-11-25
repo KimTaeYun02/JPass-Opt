@@ -1,0 +1,78 @@
+{
+  "inputVersion": "2",
+  "sessionId": "issued-by-server",
+  "operationId": "multimodal-demo",
+  "dataSource": "fixture",
+  "fixtureId": "tokyo-demo",
+  "startAt": "2026-11-17T09:00:00+09:00",
+  "endBy": "2026-11-17T20:00:00+09:00",
+  "places": [
+    {
+      "clientPlaceId": "p1",
+      "name": "가상 관광지 1",
+      "location": {
+        "lat": 35.666,
+        "lng": 139.694
+      },
+      "stayMinutes": 30,
+      "openingWindows": [
+        {
+          "startAt": "2026-11-17T08:00:00+09:00",
+          "endAt": "2026-11-18T01:00:00+09:00"
+        }
+      ],
+      "anchorRole": "start"
+    },
+    {
+      "clientPlaceId": "p2",
+      "name": "가상 관광지 2",
+      "location": {
+        "lat": 35.672,
+        "lng": 139.698
+      },
+      "stayMinutes": 30,
+      "openingWindows": [
+        {
+          "startAt": "2026-11-17T08:00:00+09:00",
+          "endAt": "2026-11-18T01:00:00+09:00"
+        }
+      ]
+    },
+    {
+      "clientPlaceId": "p3",
+      "name": "가상 관광지 3",
+      "location": {
+        "lat": 35.678,
+        "lng": 139.702
+      },
+      "stayMinutes": 30,
+      "openingWindows": [
+        {
+          "startAt": "2026-11-17T08:00:00+09:00",
+          "endAt": "2026-11-18T01:00:00+09:00"
+        }
+      ]
+    },
+    {
+      "clientPlaceId": "p4",
+      "name": "가상 관광지 4",
+      "location": {
+        "lat": 35.684,
+        "lng": 139.706
+      },
+      "stayMinutes": 30,
+      "openingWindows": [
+        {
+          "startAt": "2026-11-17T08:00:00+09:00",
+          "endAt": "2026-11-18T01:00:00+09:00"
+        }
+      ],
+      "anchorRole": "end"
+    }
+  ],
+  "mode": "reference",
+  "options": {
+    "allowMultimodal": true,
+    "allowPassEvaluation": false
+  }
+}

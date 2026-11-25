@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "sequential-manifest/1",
+  "artifacts": [
+    {
+      "file": "diagnostic-parser.json",
+      "bytes": 29937,
+      "sha256": "505defc99166fcc2a107d66243cf99dc1d261f7a6c3d7e29aa3b624986845f9b"
+    },
+    {
+      "file": "run-20261119/acquisition.json",
+      "bytes": 1805,
+      "sha256": "ad404219cb901d8589b4615fa387ea98f6d183d5c314f328927e073b3e885438"
+    },
+    {
+      "file": "run-20261119/analysis/comparison.json",
+      "bytes": 2005,
+      "sha256": "f81dacde266f189e04ef1ca0082b1932593bc18f2cf29b7ce2fad7ceb6d9d5bd"
+    },
+    {
+      "file": "run-20261119/analysis/legacy-validation-recording.json",
+      "bytes": 4445,
+      "sha256": "37a7b5d078bfecab1618827807afeffc987d110f4bcd815bf3ec9b3c7b5bbe67"
+    },
+    {
+      "file": "run-20261119/analysis/v2-recording.json",
+      "bytes": 4445,
+      "sha256": "37a7b5d078bfecab1618827807afeffc987d110f4bcd815bf3ec9b3c7b5bbe67"
+    },
+    {
+      "file": "run-20261119/analysis/v2-result.json",
+      "bytes": 10808,
+      "sha256": "224eb40297222c05c2aff97ffc2366a6a9668bafce82316ce932f64a2308e68e"
+    },
+    {
+      "file": "run-20261119/captures/01-snapshot.json",
+      "bytes": 781,
+      "sha256": "36ce211836be5316c1eb81a81317de583a77291d4b7ec584b812af0ba04e2ecc"
+    },
+    {
+      "file": "run-20261119/scenario.json",
+      "bytes": 6483,
+      "sha256": "aa5a138b1e0a9e60c277999be91dd735c578b3282d75efe53e83d3dde34e71f8"
+    },
+    {
+      "file": "run-20261119-compat/acquisition.json",
+      "bytes": 15583,
+      "sha256": "dbf8909429ff8ac19e8c727835b52818ca0471dc86edb5b637991b02bd6c71ab"
+    },
+    {
+      "file": "run-20261119-compat/analysis/comparison.json",
+      "bytes": 3718,
+      "sha256": "5975ce1f6be063a8ae8a993aed1d1ae3d2b4c4fa7db64b086c9bd5354df193e4"
+    },
+    {
+      "file": "run-20261119-compat/analysis/legacy-validation-recording.json",
+      "bytes": 26559,
+      "sha256": "b44df8a3c5b45093d2acc59d5fbfb71906f77481ed225e98245985052cfcc44e"
+    },
+    {
+      "file": "run-20261119-compat/analysis/legacy-validation-result.json",
+      "bytes": 11322,
+      "sha256": "cb6d534ec8de4ef52e78bcfa1955f6d2071e73926611876ac37174e899d3753b"
+    },
+    {
+      "file": "run-20261119-compat/analysis/v2-recording.json",
+      "bytes": 26559,
+      "sha256": "b44df8a3c5b45093d2acc59d5fbfb71906f77481ed225e98245985052cfcc44e"
+    },
+    {
+      "file": "run-20261119-compat/analysis/v2-result.json",
+      "bytes": 25844,
+      "sha256": "9f5d33f0b2c4280c9727e90f6f1955e8a67e61e13aaf5c56fd4c622e6504b6cf"
+    },
+    {
+      "file": "run-20261119-compat/captures/01-snapshot.json",
+      "bytes": 19658,
+      "sha256": "d222d60517a2376df17d1a2a5e406858ad8a72885a3110e753cd062e25ab1083"
+    },
+    {
+      "file": "run-20261119-compat/captures/02-snapshot.json",
+      "bytes": 18738,
+      "sha256": "1acf0e48c37c213510ade412e1c79d3927c03ed419b0b28b41fbfa76ebaa3880"
+    },
+    {
+      "file": "run-20261119-compat/captures/03-snapshot.json",
+      "bytes": 19766,
+      "sha256": "b374af4af3382e56a427717e1a9abe02788052b6436654cfd48f91cc9b3e75a6"
+    },
+    {
+      "file": "run-20261119-compat/captures/04-snapshot.json",
+      "bytes": 12373,
+      "sha256": "45f08464cbd12c04d111b15da798b7e42f74ba768a6dde41bc84f62630b0ab9c"
+    },
+    {
+      "file": "run-20261119-compat/captures/05-snapshot.json",
+      "bytes": 18741,
+      "sha256": "003f1774c85cb4b935d93a67fe536d83f006a1153de4d1ef2a3c9578047d7360"
+    },
+    {
+      "file": "run-20261119-compat/captures/06-snapshot.json",
+      "bytes": 12376,
+      "sha256": "68680d91634e6aec824b4a641247b94a58fa95c013c56428f963ad18475a1e0e"
+    },
+    {
+      "file": "run-20261119-compat/captures/07-v2.json",
+      "bytes": 18770,
+      "sha256": "afb582cc764bc5d9c6d877f474d653cc85bfd92e0128030a2c74db0b50149a3a"
+    },
+    {
+      "file": "run-20261119-compat/captures/08-v2.json",
+      "bytes": 12381,
+      "sha256": "6bccf97a055bb6f13d6e796d0420c08af95b314aef0bfe49683eb4a0d08b53a3"
+    },
+    {
+      "file": "run-20261119-compat/scenario.json",
+      "bytes": 6483,
+      "sha256": "aa5a138b1e0a9e60c277999be91dd735c578b3282d75efe53e83d3dde34e71f8"
+    },
+    {
+      "file": "scenario.json",
+      "bytes": 6483,
+      "sha256": "aa5a138b1e0a9e60c277999be91dd735c578b3282d75efe53e83d3dde34e71f8"
+    }
+  ],
+  "experimentSearches": 8,
+  "diagnosticSearches": 2,
+  "totalSearchesThisTask": 10,
+  "browserHttpRequestEvents": 5421,
+  "automaticRetries": 0,
+  "replayHttpRequests": 0,
+  "notice": "Same chosen order in one three-place case, not global optimality. Coordinates approximate; walking/stays declared assumptions. Failed attempts included.",
+  "provenanceCorrection": "Successful compat DOM replay is captured-public-dom; raw capture files unchanged. Derived recordings/results regenerated offline."
+}

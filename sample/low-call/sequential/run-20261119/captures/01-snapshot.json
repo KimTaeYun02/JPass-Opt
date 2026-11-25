@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "ekispert-capture/1",
+  "dataSource": "live-capture",
+  "capturedAt": "2026-11-19T02:11:07.509913Z",
+  "query": {
+    "departure": "参宮橋",
+    "arrival": "東大前",
+    "preparedAt": "2026-11-20T00:00:00Z",
+    "options": {}
+  },
+  "status": "failed",
+  "stopReason": "TimeoutError",
+  "routeSearchAttempts": 1,
+  "stationRequests": 0,
+  "httpRequestsObserved": 776,
+  "documentRequestsObserved": 50,
+  "responseStatuses": {
+    "200": 147
+  },
+  "payload": null,
+  "absoluteTimes": null,
+  "stationCodes": null,
+  "retries": 0,
+  "liveModeEnabled": false,
+  "headless": false,
+  "timeResolution": [],
+  "elapsedSeconds": 40.657,
+  "crawlerSourceSha256": "3eb0daa3ac33ecef0c83a37e7a5aca8d466b49555f319e96b48ca9854c0696ee"
+}

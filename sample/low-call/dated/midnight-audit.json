@@ -1,0 +1,136 @@
+{
+  "sourceArtifact": "sample/crawler-diagnostics/calendar-20261118T104311Z",
+  "kind": "offline-dom-recheck",
+  "networkRequestsDuringAudit": 0,
+  "resourceRequestsAborted": 0,
+  "cases": [
+    {
+      "candidateIndex": 0,
+      "absoluteTimes": null,
+      "reason": "unmarked_midnight_or_non_monotonic",
+      "rawEvidence": {
+        "departureName": "東京",
+        "arrivalName": "横浜",
+        "preparedAt": "2026-11-19T14:50:00Z",
+        "resultSummary": "東京 ⇒ 横浜 (2026年11月19日 23時50分 出発)",
+        "pointTimes": [
+          {
+            "pointIndex": 0,
+            "kind": "departure",
+            "rawText": "出発23:54",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "arrival",
+            "rawText": "到着00:21",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          }
+        ],
+        "displayedDurationMinutes": 27
+      }
+    },
+    {
+      "candidateIndex": 1,
+      "absoluteTimes": null,
+      "reason": "unmarked_midnight_or_non_monotonic",
+      "rawEvidence": {
+        "departureName": "東京",
+        "arrivalName": "横浜",
+        "preparedAt": "2026-11-19T14:50:00Z",
+        "resultSummary": "東京 ⇒ 横浜 (2026年11月19日 23時50分 出発)",
+        "pointTimes": [
+          {
+            "pointIndex": 0,
+            "kind": "departure",
+            "rawText": "出発23:50",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "arrival",
+            "rawText": "到着00:21",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          }
+        ],
+        "displayedDurationMinutes": 31
+      }
+    },
+    {
+      "candidateIndex": 2,
+      "absoluteTimes": null,
+      "reason": "unmarked_midnight_or_non_monotonic",
+      "rawEvidence": {
+        "departureName": "東京",
+        "arrivalName": "横浜",
+        "preparedAt": "2026-11-19T14:50:00Z",
+        "resultSummary": "東京 ⇒ 横浜 (2026年11月19日 23時50分 出発)",
+        "pointTimes": [
+          {
+            "pointIndex": 0,
+            "kind": "departure",
+            "rawText": "出発23:50",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "arrival",
+            "rawText": "到着23:54",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "departure",
+            "rawText": "出発23:57",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 2,
+            "kind": "arrival",
+            "rawText": "到着00:21",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          }
+        ],
+        "displayedDurationMinutes": 31
+      }
+    },
+    {
+      "candidateIndex": 3,
+      "absoluteTimes": null,
+      "reason": "unmarked_midnight_or_non_monotonic",
+      "rawEvidence": {
+        "departureName": "東京",
+        "arrivalName": "横浜",
+        "preparedAt": "2026-11-19T14:50:00Z",
+        "resultSummary": "東京 ⇒ 横浜 (2026年11月19日 23時50分 出発)",
+        "pointTimes": [
+          {
+            "pointIndex": 0,
+            "kind": "departure",
+            "rawText": "出発23:50",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "arrival",
+            "rawText": "到着23:58",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          },
+          {
+            "pointIndex": 1,
+            "kind": "departure",
+            "rawText": "出発00:04",
+            "selector": "[data-testid=\"course-detail-point-departure-time\"]"
+          },
+          {
+            "pointIndex": 2,
+            "kind": "arrival",
+            "rawText": "到着00:21",
+            "selector": "[data-testid=\"course-detail-point-arrival-time\"]"
+          }
+        ],
+        "displayedDurationMinutes": 31
+      }
+    }
+  ]
+}

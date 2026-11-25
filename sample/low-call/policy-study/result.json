@@ -1,0 +1,5812 @@
+{
+  "schemaVersion": "alternate-policy-study/1",
+  "httpRequestsObserved": 0,
+  "synthetic": [
+    {
+      "case": "dense",
+      "newCase": false,
+      "places": 3,
+      "referenceOrders": 6,
+      "referenceFeasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 110.0,
+        "grossFare": 240,
+        "stopReason": null
+      },
+      "referenceLowestFare": 240,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 110.0,
+          "grossFare": 240,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 110.0,
+            "grossFare": 240,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "reverse_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 110.0,
+          "grossFare": 240,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "geometricRank": 2,
+            "kind": "reversal",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 110.0,
+            "grossFare": 240,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 110.0,
+          "grossFare": 240,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 110.0,
+            "grossFare": 240,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "sparse",
+      "newCase": false,
+      "places": 4,
+      "referenceOrders": 24,
+      "referenceFeasibleOrders": 24,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p2",
+          "p4",
+          "p3"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 268.0,
+        "grossFare": 2130,
+        "stopReason": null
+      },
+      "referenceLowestFare": 2130,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p4",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 268.0,
+          "grossFare": 2130,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 268.0,
+            "grossFare": 2130,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "reverse_first": {
+          "order": [
+            "p4",
+            "p3",
+            "p2",
+            "p1"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 268.0,
+          "grossFare": 2130,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p4",
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "geometricRank": 2,
+            "kind": "reversal",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p4",
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 268.0,
+            "grossFare": 2130,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p4",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 268.0,
+          "grossFare": 2130,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 268.0,
+            "grossFare": 2130,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "rail_detour",
+      "newCase": false,
+      "places": 3,
+      "referenceOrders": 6,
+      "referenceFeasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p2",
+          "p1",
+          "p3"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 135.0,
+        "grossFare": 440,
+        "stopReason": null
+      },
+      "referenceLowestFare": 440,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p2",
+            "p1",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 135.0,
+            "grossFare": 440,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "reverse_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 1120,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "geometricRank": 2,
+            "kind": "reversal",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 185.0,
+            "grossFare": 1120,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 43.0,
+          "yenAboveFastest": 680,
+          "yenAboveCheapest": 680,
+          "missedFeasibleOrder": false
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 1120,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 5,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 178.0,
+            "grossFare": 1120,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "minutesBehindFastest": 43.0,
+          "yenAboveFastest": 680,
+          "yenAboveCheapest": 680,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "directional",
+      "newCase": false,
+      "places": 3,
+      "referenceOrders": 6,
+      "referenceFeasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p3",
+          "p1",
+          "p2"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 135.0,
+        "grossFare": 440,
+        "stopReason": null
+      },
+      "referenceLowestFare": 440,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 1120,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 188.0,
+            "grossFare": 1150,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 43.0,
+          "yenAboveFastest": 680,
+          "yenAboveCheapest": 680,
+          "missedFeasibleOrder": false
+        },
+        "reverse_first": {
+          "order": [
+            "p3",
+            "p2",
+            "p1"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "geometricRank": 2,
+            "kind": "reversal",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 135.0,
+            "grossFare": 440,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 1120,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 5,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 195.0,
+            "grossFare": 1150,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "minutesBehindFastest": 43.0,
+          "yenAboveFastest": 680,
+          "yenAboveCheapest": 680,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "long_headway",
+      "newCase": false,
+      "places": 4,
+      "referenceOrders": 6,
+      "referenceFeasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p3",
+          "p2",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 185.0,
+        "grossFare": 660,
+        "stopReason": null
+      },
+      "referenceLowestFare": 620,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 215.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 215.0,
+            "grossFare": 620,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 30.0,
+          "yenAboveFastest": -40,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "reverse_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 215.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 215.0,
+            "grossFare": 620,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 30.0,
+          "yenAboveFastest": -40,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 215.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 215.0,
+            "grossFare": 620,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "minutesBehindFastest": 30.0,
+          "yenAboveFastest": -40,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "long_headway_later",
+      "newCase": false,
+      "places": 4,
+      "referenceOrders": 6,
+      "referenceFeasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 178.0,
+        "grossFare": 620,
+        "stopReason": null
+      },
+      "referenceLowestFare": 620,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 178.0,
+            "grossFare": 620,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "reverse_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 178.0,
+            "grossFare": 620,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 178.0,
+          "grossFare": 620,
+          "stopReason": null,
+          "railAttempts": 5,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 5,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 178.0,
+            "grossFare": 620,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "opening_window",
+      "newCase": false,
+      "places": 4,
+      "referenceOrders": 24,
+      "referenceFeasibleOrders": 6,
+      "referenceFastest": {
+        "order": [
+          "p3",
+          "p1",
+          "p2",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 185.0,
+        "grossFare": 660,
+        "stopReason": null
+      },
+      "referenceLowestFare": 660,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p3",
+            "p4",
+            "p2",
+            "p1"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p3",
+              "p4",
+              "p2",
+              "p1"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p3",
+              "p4",
+              "p2",
+              "p1"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 185.0,
+            "grossFare": 660,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "reverse_first": {
+          "order": [
+            "p3",
+            "p4",
+            "p2",
+            "p1"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p3",
+              "p4",
+              "p2",
+              "p1"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p3",
+              "p4",
+              "p2",
+              "p1"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 185.0,
+            "grossFare": 660,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "deadline_first": {
+          "order": [
+            "p3",
+            "p1",
+            "p2",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p3",
+              "p1",
+              "p2",
+              "p4"
+            ],
+            "geometricRank": 8,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p3",
+              "p1",
+              "p2",
+              "p4"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 185.0,
+            "grossFare": 660,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [
+            "p3",
+            "p1",
+            "p2",
+            "p4"
+          ],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "fixed_visit",
+      "newCase": false,
+      "places": 4,
+      "referenceOrders": 6,
+      "referenceFeasibleOrders": 2,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p3",
+          "p2",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 215.0,
+        "grossFare": 660,
+        "stopReason": null
+      },
+      "referenceLowestFare": 660,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p1",
+              "p4",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p4",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 185.0,
+            "grossFare": 660,
+            "stopReason": null
+          },
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": true
+        },
+        "reverse_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p1",
+              "p4",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p4",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 185.0,
+            "grossFare": 660,
+            "stopReason": null
+          },
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": true
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p3",
+            "p2",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 215.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p1",
+              "p3",
+              "p2",
+              "p4"
+            ],
+            "geometricRank": 4,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p3",
+              "p2",
+              "p4"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 215.0,
+            "grossFare": 660,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [
+            "p3",
+            "p1",
+            "p2",
+            "p4"
+          ],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "no_feasible",
+      "newCase": false,
+      "places": 3,
+      "referenceOrders": 6,
+      "referenceFeasibleOrders": 0,
+      "referenceFastest": null,
+      "referenceLowestFare": null,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 135.0,
+            "grossFare": 440,
+            "stopReason": null
+          },
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": false
+        },
+        "reverse_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "geometricRank": 2,
+            "kind": "reversal",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 135.0,
+            "grossFare": 440,
+            "stopReason": null
+          },
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": false
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 5,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 135.0,
+            "grossFare": 440,
+            "stopReason": null
+          },
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "five_visits",
+      "newCase": false,
+      "places": 5,
+      "referenceOrders": 120,
+      "referenceFeasibleOrders": 120,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p2",
+          "p3",
+          "p4",
+          "p5"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 235.0,
+        "grossFare": 880,
+        "stopReason": null
+      },
+      "referenceLowestFare": 880,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 235.0,
+          "grossFare": 880,
+          "stopReason": null,
+          "railAttempts": 7,
+          "railLimit": 7,
+          "stationAttempts": 5,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 7,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p5",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 5,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p5",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 235.0,
+            "grossFare": 880,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "reverse_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 235.0,
+          "grossFare": 880,
+          "stopReason": null,
+          "railAttempts": 7,
+          "railLimit": 7,
+          "stationAttempts": 5,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 7,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p5",
+              "p4",
+              "p3"
+            ],
+            "geometricRank": 5,
+            "kind": "different_path",
+            "reusedLegs": 1,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p5",
+              "p4",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 235.0,
+            "grossFare": 880,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 235.0,
+          "grossFare": 880,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 7,
+          "stationAttempts": 5,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p1",
+              "p2",
+              "p3",
+              "p5",
+              "p4"
+            ],
+            "geometricRank": 9,
+            "kind": "different_path",
+            "reusedLegs": 2,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p2",
+              "p3",
+              "p5",
+              "p4"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 235.0,
+            "grossFare": 880,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [
+            "p1",
+            "p2",
+            "p3",
+            "p4",
+            "p5"
+          ],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "direction_tight",
+      "newCase": true,
+      "places": 3,
+      "referenceOrders": 6,
+      "referenceFeasibleOrders": 1,
+      "referenceFastest": {
+        "order": [
+          "p3",
+          "p2",
+          "p1"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 135.0,
+        "grossFare": 440,
+        "stopReason": null
+      },
+      "referenceLowestFare": 440,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 228.0,
+          "grossFare": 1800,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 188.0,
+            "grossFare": 1150,
+            "stopReason": null
+          },
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": true
+        },
+        "reverse_first": {
+          "order": [
+            "p3",
+            "p2",
+            "p1"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 135.0,
+          "grossFare": 440,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "geometricRank": 2,
+            "kind": "reversal",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 135.0,
+            "grossFare": 440,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 228.0,
+          "grossFare": 1800,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 4,
+          "stationAttempts": 3,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 5,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 195.0,
+            "grossFare": 1150,
+            "stopReason": null
+          },
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": true
+        }
+      }
+    },
+    {
+      "case": "reservation_holdout",
+      "newCase": true,
+      "places": 4,
+      "referenceOrders": 6,
+      "referenceFeasibleOrders": 2,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p3",
+          "p2",
+          "p4"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 215.0,
+        "grossFare": 740,
+        "stopReason": null
+      },
+      "referenceLowestFare": 740,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p1",
+              "p4",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p4",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 185.0,
+            "grossFare": 660,
+            "stopReason": null
+          },
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": true
+        },
+        "reverse_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p3",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 185.0,
+          "grossFare": 660,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "infeasible",
+          "alternate": {
+            "order": [
+              "p1",
+              "p4",
+              "p3",
+              "p2"
+            ],
+            "geometricRank": 2,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p4",
+              "p3",
+              "p2"
+            ],
+            "completion": "complete",
+            "feasible": false,
+            "knownViolations": 1,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 185.0,
+            "grossFare": 660,
+            "stopReason": null
+          },
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": true
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p3",
+            "p2",
+            "p4"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 215.0,
+          "grossFare": 740,
+          "stopReason": null,
+          "railAttempts": 6,
+          "railLimit": 6,
+          "stationAttempts": 4,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 6,
+            "limit": 1000
+          },
+          "alternateStatus": "selected",
+          "alternate": {
+            "order": [
+              "p1",
+              "p3",
+              "p2",
+              "p4"
+            ],
+            "geometricRank": 4,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 3
+          },
+          "alternateMetrics": {
+            "order": [
+              "p1",
+              "p3",
+              "p2",
+              "p4"
+            ],
+            "completion": "complete",
+            "feasible": true,
+            "knownViolations": 0,
+            "unknownConstraints": 0,
+            "elapsedMinutes": 215.0,
+            "grossFare": 740,
+            "stopReason": null
+          },
+          "feasibilityStatus": "confirmed",
+          "priorityVisitIds": [
+            "p3",
+            "p1",
+            "p2",
+            "p4"
+          ],
+          "minutesBehindFastest": 0.0,
+          "yenAboveFastest": 0,
+          "yenAboveCheapest": 0,
+          "missedFeasibleOrder": false
+        }
+      }
+    },
+    {
+      "case": "reservation_anchored",
+      "newCase": true,
+      "places": 5,
+      "referenceOrders": 6,
+      "referenceFeasibleOrders": 2,
+      "referenceFastest": {
+        "order": [
+          "p1",
+          "p4",
+          "p2",
+          "p3",
+          "p5"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 0,
+        "elapsedMinutes": 240.0,
+        "grossFare": 1010,
+        "stopReason": null
+      },
+      "referenceLowestFare": 1010,
+      "policies": {
+        "diverse": {
+          "order": [
+            "p1",
+            "p2",
+            "p4",
+            "p3",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 230.0,
+          "grossFare": 880,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 7,
+          "stationAttempts": 5,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "skipped_budget",
+          "alternate": null,
+          "alternateMetrics": null,
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": true
+        },
+        "reverse_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p4",
+            "p3",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 230.0,
+          "grossFare": 880,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 7,
+          "stationAttempts": 5,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "skipped_budget",
+          "alternate": null,
+          "alternateMetrics": null,
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": true
+        },
+        "deadline_first": {
+          "order": [
+            "p1",
+            "p2",
+            "p4",
+            "p3",
+            "p5"
+          ],
+          "completion": "complete",
+          "feasible": false,
+          "knownViolations": 1,
+          "unknownConstraints": 0,
+          "elapsedMinutes": 230.0,
+          "grossFare": 880,
+          "stopReason": null,
+          "railAttempts": 4,
+          "railLimit": 7,
+          "stationAttempts": 5,
+          "httpRequestsObserved": 0,
+          "sessionRail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "alternateStatus": "skipped_budget",
+          "alternate": null,
+          "alternateMetrics": null,
+          "feasibilityStatus": "not_found_in_evaluated_orders",
+          "priorityVisitIds": [
+            "p4",
+            "p1",
+            "p2",
+            "p3",
+            "p5"
+          ],
+          "minutesBehindFastest": null,
+          "yenAboveFastest": null,
+          "yenAboveCheapest": null,
+          "missedFeasibleOrder": true
+        }
+      }
+    }
+  ],
+  "replay": {
+    "policies": {
+      "diverse": {
+        "order": [
+          "meiji",
+          "nezu",
+          "odaiba"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 3,
+        "elapsedMinutes": 373.0,
+        "grossFare": 1047,
+        "stopReason": null,
+        "railAttempts": 4,
+        "railLimit": 4,
+        "stationAttempts": 3,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 4,
+          "limit": 1000
+        },
+        "alternateStatus": "selected",
+        "alternate": {
+          "order": [
+            "meiji",
+            "nezu",
+            "odaiba"
+          ],
+          "geometricRank": 3,
+          "kind": "different_path",
+          "reusedLegs": 0,
+          "requiredRailUpperBound": 2
+        },
+        "alternateMetrics": {
+          "order": [
+            "meiji",
+            "nezu",
+            "odaiba"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 3,
+          "elapsedMinutes": 373.0,
+          "grossFare": 1047,
+          "stopReason": null
+        },
+        "feasibilityStatus": "conditional",
+        "priorityVisitIds": []
+      },
+      "reverse_first": {
+        "order": [
+          "nezu",
+          "meiji",
+          "odaiba"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 3,
+        "elapsedMinutes": 379.0,
+        "grossFare": 1246,
+        "stopReason": null,
+        "railAttempts": 3,
+        "railLimit": 4,
+        "stationAttempts": 3,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 3,
+          "limit": 1000
+        },
+        "alternateStatus": "incomplete",
+        "alternate": {
+          "order": [
+            "odaiba",
+            "meiji",
+            "nezu"
+          ],
+          "geometricRank": 2,
+          "kind": "reversal",
+          "reusedLegs": 0,
+          "requiredRailUpperBound": 2
+        },
+        "alternateMetrics": {
+          "order": [
+            "odaiba",
+            "meiji",
+            "nezu"
+          ],
+          "completion": "partial",
+          "feasible": false,
+          "knownViolations": 0,
+          "unknownConstraints": 2,
+          "elapsedMinutes": null,
+          "grossFare": null,
+          "stopReason": "replay_query_miss"
+        },
+        "feasibilityStatus": "conditional",
+        "priorityVisitIds": []
+      },
+      "deadline_first": {
+        "order": [
+          "meiji",
+          "nezu",
+          "odaiba"
+        ],
+        "completion": "complete",
+        "feasible": true,
+        "knownViolations": 0,
+        "unknownConstraints": 3,
+        "elapsedMinutes": 373.0,
+        "grossFare": 1047,
+        "stopReason": null,
+        "railAttempts": 4,
+        "railLimit": 4,
+        "stationAttempts": 3,
+        "httpRequestsObserved": 0,
+        "sessionRail": {
+          "used": 4,
+          "limit": 1000
+        },
+        "alternateStatus": "selected",
+        "alternate": {
+          "order": [
+            "meiji",
+            "nezu",
+            "odaiba"
+          ],
+          "geometricRank": 3,
+          "kind": "different_path",
+          "reusedLegs": 0,
+          "requiredRailUpperBound": 2
+        },
+        "alternateMetrics": {
+          "order": [
+            "meiji",
+            "nezu",
+            "odaiba"
+          ],
+          "completion": "complete",
+          "feasible": true,
+          "knownViolations": 0,
+          "unknownConstraints": 3,
+          "elapsedMinutes": 373.0,
+          "grossFare": 1047,
+          "stopReason": null
+        },
+        "feasibilityStatus": "conditional",
+        "priorityVisitIds": []
+      }
+    },
+    "passComparison": {
+      "status": "unknown",
+      "recommendation": null,
+      "evaluations": [],
+      "reason": "rag_delivery_not_allowed"
+    },
+    "ragRequests": 0,
+    "pricingHttpRequestsObserved": 0
+  },
+  "passTrials": {
+    "oneOrder": {
+      "completion": "complete",
+      "timing": "timetable",
+      "accessWalking": "routed",
+      "pricing": "known",
+      "constraints": [
+        {
+          "kind": "opening",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": "p1"
+        },
+        {
+          "kind": "opening",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": "p2"
+        },
+        {
+          "kind": "opening",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": "p3"
+        },
+        {
+          "kind": "end_by",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": null
+        }
+      ],
+      "improvement": "not_attempted",
+      "repairLog": [],
+      "candidates": {
+        "orders": [
+          {
+            "order": [
+              "p1",
+              "p2",
+              "p3"
+            ],
+            "geometricScore": 1517.4618498498558,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "geometricScore": 1517.4618498498558,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricScore": 2276.199241207343,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "p1",
+            "p2"
+          ],
+          [
+            "p3"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only"
+      },
+      "baseline": {
+        "planId": "plan-566a4afa82f451500503",
+        "digest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+        "preserved": true,
+        "reason": "immutable_completed_baseline",
+        "plan": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "visits": [
+            {
+              "clientPlaceId": "p1",
+              "arrivalAt": "2026-11-17T00:00:00Z",
+              "visitStartAt": "2026-11-17T00:00:00Z",
+              "leaveAt": "2026-11-17T00:30:00Z",
+              "visitWaitMinutes": 0.0,
+              "stayMinutes": 30,
+              "arrivalClockExact": true,
+              "leaveClockExact": true
+            },
+            {
+              "clientPlaceId": "p2",
+              "arrivalAt": "2026-11-17T00:55:00Z",
+              "visitStartAt": "2026-11-17T00:55:00Z",
+              "leaveAt": "2026-11-17T01:25:00Z",
+              "visitWaitMinutes": 0.0,
+              "stayMinutes": 30,
+              "arrivalClockExact": true,
+              "leaveClockExact": true
+            },
+            {
+              "clientPlaceId": "p3",
+              "arrivalAt": "2026-11-17T01:45:00Z",
+              "visitStartAt": "2026-11-17T01:45:00Z",
+              "leaveAt": "2026-11-17T02:15:00Z",
+              "visitWaitMinutes": 0.0,
+              "stayMinutes": 30,
+              "arrivalClockExact": true,
+              "leaveClockExact": true
+            }
+          ],
+          "legs": [
+            {
+              "from": "p1",
+              "to": "p2",
+              "requestedAt": "2026-11-17T00:33:00Z",
+              "preparedAt": "2026-11-17T00:33:00Z",
+              "departureAt": "2026-11-17T00:40:00Z",
+              "arrivalAt": "2026-11-17T00:52:00Z",
+              "placeArrivalAt": "2026-11-17T00:55:00Z",
+              "initialWaitMinutes": 7.0,
+              "rideMinutes": 12.0,
+              "accessWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "egressWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "samePhysicalStation": false,
+              "transfers": 1,
+              "rideSegmentIds": [
+                "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+              ],
+              "segments": [
+                {
+                  "segmentId": "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba",
+                  "operator": "fixture-rail",
+                  "line": "시험 노선",
+                  "trainType": "fixture"
+                }
+              ],
+              "fareUnits": [
+                {
+                  "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                  "rideSegmentIds": [
+                    "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+                  ],
+                  "baseFare": 220,
+                  "supplement": 0,
+                  "quotedTotal": null,
+                  "currency": "JPY",
+                  "evidence": {
+                    "source": "synthetic-timetable",
+                    "version": "2026-11-test-1"
+                  }
+                }
+              ],
+              "fareBasis": "independent_journey",
+              "providerEvidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              },
+              "clockExact": true
+            },
+            {
+              "from": "p2",
+              "to": "p3",
+              "requestedAt": "2026-11-17T01:28:00Z",
+              "preparedAt": "2026-11-17T01:28:00Z",
+              "departureAt": "2026-11-17T01:30:00Z",
+              "arrivalAt": "2026-11-17T01:42:00Z",
+              "placeArrivalAt": "2026-11-17T01:45:00Z",
+              "initialWaitMinutes": 2.0,
+              "rideMinutes": 12.0,
+              "accessWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "egressWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "samePhysicalStation": false,
+              "transfers": 1,
+              "rideSegmentIds": [
+                "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+              ],
+              "segments": [
+                {
+                  "segmentId": "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc",
+                  "operator": "fixture-rail",
+                  "line": "시험 노선",
+                  "trainType": "fixture"
+                }
+              ],
+              "fareUnits": [
+                {
+                  "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                  "rideSegmentIds": [
+                    "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+                  ],
+                  "baseFare": 220,
+                  "supplement": 0,
+                  "quotedTotal": null,
+                  "currency": "JPY",
+                  "evidence": {
+                    "source": "synthetic-timetable",
+                    "version": "2026-11-test-1"
+                  }
+                }
+              ],
+              "fareBasis": "independent_journey",
+              "providerEvidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              },
+              "clockExact": true
+            }
+          ],
+          "constraints": [
+            {
+              "kind": "opening",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": "p1"
+            },
+            {
+              "kind": "opening",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": "p2"
+            },
+            {
+              "kind": "opening",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": "p3"
+            },
+            {
+              "kind": "end_by",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": null
+            }
+          ],
+          "completion": "complete",
+          "timing": "timetable",
+          "accessWalking": "routed",
+          "stopReason": null,
+          "finishAt": "2026-11-17T02:15:00Z",
+          "stationChoices": {
+            "p1": {
+              "namespace": "fixture",
+              "sourceVersion": "2026-11-test-1",
+              "providerStationId": "s1",
+              "name": "가상 1역",
+              "line": "시험 노선",
+              "prefecture": "fixture-tokyo",
+              "location": {
+                "lat": 35.666999999999994,
+                "lng": 139.694
+              }
+            },
+            "p2": {
+              "namespace": "fixture",
+              "sourceVersion": "2026-11-test-1",
+              "providerStationId": "s2",
+              "name": "가상 2역",
+              "line": "시험 노선",
+              "prefecture": "fixture-tokyo",
+              "location": {
+                "lat": 35.672999999999995,
+                "lng": 139.698
+              }
+            },
+            "p3": {
+              "namespace": "fixture",
+              "sourceVersion": "2026-11-test-1",
+              "providerStationId": "s3",
+              "name": "가상 3역",
+              "line": "시험 노선",
+              "prefecture": "fixture-tokyo",
+              "location": {
+                "lat": 35.678999999999995,
+                "lng": 139.702
+              }
+            }
+          },
+          "fare": {
+            "status": "known",
+            "noPassTotal": 440,
+            "currency": "JPY",
+            "fareUnits": [
+              {
+                "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                "rideSegmentIds": [
+                  "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+                ],
+                "baseFare": 220,
+                "supplement": 0,
+                "quotedTotal": null,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              },
+              {
+                "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                "rideSegmentIds": [
+                  "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+                ],
+                "baseFare": 220,
+                "supplement": 0,
+                "quotedTotal": null,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              }
+            ],
+            "scope": "independent-quoted-journeys"
+          },
+          "transfers": 2,
+          "optimality": "not-guaranteed",
+          "elapsedMinutes": 135.0,
+          "digest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+          "planId": "plan-566a4afa82f451500503"
+        }
+      },
+      "selected": {
+        "order": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "visits": [
+          {
+            "clientPlaceId": "p1",
+            "arrivalAt": "2026-11-17T00:00:00Z",
+            "visitStartAt": "2026-11-17T00:00:00Z",
+            "leaveAt": "2026-11-17T00:30:00Z",
+            "visitWaitMinutes": 0.0,
+            "stayMinutes": 30,
+            "arrivalClockExact": true,
+            "leaveClockExact": true
+          },
+          {
+            "clientPlaceId": "p2",
+            "arrivalAt": "2026-11-17T00:55:00Z",
+            "visitStartAt": "2026-11-17T00:55:00Z",
+            "leaveAt": "2026-11-17T01:25:00Z",
+            "visitWaitMinutes": 0.0,
+            "stayMinutes": 30,
+            "arrivalClockExact": true,
+            "leaveClockExact": true
+          },
+          {
+            "clientPlaceId": "p3",
+            "arrivalAt": "2026-11-17T01:45:00Z",
+            "visitStartAt": "2026-11-17T01:45:00Z",
+            "leaveAt": "2026-11-17T02:15:00Z",
+            "visitWaitMinutes": 0.0,
+            "stayMinutes": 30,
+            "arrivalClockExact": true,
+            "leaveClockExact": true
+          }
+        ],
+        "legs": [
+          {
+            "from": "p1",
+            "to": "p2",
+            "requestedAt": "2026-11-17T00:33:00Z",
+            "preparedAt": "2026-11-17T00:33:00Z",
+            "departureAt": "2026-11-17T00:40:00Z",
+            "arrivalAt": "2026-11-17T00:52:00Z",
+            "placeArrivalAt": "2026-11-17T00:55:00Z",
+            "initialWaitMinutes": 7.0,
+            "rideMinutes": 12.0,
+            "accessWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "egressWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "samePhysicalStation": false,
+            "transfers": 1,
+            "rideSegmentIds": [
+              "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+            ],
+            "segments": [
+              {
+                "segmentId": "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba",
+                "operator": "fixture-rail",
+                "line": "시험 노선",
+                "trainType": "fixture"
+              }
+            ],
+            "fareUnits": [
+              {
+                "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                "rideSegmentIds": [
+                  "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+                ],
+                "baseFare": 220,
+                "supplement": 0,
+                "quotedTotal": null,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              }
+            ],
+            "fareBasis": "independent_journey",
+            "providerEvidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            },
+            "clockExact": true
+          },
+          {
+            "from": "p2",
+            "to": "p3",
+            "requestedAt": "2026-11-17T01:28:00Z",
+            "preparedAt": "2026-11-17T01:28:00Z",
+            "departureAt": "2026-11-17T01:30:00Z",
+            "arrivalAt": "2026-11-17T01:42:00Z",
+            "placeArrivalAt": "2026-11-17T01:45:00Z",
+            "initialWaitMinutes": 2.0,
+            "rideMinutes": 12.0,
+            "accessWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "egressWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "samePhysicalStation": false,
+            "transfers": 1,
+            "rideSegmentIds": [
+              "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+            ],
+            "segments": [
+              {
+                "segmentId": "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc",
+                "operator": "fixture-rail",
+                "line": "시험 노선",
+                "trainType": "fixture"
+              }
+            ],
+            "fareUnits": [
+              {
+                "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                "rideSegmentIds": [
+                  "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+                ],
+                "baseFare": 220,
+                "supplement": 0,
+                "quotedTotal": null,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              }
+            ],
+            "fareBasis": "independent_journey",
+            "providerEvidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            },
+            "clockExact": true
+          }
+        ],
+        "constraints": [
+          {
+            "kind": "opening",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": "p1"
+          },
+          {
+            "kind": "opening",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": "p2"
+          },
+          {
+            "kind": "opening",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": "p3"
+          },
+          {
+            "kind": "end_by",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": null
+          }
+        ],
+        "completion": "complete",
+        "timing": "timetable",
+        "accessWalking": "routed",
+        "stopReason": null,
+        "finishAt": "2026-11-17T02:15:00Z",
+        "stationChoices": {
+          "p1": {
+            "namespace": "fixture",
+            "sourceVersion": "2026-11-test-1",
+            "providerStationId": "s1",
+            "name": "가상 1역",
+            "line": "시험 노선",
+            "prefecture": "fixture-tokyo",
+            "location": {
+              "lat": 35.666999999999994,
+              "lng": 139.694
+            }
+          },
+          "p2": {
+            "namespace": "fixture",
+            "sourceVersion": "2026-11-test-1",
+            "providerStationId": "s2",
+            "name": "가상 2역",
+            "line": "시험 노선",
+            "prefecture": "fixture-tokyo",
+            "location": {
+              "lat": 35.672999999999995,
+              "lng": 139.698
+            }
+          },
+          "p3": {
+            "namespace": "fixture",
+            "sourceVersion": "2026-11-test-1",
+            "providerStationId": "s3",
+            "name": "가상 3역",
+            "line": "시험 노선",
+            "prefecture": "fixture-tokyo",
+            "location": {
+              "lat": 35.678999999999995,
+              "lng": 139.702
+            }
+          }
+        },
+        "fare": {
+          "status": "known",
+          "noPassTotal": 440,
+          "currency": "JPY",
+          "fareUnits": [
+            {
+              "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+              "rideSegmentIds": [
+                "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "quotedTotal": null,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            },
+            {
+              "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+              "rideSegmentIds": [
+                "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "quotedTotal": null,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            }
+          ],
+          "scope": "independent-quoted-journeys"
+        },
+        "transfers": 2,
+        "optimality": "not-guaranteed",
+        "elapsedMinutes": 135.0,
+        "digest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+        "planId": "plan-566a4afa82f451500503"
+      },
+      "passComparison": {
+        "status": "known",
+        "evaluations": [
+          {
+            "passId": "synthetic-line-pass",
+            "routeDigest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+            "status": "known",
+            "total": 590,
+            "savings": -150,
+            "reason": null,
+            "decision": {
+              "routeDigest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+              "passId": "synthetic-line-pass",
+              "documentVersion": "trial-1",
+              "eligibility": "eligible",
+              "coverage": "known",
+              "validity": "valid",
+              "validFrom": "2026-11-17T00:00:00+09:00",
+              "validUntil": "2026-11-18T00:00:00+09:00",
+              "purchasePrice": 150,
+              "allocations": [
+                {
+                  "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                  "uncoveredFare": 220,
+                  "requiredSupplement": 0
+                },
+                {
+                  "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                  "uncoveredFare": 220,
+                  "requiredSupplement": 0
+                }
+              ],
+              "reportedTotal": 590,
+              "evidence": {
+                "source": "synthetic-line-coverage",
+                "version": "trial-1"
+              }
+            }
+          }
+        ],
+        "recommendation": {
+          "routeDigest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+          "passId": null,
+          "total": 440
+        },
+        "scope": "completed-candidates-only",
+        "purchasePriceCount": 1
+      },
+      "stopReasons": [],
+      "comparisonScope": "completed-candidates-only",
+      "optimality": "not-guaranteed",
+      "inputVersion": "2",
+      "dataSource": "fixture",
+      "fixtureId": "tokyo-demo",
+      "fixtureLabel": "가상 시간표·운임 시험 결과",
+      "echoInput": {
+        "inputVersion": "2",
+        "sessionId": "offline-pass-trial",
+        "operationId": "pass-trial",
+        "dataSource": "fixture",
+        "fixtureId": "tokyo-demo",
+        "startAt": "2026-11-17T09:00:00+09:00",
+        "endBy": "2026-11-17T20:00:00+09:00",
+        "places": [
+          {
+            "clientPlaceId": "p1",
+            "name": "가상 관광지 1",
+            "location": {
+              "lat": 35.666,
+              "lng": 139.694
+            },
+            "stayMinutes": 30,
+            "openingWindows": [
+              {
+                "startAt": "2026-11-17T08:00:00+09:00",
+                "endAt": "2026-11-18T01:00:00+09:00"
+              }
+            ]
+          },
+          {
+            "clientPlaceId": "p2",
+            "name": "가상 관광지 2",
+            "location": {
+              "lat": 35.672,
+              "lng": 139.698
+            },
+            "stayMinutes": 30,
+            "openingWindows": [
+              {
+                "startAt": "2026-11-17T08:00:00+09:00",
+                "endAt": "2026-11-18T01:00:00+09:00"
+              }
+            ]
+          },
+          {
+            "clientPlaceId": "p3",
+            "name": "가상 관광지 3",
+            "location": {
+              "lat": 35.678,
+              "lng": 139.702
+            },
+            "stayMinutes": 30,
+            "openingWindows": [
+              {
+                "startAt": "2026-11-17T08:00:00+09:00",
+                "endAt": "2026-11-18T01:00:00+09:00"
+              }
+            ]
+          }
+        ],
+        "mode": "strict",
+        "options": {
+          "allowRepair": false,
+          "allowPassEvaluation": true,
+          "allowOrderAlternates": false,
+          "allowPrefixReuse": false
+        }
+      },
+      "ledger": {
+        "limits": {
+          "rag": 1,
+          "rail": 4,
+          "station": 3,
+          "walk": 0
+        },
+        "railAttempts": 2,
+        "logicalAttempts": 2,
+        "stationAttempts": 3,
+        "walkAttempts": 0,
+        "ragRequests": 1,
+        "totalRoutingOperationAttempts": 5,
+        "baselineAttempts": 5,
+        "repairAttempts": 0,
+        "failedAttempts": 0,
+        "providerCalls": 0,
+        "httpRequestsObserved": 0,
+        "billingUnitsObserved": 0,
+        "measurementBasis": "fixture-no-network",
+        "sessionUsage": {
+          "rag": {
+            "used": 1,
+            "limit": 12
+          },
+          "rail": {
+            "used": 2,
+            "limit": 1000
+          },
+          "station": {
+            "used": 3,
+            "limit": 16
+          },
+          "walk": {
+            "used": 0,
+            "limit": 0
+          }
+        },
+        "attempts": [
+          {
+            "id": 1147,
+            "kind": "station",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1148,
+            "kind": "station",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1149,
+            "kind": "station",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1150,
+            "kind": "rail",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1151,
+            "kind": "rail",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1152,
+            "kind": "rag",
+            "phase": "pricing",
+            "outcome": "ok",
+            "error": null
+          }
+        ],
+        "cacheHits": 0,
+        "sharedRequests": 0,
+        "budgetExhausted": false,
+        "stopReasons": []
+      }
+    },
+    "twoOrders": {
+      "completion": "complete",
+      "timing": "timetable",
+      "accessWalking": "routed",
+      "pricing": "known",
+      "constraints": [
+        {
+          "kind": "opening",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": "p1"
+        },
+        {
+          "kind": "opening",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": "p2"
+        },
+        {
+          "kind": "opening",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": "p3"
+        },
+        {
+          "kind": "end_by",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": null
+        }
+      ],
+      "improvement": "not_attempted",
+      "repairLog": [],
+      "candidates": {
+        "orders": [
+          {
+            "order": [
+              "p1",
+              "p2",
+              "p3"
+            ],
+            "geometricScore": 1517.4618498498558,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "geometricScore": 1517.4618498498558,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricScore": 2276.199241207343,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "p1",
+            "p2"
+          ],
+          [
+            "p3"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only",
+        "orderEvaluation": {
+          "objective": "earliest-finish-then-known-fare",
+          "status": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "policy": "diverse",
+          "priorityVisitIds": [],
+          "stopReason": null,
+          "plan": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "visits": [
+              {
+                "clientPlaceId": "p2",
+                "arrivalAt": "2026-11-17T00:00:00Z",
+                "visitStartAt": "2026-11-17T00:00:00Z",
+                "leaveAt": "2026-11-17T00:30:00Z",
+                "visitWaitMinutes": 0.0,
+                "stayMinutes": 30,
+                "arrivalClockExact": true,
+                "leaveClockExact": true
+              },
+              {
+                "clientPlaceId": "p1",
+                "arrivalAt": "2026-11-17T01:08:00Z",
+                "visitStartAt": "2026-11-17T01:08:00Z",
+                "leaveAt": "2026-11-17T01:38:00Z",
+                "visitWaitMinutes": 0.0,
+                "stayMinutes": 30,
+                "arrivalClockExact": true,
+                "leaveClockExact": true
+              },
+              {
+                "clientPlaceId": "p3",
+                "arrivalAt": "2026-11-17T02:18:00Z",
+                "visitStartAt": "2026-11-17T02:18:00Z",
+                "leaveAt": "2026-11-17T02:48:00Z",
+                "visitWaitMinutes": 0.0,
+                "stayMinutes": 30,
+                "arrivalClockExact": true,
+                "leaveClockExact": true
+              }
+            ],
+            "legs": [
+              {
+                "from": "p2",
+                "to": "p1",
+                "requestedAt": "2026-11-17T00:33:00Z",
+                "preparedAt": "2026-11-17T00:33:00Z",
+                "departureAt": "2026-11-17T00:40:00Z",
+                "arrivalAt": "2026-11-17T01:05:00Z",
+                "placeArrivalAt": "2026-11-17T01:08:00Z",
+                "initialWaitMinutes": 7.0,
+                "rideMinutes": 25.0,
+                "accessWalking": {
+                  "status": "routed",
+                  "minutes": 3,
+                  "evidence": {
+                    "source": "synthetic-walk",
+                    "version": "2026-11-test-1"
+                  }
+                },
+                "egressWalking": {
+                  "status": "routed",
+                  "minutes": 3,
+                  "evidence": {
+                    "source": "synthetic-walk",
+                    "version": "2026-11-test-1"
+                  }
+                },
+                "samePhysicalStation": false,
+                "transfers": 0,
+                "rideSegmentIds": [
+                  "2f2fbc540ee4d87ee3207613712636d71122f62b4bfc6aa3f4982b707fc0bb90"
+                ],
+                "segments": [
+                  {
+                    "segmentId": "2f2fbc540ee4d87ee3207613712636d71122f62b4bfc6aa3f4982b707fc0bb90",
+                    "operator": "fixture-rail",
+                    "line": "시험 패스선",
+                    "trainType": "fixture"
+                  }
+                ],
+                "fareUnits": [
+                  {
+                    "fareUnitId": "1bf92ec28db7c71383360b92b9cd90892a0ba43716d599ec8ab62dbfe43fbb59",
+                    "rideSegmentIds": [
+                      "2f2fbc540ee4d87ee3207613712636d71122f62b4bfc6aa3f4982b707fc0bb90"
+                    ],
+                    "baseFare": 200,
+                    "supplement": 20,
+                    "quotedTotal": null,
+                    "currency": "JPY",
+                    "evidence": {
+                      "source": "synthetic-timetable",
+                      "version": "2026-11-test-1"
+                    }
+                  }
+                ],
+                "fareBasis": "independent_journey",
+                "providerEvidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                },
+                "clockExact": true
+              },
+              {
+                "from": "p1",
+                "to": "p3",
+                "requestedAt": "2026-11-17T01:41:00Z",
+                "preparedAt": "2026-11-17T01:41:00Z",
+                "departureAt": "2026-11-17T01:50:00Z",
+                "arrivalAt": "2026-11-17T02:15:00Z",
+                "placeArrivalAt": "2026-11-17T02:18:00Z",
+                "initialWaitMinutes": 9.0,
+                "rideMinutes": 25.0,
+                "accessWalking": {
+                  "status": "routed",
+                  "minutes": 3,
+                  "evidence": {
+                    "source": "synthetic-walk",
+                    "version": "2026-11-test-1"
+                  }
+                },
+                "egressWalking": {
+                  "status": "routed",
+                  "minutes": 3,
+                  "evidence": {
+                    "source": "synthetic-walk",
+                    "version": "2026-11-test-1"
+                  }
+                },
+                "samePhysicalStation": false,
+                "transfers": 0,
+                "rideSegmentIds": [
+                  "4d9dea36ea0a53369f2c06cd2574a46e5b498ec3b6590bbb68200ca3882598c3"
+                ],
+                "segments": [
+                  {
+                    "segmentId": "4d9dea36ea0a53369f2c06cd2574a46e5b498ec3b6590bbb68200ca3882598c3",
+                    "operator": "fixture-rail",
+                    "line": "시험 패스선",
+                    "trainType": "fixture"
+                  }
+                ],
+                "fareUnits": [
+                  {
+                    "fareUnitId": "fb66538fd7541df822b600bb3f8c9c6484fc17cd11ec453f28fc62e68f50970e",
+                    "rideSegmentIds": [
+                      "4d9dea36ea0a53369f2c06cd2574a46e5b498ec3b6590bbb68200ca3882598c3"
+                    ],
+                    "baseFare": 200,
+                    "supplement": 20,
+                    "quotedTotal": null,
+                    "currency": "JPY",
+                    "evidence": {
+                      "source": "synthetic-timetable",
+                      "version": "2026-11-test-1"
+                    }
+                  }
+                ],
+                "fareBasis": "independent_journey",
+                "providerEvidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                },
+                "clockExact": true
+              }
+            ],
+            "constraints": [
+              {
+                "kind": "opening",
+                "status": "satisfied",
+                "reason": null,
+                "visitId": "p2"
+              },
+              {
+                "kind": "opening",
+                "status": "satisfied",
+                "reason": null,
+                "visitId": "p1"
+              },
+              {
+                "kind": "opening",
+                "status": "satisfied",
+                "reason": null,
+                "visitId": "p3"
+              },
+              {
+                "kind": "end_by",
+                "status": "satisfied",
+                "reason": null,
+                "visitId": null
+              }
+            ],
+            "completion": "complete",
+            "timing": "timetable",
+            "accessWalking": "routed",
+            "stopReason": null,
+            "finishAt": "2026-11-17T02:48:00Z",
+            "stationChoices": {
+              "p1": {
+                "namespace": "fixture",
+                "sourceVersion": "2026-11-test-1",
+                "providerStationId": "s1",
+                "name": "가상 1역",
+                "line": "시험 노선",
+                "prefecture": "fixture-tokyo",
+                "location": {
+                  "lat": 35.666999999999994,
+                  "lng": 139.694
+                }
+              },
+              "p2": {
+                "namespace": "fixture",
+                "sourceVersion": "2026-11-test-1",
+                "providerStationId": "s2",
+                "name": "가상 2역",
+                "line": "시험 노선",
+                "prefecture": "fixture-tokyo",
+                "location": {
+                  "lat": 35.672999999999995,
+                  "lng": 139.698
+                }
+              },
+              "p3": {
+                "namespace": "fixture",
+                "sourceVersion": "2026-11-test-1",
+                "providerStationId": "s3",
+                "name": "가상 3역",
+                "line": "시험 노선",
+                "prefecture": "fixture-tokyo",
+                "location": {
+                  "lat": 35.678999999999995,
+                  "lng": 139.702
+                }
+              }
+            },
+            "fare": {
+              "status": "known",
+              "noPassTotal": 440,
+              "currency": "JPY",
+              "fareUnits": [
+                {
+                  "fareUnitId": "1bf92ec28db7c71383360b92b9cd90892a0ba43716d599ec8ab62dbfe43fbb59",
+                  "rideSegmentIds": [
+                    "2f2fbc540ee4d87ee3207613712636d71122f62b4bfc6aa3f4982b707fc0bb90"
+                  ],
+                  "baseFare": 200,
+                  "supplement": 20,
+                  "quotedTotal": null,
+                  "currency": "JPY",
+                  "evidence": {
+                    "source": "synthetic-timetable",
+                    "version": "2026-11-test-1"
+                  }
+                },
+                {
+                  "fareUnitId": "fb66538fd7541df822b600bb3f8c9c6484fc17cd11ec453f28fc62e68f50970e",
+                  "rideSegmentIds": [
+                    "4d9dea36ea0a53369f2c06cd2574a46e5b498ec3b6590bbb68200ca3882598c3"
+                  ],
+                  "baseFare": 200,
+                  "supplement": 20,
+                  "quotedTotal": null,
+                  "currency": "JPY",
+                  "evidence": {
+                    "source": "synthetic-timetable",
+                    "version": "2026-11-test-1"
+                  }
+                }
+              ],
+              "scope": "independent-quoted-journeys"
+            },
+            "transfers": 0,
+            "optimality": "not-guaranteed",
+            "elapsedMinutes": 168.0,
+            "digest": "b1f247f24809a9b011c451a2d020b7592863951b43fa466cccbf0f7bc435c56e",
+            "planId": "plan-b1f247f24809a9b011c4"
+          },
+          "selectedWithoutKnownViolations": true,
+          "feasibilityStatus": "confirmed"
+        }
+      },
+      "baseline": {
+        "planId": "plan-566a4afa82f451500503",
+        "digest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+        "preserved": true,
+        "reason": "immutable_completed_baseline",
+        "plan": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "visits": [
+            {
+              "clientPlaceId": "p1",
+              "arrivalAt": "2026-11-17T00:00:00Z",
+              "visitStartAt": "2026-11-17T00:00:00Z",
+              "leaveAt": "2026-11-17T00:30:00Z",
+              "visitWaitMinutes": 0.0,
+              "stayMinutes": 30,
+              "arrivalClockExact": true,
+              "leaveClockExact": true
+            },
+            {
+              "clientPlaceId": "p2",
+              "arrivalAt": "2026-11-17T00:55:00Z",
+              "visitStartAt": "2026-11-17T00:55:00Z",
+              "leaveAt": "2026-11-17T01:25:00Z",
+              "visitWaitMinutes": 0.0,
+              "stayMinutes": 30,
+              "arrivalClockExact": true,
+              "leaveClockExact": true
+            },
+            {
+              "clientPlaceId": "p3",
+              "arrivalAt": "2026-11-17T01:45:00Z",
+              "visitStartAt": "2026-11-17T01:45:00Z",
+              "leaveAt": "2026-11-17T02:15:00Z",
+              "visitWaitMinutes": 0.0,
+              "stayMinutes": 30,
+              "arrivalClockExact": true,
+              "leaveClockExact": true
+            }
+          ],
+          "legs": [
+            {
+              "from": "p1",
+              "to": "p2",
+              "requestedAt": "2026-11-17T00:33:00Z",
+              "preparedAt": "2026-11-17T00:33:00Z",
+              "departureAt": "2026-11-17T00:40:00Z",
+              "arrivalAt": "2026-11-17T00:52:00Z",
+              "placeArrivalAt": "2026-11-17T00:55:00Z",
+              "initialWaitMinutes": 7.0,
+              "rideMinutes": 12.0,
+              "accessWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "egressWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "samePhysicalStation": false,
+              "transfers": 1,
+              "rideSegmentIds": [
+                "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+              ],
+              "segments": [
+                {
+                  "segmentId": "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba",
+                  "operator": "fixture-rail",
+                  "line": "시험 노선",
+                  "trainType": "fixture"
+                }
+              ],
+              "fareUnits": [
+                {
+                  "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                  "rideSegmentIds": [
+                    "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+                  ],
+                  "baseFare": 220,
+                  "supplement": 0,
+                  "quotedTotal": null,
+                  "currency": "JPY",
+                  "evidence": {
+                    "source": "synthetic-timetable",
+                    "version": "2026-11-test-1"
+                  }
+                }
+              ],
+              "fareBasis": "independent_journey",
+              "providerEvidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              },
+              "clockExact": true
+            },
+            {
+              "from": "p2",
+              "to": "p3",
+              "requestedAt": "2026-11-17T01:28:00Z",
+              "preparedAt": "2026-11-17T01:28:00Z",
+              "departureAt": "2026-11-17T01:30:00Z",
+              "arrivalAt": "2026-11-17T01:42:00Z",
+              "placeArrivalAt": "2026-11-17T01:45:00Z",
+              "initialWaitMinutes": 2.0,
+              "rideMinutes": 12.0,
+              "accessWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "egressWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "samePhysicalStation": false,
+              "transfers": 1,
+              "rideSegmentIds": [
+                "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+              ],
+              "segments": [
+                {
+                  "segmentId": "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc",
+                  "operator": "fixture-rail",
+                  "line": "시험 노선",
+                  "trainType": "fixture"
+                }
+              ],
+              "fareUnits": [
+                {
+                  "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                  "rideSegmentIds": [
+                    "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+                  ],
+                  "baseFare": 220,
+                  "supplement": 0,
+                  "quotedTotal": null,
+                  "currency": "JPY",
+                  "evidence": {
+                    "source": "synthetic-timetable",
+                    "version": "2026-11-test-1"
+                  }
+                }
+              ],
+              "fareBasis": "independent_journey",
+              "providerEvidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              },
+              "clockExact": true
+            }
+          ],
+          "constraints": [
+            {
+              "kind": "opening",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": "p1"
+            },
+            {
+              "kind": "opening",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": "p2"
+            },
+            {
+              "kind": "opening",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": "p3"
+            },
+            {
+              "kind": "end_by",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": null
+            }
+          ],
+          "completion": "complete",
+          "timing": "timetable",
+          "accessWalking": "routed",
+          "stopReason": null,
+          "finishAt": "2026-11-17T02:15:00Z",
+          "stationChoices": {
+            "p1": {
+              "namespace": "fixture",
+              "sourceVersion": "2026-11-test-1",
+              "providerStationId": "s1",
+              "name": "가상 1역",
+              "line": "시험 노선",
+              "prefecture": "fixture-tokyo",
+              "location": {
+                "lat": 35.666999999999994,
+                "lng": 139.694
+              }
+            },
+            "p2": {
+              "namespace": "fixture",
+              "sourceVersion": "2026-11-test-1",
+              "providerStationId": "s2",
+              "name": "가상 2역",
+              "line": "시험 노선",
+              "prefecture": "fixture-tokyo",
+              "location": {
+                "lat": 35.672999999999995,
+                "lng": 139.698
+              }
+            },
+            "p3": {
+              "namespace": "fixture",
+              "sourceVersion": "2026-11-test-1",
+              "providerStationId": "s3",
+              "name": "가상 3역",
+              "line": "시험 노선",
+              "prefecture": "fixture-tokyo",
+              "location": {
+                "lat": 35.678999999999995,
+                "lng": 139.702
+              }
+            }
+          },
+          "fare": {
+            "status": "known",
+            "noPassTotal": 440,
+            "currency": "JPY",
+            "fareUnits": [
+              {
+                "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                "rideSegmentIds": [
+                  "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+                ],
+                "baseFare": 220,
+                "supplement": 0,
+                "quotedTotal": null,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              },
+              {
+                "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                "rideSegmentIds": [
+                  "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+                ],
+                "baseFare": 220,
+                "supplement": 0,
+                "quotedTotal": null,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              }
+            ],
+            "scope": "independent-quoted-journeys"
+          },
+          "transfers": 2,
+          "optimality": "not-guaranteed",
+          "elapsedMinutes": 135.0,
+          "digest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+          "planId": "plan-566a4afa82f451500503"
+        }
+      },
+      "selected": {
+        "order": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "visits": [
+          {
+            "clientPlaceId": "p1",
+            "arrivalAt": "2026-11-17T00:00:00Z",
+            "visitStartAt": "2026-11-17T00:00:00Z",
+            "leaveAt": "2026-11-17T00:30:00Z",
+            "visitWaitMinutes": 0.0,
+            "stayMinutes": 30,
+            "arrivalClockExact": true,
+            "leaveClockExact": true
+          },
+          {
+            "clientPlaceId": "p2",
+            "arrivalAt": "2026-11-17T00:55:00Z",
+            "visitStartAt": "2026-11-17T00:55:00Z",
+            "leaveAt": "2026-11-17T01:25:00Z",
+            "visitWaitMinutes": 0.0,
+            "stayMinutes": 30,
+            "arrivalClockExact": true,
+            "leaveClockExact": true
+          },
+          {
+            "clientPlaceId": "p3",
+            "arrivalAt": "2026-11-17T01:45:00Z",
+            "visitStartAt": "2026-11-17T01:45:00Z",
+            "leaveAt": "2026-11-17T02:15:00Z",
+            "visitWaitMinutes": 0.0,
+            "stayMinutes": 30,
+            "arrivalClockExact": true,
+            "leaveClockExact": true
+          }
+        ],
+        "legs": [
+          {
+            "from": "p1",
+            "to": "p2",
+            "requestedAt": "2026-11-17T00:33:00Z",
+            "preparedAt": "2026-11-17T00:33:00Z",
+            "departureAt": "2026-11-17T00:40:00Z",
+            "arrivalAt": "2026-11-17T00:52:00Z",
+            "placeArrivalAt": "2026-11-17T00:55:00Z",
+            "initialWaitMinutes": 7.0,
+            "rideMinutes": 12.0,
+            "accessWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "egressWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "samePhysicalStation": false,
+            "transfers": 1,
+            "rideSegmentIds": [
+              "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+            ],
+            "segments": [
+              {
+                "segmentId": "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba",
+                "operator": "fixture-rail",
+                "line": "시험 노선",
+                "trainType": "fixture"
+              }
+            ],
+            "fareUnits": [
+              {
+                "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                "rideSegmentIds": [
+                  "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+                ],
+                "baseFare": 220,
+                "supplement": 0,
+                "quotedTotal": null,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              }
+            ],
+            "fareBasis": "independent_journey",
+            "providerEvidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            },
+            "clockExact": true
+          },
+          {
+            "from": "p2",
+            "to": "p3",
+            "requestedAt": "2026-11-17T01:28:00Z",
+            "preparedAt": "2026-11-17T01:28:00Z",
+            "departureAt": "2026-11-17T01:30:00Z",
+            "arrivalAt": "2026-11-17T01:42:00Z",
+            "placeArrivalAt": "2026-11-17T01:45:00Z",
+            "initialWaitMinutes": 2.0,
+            "rideMinutes": 12.0,
+            "accessWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "egressWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "samePhysicalStation": false,
+            "transfers": 1,
+            "rideSegmentIds": [
+              "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+            ],
+            "segments": [
+              {
+                "segmentId": "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc",
+                "operator": "fixture-rail",
+                "line": "시험 노선",
+                "trainType": "fixture"
+              }
+            ],
+            "fareUnits": [
+              {
+                "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                "rideSegmentIds": [
+                  "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+                ],
+                "baseFare": 220,
+                "supplement": 0,
+                "quotedTotal": null,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              }
+            ],
+            "fareBasis": "independent_journey",
+            "providerEvidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            },
+            "clockExact": true
+          }
+        ],
+        "constraints": [
+          {
+            "kind": "opening",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": "p1"
+          },
+          {
+            "kind": "opening",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": "p2"
+          },
+          {
+            "kind": "opening",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": "p3"
+          },
+          {
+            "kind": "end_by",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": null
+          }
+        ],
+        "completion": "complete",
+        "timing": "timetable",
+        "accessWalking": "routed",
+        "stopReason": null,
+        "finishAt": "2026-11-17T02:15:00Z",
+        "stationChoices": {
+          "p1": {
+            "namespace": "fixture",
+            "sourceVersion": "2026-11-test-1",
+            "providerStationId": "s1",
+            "name": "가상 1역",
+            "line": "시험 노선",
+            "prefecture": "fixture-tokyo",
+            "location": {
+              "lat": 35.666999999999994,
+              "lng": 139.694
+            }
+          },
+          "p2": {
+            "namespace": "fixture",
+            "sourceVersion": "2026-11-test-1",
+            "providerStationId": "s2",
+            "name": "가상 2역",
+            "line": "시험 노선",
+            "prefecture": "fixture-tokyo",
+            "location": {
+              "lat": 35.672999999999995,
+              "lng": 139.698
+            }
+          },
+          "p3": {
+            "namespace": "fixture",
+            "sourceVersion": "2026-11-test-1",
+            "providerStationId": "s3",
+            "name": "가상 3역",
+            "line": "시험 노선",
+            "prefecture": "fixture-tokyo",
+            "location": {
+              "lat": 35.678999999999995,
+              "lng": 139.702
+            }
+          }
+        },
+        "fare": {
+          "status": "known",
+          "noPassTotal": 440,
+          "currency": "JPY",
+          "fareUnits": [
+            {
+              "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+              "rideSegmentIds": [
+                "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "quotedTotal": null,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            },
+            {
+              "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+              "rideSegmentIds": [
+                "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+              ],
+              "baseFare": 220,
+              "supplement": 0,
+              "quotedTotal": null,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            }
+          ],
+          "scope": "independent-quoted-journeys"
+        },
+        "transfers": 2,
+        "optimality": "not-guaranteed",
+        "elapsedMinutes": 135.0,
+        "digest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+        "planId": "plan-566a4afa82f451500503"
+      },
+      "passComparison": {
+        "status": "known",
+        "evaluations": [
+          {
+            "passId": "synthetic-line-pass",
+            "routeDigest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+            "status": "known",
+            "total": 590,
+            "savings": -150,
+            "reason": null,
+            "decision": {
+              "routeDigest": "566a4afa82f451500503fa51384434775ee5c3fd16a22dc27fdbf5bac71fcf53",
+              "passId": "synthetic-line-pass",
+              "documentVersion": "trial-1",
+              "eligibility": "eligible",
+              "coverage": "known",
+              "validity": "valid",
+              "validFrom": "2026-11-17T00:00:00+09:00",
+              "validUntil": "2026-11-18T00:00:00+09:00",
+              "purchasePrice": 150,
+              "allocations": [
+                {
+                  "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                  "uncoveredFare": 220,
+                  "requiredSupplement": 0
+                },
+                {
+                  "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                  "uncoveredFare": 220,
+                  "requiredSupplement": 0
+                }
+              ],
+              "reportedTotal": 590,
+              "evidence": {
+                "source": "synthetic-line-coverage",
+                "version": "trial-1"
+              }
+            }
+          },
+          {
+            "passId": "synthetic-line-pass",
+            "routeDigest": "b1f247f24809a9b011c451a2d020b7592863951b43fa466cccbf0f7bc435c56e",
+            "status": "known",
+            "total": 190,
+            "savings": 250,
+            "reason": null,
+            "decision": {
+              "routeDigest": "b1f247f24809a9b011c451a2d020b7592863951b43fa466cccbf0f7bc435c56e",
+              "passId": "synthetic-line-pass",
+              "documentVersion": "trial-1",
+              "eligibility": "eligible",
+              "coverage": "known",
+              "validity": "valid",
+              "validFrom": "2026-11-17T00:00:00+09:00",
+              "validUntil": "2026-11-18T00:00:00+09:00",
+              "purchasePrice": 150,
+              "allocations": [
+                {
+                  "fareUnitId": "1bf92ec28db7c71383360b92b9cd90892a0ba43716d599ec8ab62dbfe43fbb59",
+                  "uncoveredFare": 0,
+                  "requiredSupplement": 20
+                },
+                {
+                  "fareUnitId": "fb66538fd7541df822b600bb3f8c9c6484fc17cd11ec453f28fc62e68f50970e",
+                  "uncoveredFare": 0,
+                  "requiredSupplement": 20
+                }
+              ],
+              "reportedTotal": 190,
+              "evidence": {
+                "source": "synthetic-line-coverage",
+                "version": "trial-1"
+              }
+            }
+          }
+        ],
+        "recommendation": {
+          "routeDigest": "b1f247f24809a9b011c451a2d020b7592863951b43fa466cccbf0f7bc435c56e",
+          "passId": "synthetic-line-pass",
+          "total": 190
+        },
+        "scope": "completed-candidates-only",
+        "purchasePriceCount": 1,
+        "unconfirmedPassRouteDigests": []
+      },
+      "stopReasons": [],
+      "comparisonScope": "completed-candidates-only",
+      "optimality": "not-guaranteed",
+      "inputVersion": "2",
+      "dataSource": "fixture",
+      "fixtureId": "tokyo-demo",
+      "fixtureLabel": "가상 시간표·운임 시험 결과",
+      "echoInput": {
+        "inputVersion": "2",
+        "sessionId": "offline-pass-trial",
+        "operationId": "pass-trial",
+        "dataSource": "fixture",
+        "fixtureId": "tokyo-demo",
+        "startAt": "2026-11-17T09:00:00+09:00",
+        "endBy": "2026-11-17T20:00:00+09:00",
+        "places": [
+          {
+            "clientPlaceId": "p1",
+            "name": "가상 관광지 1",
+            "location": {
+              "lat": 35.666,
+              "lng": 139.694
+            },
+            "stayMinutes": 30,
+            "openingWindows": [
+              {
+                "startAt": "2026-11-17T08:00:00+09:00",
+                "endAt": "2026-11-18T01:00:00+09:00"
+              }
+            ]
+          },
+          {
+            "clientPlaceId": "p2",
+            "name": "가상 관광지 2",
+            "location": {
+              "lat": 35.672,
+              "lng": 139.698
+            },
+            "stayMinutes": 30,
+            "openingWindows": [
+              {
+                "startAt": "2026-11-17T08:00:00+09:00",
+                "endAt": "2026-11-18T01:00:00+09:00"
+              }
+            ]
+          },
+          {
+            "clientPlaceId": "p3",
+            "name": "가상 관광지 3",
+            "location": {
+              "lat": 35.678,
+              "lng": 139.702
+            },
+            "stayMinutes": 30,
+            "openingWindows": [
+              {
+                "startAt": "2026-11-17T08:00:00+09:00",
+                "endAt": "2026-11-18T01:00:00+09:00"
+              }
+            ]
+          }
+        ],
+        "mode": "strict",
+        "options": {
+          "allowRepair": false,
+          "allowPassEvaluation": true,
+          "allowOrderAlternates": true,
+          "allowPrefixReuse": false
+        }
+      },
+      "ledger": {
+        "limits": {
+          "rag": 1,
+          "rail": 4,
+          "station": 3,
+          "walk": 0
+        },
+        "railAttempts": 4,
+        "logicalAttempts": 4,
+        "stationAttempts": 3,
+        "walkAttempts": 0,
+        "ragRequests": 1,
+        "totalRoutingOperationAttempts": 7,
+        "baselineAttempts": 5,
+        "repairAttempts": 2,
+        "failedAttempts": 0,
+        "providerCalls": 0,
+        "httpRequestsObserved": 0,
+        "billingUnitsObserved": 0,
+        "measurementBasis": "fixture-no-network",
+        "sessionUsage": {
+          "rag": {
+            "used": 1,
+            "limit": 12
+          },
+          "rail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "station": {
+            "used": 3,
+            "limit": 16
+          },
+          "walk": {
+            "used": 0,
+            "limit": 0
+          }
+        },
+        "attempts": [
+          {
+            "id": 1153,
+            "kind": "station",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1154,
+            "kind": "station",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1155,
+            "kind": "station",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1156,
+            "kind": "rail",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1157,
+            "kind": "rail",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1158,
+            "kind": "rail",
+            "phase": "repair",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1159,
+            "kind": "rail",
+            "phase": "repair",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1160,
+            "kind": "rag",
+            "phase": "pricing",
+            "outcome": "ok",
+            "error": null
+          }
+        ],
+        "cacheHits": 0,
+        "sharedRequests": 0,
+        "budgetExhausted": false,
+        "stopReasons": []
+      }
+    },
+    "totalOnly": {
+      "completion": "complete",
+      "timing": "timetable",
+      "accessWalking": "routed",
+      "pricing": "partial",
+      "constraints": [
+        {
+          "kind": "opening",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": "p1"
+        },
+        {
+          "kind": "opening",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": "p2"
+        },
+        {
+          "kind": "opening",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": "p3"
+        },
+        {
+          "kind": "end_by",
+          "status": "satisfied",
+          "reason": null,
+          "visitId": null
+        }
+      ],
+      "improvement": "not_attempted",
+      "repairLog": [],
+      "candidates": {
+        "orders": [
+          {
+            "order": [
+              "p1",
+              "p2",
+              "p3"
+            ],
+            "geometricScore": 1517.4618498498558,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "p3",
+              "p2",
+              "p1"
+            ],
+            "geometricScore": 1517.4618498498558,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          },
+          {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricScore": 2276.199241207343,
+            "scoreBasis": "distance-and-soft-group-penalty-meters"
+          }
+        ],
+        "groups": [
+          [
+            "p1",
+            "p2"
+          ],
+          [
+            "p3"
+          ]
+        ],
+        "clusterDiameterLimitMeters": 800,
+        "thresholdStatus": "experimental",
+        "routeProviderAttempts": 0,
+        "optimality": "geometric-ranking-only",
+        "orderEvaluation": {
+          "objective": "earliest-finish-then-known-fare",
+          "status": "baseline_kept",
+          "alternate": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "geometricRank": 3,
+            "kind": "different_path",
+            "reusedLegs": 0,
+            "requiredRailUpperBound": 2
+          },
+          "policy": "diverse",
+          "priorityVisitIds": [],
+          "stopReason": null,
+          "plan": {
+            "order": [
+              "p2",
+              "p1",
+              "p3"
+            ],
+            "visits": [
+              {
+                "clientPlaceId": "p2",
+                "arrivalAt": "2026-11-17T00:00:00Z",
+                "visitStartAt": "2026-11-17T00:00:00Z",
+                "leaveAt": "2026-11-17T00:30:00Z",
+                "visitWaitMinutes": 0.0,
+                "stayMinutes": 30,
+                "arrivalClockExact": true,
+                "leaveClockExact": true
+              },
+              {
+                "clientPlaceId": "p1",
+                "arrivalAt": "2026-11-17T01:08:00Z",
+                "visitStartAt": "2026-11-17T01:08:00Z",
+                "leaveAt": "2026-11-17T01:38:00Z",
+                "visitWaitMinutes": 0.0,
+                "stayMinutes": 30,
+                "arrivalClockExact": true,
+                "leaveClockExact": true
+              },
+              {
+                "clientPlaceId": "p3",
+                "arrivalAt": "2026-11-17T02:18:00Z",
+                "visitStartAt": "2026-11-17T02:18:00Z",
+                "leaveAt": "2026-11-17T02:48:00Z",
+                "visitWaitMinutes": 0.0,
+                "stayMinutes": 30,
+                "arrivalClockExact": true,
+                "leaveClockExact": true
+              }
+            ],
+            "legs": [
+              {
+                "from": "p2",
+                "to": "p1",
+                "requestedAt": "2026-11-17T00:33:00Z",
+                "preparedAt": "2026-11-17T00:33:00Z",
+                "departureAt": "2026-11-17T00:40:00Z",
+                "arrivalAt": "2026-11-17T01:05:00Z",
+                "placeArrivalAt": "2026-11-17T01:08:00Z",
+                "initialWaitMinutes": 7.0,
+                "rideMinutes": 25.0,
+                "accessWalking": {
+                  "status": "routed",
+                  "minutes": 3,
+                  "evidence": {
+                    "source": "synthetic-walk",
+                    "version": "2026-11-test-1"
+                  }
+                },
+                "egressWalking": {
+                  "status": "routed",
+                  "minutes": 3,
+                  "evidence": {
+                    "source": "synthetic-walk",
+                    "version": "2026-11-test-1"
+                  }
+                },
+                "samePhysicalStation": false,
+                "transfers": 0,
+                "rideSegmentIds": [
+                  "2f2fbc540ee4d87ee3207613712636d71122f62b4bfc6aa3f4982b707fc0bb90"
+                ],
+                "segments": [
+                  {
+                    "segmentId": "2f2fbc540ee4d87ee3207613712636d71122f62b4bfc6aa3f4982b707fc0bb90",
+                    "operator": "fixture-rail",
+                    "line": "시험 패스선",
+                    "trainType": "fixture"
+                  }
+                ],
+                "fareUnits": [
+                  {
+                    "fareUnitId": "1bf92ec28db7c71383360b92b9cd90892a0ba43716d599ec8ab62dbfe43fbb59",
+                    "rideSegmentIds": [
+                      "2f2fbc540ee4d87ee3207613712636d71122f62b4bfc6aa3f4982b707fc0bb90"
+                    ],
+                    "baseFare": null,
+                    "supplement": null,
+                    "quotedTotal": 220,
+                    "currency": "JPY",
+                    "evidence": {
+                      "source": "synthetic-timetable",
+                      "version": "2026-11-test-1"
+                    }
+                  }
+                ],
+                "fareBasis": "independent_journey",
+                "providerEvidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                },
+                "clockExact": true
+              },
+              {
+                "from": "p1",
+                "to": "p3",
+                "requestedAt": "2026-11-17T01:41:00Z",
+                "preparedAt": "2026-11-17T01:41:00Z",
+                "departureAt": "2026-11-17T01:50:00Z",
+                "arrivalAt": "2026-11-17T02:15:00Z",
+                "placeArrivalAt": "2026-11-17T02:18:00Z",
+                "initialWaitMinutes": 9.0,
+                "rideMinutes": 25.0,
+                "accessWalking": {
+                  "status": "routed",
+                  "minutes": 3,
+                  "evidence": {
+                    "source": "synthetic-walk",
+                    "version": "2026-11-test-1"
+                  }
+                },
+                "egressWalking": {
+                  "status": "routed",
+                  "minutes": 3,
+                  "evidence": {
+                    "source": "synthetic-walk",
+                    "version": "2026-11-test-1"
+                  }
+                },
+                "samePhysicalStation": false,
+                "transfers": 0,
+                "rideSegmentIds": [
+                  "4d9dea36ea0a53369f2c06cd2574a46e5b498ec3b6590bbb68200ca3882598c3"
+                ],
+                "segments": [
+                  {
+                    "segmentId": "4d9dea36ea0a53369f2c06cd2574a46e5b498ec3b6590bbb68200ca3882598c3",
+                    "operator": "fixture-rail",
+                    "line": "시험 패스선",
+                    "trainType": "fixture"
+                  }
+                ],
+                "fareUnits": [
+                  {
+                    "fareUnitId": "fb66538fd7541df822b600bb3f8c9c6484fc17cd11ec453f28fc62e68f50970e",
+                    "rideSegmentIds": [
+                      "4d9dea36ea0a53369f2c06cd2574a46e5b498ec3b6590bbb68200ca3882598c3"
+                    ],
+                    "baseFare": null,
+                    "supplement": null,
+                    "quotedTotal": 220,
+                    "currency": "JPY",
+                    "evidence": {
+                      "source": "synthetic-timetable",
+                      "version": "2026-11-test-1"
+                    }
+                  }
+                ],
+                "fareBasis": "independent_journey",
+                "providerEvidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                },
+                "clockExact": true
+              }
+            ],
+            "constraints": [
+              {
+                "kind": "opening",
+                "status": "satisfied",
+                "reason": null,
+                "visitId": "p2"
+              },
+              {
+                "kind": "opening",
+                "status": "satisfied",
+                "reason": null,
+                "visitId": "p1"
+              },
+              {
+                "kind": "opening",
+                "status": "satisfied",
+                "reason": null,
+                "visitId": "p3"
+              },
+              {
+                "kind": "end_by",
+                "status": "satisfied",
+                "reason": null,
+                "visitId": null
+              }
+            ],
+            "completion": "complete",
+            "timing": "timetable",
+            "accessWalking": "routed",
+            "stopReason": null,
+            "finishAt": "2026-11-17T02:48:00Z",
+            "stationChoices": {
+              "p1": {
+                "namespace": "fixture",
+                "sourceVersion": "2026-11-test-1",
+                "providerStationId": "s1",
+                "name": "가상 1역",
+                "line": "시험 노선",
+                "prefecture": "fixture-tokyo",
+                "location": {
+                  "lat": 35.666999999999994,
+                  "lng": 139.694
+                }
+              },
+              "p2": {
+                "namespace": "fixture",
+                "sourceVersion": "2026-11-test-1",
+                "providerStationId": "s2",
+                "name": "가상 2역",
+                "line": "시험 노선",
+                "prefecture": "fixture-tokyo",
+                "location": {
+                  "lat": 35.672999999999995,
+                  "lng": 139.698
+                }
+              },
+              "p3": {
+                "namespace": "fixture",
+                "sourceVersion": "2026-11-test-1",
+                "providerStationId": "s3",
+                "name": "가상 3역",
+                "line": "시험 노선",
+                "prefecture": "fixture-tokyo",
+                "location": {
+                  "lat": 35.678999999999995,
+                  "lng": 139.702
+                }
+              }
+            },
+            "fare": {
+              "status": "known",
+              "noPassTotal": 440,
+              "currency": "JPY",
+              "fareUnits": [
+                {
+                  "fareUnitId": "1bf92ec28db7c71383360b92b9cd90892a0ba43716d599ec8ab62dbfe43fbb59",
+                  "rideSegmentIds": [
+                    "2f2fbc540ee4d87ee3207613712636d71122f62b4bfc6aa3f4982b707fc0bb90"
+                  ],
+                  "baseFare": null,
+                  "supplement": null,
+                  "quotedTotal": 220,
+                  "currency": "JPY",
+                  "evidence": {
+                    "source": "synthetic-timetable",
+                    "version": "2026-11-test-1"
+                  }
+                },
+                {
+                  "fareUnitId": "fb66538fd7541df822b600bb3f8c9c6484fc17cd11ec453f28fc62e68f50970e",
+                  "rideSegmentIds": [
+                    "4d9dea36ea0a53369f2c06cd2574a46e5b498ec3b6590bbb68200ca3882598c3"
+                  ],
+                  "baseFare": null,
+                  "supplement": null,
+                  "quotedTotal": 220,
+                  "currency": "JPY",
+                  "evidence": {
+                    "source": "synthetic-timetable",
+                    "version": "2026-11-test-1"
+                  }
+                }
+              ],
+              "scope": "independent-quoted-journeys"
+            },
+            "transfers": 0,
+            "optimality": "not-guaranteed",
+            "elapsedMinutes": 168.0,
+            "digest": "4a1e60ec67d291989295353fb595f155292674f252cc2182d84aa901f1ec4bb5",
+            "planId": "plan-4a1e60ec67d291989295"
+          },
+          "selectedWithoutKnownViolations": true,
+          "feasibilityStatus": "confirmed"
+        }
+      },
+      "baseline": {
+        "planId": "plan-d321e200567e102282b8",
+        "digest": "d321e200567e102282b8e34135d75731a03db30156bfdf99340f80ade81e8fd6",
+        "preserved": true,
+        "reason": "immutable_completed_baseline",
+        "plan": {
+          "order": [
+            "p1",
+            "p2",
+            "p3"
+          ],
+          "visits": [
+            {
+              "clientPlaceId": "p1",
+              "arrivalAt": "2026-11-17T00:00:00Z",
+              "visitStartAt": "2026-11-17T00:00:00Z",
+              "leaveAt": "2026-11-17T00:30:00Z",
+              "visitWaitMinutes": 0.0,
+              "stayMinutes": 30,
+              "arrivalClockExact": true,
+              "leaveClockExact": true
+            },
+            {
+              "clientPlaceId": "p2",
+              "arrivalAt": "2026-11-17T00:55:00Z",
+              "visitStartAt": "2026-11-17T00:55:00Z",
+              "leaveAt": "2026-11-17T01:25:00Z",
+              "visitWaitMinutes": 0.0,
+              "stayMinutes": 30,
+              "arrivalClockExact": true,
+              "leaveClockExact": true
+            },
+            {
+              "clientPlaceId": "p3",
+              "arrivalAt": "2026-11-17T01:45:00Z",
+              "visitStartAt": "2026-11-17T01:45:00Z",
+              "leaveAt": "2026-11-17T02:15:00Z",
+              "visitWaitMinutes": 0.0,
+              "stayMinutes": 30,
+              "arrivalClockExact": true,
+              "leaveClockExact": true
+            }
+          ],
+          "legs": [
+            {
+              "from": "p1",
+              "to": "p2",
+              "requestedAt": "2026-11-17T00:33:00Z",
+              "preparedAt": "2026-11-17T00:33:00Z",
+              "departureAt": "2026-11-17T00:40:00Z",
+              "arrivalAt": "2026-11-17T00:52:00Z",
+              "placeArrivalAt": "2026-11-17T00:55:00Z",
+              "initialWaitMinutes": 7.0,
+              "rideMinutes": 12.0,
+              "accessWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "egressWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "samePhysicalStation": false,
+              "transfers": 1,
+              "rideSegmentIds": [
+                "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+              ],
+              "segments": [
+                {
+                  "segmentId": "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba",
+                  "operator": "fixture-rail",
+                  "line": "시험 노선",
+                  "trainType": "fixture"
+                }
+              ],
+              "fareUnits": [
+                {
+                  "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                  "rideSegmentIds": [
+                    "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+                  ],
+                  "baseFare": null,
+                  "supplement": null,
+                  "quotedTotal": 220,
+                  "currency": "JPY",
+                  "evidence": {
+                    "source": "synthetic-timetable",
+                    "version": "2026-11-test-1"
+                  }
+                }
+              ],
+              "fareBasis": "independent_journey",
+              "providerEvidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              },
+              "clockExact": true
+            },
+            {
+              "from": "p2",
+              "to": "p3",
+              "requestedAt": "2026-11-17T01:28:00Z",
+              "preparedAt": "2026-11-17T01:28:00Z",
+              "departureAt": "2026-11-17T01:30:00Z",
+              "arrivalAt": "2026-11-17T01:42:00Z",
+              "placeArrivalAt": "2026-11-17T01:45:00Z",
+              "initialWaitMinutes": 2.0,
+              "rideMinutes": 12.0,
+              "accessWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "egressWalking": {
+                "status": "routed",
+                "minutes": 3,
+                "evidence": {
+                  "source": "synthetic-walk",
+                  "version": "2026-11-test-1"
+                }
+              },
+              "samePhysicalStation": false,
+              "transfers": 1,
+              "rideSegmentIds": [
+                "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+              ],
+              "segments": [
+                {
+                  "segmentId": "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc",
+                  "operator": "fixture-rail",
+                  "line": "시험 노선",
+                  "trainType": "fixture"
+                }
+              ],
+              "fareUnits": [
+                {
+                  "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                  "rideSegmentIds": [
+                    "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+                  ],
+                  "baseFare": null,
+                  "supplement": null,
+                  "quotedTotal": 220,
+                  "currency": "JPY",
+                  "evidence": {
+                    "source": "synthetic-timetable",
+                    "version": "2026-11-test-1"
+                  }
+                }
+              ],
+              "fareBasis": "independent_journey",
+              "providerEvidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              },
+              "clockExact": true
+            }
+          ],
+          "constraints": [
+            {
+              "kind": "opening",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": "p1"
+            },
+            {
+              "kind": "opening",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": "p2"
+            },
+            {
+              "kind": "opening",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": "p3"
+            },
+            {
+              "kind": "end_by",
+              "status": "satisfied",
+              "reason": null,
+              "visitId": null
+            }
+          ],
+          "completion": "complete",
+          "timing": "timetable",
+          "accessWalking": "routed",
+          "stopReason": null,
+          "finishAt": "2026-11-17T02:15:00Z",
+          "stationChoices": {
+            "p1": {
+              "namespace": "fixture",
+              "sourceVersion": "2026-11-test-1",
+              "providerStationId": "s1",
+              "name": "가상 1역",
+              "line": "시험 노선",
+              "prefecture": "fixture-tokyo",
+              "location": {
+                "lat": 35.666999999999994,
+                "lng": 139.694
+              }
+            },
+            "p2": {
+              "namespace": "fixture",
+              "sourceVersion": "2026-11-test-1",
+              "providerStationId": "s2",
+              "name": "가상 2역",
+              "line": "시험 노선",
+              "prefecture": "fixture-tokyo",
+              "location": {
+                "lat": 35.672999999999995,
+                "lng": 139.698
+              }
+            },
+            "p3": {
+              "namespace": "fixture",
+              "sourceVersion": "2026-11-test-1",
+              "providerStationId": "s3",
+              "name": "가상 3역",
+              "line": "시험 노선",
+              "prefecture": "fixture-tokyo",
+              "location": {
+                "lat": 35.678999999999995,
+                "lng": 139.702
+              }
+            }
+          },
+          "fare": {
+            "status": "known",
+            "noPassTotal": 440,
+            "currency": "JPY",
+            "fareUnits": [
+              {
+                "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                "rideSegmentIds": [
+                  "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+                ],
+                "baseFare": null,
+                "supplement": null,
+                "quotedTotal": 220,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              },
+              {
+                "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                "rideSegmentIds": [
+                  "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+                ],
+                "baseFare": null,
+                "supplement": null,
+                "quotedTotal": 220,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              }
+            ],
+            "scope": "independent-quoted-journeys"
+          },
+          "transfers": 2,
+          "optimality": "not-guaranteed",
+          "elapsedMinutes": 135.0,
+          "digest": "d321e200567e102282b8e34135d75731a03db30156bfdf99340f80ade81e8fd6",
+          "planId": "plan-d321e200567e102282b8"
+        }
+      },
+      "selected": {
+        "order": [
+          "p1",
+          "p2",
+          "p3"
+        ],
+        "visits": [
+          {
+            "clientPlaceId": "p1",
+            "arrivalAt": "2026-11-17T00:00:00Z",
+            "visitStartAt": "2026-11-17T00:00:00Z",
+            "leaveAt": "2026-11-17T00:30:00Z",
+            "visitWaitMinutes": 0.0,
+            "stayMinutes": 30,
+            "arrivalClockExact": true,
+            "leaveClockExact": true
+          },
+          {
+            "clientPlaceId": "p2",
+            "arrivalAt": "2026-11-17T00:55:00Z",
+            "visitStartAt": "2026-11-17T00:55:00Z",
+            "leaveAt": "2026-11-17T01:25:00Z",
+            "visitWaitMinutes": 0.0,
+            "stayMinutes": 30,
+            "arrivalClockExact": true,
+            "leaveClockExact": true
+          },
+          {
+            "clientPlaceId": "p3",
+            "arrivalAt": "2026-11-17T01:45:00Z",
+            "visitStartAt": "2026-11-17T01:45:00Z",
+            "leaveAt": "2026-11-17T02:15:00Z",
+            "visitWaitMinutes": 0.0,
+            "stayMinutes": 30,
+            "arrivalClockExact": true,
+            "leaveClockExact": true
+          }
+        ],
+        "legs": [
+          {
+            "from": "p1",
+            "to": "p2",
+            "requestedAt": "2026-11-17T00:33:00Z",
+            "preparedAt": "2026-11-17T00:33:00Z",
+            "departureAt": "2026-11-17T00:40:00Z",
+            "arrivalAt": "2026-11-17T00:52:00Z",
+            "placeArrivalAt": "2026-11-17T00:55:00Z",
+            "initialWaitMinutes": 7.0,
+            "rideMinutes": 12.0,
+            "accessWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "egressWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "samePhysicalStation": false,
+            "transfers": 1,
+            "rideSegmentIds": [
+              "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+            ],
+            "segments": [
+              {
+                "segmentId": "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba",
+                "operator": "fixture-rail",
+                "line": "시험 노선",
+                "trainType": "fixture"
+              }
+            ],
+            "fareUnits": [
+              {
+                "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+                "rideSegmentIds": [
+                  "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+                ],
+                "baseFare": null,
+                "supplement": null,
+                "quotedTotal": 220,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              }
+            ],
+            "fareBasis": "independent_journey",
+            "providerEvidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            },
+            "clockExact": true
+          },
+          {
+            "from": "p2",
+            "to": "p3",
+            "requestedAt": "2026-11-17T01:28:00Z",
+            "preparedAt": "2026-11-17T01:28:00Z",
+            "departureAt": "2026-11-17T01:30:00Z",
+            "arrivalAt": "2026-11-17T01:42:00Z",
+            "placeArrivalAt": "2026-11-17T01:45:00Z",
+            "initialWaitMinutes": 2.0,
+            "rideMinutes": 12.0,
+            "accessWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "egressWalking": {
+              "status": "routed",
+              "minutes": 3,
+              "evidence": {
+                "source": "synthetic-walk",
+                "version": "2026-11-test-1"
+              }
+            },
+            "samePhysicalStation": false,
+            "transfers": 1,
+            "rideSegmentIds": [
+              "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+            ],
+            "segments": [
+              {
+                "segmentId": "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc",
+                "operator": "fixture-rail",
+                "line": "시험 노선",
+                "trainType": "fixture"
+              }
+            ],
+            "fareUnits": [
+              {
+                "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+                "rideSegmentIds": [
+                  "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+                ],
+                "baseFare": null,
+                "supplement": null,
+                "quotedTotal": 220,
+                "currency": "JPY",
+                "evidence": {
+                  "source": "synthetic-timetable",
+                  "version": "2026-11-test-1"
+                }
+              }
+            ],
+            "fareBasis": "independent_journey",
+            "providerEvidence": {
+              "source": "synthetic-timetable",
+              "version": "2026-11-test-1"
+            },
+            "clockExact": true
+          }
+        ],
+        "constraints": [
+          {
+            "kind": "opening",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": "p1"
+          },
+          {
+            "kind": "opening",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": "p2"
+          },
+          {
+            "kind": "opening",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": "p3"
+          },
+          {
+            "kind": "end_by",
+            "status": "satisfied",
+            "reason": null,
+            "visitId": null
+          }
+        ],
+        "completion": "complete",
+        "timing": "timetable",
+        "accessWalking": "routed",
+        "stopReason": null,
+        "finishAt": "2026-11-17T02:15:00Z",
+        "stationChoices": {
+          "p1": {
+            "namespace": "fixture",
+            "sourceVersion": "2026-11-test-1",
+            "providerStationId": "s1",
+            "name": "가상 1역",
+            "line": "시험 노선",
+            "prefecture": "fixture-tokyo",
+            "location": {
+              "lat": 35.666999999999994,
+              "lng": 139.694
+            }
+          },
+          "p2": {
+            "namespace": "fixture",
+            "sourceVersion": "2026-11-test-1",
+            "providerStationId": "s2",
+            "name": "가상 2역",
+            "line": "시험 노선",
+            "prefecture": "fixture-tokyo",
+            "location": {
+              "lat": 35.672999999999995,
+              "lng": 139.698
+            }
+          },
+          "p3": {
+            "namespace": "fixture",
+            "sourceVersion": "2026-11-test-1",
+            "providerStationId": "s3",
+            "name": "가상 3역",
+            "line": "시험 노선",
+            "prefecture": "fixture-tokyo",
+            "location": {
+              "lat": 35.678999999999995,
+              "lng": 139.702
+            }
+          }
+        },
+        "fare": {
+          "status": "known",
+          "noPassTotal": 440,
+          "currency": "JPY",
+          "fareUnits": [
+            {
+              "fareUnitId": "d02856aff2d1ab245066d44e65e5decd18e3b58ff9c53c907c15b071f938c807",
+              "rideSegmentIds": [
+                "32b6d32870daa833b731a4f5a5602c1fb01b188c0764da9c57eda8c49eda4cba"
+              ],
+              "baseFare": null,
+              "supplement": null,
+              "quotedTotal": 220,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            },
+            {
+              "fareUnitId": "7d27cf5ff9c3a079a2408b940b5ebdeaed04289543bd5b77a83151de9b597e70",
+              "rideSegmentIds": [
+                "d35a093c52a22bc6f365ba328bbf2b6c2d30b9f8f391d6ad15f9184bb895b8dc"
+              ],
+              "baseFare": null,
+              "supplement": null,
+              "quotedTotal": 220,
+              "currency": "JPY",
+              "evidence": {
+                "source": "synthetic-timetable",
+                "version": "2026-11-test-1"
+              }
+            }
+          ],
+          "scope": "independent-quoted-journeys"
+        },
+        "transfers": 2,
+        "optimality": "not-guaranteed",
+        "elapsedMinutes": 135.0,
+        "digest": "d321e200567e102282b8e34135d75731a03db30156bfdf99340f80ade81e8fd6",
+        "planId": "plan-d321e200567e102282b8"
+      },
+      "passComparison": {
+        "status": "partial",
+        "evaluations": [
+          {
+            "passId": "synthetic-line-pass",
+            "routeDigest": "d321e200567e102282b8e34135d75731a03db30156bfdf99340f80ade81e8fd6",
+            "status": "unknown",
+            "total": null,
+            "savings": null,
+            "reason": "fare_components_unconfirmed"
+          },
+          {
+            "passId": "synthetic-line-pass",
+            "routeDigest": "4a1e60ec67d291989295353fb595f155292674f252cc2182d84aa901f1ec4bb5",
+            "status": "unknown",
+            "total": null,
+            "savings": null,
+            "reason": "fare_components_unconfirmed"
+          }
+        ],
+        "recommendation": {
+          "routeDigest": "d321e200567e102282b8e34135d75731a03db30156bfdf99340f80ade81e8fd6",
+          "passId": null,
+          "total": 440
+        },
+        "scope": "completed-candidates-only",
+        "purchasePriceCount": 1,
+        "unconfirmedPassRouteDigests": [
+          "d321e200567e102282b8e34135d75731a03db30156bfdf99340f80ade81e8fd6",
+          "4a1e60ec67d291989295353fb595f155292674f252cc2182d84aa901f1ec4bb5"
+        ]
+      },
+      "stopReasons": [],
+      "comparisonScope": "completed-candidates-only",
+      "optimality": "not-guaranteed",
+      "inputVersion": "2",
+      "dataSource": "fixture",
+      "fixtureId": "tokyo-demo",
+      "fixtureLabel": "가상 시간표·운임 시험 결과",
+      "echoInput": {
+        "inputVersion": "2",
+        "sessionId": "offline-pass-trial",
+        "operationId": "pass-trial",
+        "dataSource": "fixture",
+        "fixtureId": "tokyo-demo",
+        "startAt": "2026-11-17T09:00:00+09:00",
+        "endBy": "2026-11-17T20:00:00+09:00",
+        "places": [
+          {
+            "clientPlaceId": "p1",
+            "name": "가상 관광지 1",
+            "location": {
+              "lat": 35.666,
+              "lng": 139.694
+            },
+            "stayMinutes": 30,
+            "openingWindows": [
+              {
+                "startAt": "2026-11-17T08:00:00+09:00",
+                "endAt": "2026-11-18T01:00:00+09:00"
+              }
+            ]
+          },
+          {
+            "clientPlaceId": "p2",
+            "name": "가상 관광지 2",
+            "location": {
+              "lat": 35.672,
+              "lng": 139.698
+            },
+            "stayMinutes": 30,
+            "openingWindows": [
+              {
+                "startAt": "2026-11-17T08:00:00+09:00",
+                "endAt": "2026-11-18T01:00:00+09:00"
+              }
+            ]
+          },
+          {
+            "clientPlaceId": "p3",
+            "name": "가상 관광지 3",
+            "location": {
+              "lat": 35.678,
+              "lng": 139.702
+            },
+            "stayMinutes": 30,
+            "openingWindows": [
+              {
+                "startAt": "2026-11-17T08:00:00+09:00",
+                "endAt": "2026-11-18T01:00:00+09:00"
+              }
+            ]
+          }
+        ],
+        "mode": "strict",
+        "options": {
+          "allowRepair": false,
+          "allowPassEvaluation": true,
+          "allowOrderAlternates": true,
+          "allowPrefixReuse": false
+        }
+      },
+      "ledger": {
+        "limits": {
+          "rag": 1,
+          "rail": 4,
+          "station": 3,
+          "walk": 0
+        },
+        "railAttempts": 4,
+        "logicalAttempts": 4,
+        "stationAttempts": 3,
+        "walkAttempts": 0,
+        "ragRequests": 1,
+        "totalRoutingOperationAttempts": 7,
+        "baselineAttempts": 5,
+        "repairAttempts": 2,
+        "failedAttempts": 0,
+        "providerCalls": 0,
+        "httpRequestsObserved": 0,
+        "billingUnitsObserved": 0,
+        "measurementBasis": "fixture-no-network",
+        "sessionUsage": {
+          "rag": {
+            "used": 1,
+            "limit": 12
+          },
+          "rail": {
+            "used": 4,
+            "limit": 1000
+          },
+          "station": {
+            "used": 3,
+            "limit": 16
+          },
+          "walk": {
+            "used": 0,
+            "limit": 0
+          }
+        },
+        "attempts": [
+          {
+            "id": 1161,
+            "kind": "station",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1162,
+            "kind": "station",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1163,
+            "kind": "station",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1164,
+            "kind": "rail",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1165,
+            "kind": "rail",
+            "phase": "baseline",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1166,
+            "kind": "rail",
+            "phase": "repair",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1167,
+            "kind": "rail",
+            "phase": "repair",
+            "outcome": "ok",
+            "error": null
+          },
+          {
+            "id": 1168,
+            "kind": "rag",
+            "phase": "pricing",
+            "outcome": "ok",
+            "error": null
+          }
+        ],
+        "cacheHits": 0,
+        "sharedRequests": 0,
+        "budgetExhausted": false,
+        "stopReasons": []
+      }
+    }
+  }
+}

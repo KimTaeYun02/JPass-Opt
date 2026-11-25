@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "divergent-revalidation-manifest/1",
+  "artifacts": [
+    {
+      "file": "preflight.json",
+      "bytes": 9577,
+      "sha256": "bea4171ae58134828d8cbce5866e8166a5bd9fc32be995a06b75b1f24d7f25d2"
+    },
+    {
+      "file": "run-20261119/acquisition.json",
+      "bytes": 18301,
+      "sha256": "b94bcc055a9d07db8103de96578eb707dc384bec7f1590ebecb6d642b49f7389"
+    },
+    {
+      "file": "run-20261119/analysis/comparison.json",
+      "bytes": 4356,
+      "sha256": "719d847300eeb55866778b8e78b220aab20574e2265622001607f4f93a50c9af"
+    },
+    {
+      "file": "run-20261119/analysis/legacy-validation-recording.json",
+      "bytes": 34719,
+      "sha256": "bd7f4b262def1b16113388b717a86d42ee8f1d52fd5071924daac6c43e67887b"
+    },
+    {
+      "file": "run-20261119/analysis/legacy-validation-result.json",
+      "bytes": 12286,
+      "sha256": "011dba5a6c3ff1d7e8c5964e22c2a66e0ed2820fcc7402b9313396ed088b24e9"
+    },
+    {
+      "file": "run-20261119/analysis/v2-recording.json",
+      "bytes": 35337,
+      "sha256": "1c7e9b06ea1428c64747330b12bb3c337cf896aa3c66520fa5ea085980479881"
+    },
+    {
+      "file": "run-20261119/analysis/v2-result.json",
+      "bytes": 29800,
+      "sha256": "c7d28ec54ba85d5f38b5eb03b823da7d698b295c97d864e397b8a2e0c84ab765"
+    },
+    {
+      "file": "run-20261119/captures/01-snapshot.json",
+      "bytes": 19659,
+      "sha256": "3646f86987a2ac7fe3b745cb09e7a701452c4cb304952d48ed53c9befa40dceb"
+    },
+    {
+      "file": "run-20261119/captures/02-snapshot.json",
+      "bytes": 22656,
+      "sha256": "9d563c806ea7b7ccb2090ed2b25c5c6218cc0a2d19fc67f4ff76865e01dbd918"
+    },
+    {
+      "file": "run-20261119/captures/03-snapshot.json",
+      "bytes": 19767,
+      "sha256": "322a241da13d88b3103668a211b16b9a037158d627727141bab9ca8a7964ba53"
+    },
+    {
+      "file": "run-20261119/captures/04-snapshot.json",
+      "bytes": 22483,
+      "sha256": "6be0038f688c51fa6ccbb1653804c8703861016a63e4dea9f850f237a01684d6"
+    },
+    {
+      "file": "run-20261119/captures/05-snapshot.json",
+      "bytes": 25167,
+      "sha256": "1732735588308698af30a42e5e5cdd40979853fa8379afe474bc36f12ecba7b7"
+    },
+    {
+      "file": "run-20261119/captures/06-snapshot.json",
+      "bytes": 20908,
+      "sha256": "2fe4ac3f6abcbe801d26a5ddfb3b67f707f3f8f5198e1b311dbf60996d6f2b1c"
+    },
+    {
+      "file": "run-20261119/captures/07-v2.json",
+      "bytes": 20526,
+      "sha256": "a2d45c3235e1106b44f80ecf9d17610ef265c631ea314db3c88fcbd899ccdb40"
+    },
+    {
+      "file": "run-20261119/captures/08-v2.json",
+      "bytes": 22462,
+      "sha256": "4d7f2b88c0896ed5c024e1ebe7ec2acf49c8fa6f6252dc8b4a32ced410707ab6"
+    },
+    {
+      "file": "run-20261119/captures/09-legacy-validation.json",
+      "bytes": 19702,
+      "sha256": "6a254fb6e90ddcba84c1b393c61f801992af7cd4123050ff5fb46b21bf2ee07c"
+    },
+    {
+      "file": "run-20261119/captures/10-legacy-validation.json",
+      "bytes": 22454,
+      "sha256": "ff1a128d7b0a7e1cf48ed0afcb87e72ecee47ca9b622011cffaac40330f3731b"
+    },
+    {
+      "file": "run-20261119/scenario.json",
+      "bytes": 6974,
+      "sha256": "9f51cceac668d28f66178d754558e8136a9f866e2f90d5cd7bf56ec6efc076d8"
+    }
+  ],
+  "sources": [
+    {
+      "file": "planner/collect_sequential.py",
+      "bytes": 16398,
+      "sha256": "1adbb6d3f5c80ffd090a17ad4884ba47d01e73df32b555364c2e98709eba4f09"
+    },
+    {
+      "file": "planner/sequential_benchmark.py",
+      "bytes": 9192,
+      "sha256": "c34a2464da158af42fa73f1c922a4ad97f5f1d40dfad0ff162d33f7ba06c3110"
+    },
+    {
+      "file": "planner/capture.py",
+      "bytes": 12562,
+      "sha256": "75c37dda170699496c7bdfae3a391a91ac307815b3534f9e69f65c4ebf323515"
+    },
+    {
+      "file": "planner/adapters/ekispert_dom.py",
+      "bytes": 3492,
+      "sha256": "25777b262d52f71d8e4f2e35954462f0d21637ea1437dfb082d297c662011d01"
+    },
+    {
+      "file": "planner/adapters/ekispert_times.py",
+      "bytes": 4713,
+      "sha256": "8e6aaadba1d7de8b29fc64f2803a342384336d838680fe3dc8421c90363abffa"
+    },
+    {
+      "file": "planner/replay.py",
+      "bytes": 6524,
+      "sha256": "f41708b626f3f8bc7205f591844cd8199e76ce40e0b23b4bd43727e588797467"
+    },
+    {
+      "file": "planner/evaluator.py",
+      "bytes": 9947,
+      "sha256": "20083fcb8e38b913b87bd82b20193d3fa4342163444b3b4f89a1e0f260b42397"
+    },
+    {
+      "file": "planner/ordering.py",
+      "bytes": 3976,
+      "sha256": "03361b9277720d410bd9384b6fe9e553b179a36ee49f49a6fdaeb97f3a690e79"
+    },
+    {
+      "file": "planner/tests/test_divergent_revalidation.py",
+      "bytes": 8255,
+      "sha256": "650a51c0df7d8f3037841733c84957bef4ed3dd156716a48d685d26eb21b6fa9"
+    },
+    {
+      "file": "docs/DIVERGENT_ROUTE_DESIGN.md",
+      "bytes": 6138,
+      "sha256": "e30e4e62eb312e4e8b64c86f9ad5e3548161d9038fd638e3738f2c3570fda0ec"
+    }
+  ],
+  "totals": {
+    "thisRunRouteSearches": 10,
+    "thisRunBrowserHttpRequestEvents": 5058,
+    "priorSameCaseFailedRouteSearches": 2,
+    "priorSameCaseFailedBrowserHttpRequestEvents": 1030,
+    "sameCaseValidationSeriesRouteSearches": 12,
+    "sameCaseValidationSeriesBrowserHttpRequestEvents": 6088,
+    "automaticRetries": 0,
+    "stationNetworkRequests": 0,
+    "walkNetworkRequests": 0,
+    "ragRequests": 0,
+    "replayHttpRequests": 0
+  },
+  "verification": {
+    "priorBaselineFilesUnchanged": 73,
+    "selectedScenarioSha256": "9f51cceac668d28f66178d754558e8136a9f866e2f90d5cd7bf56ec6efc076d8",
+    "capturedCoursesWithVerifiedCalendarTimes": 40,
+    "currentComparisonComplete": true,
+    "parserFixVerifiedInBrowser": true,
+    "publicLiveEnabled": false,
+    "codespacesVerified": false
+  }
+}

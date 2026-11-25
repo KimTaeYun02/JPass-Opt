@@ -1,0 +1,496 @@
+{
+  "completion": "complete",
+  "timing": "reference",
+  "accessWalking": "estimated",
+  "pricing": "known",
+  "constraints": [
+    {
+      "kind": "opening",
+      "status": "unknown",
+      "reason": "opening_hours_missing",
+      "visitId": "dated-0"
+    },
+    {
+      "kind": "opening",
+      "status": "unknown",
+      "reason": "opening_hours_missing",
+      "visitId": "dated-1"
+    }
+  ],
+  "improvement": "not_attempted",
+  "repairLog": [],
+  "candidates": {
+    "orders": [
+      {
+        "order": [
+          "dated-0",
+          "dated-1"
+        ],
+        "geometricScore": 1111.9508023352598,
+        "scoreBasis": "distance-and-soft-group-penalty-meters"
+      }
+    ],
+    "groups": [
+      [
+        "dated-0"
+      ],
+      [
+        "dated-1"
+      ]
+    ],
+    "clusterDiameterLimitMeters": 800,
+    "thresholdStatus": "experimental",
+    "routeProviderAttempts": 0,
+    "optimality": "geometric-ranking-only"
+  },
+  "baseline": {
+    "planId": "plan-b567f1d49a678d6ddd71",
+    "digest": "b567f1d49a678d6ddd7155d9984f42b47b8e446afc0ba05dceb5055ec639d969",
+    "preserved": true,
+    "reason": "immutable_completed_baseline",
+    "plan": {
+      "order": [
+        "dated-0",
+        "dated-1"
+      ],
+      "visits": [
+        {
+          "clientPlaceId": "dated-0",
+          "arrivalAt": "2026-11-19T00:00:00Z",
+          "visitStartAt": "2026-11-19T00:00:00Z",
+          "leaveAt": "2026-11-19T00:00:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 0,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        },
+        {
+          "clientPlaceId": "dated-1",
+          "arrivalAt": "2026-11-19T00:07:00Z",
+          "visitStartAt": "2026-11-19T00:07:00Z",
+          "leaveAt": "2026-11-19T00:07:00Z",
+          "visitWaitMinutes": 0.0,
+          "stayMinutes": 0,
+          "arrivalClockExact": false,
+          "leaveClockExact": false
+        }
+      ],
+      "legs": [
+        {
+          "from": "dated-0",
+          "to": "dated-1",
+          "requestedAt": "2026-11-19T00:01:00Z",
+          "preparedAt": "2026-11-19T00:01:00Z",
+          "departureAt": "2026-11-19T00:04:00Z",
+          "arrivalAt": "2026-11-19T00:06:00Z",
+          "placeArrivalAt": "2026-11-19T00:07:00Z",
+          "initialWaitMinutes": 3.0,
+          "rideMinutes": 2.0,
+          "accessWalking": {
+            "status": "estimated",
+            "minutes": 1,
+            "evidence": {
+              "source": "illustrative-one-minute-walking-assumption",
+              "version": "1"
+            }
+          },
+          "egressWalking": {
+            "status": "estimated",
+            "minutes": 1,
+            "evidence": {
+              "source": "illustrative-one-minute-walking-assumption",
+              "version": "1"
+            }
+          },
+          "samePhysicalStation": false,
+          "transfers": null,
+          "rideSegmentIds": [
+            "4a480628a498cb15369b010f9e41c5379abf2f4b0e15daf0f7616d10b27e1aca"
+          ],
+          "segments": [
+            {
+              "segmentId": "4a480628a498cb15369b010f9e41c5379abf2f4b0e15daf0f7616d10b27e1aca",
+              "operator": null,
+              "line": "東京メトロ南北線・武蔵小杉行",
+              "trainType": null
+            }
+          ],
+          "fareUnits": [
+            {
+              "fareUnitId": "7b42d129f568c87375b6b6e0f818960e4162993e17599bb949f330d7353f55ce",
+              "rideSegmentIds": [
+                "4a480628a498cb15369b010f9e41c5379abf2f4b0e15daf0f7616d10b27e1aca"
+              ],
+              "baseFare": null,
+              "supplement": null,
+              "quotedTotal": 178,
+              "currency": "JPY",
+              "evidence": {
+                "source": "ekispert-captured-team-crawler",
+                "version": "db0f780a277243539aaba05de9a226c2a3d0e1a6a999c765e51b24a35d0035b9"
+              }
+            }
+          ],
+          "fareBasis": "independent_journey",
+          "providerEvidence": {
+            "source": "ekispert-captured-team-crawler",
+            "version": "db0f780a277243539aaba05de9a226c2a3d0e1a6a999c765e51b24a35d0035b9"
+          },
+          "clockExact": false
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "opening",
+          "status": "unknown",
+          "reason": "opening_hours_missing",
+          "visitId": "dated-0"
+        },
+        {
+          "kind": "opening",
+          "status": "unknown",
+          "reason": "opening_hours_missing",
+          "visitId": "dated-1"
+        }
+      ],
+      "completion": "complete",
+      "timing": "reference",
+      "accessWalking": "estimated",
+      "stopReason": null,
+      "finishAt": "2026-11-19T00:07:00Z",
+      "stationChoices": {
+        "dated-0": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "e567a2ec5c3b048ae653eb93798a8e1ce5b7589cea164cffafc2924eadea51a2",
+          "providerStationId": "29075",
+          "name": "東大前",
+          "line": "미확인",
+          "prefecture": "미확인",
+          "location": {
+            "lat": 35.0,
+            "lng": 139.0
+          }
+        },
+        "dated-1": {
+          "namespace": "ekispert-roote",
+          "sourceVersion": "e567a2ec5c3b048ae653eb93798a8e1ce5b7589cea164cffafc2924eadea51a2",
+          "providerStationId": "22675",
+          "name": "後楽園",
+          "line": "미확인",
+          "prefecture": "미확인",
+          "location": {
+            "lat": 35.01,
+            "lng": 139.0
+          }
+        }
+      },
+      "fare": {
+        "status": "known",
+        "noPassTotal": 178,
+        "currency": "JPY",
+        "fareUnits": [
+          {
+            "fareUnitId": "7b42d129f568c87375b6b6e0f818960e4162993e17599bb949f330d7353f55ce",
+            "rideSegmentIds": [
+              "4a480628a498cb15369b010f9e41c5379abf2f4b0e15daf0f7616d10b27e1aca"
+            ],
+            "baseFare": null,
+            "supplement": null,
+            "quotedTotal": 178,
+            "currency": "JPY",
+            "evidence": {
+              "source": "ekispert-captured-team-crawler",
+              "version": "db0f780a277243539aaba05de9a226c2a3d0e1a6a999c765e51b24a35d0035b9"
+            }
+          }
+        ],
+        "scope": "independent-quoted-journeys"
+      },
+      "transfers": null,
+      "optimality": "not-guaranteed",
+      "elapsedMinutes": 7.0,
+      "digest": "b567f1d49a678d6ddd7155d9984f42b47b8e446afc0ba05dceb5055ec639d969",
+      "planId": "plan-b567f1d49a678d6ddd71"
+    }
+  },
+  "selected": {
+    "order": [
+      "dated-0",
+      "dated-1"
+    ],
+    "visits": [
+      {
+        "clientPlaceId": "dated-0",
+        "arrivalAt": "2026-11-19T00:00:00Z",
+        "visitStartAt": "2026-11-19T00:00:00Z",
+        "leaveAt": "2026-11-19T00:00:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 0,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      },
+      {
+        "clientPlaceId": "dated-1",
+        "arrivalAt": "2026-11-19T00:07:00Z",
+        "visitStartAt": "2026-11-19T00:07:00Z",
+        "leaveAt": "2026-11-19T00:07:00Z",
+        "visitWaitMinutes": 0.0,
+        "stayMinutes": 0,
+        "arrivalClockExact": false,
+        "leaveClockExact": false
+      }
+    ],
+    "legs": [
+      {
+        "from": "dated-0",
+        "to": "dated-1",
+        "requestedAt": "2026-11-19T00:01:00Z",
+        "preparedAt": "2026-11-19T00:01:00Z",
+        "departureAt": "2026-11-19T00:04:00Z",
+        "arrivalAt": "2026-11-19T00:06:00Z",
+        "placeArrivalAt": "2026-11-19T00:07:00Z",
+        "initialWaitMinutes": 3.0,
+        "rideMinutes": 2.0,
+        "accessWalking": {
+          "status": "estimated",
+          "minutes": 1,
+          "evidence": {
+            "source": "illustrative-one-minute-walking-assumption",
+            "version": "1"
+          }
+        },
+        "egressWalking": {
+          "status": "estimated",
+          "minutes": 1,
+          "evidence": {
+            "source": "illustrative-one-minute-walking-assumption",
+            "version": "1"
+          }
+        },
+        "samePhysicalStation": false,
+        "transfers": null,
+        "rideSegmentIds": [
+          "4a480628a498cb15369b010f9e41c5379abf2f4b0e15daf0f7616d10b27e1aca"
+        ],
+        "segments": [
+          {
+            "segmentId": "4a480628a498cb15369b010f9e41c5379abf2f4b0e15daf0f7616d10b27e1aca",
+            "operator": null,
+            "line": "東京メトロ南北線・武蔵小杉行",
+            "trainType": null
+          }
+        ],
+        "fareUnits": [
+          {
+            "fareUnitId": "7b42d129f568c87375b6b6e0f818960e4162993e17599bb949f330d7353f55ce",
+            "rideSegmentIds": [
+              "4a480628a498cb15369b010f9e41c5379abf2f4b0e15daf0f7616d10b27e1aca"
+            ],
+            "baseFare": null,
+            "supplement": null,
+            "quotedTotal": 178,
+            "currency": "JPY",
+            "evidence": {
+              "source": "ekispert-captured-team-crawler",
+              "version": "db0f780a277243539aaba05de9a226c2a3d0e1a6a999c765e51b24a35d0035b9"
+            }
+          }
+        ],
+        "fareBasis": "independent_journey",
+        "providerEvidence": {
+          "source": "ekispert-captured-team-crawler",
+          "version": "db0f780a277243539aaba05de9a226c2a3d0e1a6a999c765e51b24a35d0035b9"
+        },
+        "clockExact": false
+      }
+    ],
+    "constraints": [
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "opening_hours_missing",
+        "visitId": "dated-0"
+      },
+      {
+        "kind": "opening",
+        "status": "unknown",
+        "reason": "opening_hours_missing",
+        "visitId": "dated-1"
+      }
+    ],
+    "completion": "complete",
+    "timing": "reference",
+    "accessWalking": "estimated",
+    "stopReason": null,
+    "finishAt": "2026-11-19T00:07:00Z",
+    "stationChoices": {
+      "dated-0": {
+        "namespace": "ekispert-roote",
+        "sourceVersion": "e567a2ec5c3b048ae653eb93798a8e1ce5b7589cea164cffafc2924eadea51a2",
+        "providerStationId": "29075",
+        "name": "東大前",
+        "line": "미확인",
+        "prefecture": "미확인",
+        "location": {
+          "lat": 35.0,
+          "lng": 139.0
+        }
+      },
+      "dated-1": {
+        "namespace": "ekispert-roote",
+        "sourceVersion": "e567a2ec5c3b048ae653eb93798a8e1ce5b7589cea164cffafc2924eadea51a2",
+        "providerStationId": "22675",
+        "name": "後楽園",
+        "line": "미확인",
+        "prefecture": "미확인",
+        "location": {
+          "lat": 35.01,
+          "lng": 139.0
+        }
+      }
+    },
+    "fare": {
+      "status": "known",
+      "noPassTotal": 178,
+      "currency": "JPY",
+      "fareUnits": [
+        {
+          "fareUnitId": "7b42d129f568c87375b6b6e0f818960e4162993e17599bb949f330d7353f55ce",
+          "rideSegmentIds": [
+            "4a480628a498cb15369b010f9e41c5379abf2f4b0e15daf0f7616d10b27e1aca"
+          ],
+          "baseFare": null,
+          "supplement": null,
+          "quotedTotal": 178,
+          "currency": "JPY",
+          "evidence": {
+            "source": "ekispert-captured-team-crawler",
+            "version": "db0f780a277243539aaba05de9a226c2a3d0e1a6a999c765e51b24a35d0035b9"
+          }
+        }
+      ],
+      "scope": "independent-quoted-journeys"
+    },
+    "transfers": null,
+    "optimality": "not-guaranteed",
+    "elapsedMinutes": 7.0,
+    "digest": "b567f1d49a678d6ddd7155d9984f42b47b8e446afc0ba05dceb5055ec639d969",
+    "planId": "plan-b567f1d49a678d6ddd71"
+  },
+  "passComparison": null,
+  "stopReasons": [],
+  "comparisonScope": "completed-candidates-only",
+  "optimality": "not-guaranteed",
+  "inputVersion": "2",
+  "dataSource": "replay",
+  "fixtureId": "headed-dated-20261119",
+  "fixtureLabel": "저장된 크롤러 응답 재생 (실시간 아님)",
+  "echoInput": {
+    "inputVersion": "2",
+    "sessionId": "a040c2f5-8711-414e-8380-01b4c9bff4f8",
+    "operationId": "dated-replay-example",
+    "dataSource": "replay",
+    "fixtureId": "headed-dated-20261119",
+    "startAt": "2026-11-19T00:00:00Z",
+    "places": [
+      {
+        "clientPlaceId": "dated-0",
+        "name": "東大前 (재생 입력)",
+        "location": {
+          "lat": 35.0,
+          "lng": 139.0
+        },
+        "stayMinutes": 0,
+        "anchorRole": "start",
+        "openingWindows": null
+      },
+      {
+        "clientPlaceId": "dated-1",
+        "name": "後楽園 (재생 입력)",
+        "location": {
+          "lat": 35.01,
+          "lng": 139.0
+        },
+        "stayMinutes": 0,
+        "anchorRole": "end",
+        "openingWindows": null
+      }
+    ],
+    "options": {
+      "allowRepair": false,
+      "allowPassEvaluation": false
+    }
+  },
+  "replayProvenance": {
+    "kind": "captured-team-crawler",
+    "sourceArtifact": "sample/low-call/dated/capture.json",
+    "sourceSha256": "e567a2ec5c3b048ae653eb93798a8e1ce5b7589cea164cffafc2924eadea51a2",
+    "notice": "교통 시각·총운임은 실제 수집값. 좌표·관광지 바인딩·도보 각 1분은 재생 시나리오 가정. 단일 역간 연결 시험이며 관광 동선 품질 검증이 아님."
+  },
+  "ledger": {
+    "limits": {
+      "rag": 1,
+      "rail": 2,
+      "station": 2,
+      "walk": 0
+    },
+    "railAttempts": 1,
+    "logicalAttempts": 1,
+    "stationAttempts": 2,
+    "walkAttempts": 0,
+    "ragRequests": 0,
+    "totalRoutingOperationAttempts": 3,
+    "baselineAttempts": 3,
+    "repairAttempts": 0,
+    "failedAttempts": 0,
+    "providerCalls": 0,
+    "httpRequestsObserved": 0,
+    "billingUnitsObserved": 0,
+    "measurementBasis": "replay-no-network",
+    "sessionUsage": {
+      "rag": {
+        "used": 0,
+        "limit": 12
+      },
+      "rail": {
+        "used": 1,
+        "limit": 120
+      },
+      "station": {
+        "used": 2,
+        "limit": 96
+      },
+      "walk": {
+        "used": 0,
+        "limit": 0
+      }
+    },
+    "attempts": [
+      {
+        "id": 1,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 2,
+        "kind": "station",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      },
+      {
+        "id": 3,
+        "kind": "rail",
+        "phase": "baseline",
+        "outcome": "ok",
+        "error": null
+      }
+    ],
+    "cacheHits": 0,
+    "sharedRequests": 0,
+    "budgetExhausted": false,
+    "stopReasons": []
+  }
+}
