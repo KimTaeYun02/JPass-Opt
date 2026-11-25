@@ -3,6 +3,9 @@
 From the repository root:
     python backend/scripts/test_api_http.py
     python backend/scripts/test_api_http.py --api places
+
+Exit codes: 0 expected response, 1 status/schema mismatch,
+2 connection/local I/O failure, 3 unexpected provider/server availability status.
 """
 
 import argparse
@@ -19,6 +22,7 @@ ENDPOINTS = {
     "places": "/api/places/search",
     "nearby": "/api/nearby/recommend",
     "routes": "/api/routes/optimize",
+    "stations": "/api/stations/resolve",
 }
 EXAMPLES = Path(__file__).resolve().parents[1] / "examples" / "http"
 
@@ -117,6 +121,12 @@ def main() -> int:
     if args.api is None and status == 200 and not valid_openapi:
         print("OpenAPI JSON 형식이 올바르지 않습니다.", file=sys.stderr)
         return 1
+    if status != args.expect_status and status in (429, 502, 503, 504):
+        print(
+            "외부 서비스 또는 서버 가용성 오류입니다. 응답과 서버 로그에서 인증·쿼터·시간 초과·응답 형식을 확인하세요.",
+            file=sys.stderr,
+        )
+        return 3
     return 0 if status == args.expect_status else 1
 
 

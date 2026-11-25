@@ -101,7 +101,7 @@ def _get_matching_stations(name: str, params: dict[str, str]) -> list[dict]:
 def get_nearest_stations(
     latitude: float,
     longitude: float,
-    limit: int = 3,
+    limit: int | None = 3,
 ) -> list[dict]:
     stations = _request_stations(
         {
@@ -117,3 +117,14 @@ def get_nearest_stations(
         }
         for station in stations[:limit]
     ]
+
+
+def get_station_candidates(
+    latitude: float, longitude: float, limit: int = 3
+) -> list[dict]:
+    """노선만 다른 동일 역을 합친 뒤 후보 수를 제한한다. 기존 resolve는 유지한다."""
+    unique = {}
+    for row in get_nearest_stations(latitude, longitude, limit=None):
+        key = (row["name"], row["latitude"], row["longitude"], row["prefecture"])
+        unique.setdefault(key, row)
+    return list(unique.values())[:limit]

@@ -8,6 +8,7 @@ __pycache__/
 .venv/
 .pytest_cache/
 .cache
+.local-run/
 extensions.txt
 backend/tests/*
 .env

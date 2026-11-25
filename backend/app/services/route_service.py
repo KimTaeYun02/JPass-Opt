@@ -125,6 +125,32 @@ async def collect_quotes(
     return quotes
 
 
+def find_route_station(
+    name: str,
+    line: str,
+    known_stations: dict[str, Station],
+    route_stations: dict[tuple[str, str], Station],
+) -> Station:
+    key = name, line
+    if key not in route_stations:
+        if name in known_stations:
+            route_stations[key] = known_stations[name]
+        else:
+            logger.info("환승역 좌표 조회: %s (%s)", name, line)
+            results = get_stations(name, line=line)
+            if not results:
+                raise ProviderResponseError(
+                    f"{name} ({line}): HeartRails에서 역 좌표를 찾을 수 없습니다."
+                )
+            raw = results[0]
+            route_stations[key] = Station(
+                name=name,
+                location=Location(lat=raw["latitude"], lng=raw["longitude"]),
+                prefecture=raw.get("prefecture"),
+            )
+    return route_stations[key]
+
+
 def find_route_stations(
     stations: dict[str, Station], plan: Plan
 ) -> dict[tuple[str, str], Station]:
@@ -141,24 +167,7 @@ def find_route_stations(
             # 마지막 역은 출발점에서 제외되며, 나머지 노선은 이미 검증됐다.
             line = cast(str, origin["line"])
             for name in (origin["station"], destination["station"]):
-                key = name, line
-                if key in route_stations:
-                    continue
-                if name in known_stations:
-                    route_stations[key] = known_stations[name]
-                    continue
-                logger.info("환승역 좌표 조회: %s (%s)", name, line)
-                results = get_stations(name, line=line)
-                if not results:
-                    raise ProviderResponseError(
-                        f"{name} ({line}): HeartRails에서 역 좌표를 찾을 수 없습니다."
-                    )
-                raw = results[0]
-                route_stations[key] = Station(
-                    name=name,
-                    location=Location(lat=raw["latitude"], lng=raw["longitude"]),
-                    prefecture=raw.get("prefecture"),
-                )
+                find_route_station(name, line, known_stations, route_stations)
     return route_stations
 
 
@@ -240,6 +249,10 @@ def build_day_output(
 
 async def optimize_route(request: RouteRequest) -> RouteResponse:
     """근처 역 → 경로 수집 → 최적화 → 좌표 보완 → 응답. 일차별로 독립 실행한다."""
+    if request.includeAccessWalking:
+        from app.services.access_route_service import optimize_with_access
+
+        return await optimize_with_access(request)
     days: list[OptimizedDay] = []
     for day in sorted(request.days, key=lambda item: item.dayIndex):
         day_date = request.startDate + timedelta(days=day.dayIndex - 1)

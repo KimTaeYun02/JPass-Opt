@@ -1,0 +1,27 @@
+{
+  "source": "synthetic",
+  "description": "도쿄의 역 이름을 사용한 가상 데이터. 시간·운임·테스트 노선은 실제 교통 정보가 아닙니다.",
+  "places": ["池袋", "銀座", "新宿", "浅草", "渋谷"],
+  "quotes": [
+    {"from":"池袋","to":"新宿","result":{"time":12,"fee":180,"route":[{"station":"池袋","line":"테스트 노선 1"},{"station":"新宿","line":null}]}},
+    {"from":"池袋","to":"渋谷","result":{"time":25,"fee":250,"route":[{"station":"池袋","line":"테스트 노선 1"},{"station":"渋谷","line":null}]}},
+    {"from":"池袋","to":"銀座","result":{"time":35,"fee":300,"route":[{"station":"池袋","line":"테스트 노선 2"},{"station":"銀座","line":null}]}},
+    {"from":"池袋","to":"浅草","result":{"time":40,"fee":320,"route":[{"station":"池袋","line":"테스트 노선 3"},{"station":"浅草","line":null}]}},
+    {"from":"新宿","to":"池袋","result":{"time":15,"fee":180,"route":[{"station":"新宿","line":"테스트 노선 1"},{"station":"池袋","line":null}]}},
+    {"from":"新宿","to":"渋谷","result":{"time":10,"fee":170,"route":[{"station":"新宿","line":"테스트 노선 1"},{"station":"渋谷","line":null}]}},
+    {"from":"新宿","to":"銀座","result":{"time":30,"fee":280,"route":[{"station":"新宿","line":"테스트 노선 2"},{"station":"銀座","line":null}]}},
+    {"from":"新宿","to":"浅草","result":{"time":38,"fee":310,"route":[{"station":"新宿","line":"테스트 노선 3"},{"station":"浅草","line":null}]}},
+    {"from":"渋谷","to":"池袋","result":{"time":28,"fee":260,"route":[{"station":"渋谷","line":"테스트 노선 1"},{"station":"池袋","line":null}]}},
+    {"from":"渋谷","to":"新宿","result":{"time":11,"fee":170,"route":[{"station":"渋谷","line":"테스트 노선 1"},{"station":"新宿","line":null}]}},
+    {"from":"渋谷","to":"銀座","result":{"time":22,"fee":230,"route":[{"station":"渋谷","line":"테스트 노선 2"},{"station":"乗換テスト駅","line":"테스트 노선 4"},{"station":"銀座","line":null}]}},
+    {"from":"渋谷","to":"浅草","result":{"time":42,"fee":330,"route":[{"station":"渋谷","line":"테스트 노선 3"},{"station":"浅草","line":null}]}},
+    {"from":"銀座","to":"池袋","result":{"time":33,"fee":300,"route":[{"station":"銀座","line":"테스트 노선 2"},{"station":"池袋","line":null}]}},
+    {"from":"銀座","to":"新宿","result":{"time":27,"fee":280,"route":[{"station":"銀座","line":"테스트 노선 2"},{"station":"新宿","line":null}]}},
+    {"from":"銀座","to":"渋谷","result":{"time":24,"fee":240,"route":[{"station":"銀座","line":"테스트 노선 4"},{"station":"乗換テスト駅","line":"테스트 노선 2"},{"station":"渋谷","line":null}]}},
+    {"from":"銀座","to":"浅草","result":{"time":14,"fee":180,"route":[{"station":"銀座","line":"테스트 노선 3"},{"station":"浅草","line":null}]}},
+    {"from":"浅草","to":"池袋","result":{"time":41,"fee":320,"route":[{"station":"浅草","line":"테스트 노선 3"},{"station":"池袋","line":null}]}},
+    {"from":"浅草","to":"新宿","result":{"time":36,"fee":310,"route":[{"station":"浅草","line":"테스트 노선 3"},{"station":"新宿","line":null}]}},
+    {"from":"浅草","to":"渋谷","result":{"time":39,"fee":330,"route":[{"station":"浅草","line":"테스트 노선 3"},{"station":"渋谷","line":null}]}},
+    {"from":"浅草","to":"銀座","result":{"time":16,"fee":180,"route":[{"station":"浅草","line":"테스트 노선 3"},{"station":"銀座","line":null}]}}
+  ]
+}

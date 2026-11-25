@@ -2,9 +2,11 @@
 
 일차별 관광지 목록으로 방문 순서·예상 도착 시각·교통비를 계산하고, 역 주변 관광지 추천과 자연어 장소 검색을 제공하는 FastAPI 서버다.
 
-세 API의 입력·출력·처리 흐름과 기계 판독용 OpenAPI JSON은 [API 참조 문서](docs/README.md)에서 확인한다.
+네 API의 입력·출력·처리 흐름과 기계 판독용 OpenAPI JSON은 [API 참조 문서](docs/README.md)에서 확인한다.
 
 Docker로 실행·배포하려면 [Docker 실행·배포 안내](docs/docker.md)를 참고한다.
+
+공식 키 없이 기존 크롤러의 버스 검색·추출을 점검하려면 [버스 크롤러 검증](docs/ekispert-bus-crawler.md)을 참고한다. 별도 진단 도구이며 제품 API의 버스 연동 완료를 뜻하지 않는다.
 
 minikube로 로컬 Kubernetes를 테스트하려면 [Kubernetes 실행 안내](docs/kubernetes.md)를 참고한다.
 
@@ -15,6 +17,11 @@ Argo CD에서 Git 설정으로 배포하려면 [Argo CD 실습 안내](docs/argo
 | `POST /api/routes/optimize` | 관광지 방문 순서 최적화와 역·환승역 좌표 조회 |
 | `POST /api/nearby/recommend` | LLM으로 앵커 역을 선택하고 해당 역 주변 관광지 추천 |
 | `POST /api/places/search` | 사용자 문장을 일본어 검색어로 증강·정규화해 Google Places 조회 |
+| `POST /api/stations/resolve` | 관광지 좌표로 동선 계산 전에 최근접 기준역만 조회 |
+
+기준역 조회는 Google·Gemini와 크롤러를 호출하지 않는다. 공통 서버를 시작하려면 아래의 세 필수 환경 변수는 모두 설정해야 한다. 관광지별 실패를 분리하며 요청·응답은 [기준역 조회 API 안내](docs/stations.md)를 참고한다.
+
+실행 확인 도구 `scripts/test_api_http.py`는 기대한 응답이면 종료 코드 0, 기타 상태·스키마 불일치는 1, 연결·로컬 파일 처리 실패는 2, 예상하지 않은 429/502/503/504는 3을 반환한다. 특히 502는 외부 통신 실패와 유효하지 않은 공급자 응답을 모두 포함하므로 서버 로그로 원인을 확인한다. 필수 설정 누락은 서버 시작 실패로 나타나며 프록시가 503을 반환할 때도 API 명세의 정상 응답으로 취급하지 않는다.
 
 자연어 장소 검색의 요청·응답과 호출 횟수 제한은 [장소 검색 API 안내](docs/text_search.md)를 참고한다. LLM은 검색어 증강·정규화에 한 번 호출하고 Places는 검색어별 첫 페이지만 최대 3회 조회한다. 검색어를 만들 수 없으면 추가 질문 없이 `textQueries: null`, `results: []`를 HTTP `200`으로 반환하며 Places를 호출하지 않는다. `tests/test_text_search.py`는 요청 모델을 만들어 실제 서비스를 호출하는 수동 테스트다.
 
@@ -31,6 +38,8 @@ xvfb-run -a poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000
 `Uvicorn running on http://0.0.0.0:8000`이 나오면 서버가 준비된 것이다. 이 터미널은 켜둔다.
 
 이 크롤러는 Xvfb 안에서 `headless=False`인 Playwright Chromium을 실행한다. 실행 환경에 `xvfb-run`과 Playwright Chromium이 준비되어 있어야 한다. Chromium을 아직 설치하지 않았다면 `poetry run playwright install chromium`으로 설치한다.
+
+Windows에서는 `xvfb-run` 없이 `poetry run uvicorn app.main:app --host 127.0.0.1 --port 8000`으로 실행한다. 크롤링 시 Chromium 창이 열리며, 일본 시간대 처리를 위한 `tzdata`는 Windows 의존성으로 설치된다.
 
 서버가 실행되면 다음 주소를 사용한다.
 
@@ -65,6 +74,12 @@ LLM_NEARBY_MODEL=
 `OPENAI_MODEL`은 요청에 별도 모델이 없을 때 사용하는 필수 기본 모델이다. 주변 추천의 앵커 선정·순위 선정은 `LLM_NEARBY_MODEL`이 있으면 사용하고, 미설정·빈 문자열·공백뿐이면 `OPENAI_MODEL`을 사용한다. 모델명으로 공급자를 구분하여 Gemini는 `GEMINI_API_KEY`, GPT는 `OPENAI_API_KEY`를 읽는다. 두 공급자의 모델을 함께 쓰면 두 키 모두 필요하다. `GOOGLE_PLACE_API_KEY`, 기본 모델과 설정된 모델들의 API 키를 시작 시 검증하며 누락되면 앱 시작이 실패한다. 검증 과정에서 외부 API를 호출하지 않는다. 모델과 출력 토큰 수는 요청 시 결정하며, 토큰 한도는 코드의 `max_output_tokens`로 관리한다. 자세한 선택 순서는 [공통 LLM 래퍼 안내](app/llm/README.md)를 참고한다.
 
 API 키는 서버에서만 관리하고 프론트의 요청 JSON에는 넣지 않는다. 앱은 시작 시 루트 `.env`를 읽으며 이미 설정된 환경변수는 덮어쓰지 않는다.
+
+## 프론트 배포 주소와 CORS
+
+프론트를 별도 도메인에 배포하면 `CORS_ORIGINS=https://실제-프론트-호스트`를 서버 환경에 설정한다. 쉼표로 여러 origin을 지정할 수 있으며, 프로토콜·호스트·포트까지만 쓰고 경로와 끝의 `/`는 넣지 않는다. 빈 값이나 잘못된 값은 앱 생성 시 실패하며 원문은 오류에 포함하지 않는다. 미설정 시 localhost·127.0.0.1의 3000·5173·4173 포트를 허용한다. 호스트 대소문자·기본 포트·IPv6는 브라우저 origin 형태로 정규화한다. 잘못된 항목은 값 대신 순번만 오류에 표시한다. 같은 도메인의 리버스 프록시를 쓰더라도 명시적인 빈 값은 허용하지 않으므로 `CORS_ORIGINS`를 생략하거나 실제 프론트 origin을 설정한다. 변경 후 서버를 다시 시작한다.
+
+프론트 빌드에는 `VITE_API_BASE=https://실제-백엔드-호스트/api`를 설정한다. 상세 절차는 [프론트 배포 설정](../web/README.md#vercel-등-정적-호스팅에서-백엔드-연결)을 참고한다. 로컬 PC IP로 제한한 Places 키는 다른 서버에서 동작하지 않으므로 배포 서버의 고정 외부 IP에 맞춘 별도 서버 키가 필요하다.
 
 ## 자연어 장소 검색 curl 테스트
 
@@ -304,7 +319,7 @@ flowchart TD
 
 성공 응답은 각 API의 계산·검색이 완료된 JSON이다. 현재는 요청마다 처리해서 반환하며 DB 저장, 작업 큐, 작업 ID 조회, 인증은 구현 범위에 포함하지 않았다.
 
-## 동선 최적화의 현재 계산 범위
+## 동선 최적화 기본 모드의 계산 범위
 
 - 각 일차의 방문 순서를 독립적으로 계산한다. 관광지를 다른 일차로 옮기지 않는다.
 - 관광지마다 가까운 역 하나를 고른 뒤 역 사이 총 이동 시간을 최소화한다. 시간이 같으면 교통비를 비교한다.
@@ -312,3 +327,9 @@ flowchart TD
 - 모든 역 간 경로는 해당 일차의 시작 시각으로 조회한다. 순서 결정 후에는 구간 소요 시간을 누적하며 후속 구간의 실제 출발 시각으로 재조회하지 않는다.
 - 관광지 체류 시간과 관광지↔역 도보 시간은 계산하지 않는다. 따라서 예상 도착 시각은 역 사이 이동 기준이다.
 - 요금은 구간별 원본 운임의 합계다. 교통 패스·묶음 요금 할인은 반영하지 않는다.
+
+## 도보 포함 계산의 추가 설정
+
+`POST /api/routes/optimize`는 기본적으로 기존 역 간 계산을 유지한다. `includeAccessWalking=true` 선택 확장은 서버 환경의 `GOOGLE_ROUTES_API_KEY`가 필요하다. Routes API를 활성화하고 API 제한을 Routes API로, IP 제한을 실제 실행 서버의 고정 외부 IP로 설정한다. 이 서버 키를 프론트 `VITE_` 변수에 넣지 않는다. 실행 시 읽는 환경 파일 또는 Kubernetes Secret을 통해 주입한다. 저장소 루트 `.env`와 `backend/.env` 중 어떤 파일을 읽는지는 실행 방법을 확인한다.
+
+이 확장은 최대 3개 역의 방향별 도보 접근과 제한된 직접 도보를 비교한다. 버스 연결·체류·누적 출발시각 재조회는 포함하지 않는다. 키가 없는 상태로 옵션을 켜면 503 안내를 반환하며 기존 모드는 계속 사용할 수 있다. [추가 입출력·호출 제한·실패 정책](docs/routes.md#선택-확장-관광지역-도보-포함-2026-11-10)을 참고한다.

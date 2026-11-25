@@ -1,6 +1,14 @@
 # JPass-Opt
 경제보복 프로젝트
 
+## 프론트 데모
+
+`web/`에서 Node.js 22.20 이상으로 `npm ci`, `npm run dev`를 실행하세요.
+`http://127.0.0.1:5173/demo.html?mode=example`은 백엔드·키 없이 예제로 실행됩니다.
+`/demo.html`의 API 모드는 이 저장소의 FastAPI `backend/` 서버를 별도로 실행해 연결합니다.
+
+[프론트 실행·API 설정](web/README.md) · [오프라인 경로 실험](web/docs/routing-prototypes.md) · [AI 기획·검토 문서](docs/ai/README.md)
+
 동선 최적화·역 주변 관광지 추천·자연어 장소 검색 API의 서버 실행, API 키 설정, Swagger 사용법과 **curl 요청 예시**는
 [백엔드 실행 안내](backend/README.md)를 참고한다.
 
@@ -11,6 +19,8 @@
 로컬 Kubernetes에서 실행하려면 [minikube 실행 안내](backend/docs/kubernetes.md)를 참고한다.
 
 Git의 배포 설정을 Argo CD로 연결하려면 [Argo CD 실습 안내](backend/docs/argocd.md)를 참고한다.
+
+## 기존 경로 크롤러
 
 `crawl_route()`는 검색 결과에 표시된 모든 경로를 화면 순서대로 반환한다.
 

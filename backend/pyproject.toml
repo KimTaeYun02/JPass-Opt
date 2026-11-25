@@ -15,7 +15,8 @@ dependencies = [
     "dotenv (>=0.9.9,<0.10.0)",
     "pydantic (>=2,<3)",
     "openai (>=2,<3)",
-    "google-genai (>=1,<2)"
+    "google-genai (>=1,<2)",
+    "tzdata (>=2026.6,<2027.0) ; sys_platform == \"win32\""
 ]
 
 [dependency-groups]
