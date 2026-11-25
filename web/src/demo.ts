@@ -2,10 +2,11 @@ import './demo.css';
 import './demo-reference.css';
 import { TAGS, addPlace, addPlaces, canApplyResult, computeExample, dateAt, emptyDraft, initialDraft, initialRecommendations, placeById, recommendations, registerPlaces, removePlace, searchPlaces, setDayCount, validateDraft } from './demo-model';
 import { createTravelApi } from './demo-api';
+import { MAX_DRAFT_FILE_BYTES, readDraftFile, writeDraftFile } from './demo-draft-file';
 import { renderRouteDay } from './demo-route-render';
 import { travelApiBase } from './demo-config';
 import { renderDemoMarkup } from './demo-render';
-import type { DemoPlace, DemoResult, Tag } from './demo-model';
+import type { DemoPlace, DemoResult, Draft, Tag } from './demo-model';
 import type { PlaceSearch } from './demo-api';
 import { createGoogleDemoMap } from './demo-map';
 import { mapRoutePaths } from './demo-map-controller';
@@ -17,11 +18,19 @@ const search = document.querySelector<HTMLInputElement>('#demo-search')!;
 const searchResults = document.querySelector<HTMLElement>('#search-results')!;
 const searchSelection = document.querySelector<HTMLElement>('#search-selection')!;
 const searchConfirm = document.querySelector<HTMLButtonElement>('#search-confirm')!;
+const draftImport = document.querySelector<HTMLInputElement>('#draft-import')!;
 const stagedPlaces = new Set<string>();
 const toast = document.querySelector<HTMLElement>('#toast')!;
 const apiMode = new URLSearchParams(window.location.search).get('mode') !== 'example';
 const api = createTravelApi(travelApiBase);
-let draft = apiMode ? emptyDraft() : initialDraft();
+const draftMode = apiMode ? 'api' : 'example';
+const draftStorageKey = `jpass.travel-draft.${draftMode}`;
+const freshDraft = apiMode ? emptyDraft() : initialDraft();
+let draft = freshDraft;
+let storedDraftText: string | null = null;
+let storedDraftUnreadable = false;
+let draftSaveMessage = '변경하면 이 브라우저에 자동 저장돼요.';
+let latestImport = 0;
 const initialQuery = (): string => draft.days[activeDay]?.searchQuery ?? '';
 const initialDays = new Map<number, { ids: string[]; message: string }>();
 let initialAbort: AbortController | undefined;
@@ -53,6 +62,7 @@ let toastTimer: ReturnType<typeof setTimeout>;
 const html = (value: string): string => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!);
 const yen = (value: number): string => `¥${value.toLocaleString('ja-JP')}`;
 const isDirty = (): boolean => !!result && result.revision !== draft.revision;
+const canResetDraft = (): boolean => draft !== freshDraft || storedDraftUnreadable || running || result !== undefined;
 const tagLabel = (tag: Tag): string => TAGS.find(([id]) => id === tag)![1];
 // Narrow preview panels show the PC canvas at scale instead of switching to a mobile layout.
 function updatePreviewScale(): void {
@@ -65,6 +75,102 @@ function notify(message: string): void {
   toast.textContent = message;
   toast.classList.add('visible');
   toastTimer = setTimeout(() => toast.classList.remove('visible'), 3200);
+}
+function setDraftSaveMessage(message: string): void {
+  if (draftSaveMessage === message) return;
+  draftSaveMessage = message;
+  const status = document.getElementById('draft-save-status');
+  if (status) status.textContent = message;
+}
+function restoreDraft(): void {
+  try { storedDraftText = window.localStorage.getItem(draftStorageKey); }
+  catch { setDraftSaveMessage('브라우저 저장을 사용할 수 없어요. 파일로 내보낼 수 있어요.'); return; }
+  if (storedDraftText === null) return;
+  try {
+    const saved = readDraftFile(storedDraftText, draftMode);
+    registerPlaces(saved.places);
+    draft = saved.draft;
+    setDraftSaveMessage('이 브라우저에서 저장한 초안을 불러왔어요.');
+  } catch {
+    storedDraftUnreadable = true;
+    setDraftSaveMessage('저장된 초안을 읽지 못했어요. 새 초안은 파일로 내보낼 수 있어요.');
+  }
+}
+function saveDraft(replaceUnreadable = false): void {
+  if (storedDraftUnreadable && !replaceUnreadable) return;
+  try {
+    const storage = window.localStorage;
+    if (storage.getItem(draftStorageKey) !== storedDraftText) {
+      setDraftSaveMessage('다른 탭에서 초안이 바뀌었어요. 이 초안은 파일로 내보내세요.');
+      return;
+    }
+    const text = writeDraftFile(draft, draftMode);
+    if (text !== storedDraftText) storage.setItem(draftStorageKey, text);
+    storedDraftText = text;
+    storedDraftUnreadable = false;
+    setDraftSaveMessage('이 브라우저에 저장했어요.');
+  } catch {
+    setDraftSaveMessage('자동 저장을 완료하지 못했어요. 파일로 내보내세요.');
+  }
+}
+function updateDraft(next: Draft): void {
+  draft = next;
+  saveDraft();
+}
+function exportDraft(): void {
+  const text = writeDraftFile(draft, draftMode);
+  const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `jpass-${draftMode}-${draft.startDate || 'draft'}.json`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+function replaceDraft(next: Draft, places: DemoPlace[]): void {
+  if (dialog.open) dialog.close();
+  navigationRevision++;
+  invalidateRecommendations();
+  initialAddedIds.clear();
+  placeCache.clear();
+  searchPool = [];
+  nearbyOpen = false;
+  nearbyKind = 'nearby';
+  nearbyQuery = '';
+  selected = undefined;
+  activeDay = 0;
+  result = undefined;
+  resultStartDate = '';
+  operationError = '';
+  view = 'input';
+  registerPlaces(places);
+  draft = next;
+  saveDraft(true);
+  render();
+  app.querySelector('.panel-content')?.scrollTo(0, 0);
+}
+function startNewDraft(): void {
+  if (!canResetDraft()) return;
+  if (!window.confirm('새 초안을 만들면 이 브라우저의 현재 초안이 바뀌어요. 계속할까요?')) return;
+  latestImport++;
+  replaceDraft(freshDraft, []);
+  notify('새 여행 초안을 열었어요.');
+}
+async function importDraft(file: File): Promise<void> {
+  const importId = ++latestImport;
+  const previous = draft;
+  try {
+    if (file.size > MAX_DRAFT_FILE_BYTES) throw new Error('여행 초안 파일은 1MB 이하여야 해요.');
+    const saved = readDraftFile(await file.text(), draftMode);
+    if (importId !== latestImport) return;
+    if (draft !== previous) { notify('파일을 읽는 동안 초안이 바뀌었어요. 다시 가져와 주세요.'); return; }
+    if (canResetDraft() && !window.confirm('현재 초안을 이 파일의 초안으로 바꿀까요?')) return;
+    replaceDraft(saved.draft, saved.places);
+    notify('파일에서 여행 초안을 불러왔어요.');
+  } catch (error) {
+    if (importId === latestImport) notify(error instanceof Error ? error.message : '여행 초안 파일을 읽지 못했어요.');
+  }
 }
 function dayButtons(): string {
   const start = view === 'result' && result ? resultStartDate : draft.startDate;
@@ -226,13 +332,13 @@ async function loadPlaces(kind: 'initial' | 'nearby' | 'search'): Promise<void> 
   messages[kind] = '조회 중입니다. 다른 조건으로 이동하면 응답을 반영하지 않아요.';
   if (kind === 'search') renderSearch(); else render();
   try {
-    let data = placeCache.get(key);
-    if (!data) {
-      data = kind === 'initial' ? await api.initial(snapshot, day, query, initialAbort?.signal) : kind === 'nearby' && mode === 'nearby' ? { places: await api.nearby(snapshot, computed!, day), clarification: null } : await api.search(query);
-      if (!data.warnings?.length) placeCache.set(key, data);
+    const cached = placeCache.get(key);
+    const data = cached ?? (kind === 'initial' ? await api.initial(snapshot, day, query, initialAbort?.signal) : kind === 'nearby' && mode === 'nearby' ? { places: await api.nearby(snapshot, computed!, day), clarification: null } : await api.search(query));
+    if (tokens[kind] !== token || requestContext(kind) !== context) return;
+    if (!cached && !data.warnings?.length) {
+      placeCache.set(key, data);
       if (placeCache.size > 20) placeCache.delete(placeCache.keys().next().value!);
     }
-    if (tokens[kind] !== token || requestContext(kind) !== context) return;
     registerPlaces(data.places);
     const ids = data.places.map((place) => place.id);
     if (kind === 'initial') initialPool = ids;
@@ -369,8 +475,14 @@ function render(): void {
   const buttonLabel = view === 'input' ? '추천 관광지 고르기' : view === 'choose' ? '선택한 장소로 동선 만들기' : '변경한 조건으로 다시 계산';
   const walkingBasis = view === 'result' ? result?.days[activeDay]?.accessWalking : draft.includeAccessWalking;
   const timingNote = walkingBasis ? '관광지↔역 도보 포함 · 체류시간 미포함' : '역 간 이동 기준 · 관광지↔역 이동·체류시간 미포함';
+  const draftTools = `<div class="draft-tools" role="group" aria-label="여행 초안">
+    <span id="draft-save-status" role="status">${html(draftSaveMessage)}</span>
+    <button type="button" data-action="new-draft" ${canResetDraft() ? '' : 'disabled'}>새 초안</button>
+    <button type="button" data-action="import-draft" aria-label="여행 초안 가져오기">가져오기</button>
+    <button type="button" data-action="export-draft" aria-label="여행 초안 내보내기">내보내기</button>
+  </div>`;
   renderDemoMarkup(app, `<header class="site-header"><a href="${apiMode ? './demo.html' : './demo.html?mode=example'}" class="brand" aria-label="JR Pass Opt 데모 처음으로">JR Pass Opt</a><nav class="stepper" aria-label="여행 계획 단계">${steps.map(([step, label], index) => `${index ? '<span class="step-line" aria-hidden="true"></span>' : ''}<button type="button" data-action="view" data-view="${step}" ${view === step ? 'aria-current="step"' : ''} ${step === 'result' && !result ? 'disabled' : ''}><span class="step-no">${index + 1}</span>${label}${step === 'result' && isDirty() ? '<span class="change-dot" aria-label="변경됨"></span>' : ''}</button>`).join('')}</nav><span class="demo-badge">${apiMode ? '실제 API 연결 · PC 데모' : '예시 데이터 · PC 데모'}<a href="${apiMode ? './demo.html?mode=example' : './demo.html'}">${apiMode ? '예시 체험' : 'API 모드'}</a></span></header>
-    <main class="workspace"><section class="map-area" aria-label="일정 지도">${mapMarkup()}</section><aside class="planner" aria-label="여행 계획"><div class="panel-head"><div><h1>${title}</h1><p>${description}</p></div><span class="trip-length">${draft.dayCount}일 여행</span></div><div class="panel-content">${view === 'input' ? inputPanel() : view === 'choose' ? choosePanel() : resultPanel()}</div><footer class="panel-footer">${operationError ? `<p class="api-error" role="alert">${html(operationError)}</p>` : ''}${view === 'result' && isDirty() ? '<p class="footer-dirty">변경한 일정을 반영해 주세요.</p>' : ''}<button type="button" class="primary-button" data-action="${view === 'input' ? 'continue' : 'calculate'}" ${running ? 'disabled' : ''}>${running ? '<span class="spinner" aria-hidden="true"></span> 일정을 준비하고 있어요' : `${buttonLabel}<span aria-hidden="true">→</span>`}</button><p>${apiMode ? timingNote : '순서·시간·요금은 예시 데이터입니다'}</p></footer></aside></main>`);
+    <main class="workspace"><section class="map-area" aria-label="일정 지도">${mapMarkup()}</section><aside class="planner" aria-label="여행 계획"><div class="panel-head"><div><h1>${title}</h1><p>${description}</p></div><span class="trip-length">${draft.dayCount}일 여행</span></div><div class="panel-content">${view === 'input' ? inputPanel() : view === 'choose' ? choosePanel() : resultPanel()}</div><footer class="panel-footer">${draftTools}${operationError ? `<p class="api-error" role="alert">${html(operationError)}</p>` : ''}${view === 'result' && isDirty() ? '<p class="footer-dirty">변경한 일정을 반영해 주세요.</p>' : ''}<button type="button" class="primary-button" data-action="${view === 'input' ? 'continue' : 'calculate'}" ${running ? 'disabled' : ''}>${running ? '<span class="spinner" aria-hidden="true"></span> 일정을 준비하고 있어요' : `${buttonLabel}<span aria-hidden="true">→</span>`}</button><p>${apiMode ? timingNote : '순서·시간·요금은 예시 데이터입니다'}</p></footer></aside></main>`);
   const panel = app.querySelector('.panel-content');
   if (panel) panel.scrollTop = scroll;
   updateLiveMap();
@@ -456,12 +568,12 @@ app.addEventListener('click', (event) => {
       const id = button.dataset.id!;
       const owned = ownedPicks();
       if (owned.has(id)) {
-        draft = removePlace(draft, activeDay, id);
+        updateDraft(removePlace(draft, activeDay, id));
         initialAddedIds.get(activeDay)?.delete(id);
         if (selected === id) selected = undefined;
       } else {
         if (!choiceCandidates().some((candidate) => candidate.demoPlaceId === id)) return;
-        draft = addPlace(draft, activeDay, id);
+        updateDraft(addPlace(draft, activeDay, id));
         initialAddedIds.set(activeDay, new Set([...owned, id]));
         selected = id;
       }
@@ -469,14 +581,17 @@ app.addEventListener('click', (event) => {
     else if (action === 'toggle-nearby') { if (apiMode) { tokens.nearby++; loading.nearby = false; } nearbyOpen = !nearbyOpen; selected = undefined; }
     else if (action === 'focus') selected = button.dataset.id;
     else if (action === 'clear-focus') selected = undefined;
-    else if (action === 'pending-remove' || action === 'remove') { draft = removePlace(draft, activeDay, button.dataset.id!); initialAddedIds.get(activeDay)?.delete(button.dataset.id!); if (apiMode) invalidateRecommendations(true); if (selected === button.dataset.id) selected = undefined; }
+    else if (action === 'pending-remove' || action === 'remove') { updateDraft(removePlace(draft, activeDay, button.dataset.id!)); initialAddedIds.get(activeDay)?.delete(button.dataset.id!); if (apiMode) invalidateRecommendations(true); if (selected === button.dataset.id) selected = undefined; }
     else if (action === 'tag') {
       if (apiMode) invalidateRecommendations();
       const tag = button.dataset.tag as Tag;
-      draft = { ...draft, tags: draft.tags.includes(tag) ? draft.tags.filter((item) => item !== tag) : [...draft.tags, tag] };
+      updateDraft({ ...draft, tags: draft.tags.includes(tag) ? draft.tags.filter((item) => item !== tag) : [...draft.tags, tag] });
     }
     else if (action === 'search') { if (apiMode) { searchPool = []; messages.search = '검색어를 입력하고 검색 버튼을 눌러주세요.'; } stagedPlaces.clear(); search.value = ''; renderSearch(); dialog.showModal(); search.focus(); return; }
-    else if (action === 'recommend-add') { draft = addPlace(draft, activeDay, button.dataset.id!); selected = button.dataset.id; notify(`${placeById(button.dataset.id!).name}을 ${activeDay + 1}일차에 추가했어요.`); }
+    else if (action === 'recommend-add') { updateDraft(addPlace(draft, activeDay, button.dataset.id!)); selected = button.dataset.id; notify(`${placeById(button.dataset.id!).name}을 ${activeDay + 1}일차에 추가했어요.`); }
+    else if (action === 'export-draft') { exportDraft(); return; }
+    else if (action === 'import-draft') { draftImport.click(); return; }
+    else if (action === 'new-draft') { startNewDraft(); return; }
     else if (action === 'calculate') { void calculate(); return; }
     render();
     if (action === 'view' || action === 'continue' || action === 'day') app.querySelector('.panel-content')?.scrollTo(0, 0);
@@ -494,18 +609,18 @@ app.addEventListener('keydown', (event) => {
 app.addEventListener('change', (event) => {
   const field = event.target as HTMLInputElement;
   if (apiMode && ['start-date', 'day-count', 'start-time'].includes(field.id)) invalidateRecommendations();
-  if (field.id === 'start-date') draft = { ...draft, startDate: field.value, revision: draft.revision + 1 };
-  else if (field.id === 'day-count') { draft = setDayCount(draft, Number(field.value)); activeDay = Math.min(activeDay, draft.dayCount - 1); selected = undefined; }
-  else if (field.id === 'start-time') draft = { ...draft, revision: draft.revision + 1, days: draft.days.map((day, index) => index === activeDay ? { ...day, startTime: field.value } : day) };
-  else if (field.id === 'include-walking') draft = { ...draft, includeAccessWalking: field.checked, revision: draft.revision + 1 };
+  if (field.id === 'start-date') updateDraft({ ...draft, startDate: field.value, revision: draft.revision + 1 });
+  else if (field.id === 'day-count') { updateDraft(setDayCount(draft, Number(field.value))); activeDay = Math.min(activeDay, draft.dayCount - 1); selected = undefined; }
+  else if (field.id === 'start-time') updateDraft({ ...draft, revision: draft.revision + 1, days: draft.days.map((day, index) => index === activeDay ? { ...day, startTime: field.value } : day) });
+  else if (field.id === 'include-walking') updateDraft({ ...draft, includeAccessWalking: field.checked, revision: draft.revision + 1 });
   else return;
   render();
 });
 app.addEventListener('input', (event) => {
   const field = event.target as HTMLTextAreaElement;
-  if (field.id === 'extra-request') { if (apiMode) invalidateRecommendations(); draft = { ...draft, request: field.value }; }
+  if (field.id === 'extra-request') { if (apiMode) invalidateRecommendations(); updateDraft({ ...draft, request: field.value }); }
   else if (field.id === 'choice-query' || field.id === 'initial-query') {
-    draft = { ...draft, days: draft.days.map((day, index) => index === activeDay ? { ...day, searchQuery: field.value } : day) };
+    updateDraft({ ...draft, days: draft.days.map((day, index) => index === activeDay ? { ...day, searchQuery: field.value } : day) });
     cancelInitialRequest(); initialDays.delete(activeDay); initialPool = [];
     messages.initial = '검색 조건이 바뀌었어요. 추천 받기를 눌러 조회하세요.';
     refreshQueryCandidates();
@@ -529,7 +644,7 @@ dialog.addEventListener('click', (event) => {
     if (!stagedPlaces.size) return;
     try {
       const ids = [...stagedPlaces];
-      draft = addPlaces(draft, activeDay, ids);
+      updateDraft(addPlaces(draft, activeDay, ids));
       if (apiMode) invalidateRecommendations(true);
       selected = ids[ids.length - 1];
       stagedPlaces.clear(); dialog.close(); render();
@@ -547,6 +662,12 @@ dialog.addEventListener('click', (event) => {
   }
 });
 dialog.addEventListener('close', () => { tokens.search++; loading.search = false; stagedPlaces.clear(); app.querySelector<HTMLElement>('[data-action="search"]')?.focus({ preventScroll: true }); });
+draftImport.addEventListener('change', () => {
+  const file = draftImport.files?.[0];
+  draftImport.value = '';
+  if (file) void importDraft(file);
+});
+restoreDraft();
 render();
 
 const searchSubmit = document.querySelector<HTMLButtonElement>('#search-submit');

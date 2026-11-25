@@ -11,6 +11,7 @@ export type DemoPlace = {
   searchTags?: string[];
   sources?: ('nearby' | 'text_search')[];
 };
+export const googlePlaceKey = (id: string): string => `google:${encodeURIComponent(id)}`;
 // These local IDs are not Google Place IDs; search and optimization use local fixtures.
 export const PLACES: DemoPlace[] = [
   { id: 'demo-kiyomizu', name: '기요미즈데라', area: '히가시야마', station: '기요미즈고조역', lat: 34.9949, lng: 135.785, tags: ['culture', 'nature'], rank: 5 },
@@ -76,7 +77,7 @@ export function setDayCount(draft: Draft, count: number): Draft {
   if (!Number.isInteger(count) || count < 1 || count > 7) throw new Error('데모에서는 1~7일을 선택할 수 있어요.');
   const days = draft.days.map((day) => ({ ...day, placeIds: [...day.placeIds] }));
   while (days.length < count) days.push({ placeIds: [], startTime: '08:00' });
-  // Hidden days stay in memory and return when the user extends the trip again.
+  // Keep hidden days in the draft so extending the trip can restore them.
   return { ...draft, dayCount: count, days, revision: draft.revision + 1 };
 }
 export function addPlace(draft: Draft, day: number, id: string): Draft {
@@ -93,15 +94,21 @@ export function addPlaces(draft: Draft, day: number, ids: string[]): Draft {
   // addPlace returns copies, so a rejected batch cannot partially alter the draft.
   return ids.reduce((next, id) => addPlace(next, day, id), draft);
 }
+export function isTravelDate(value: string): boolean {
+  const date = new Date(`${value}T00:00:00Z`);
+  return /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value;
+}
+export function isTravelTime(value: string): boolean {
+  return /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
+}
 export function validateDraft(draft: Draft, allowEmptyDays = false): string[] {
   const errors: string[] = [];
-  const date = new Date(`${draft.startDate}T00:00:00Z`);
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(draft.startDate) || !Number.isFinite(date.getTime()) || date.toISOString().slice(0, 10) !== draft.startDate) errors.push('여행 시작일을 확인해 주세요.');
+  if (!isTravelDate(draft.startDate)) errors.push('여행 시작일을 확인해 주세요.');
   if (!Number.isInteger(draft.dayCount) || draft.dayCount < 1 || draft.dayCount > 7 || draft.days.length < draft.dayCount) errors.push('여행 일수를 확인해 주세요.');
   draft.days.slice(0, draft.dayCount).forEach((day, index) => {
     if ((!allowEmptyDays && day.placeIds.length < 1) || day.placeIds.length > 8) errors.push(`${index + 1}일차에는 장소를 1~8곳 넣어 주세요.`);
     if (new Set(day.placeIds).size !== day.placeIds.length || day.placeIds.some((id) => !PLACES.some((item) => item.id === id))) errors.push(`${index + 1}일차 장소를 확인해 주세요.`);
-    if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(day.startTime)) errors.push(`${index + 1}일차 출발 시각을 확인해 주세요.`);
+    if (!isTravelTime(day.startTime)) errors.push(`${index + 1}일차 출발 시각을 확인해 주세요.`);
   });
   return errors;
 }

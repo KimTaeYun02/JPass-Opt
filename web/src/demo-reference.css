@@ -45,3 +45,23 @@ input,select,textarea{border-color:#d5dbe4;border-radius:6px;background:#fff}but
 .map-legend .legend-walking{width:17px;height:0;border-top:3px dashed #258258}
 .walking-toggle { display: flex; align-items: center; gap: 8px; margin-top: 16px; font-size: 13px; cursor: pointer; }
 .walking-toggle input { width: 16px; height: 16px; accent-color: #258258; }
+
+.draft-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.draft-tools [role="status"] { flex: 1 1 135px; }
+.draft-tools button {
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.draft-tools button:hover:not(:disabled) { background: #f4f6f9; }
