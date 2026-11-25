@@ -15,7 +15,12 @@ from pathlib import Path
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
-from http_fixture import contract_env, controlled_api, serve_api
+from http_fixture import (
+    contract_env,
+    controlled_api,
+    controlled_browser_page,
+    serve_api,
+)
 from pydantic import ValidationError
 
 from app.clients.google_routes import WalkingRoute, decode_polyline, walking_route
@@ -27,7 +32,7 @@ from app.errors import (
     ProviderTimeoutError,
 )
 from app.main import create_app
-from app.optimizer import optimize_visit_order
+from app.optimizer import optimize_visit_orders
 from app.schemas.route import Leg
 
 
@@ -81,7 +86,7 @@ def controlled(nearest=None, walk=None, crawl=None, key="contract-only-routes"):
         audit["walk"].append((a, b))
         return walk(a, b) if walk else walk_result(a, b)
 
-    async def transit(a, b, **kwargs):
+    async def transit(page, a, b, **kwargs):
         audit["crawl"].append((a, b))
         if crawl:
             return crawl(a, b)
@@ -103,6 +108,7 @@ def controlled(nearest=None, walk=None, crawl=None, key="contract-only-routes"):
         patch.dict(os.environ, {"GOOGLE_ROUTES_API_KEY": key}),
         patch("app.services.access_route_service.get_station_candidates", candidates),
         patch("app.services.access_route_service.walking_route", walking),
+        patch("app.services.access_route_service.browser_page", controlled_browser_page),
         patch("app.services.access_route_service.crawl_route", transit),
         patch(
             "requests.sessions.Session.request",
@@ -579,8 +585,9 @@ class AccessRouteContract(unittest.TestCase):
             ),
         )
         self.assertEqual(
-            optimize_visit_order(list("ABC"), edges)["order"], list(expected)
+            optimize_visit_orders(list("ABC"), edges, limit=1)[0]["order"],
+            list(expected),
         )
         edges[0]["segments"][0]["durationMinutes"] += 1
         with self.assertRaises(ValueError):
-            optimize_visit_order(list("ABC"), edges)
+            optimize_visit_orders(list("ABC"), edges, limit=1)

@@ -267,7 +267,7 @@ class StationContract(unittest.TestCase):
         }
         with (
             patch(
-                "app.services.place_search_service.GeminiWrapper", autospec=True
+                "app.services.place_search_service.LLMWrapper", autospec=True
             ) as gemini,
             patch(
                 "app.services.place_search_service.search_text",

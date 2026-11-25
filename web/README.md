@@ -40,7 +40,7 @@ VITE_API_BASE=
 
 브라우저 키는 Maps JavaScript API와 허용 HTTP 리퍼러로 제한하세요. 장소 검색·Nearby는 서버에서 호출하므로 브라우저 키에 Places API 권한은 필요하지 않습니다. 개발용 키에는 `http://localhost:5173/*`, `http://127.0.0.1:5173/*`, preview를 쓰면 4173 포트의 같은 두 주소를 허용하세요. 배포용 키에는 실제 배포 도메인만 허용하고 개발용 키와 분리하세요. `VITE_` 변수는 브라우저 번들에 포함됩니다. 서버의 `GOOGLE_PLACE_API_KEY`·`GEMINI_API_KEY`는 백엔드 환경에만 넣으세요. 과금·쿼터는 사용하는 GCP 프로젝트 설정을 확인하세요.
 
-팀원이 백엔드 서버에 Places·Gemini 키를 설정했다면 프론트 담당자가 그 키를 발급하거나 복사할 필요는 없습니다. 전달받은 서버 주소만 `JPASS_API_TARGET`에 설정하세요. 프론트 지도용 브라우저 키는 별도입니다. 기준역 조회는 Google·Gemini를 호출하지 않지만 공통 백엔드 시작에는 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL` 설정이 필요합니다.
+팀원이 백엔드 서버를 설정했다면 전달받은 서버 주소를 `JPASS_API_TARGET`에 입력하세요. 프론트 지도용 브라우저 키는 별도입니다. 백엔드를 직접 실행할 때는 `GOOGLE_PLACE_API_KEY`, `OPENAI_MODEL`과 해당 모델 공급자의 키를 [백엔드 실행 안내](../backend/README.md)에 따라 설정하세요.
 
 개발 중 `/api`는 Vite가 `JPASS_API_TARGET`으로 전달하며 기본값은 `http://127.0.0.1:8000`입니다. `.env.local` 변경 후 Vite를 재시작하세요. `-ApiTarget`은 해당 실행에만 적용됩니다. [Vite preview도 기본적으로 이 프록시 설정을 상속합니다](https://vite.dev/config/preview-options#preview-proxy). 빌드 산출물 자체에는 프록시 서버가 포함되지 않으며 preview는 운영 서버가 아닙니다.
 

@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException, Request
 from app.errors import (
     ProviderConfigurationError,
     ProviderError,
+    ProviderPaymentRequiredError,
     ProviderRateLimitError,
     ProviderTimeoutError,
 )
@@ -27,9 +28,10 @@ logger = logging.getLogger(__name__)
         "includeAccessWalking=true이면 접근 도보와 제한된 직접 도보를 비교합니다. 체류는 제외합니다."
     ),
     responses={
+        402: {"description": "외부 서비스의 결제 설정 또는 크레딧 확인 필요"},
         422: {"description": "입력이 올바르지 않거나 유효한 역·경로를 찾지 못함"},
         429: {"description": "외부 역·경로 정보 서비스의 요청 한도 초과"},
-        502: {"description": "외부 역·경로 정보 서비스 조회 오류"},
+        502: {"description": "외부 역·경로 정보 서비스 조회·응답 형식 오류"},
         503: {"description": "선택한 도보 경로 기능의 서버 설정 미완료"},
         504: {"description": "외부 역·경로 정보 서비스 응답 시간 초과"},
     },
@@ -42,6 +44,12 @@ async def optimize(payload: RouteRequest, request: Request) -> RouteResponse:
     except ProviderConfigurationError as exc:
         raise HTTPException(
             status_code=503, detail="도보 경로 기능이 아직 준비되지 않았습니다."
+        ) from exc
+    except ProviderPaymentRequiredError as exc:
+        logger.warning("동선 조회 실패: status=402, 오류=%s", exc)
+        raise HTTPException(
+            status_code=402,
+            detail="외부 서비스의 결제 설정 또는 크레딧을 확인해주세요.",
         ) from exc
     except ProviderRateLimitError as exc:
         logger.warning("동선 조회 실패: status=429, 오류=%s", exc)

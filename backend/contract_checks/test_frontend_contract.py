@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 
 from fastapi.testclient import TestClient
-from http_fixture import contract_env, controlled_api
+from http_fixture import contract_env, controlled_api, controlled_browser_page
 
 from app.main import create_app
 
@@ -35,7 +35,7 @@ class FrontendContract(unittest.TestCase):
                 }
             ]
 
-        async def crawl(origin, destination, **kwargs):
+        async def crawl(page, origin, destination, **kwargs):
             minutes, fare = costs[origin, destination]
             return {
                 "routes": [
@@ -70,6 +70,7 @@ class FrontendContract(unittest.TestCase):
         }
         with (
             patch("app.services.route_service.get_nearest_stations", nearest),
+            patch("app.services.route_service.browser_page", controlled_browser_page),
             patch("app.services.route_service.crawl_route", crawl),
             TestClient(create_app()) as client,
         ):
@@ -117,7 +118,7 @@ class FrontendContract(unittest.TestCase):
         self.assertTrue(all(not calls for calls in audit.values()))
 
     def test_missing_required_setting_prevents_server_startup(self):
-        settings = ("GOOGLE_PLACE_API_KEY", "GEMINI_API_KEY", "GEMINI_MODEL")
+        settings = ("GOOGLE_PLACE_API_KEY", "GEMINI_API_KEY", "OPENAI_MODEL")
         for setting in settings:
             for value in (None, "", " "):
                 with (
@@ -136,7 +137,7 @@ class FrontendContract(unittest.TestCase):
             with self.assertRaises(RuntimeError) as raised:
                 with TestClient(create_app()):
                     self.fail("The server must reject missing configuration")
-            for setting in settings:
+            for setting in ("GOOGLE_PLACE_API_KEY", "OPENAI_API_KEY", "OPENAI_MODEL"):
                 self.assertIn(setting, str(raised.exception))
 
 

@@ -3,12 +3,15 @@
 from bisect import insort
 from copy import deepcopy
 from dataclasses import dataclass, field
+from typing import Literal, TypedDict, cast
+
+from app.optimizer.types import Plan, Quote, RouteResult
 
 MAX_ROUTE_STOPS = 8
 MAX_SAFE_INTEGER = 2**53 - 1
 
 
-def validate_places(places):
+def validate_places(places: object) -> None:
     if not isinstance(places, (list, tuple)) or not 2 <= len(places) <= MAX_ROUTE_STOPS:
         raise ValueError(f"방문 역은 2~{MAX_ROUTE_STOPS}개여야 합니다.")
     if any(not isinstance(place, str) or not place.strip() for place in places):
@@ -19,11 +22,11 @@ def validate_places(places):
         )
 
 
-def _safe_cost(value):
+def _safe_cost(value: object) -> bool:
     return type(value) is int and 0 <= value <= MAX_SAFE_INTEGER
 
 
-def validate_quote(quote):
+def validate_quote(quote: object) -> None:
     if not isinstance(quote, dict):
         raise ValueError("이동 구간은 객체여야 합니다.")
     start, end = quote.get("from"), quote.get("to")
@@ -106,20 +109,35 @@ class _Label:
 
 @dataclass
 class _State:
-    labels: list = field(default_factory=list)
+    labels: list[_Label] = field(default_factory=list)
     max_time: int = 0
     max_fee: int = 0
 
 
-def _keep(labels, candidate, limit):
+class _Path(TypedDict):
+    time: int
+    fee: int
+    indices: list[int]
+
+
+class _Metrics(TypedDict):
+    algorithm: Literal["held-karp"]
+    dpStates: int
+    dpTransitions: int
+    evaluatedOrders: int
+
+
+def _keep(labels: list[_Label], candidate: _Label, limit: int) -> None:
     insort(labels, candidate)
     del labels[limit:]
 
 
-def _held_karp(matrix, limit):
+def _held_karp(
+    matrix: list[list[RouteResult | None]], limit: int
+) -> tuple[list[_Path], _Metrics]:
     n = len(matrix)
     size = 1 << n
-    table = {}
+    table: dict[tuple[int, int], _State] = {}
     transitions = 0
     for mask in range(1, size):
         for end in range(n):
@@ -135,7 +153,8 @@ def _held_karp(matrix, limit):
                     if not previous_mask & (1 << previous):
                         continue
                     prefix = table[previous_mask, previous]
-                    edge = matrix[previous][end]
+                    # Predecessors differ from end, so the diagonal None is not read.
+                    edge = cast(RouteResult, matrix[previous][end])
                     max_time = prefix.max_time + edge["time"]
                     max_fee = prefix.max_fee + edge["fee"]
                     # Track discarded prefixes too, preserving the TypeScript guard.
@@ -157,14 +176,14 @@ def _held_karp(matrix, limit):
                             limit,
                         )
             table[mask, end] = state
-    winners = []
+    winners: list[_Label] = []
     for end in range(n):
         for label in table[size - 1, end].labels:
             _keep(winners, label, limit)
-    paths = []
+    paths: list[_Path] = []
     for label in winners:
         indices = []
-        cursor = label
+        cursor: _Label | None = label
         while cursor is not None:
             indices.append(cursor.end)
             cursor = cursor.previous
@@ -177,14 +196,18 @@ def _held_karp(matrix, limit):
     }
 
 
-def optimize_visit_orders(places, quotes, limit=3):
+def optimize_visit_orders(
+    places: list[str] | tuple[str, ...],
+    quotes: list[Quote] | tuple[Quote, ...],
+    limit: int = 3,
+) -> list[Plan]:
     """Return top 1..3 open tours; minimize time, fare, then JS UTF-16 ID order."""
     validate_places(places)
     if type(limit) is not int or not 1 <= limit <= 3:
         raise ValueError("후보 수는 1~3의 정수여야 합니다.")
     if not isinstance(quotes, (list, tuple)):
         raise ValueError("구간 목록은 배열이어야 합니다.")
-    matrix = {}
+    matrix: dict[tuple[str, str], Quote] = {}
     for quote in quotes:
         validate_quote(quote)
         key = quote["from"], quote["to"]
@@ -204,7 +227,7 @@ def optimize_visit_orders(places, quotes, limit=3):
         for start in ordered
     ]
     paths, metrics = _held_karp(costs, limit)
-    plans = []
+    plans: list[Plan] = []
     for path in paths:
         order = [ordered[index] for index in path["indices"]]
         legs = [deepcopy(matrix[start, end]) for start, end in zip(order, order[1:])]
@@ -218,7 +241,3 @@ def optimize_visit_orders(places, quotes, limit=3):
             }
         )
     return plans
-
-
-def optimize_visit_order(places, quotes):
-    return optimize_visit_orders(places, quotes, limit=1)[0]

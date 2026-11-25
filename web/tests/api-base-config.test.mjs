@@ -59,7 +59,7 @@ test('HTML routing errors and malformed JSON are distinct from network failures 
 });
 
 test('HTTP failures keep status and safe messages without echoing upstream bodies or retrying', async () => {
-  for (const status of [404, 422, 429, 500, 502, 503, 504]) {
+  for (const status of [402, 404, 422, 429, 500, 502, 503, 504]) {
     let calls = 0;
     await assert.rejects(createTravelApi('/api', async () => {
       calls++;

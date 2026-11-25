@@ -5,7 +5,7 @@ import os
 import socket
 import threading
 import time
-from contextlib import ExitStack, contextmanager
+from contextlib import ExitStack, asynccontextmanager, contextmanager
 from unittest.mock import patch
 
 import uvicorn
@@ -33,14 +33,19 @@ def contract_env():
             {
                 "GOOGLE_PLACE_API_KEY": "contract-only-not-a-key",
                 "GEMINI_API_KEY": "contract-only-not-a-key",
-                "GEMINI_MODEL": "contract-only-model",
-                "GEMINI_NEARBY_MODEL": "",
+                "OPENAI_MODEL": "gemini-contract-only-model",
+                "LLM_NEARBY_MODEL": "",
                 "CORS_ORIGINS": "http://localhost:5173",
             },
         ),
         patch("app.main.load_dotenv"),
     ):
         yield
+
+
+@asynccontextmanager
+async def controlled_browser_page(**kwargs):
+    yield object()
 
 
 @contextmanager
@@ -97,7 +102,7 @@ def controlled_api():
         audit["nearby"].append(kwargs)
         return [PLACES[1]]
 
-    async def crawl(origin, destination, **kwargs):
+    async def crawl(page, origin, destination, **kwargs):
         audit["crawl"].append((origin, destination))
         minutes, fare = (9, 180) if origin == "B" else (17, 321)
         return {
@@ -121,11 +126,12 @@ def controlled_api():
         stack.enter_context(contract_env())
         for target, replacement in [
             ("app.services.route_service.get_nearest_stations", nearest),
+            ("app.services.route_service.browser_page", controlled_browser_page),
             ("app.services.route_service.crawl_route", crawl),
             ("app.services.place_search_service.search_text", search_text),
             ("app.services.nearby_service.search_nearby", search_nearby),
-            ("app.services.place_search_service.GeminiWrapper", ControlledLLM),
-            ("app.services.nearby_service.GeminiWrapper", ControlledLLM),
+            ("app.services.place_search_service.LLMWrapper", ControlledLLM),
+            ("app.services.nearby_service.LLMWrapper", ControlledLLM),
             ("requests.sessions.Session.request", block_network),
             ("httpx.HTTPTransport.handle_request", block_network),
             ("httpx.AsyncHTTPTransport.handle_async_request", block_network),

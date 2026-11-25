@@ -1,5 +1,6 @@
 services:
   api:
+    network_mode: bridge
     image: jpass-api:local
     build:
       context: .

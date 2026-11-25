@@ -6,18 +6,19 @@
 
 import asyncio
 import os
+from contextlib import AsyncExitStack
 from datetime import datetime, time, timedelta
 from itertools import permutations
 
 from app.clients.google_routes import walking_route
 from app.clients.heartrails import get_station_candidates
-from app.crawling import crawl_route
+from app.crawling import browser_page, crawl_route
 from app.errors import (
     ProviderConfigurationError,
     ProviderResponseError,
     ProviderTimeoutError,
 )
-from app.optimizer import optimize_visit_order, quotes_from_segments
+from app.optimizer import optimize_visit_orders, quotes_from_segments
 from app.schemas.route import Leg, OptimizedDay, RouteResponse, Station, Visit
 from app.services.nearby_service import distance_meters
 from app.services.route_service import (
@@ -81,7 +82,7 @@ def candidates_for_day(day):
     return result
 
 
-async def build_access_day(day, day_date, start_at, api_key):
+async def build_access_day(day, day_date, start_at, api_key, browser_stack):
     candidates = await asyncio.to_thread(candidates_for_day, day)
     places = dict(zip(candidates, day.places))
     if len(places) == 1:
@@ -188,6 +189,7 @@ async def build_access_day(day, day_date, start_at, api_key):
             station.name: station for rows in candidates.values() for station in rows
         }
         coordinate_cache = {}
+        page = None
         for a, b in pairs:
             origin, outward = departures[a]
             destination, inward = arrivals[b]
@@ -201,11 +203,15 @@ async def build_access_day(day, day_date, start_at, api_key):
                     transit = {"time": 0, "fee": 0, "route": []}
                 else:
                     if key not in station_cache:
+                        if page is None:
+                            page = await browser_stack.enter_async_context(
+                                browser_page(headless=False)
+                            )
                         raw = await crawl_route(
+                            page,
                             origin.name,
                             destination.name,
                             departure_time=start_at,
-                            headless=False,
                         )
                         if not isinstance(raw, dict) or not isinstance(
                             raw.get("routes"), list
@@ -285,7 +291,7 @@ async def build_access_day(day, day_date, start_at, api_key):
                     "transportRoute": route,
                 }
             )
-        plan = optimize_visit_order(list(places), quotes)
+        plan = optimize_visit_orders(list(places), quotes, limit=1)[0]
         visits, legs, current = [], [], start_at
         for index, visit_id in enumerate(plan["order"]):
             place = places[visit_id]
@@ -377,7 +383,10 @@ async def optimize_with_access(request):
                 start = datetime.combine(
                     date, time.fromisoformat(day.dailyStartTime), tzinfo=JAPAN_TIMEZONE
                 )
-                days.append(await build_access_day(day, date, start, api_key))
+                async with AsyncExitStack() as browser_stack:
+                    days.append(
+                        await build_access_day(day, date, start, api_key, browser_stack)
+                    )
     except TimeoutError as exc:
         raise ProviderTimeoutError(
             "도보 포함 동선 계산 시간이 초과되었습니다."

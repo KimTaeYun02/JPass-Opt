@@ -17,13 +17,13 @@ cp -n .env.example .env
 ```dotenv
 GOOGLE_PLACE_API_KEY=발급받은_Google_Places_API_키
 GEMINI_API_KEY=발급받은_Gemini_API_키
-GEMINI_MODEL=gemini-3.5-flash-lite
-GEMINI_NEARBY_MODEL=gemini-3.5-flash-lite
+OPENAI_MODEL=gemini-3.5-flash-lite
+LLM_NEARBY_MODEL=
 CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 API_PORT=8000
 ```
 
-`GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL`은 필수 설정이다. `lifespan`에서 하나라도 미설정·빈 문자열·공백뿐이면 앱 시작이 실패하고 컨테이너가 종료된다. 시작 시 실제 외부 API를 호출해 키나 모델의 유효성을 확인하지는 않는다. `GEMINI_MODEL`은 공통 기본 모델이며, 주변 추천용 `GEMINI_NEARBY_MODEL`은 선택 사항으로 미설정·빈 문자열·공백뿐이면 `GEMINI_MODEL`을 사용한다. 모델의 앞뒤 공백은 제거하며 코드에 고정된 모델명으로 대체하지 않는다. 위 모델명은 설정 예시이며 nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다.
+`OPENAI_MODEL`은 요청에 별도 모델이 없을 때 사용하는 필수 기본 모델이다. 주변 추천의 앵커 선정·순위 선정은 `LLM_NEARBY_MODEL`이 있으면 사용하고, 미설정·빈 문자열·공백뿐이면 `OPENAI_MODEL`을 사용한다. 모델명으로 공급자를 구분하여 Gemini는 `GEMINI_API_KEY`, GPT는 `OPENAI_API_KEY`를 읽는다. 두 공급자의 모델을 함께 쓰면 두 키 모두 필요하다. `GOOGLE_PLACE_API_KEY`, 기본 모델과 설정된 모델들의 API 키를 시작 시 검증하며 누락되면 앱 시작이 실패한다. 검증 과정에서 외부 API를 호출하지 않는다. 모델과 출력 토큰 수는 요청 시 결정하며, 토큰 한도는 코드의 `max_output_tokens`로 관리한다. 자세한 선택 순서는 [공통 LLM 래퍼 안내](../app/llm/README.md)를 참고한다.
 
 Compose가 `env_file: .env`를 읽으므로 `.env` 파일 자체는 준비해야 한다. 키는 이미지에 복사하지 않고 컨테이너 실행 시 환경 변수로 주입한다. `.env`는 Git에 올리지 않는다.
 
@@ -68,6 +68,16 @@ curl -fsS http://localhost:8000/openapi.json
 컨테이너 healthcheck도 `/openapi.json`에 대한 앱의 응답을 확인한다. `healthy`는 외부 Google·Gemini API나 실제 브라우저 크롤링의 성공을 의미하지 않는다. 실제 요청 예시는 [백엔드 실행 안내](../README.md)와 [API 참조 문서](README.md)를 참고한다.
 
 ## 로컬 HTTP 테스트
+
+Docker 재실행부터 세 API 테스트까지 한 번에 실행하려면 저장소 루트에서 다음을 실행한다.
+
+```bash
+sh backend/scripts/test_all_apis.sh
+```
+
+[test_all_apis.sh](../scripts/test_all_apis.sh)는 이미지를 빌드하고 컨테이너를 재생성한 뒤 서버 기동을 기다린다. `.env`의 `API_PORT`에 맞는 실제 포트를 자동으로 읽고, 서버 상태 → 장소 검색 → 주변 추천 → 동선 최적화 순서로 호출한다. 한 API가 실패해도 나머지는 계속 실행하며 마지막에 성공·실패 개수와 실패 시 최근 서버 로그를 출력한다. 모든 API가 HTTP `200`이면 종료 코드 `0`, 실패가 있으면 `1`이다. 셸·실행 환경 오류는 다른 비정상 종료 코드가 될 수 있다.
+
+기존 `examples/http` 파일을 복사해 테스트 요청을 만든다. 주변 추천은 `culture`, `nature` 복수 태그와 `placeCount=3`을 사용하고, 동선은 일본 시간 기준 내일 날짜를 사용한다. 원본 예시 파일은 수정하지 않는다. 후보가 2개 이상이면 주변 추천의 순위 선정도 실행된다. 실제 외부 API와 크롤러를 호출하며, 요청·응답은 `backend/tests/api_http_results/`의 동일한 파일에 덮어쓴다. 테스트가 끝나도 서버는 계속 실행된다.
 
 컨테이너가 실행된 뒤 호스트의 Python 3으로 [test_api_http.py](../scripts/test_api_http.py)를 실행한다. 이 스크립트는 Python 표준 라이브러리만 사용하므로 호스트에 앱 의존성이나 Poetry를 설치할 필요가 없다. 아래 명령은 저장소 루트 기준이다.
 

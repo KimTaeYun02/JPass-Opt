@@ -5,7 +5,12 @@ from time import perf_counter
 
 from fastapi import APIRouter, HTTPException
 
-from app.errors import ProviderError, ProviderRateLimitError, ProviderTimeoutError
+from app.errors import (
+    ProviderError,
+    ProviderPaymentRequiredError,
+    ProviderRateLimitError,
+    ProviderTimeoutError,
+)
 from app.schemas.nearby import NearbyRequest, NearbyResponse
 from app.services.nearby_service import recommend_nearby
 
@@ -25,6 +30,7 @@ logger = logging.getLogger(__name__)
         "후보가 placeCount개 이하여도 순위를 정하며, 0~1개이면 순위 선정을 생략합니다."
     ),
     responses={
+        402: {"description": "외부 서비스의 결제 설정 또는 크레딧 확인 필요"},
         422: {"description": "입력이 올바르지 않음"},
         429: {"description": "외부 추천 서비스의 요청 한도 초과"},
         502: {"description": "외부 추천 서비스 조회 오류"},
@@ -51,6 +57,16 @@ def recommend(payload: NearbyRequest) -> NearbyResponse:
             perf_counter() - started_at,
         )
         return result
+    except ProviderPaymentRequiredError as exc:
+        logger.warning(
+            "주변 관광지 추천 실패: status=402, 오류=%s, 소요=%.2f초",
+            exc,
+            perf_counter() - started_at,
+        )
+        raise HTTPException(
+            status_code=402,
+            detail="외부 서비스의 결제 설정 또는 크레딧을 확인해주세요.",
+        ) from exc
     except ProviderRateLimitError as exc:
         logger.warning(
             "주변 관광지 추천 실패: status=429, 오류=%s, 소요=%.2f초",

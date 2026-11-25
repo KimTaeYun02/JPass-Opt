@@ -13,6 +13,10 @@ class ProviderRateLimitError(ProviderError):
     """외부 서비스의 요청 한도를 초과했다."""
 
 
+class ProviderPaymentRequiredError(ProviderError):
+    """외부 서비스의 결제 설정 또는 크레딧 확인이 필요하다."""
+
+
 class ProviderResponseError(ProviderError):
     """외부 서비스가 유효하지 않은 응답을 반환했다."""
 
@@ -23,6 +27,8 @@ class ProviderConfigurationError(ProviderError):
 
 def provider_error_for_status(status: int | None, message: str) -> ProviderError:
     """외부 HTTP 상태를 공통 오류로 분류한다."""
+    if status == 402:
+        return ProviderPaymentRequiredError(message)
     if status == 429:
         return ProviderRateLimitError(message)
     if status in (408, 504):

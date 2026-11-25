@@ -297,10 +297,10 @@ export function createTravelApi(base?: string, fetcher: typeof fetch = fetch) {
       // Resolve lazily so a configuration error can be displayed by the existing UI.
       const response = await fetcher(`${resolveApiBase(base)}${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: controller.signal });
       const responseError = () => new TravelApiError('API 응답을 읽을 수 없어요. VITE_API_BASE와 /api 프록시 설정을 확인해 주세요.', response.status);
-      const knownFailure = [422, 429, 500, 502, 503, 504].includes(response.status);
+      const knownFailure = [402, 422, 429, 500, 502, 503, 504].includes(response.status);
       if (!knownFailure && response.headers.get('content-type')?.toLowerCase().includes('text/html')) throw responseError();
       if (!response.ok) {
-        const messages: Record<number, string> = { 404: 'API 경로를 찾지 못했어요. VITE_API_BASE와 /api 프록시 설정을 확인해 주세요.', 422: '입력값 또는 조회 가능한 역·경로를 확인해 주세요.', 429: '검색 서비스의 호출 한도를 초과했어요. 잠시 후 다시 시도해 주세요.', 500: '백엔드 내부 오류가 발생했어요. 서버 로그를 확인해 주세요.', 502: '외부 검색·경로 서비스에서 정상 응답을 받지 못했어요.', 503: '백엔드를 현재 사용할 수 없어요. 서버의 실행 상태와 필수 환경 변수 설정을 확인해 주세요.', 504: '외부 조회 시간이 초과됐어요. 잠시 후 직접 다시 시도해 주세요.' };
+        const messages: Record<number, string> = { 402: '외부 서비스의 결제 설정이나 크레딧을 확인해 주세요.', 404: 'API 경로를 찾지 못했어요. VITE_API_BASE와 /api 프록시 설정을 확인해 주세요.', 422: '입력값 또는 조회 가능한 역·경로를 확인해 주세요.', 429: '검색 서비스의 호출 한도를 초과했어요. 잠시 후 다시 시도해 주세요.', 500: '백엔드 내부 오류가 발생했어요. 서버 로그를 확인해 주세요.', 502: '외부 검색·경로 서비스에서 정상 응답을 받지 못했어요.', 503: '백엔드를 현재 사용할 수 없어요. 서버의 실행 상태와 필수 환경 변수 설정을 확인해 주세요.', 504: '외부 조회 시간이 초과됐어요. 잠시 후 직접 다시 시도해 주세요.' };
         throw new TravelApiError(messages[response.status] ?? '백엔드 요청에 실패했어요. 서버 실행 상태를 확인해 주세요.', response.status);
       }
       try { return await response.json(); }

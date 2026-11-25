@@ -23,7 +23,7 @@ Argo CD에서 Git 설정으로 배포하려면 [Argo CD 실습 안내](docs/argo
 
 실행 확인 도구 `scripts/test_api_http.py`는 기대한 응답이면 종료 코드 0, 기타 상태·스키마 불일치는 1, 연결·로컬 파일 처리 실패는 2, 예상하지 않은 429/502/503/504는 3을 반환한다. 특히 502는 외부 통신 실패와 유효하지 않은 공급자 응답을 모두 포함하므로 서버 로그로 원인을 확인한다. 필수 설정 누락은 서버 시작 실패로 나타나며 프록시가 503을 반환할 때도 API 명세의 정상 응답으로 취급하지 않는다.
 
-자연어 장소 검색의 요청·응답과 호출 횟수 제한은 [장소 검색 API 안내](docs/text_search.md)를 참고한다. Gemini는 검색어 증강·정규화에 한 번 호출하고 Places는 검색어별 첫 페이지만 최대 3회 조회한다. 검색어를 만들 수 없으면 추가 질문 없이 `textQueries: null`, `results: []`를 HTTP `200`으로 반환하며 Places를 호출하지 않는다. `tests/test_text_search.py`는 요청 모델을 만들어 실제 서비스를 호출하는 수동 테스트다.
+자연어 장소 검색의 요청·응답과 호출 횟수 제한은 [장소 검색 API 안내](docs/text_search.md)를 참고한다. LLM은 검색어 증강·정규화에 한 번 호출하고 Places는 검색어별 첫 페이지만 최대 3회 조회한다. 검색어를 만들 수 없으면 추가 질문 없이 `textQueries: null`, `results: []`를 HTTP `200`으로 반환하며 Places를 호출하지 않는다. `tests/test_text_search.py`는 요청 모델을 만들어 실제 서비스를 호출하는 수동 테스트다.
 
 ## 서버 실행 — 첫 번째 터미널
 
@@ -60,20 +60,20 @@ cd backend
 poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
-### Gemini 모델·장소 검색·주변 관광지 추천용 API 키
+### LLM 모델·장소 검색·주변 관광지 추천용 API 키
 
-장소 검색과 주변 관광지 추천은 Google Places와 Gemini를 사용한다. 직접 실행하는 앱은 `backend/.env`를 읽으며 이미 설정된 환경 변수는 덮어쓰지 않는다. Docker Compose는 저장소 루트 `.env`를 주입한다. 루트 파일로 직접 실행하려면 `backend/`에서 `poetry run uvicorn app.main:app --env-file ../.env --host 127.0.0.1 --port 8000`처럼 명시한다. 다음 값을 실제 실행 방식이 읽는 환경에 설정한다.
+장소 검색과 주변 관광지 추천은 Google Places와 공통 LLM 래퍼(GPT·Gemini)를 사용한다. 저장소 루트의 `.env`에 다음 값을 설정한 뒤 서버를 시작한다. 앱은 시작 시 이 파일을 읽으며, 이미 설정된 환경 변수는 덮어쓰지 않는다.
 
 ```dotenv
 GOOGLE_PLACE_API_KEY=발급받은_Google_Places_API_키
 GEMINI_API_KEY=발급받은_Gemini_API_키
-GEMINI_MODEL=gemini-3.5-flash-lite
-GEMINI_NEARBY_MODEL=gemini-3.5-flash-lite
+OPENAI_MODEL=gemini-3.5-flash-lite
+LLM_NEARBY_MODEL=
 ```
 
-`GEMINI_MODEL`은 공통 기본 모델을 지정하는 필수 설정이다. 미설정·빈 문자열·공백뿐이면 앱 시작이 실패한다. 장소 검색은 이 모델을 사용한다. 주변 관광지 추천은 선택 설정인 `GEMINI_NEARBY_MODEL`을 우선 사용하며, 해당 값이 미설정·빈 문자열·공백뿐이면 `GEMINI_MODEL`을 사용한다. 모델의 앞뒤 공백은 제거하며 코드에 고정된 모델명으로 대체하지 않는다. 위 모델명은 설정 예시이며 nearby 모델만 바꾸려면 `GEMINI_NEARBY_MODEL`을 수정한다.
+`OPENAI_MODEL`은 요청에 별도 모델이 없을 때 사용하는 필수 기본 모델이다. 주변 추천의 앵커 선정·순위 선정은 `LLM_NEARBY_MODEL`이 있으면 사용하고, 미설정·빈 문자열·공백뿐이면 `OPENAI_MODEL`을 사용한다. 모델명으로 공급자를 구분하여 Gemini는 `GEMINI_API_KEY`, GPT는 `OPENAI_API_KEY`를 읽는다. 두 공급자의 모델을 함께 쓰면 두 키 모두 필요하다. `GOOGLE_PLACE_API_KEY`, 기본 모델과 설정된 모델들의 API 키를 시작 시 검증하며 누락되면 앱 시작이 실패한다. 검증 과정에서 외부 API를 호출하지 않는다. 모델과 출력 토큰 수는 요청 시 결정하며, 토큰 한도는 코드의 `max_output_tokens`로 관리한다. 자세한 선택 순서는 [공통 LLM 래퍼 안내](app/llm/README.md)를 참고한다.
 
-API 키는 서버에서만 관리하고 프론트의 요청 JSON에는 넣지 않는다. `lifespan`에서 `GOOGLE_PLACE_API_KEY`, `GEMINI_API_KEY`, `GEMINI_MODEL`을 한 번 검증하며, 하나라도 미설정·빈 문자열·공백뿐이면 `RuntimeError`로 앱 시작이 실패한다. 서비스는 요청마다 설정 누락을 다시 확인하지 않는다. 시작 검증은 값의 존재 여부만 확인하며 실제 모델 사용 가능 여부나 API 키의 유효성을 외부 호출로 확인하지 않는다.
+API 키는 서버에서만 관리하고 프론트의 요청 JSON에는 넣지 않는다. 앱은 시작 시 루트 `.env`를 읽으며 이미 설정된 환경변수는 덮어쓰지 않는다.
 
 ## 프론트 배포 주소와 CORS
 
@@ -243,12 +243,12 @@ JSON
 
 ### 추천 흐름과 현재 범위
 
-1. 사용자 요청사항·여행 태그·역 목록을 기존 Gemini 래퍼에 보내 앵커 역을 선택한다. LLM은 후보 ID 목록만 반환하며 서버가 실제 입력 역에 연결한다. 없는 역 ID·중복 선택·개수 초과는 오류로 처리한다.
+1. 사용자 요청사항·여행 태그·역 목록을 공통 LLM 래퍼에 보내 앵커 역을 선택한다. LLM은 후보 ID 목록만 반환하며 서버가 실제 입력 역에 연결한다. 없는 역 ID·중복 선택·개수 초과는 오류로 처리한다.
 2. 선택된 역마다 기존 Google Nearby Search 클라이언트로 주변 장소를 조회한다. 태그가 하나면 최대 N개, 복수면 태그 전체에 검색 개수 `2 × N`을 나누어 요청한다. 태그별 추가 검색 개수와 예산보다 많은 태그 중 조회할 태그는 기존처럼 무작위로 배분한다.
 3. 같은 역에서 얻은 장소는 Google Place ID로 중복을 제거하고, 좌표가 없거나 반경 밖인 장소는 제외한다.
-4. 태그가 하나면 검색 순서대로 처음 N개를 반환한다. 복수 태그의 유효 후보가 0~1개이면 LLM 순위 선정을 생략한다. 후보가 2개 이상이면 해당 역에서 Gemini를 한 번 호출해 사용자 요청사항·태그에 맞는 `min(N, 후보 수)`개를 순서대로 선택한다. 후보가 N개 이하여도 반환 순서를 정하기 위해 호출한다. 결과가 부족해도 개수를 채우기 위한 추가 검색은 하지 않는다.
+4. 태그가 하나면 검색 순서대로 처음 N개를 반환한다. 복수 태그의 유효 후보가 0~1개이면 LLM 순위 선정을 생략한다. 후보가 2개 이상이면 해당 역에서 LLM을 한 번 호출해 사용자 요청사항·태그에 맞는 `min(N, 후보 수)`개를 순서대로 선택한다. 후보가 N개 이하여도 반환 순서를 정하기 위해 호출한다. 결과가 부족해도 개수를 채우기 위한 추가 검색은 하지 않는다.
 
-순위 선정에는 앵커 선택에 사용한 Gemini 클라이언트를 재사용한다. LLM에는 사용자 요청사항·태그·요청 개수와 후보의 인덱스·이름·대표 유형·검색 태그·역과의 거리만 전달한다. ID와 좌표는 보내지 않고, `{"indices": [2, 0, 1]}`처럼 반환된 0부터 시작하는 인덱스로 원래 장소 객체를 복원한다. 동적 JSON Schema와 로컬 검증으로 정확히 `min(N, 후보 수)`개의 중복 없는 정수와 후보 범위를 확인하며, 출력은 256토큰으로 제한한다. 오류 시 재시도하거나 무작위 결과로 대체하지 않는다. HTTP 요청·응답 형식은 그대로이며 인덱스·선정 이유를 응답에 추가하지 않는다. 서로 다른 역의 추천에는 같은 장소가 포함될 수 있다.
+순위 선정에는 앵커 선택에 사용한 동일한 모델의 LLM 클라이언트를 재사용한다. LLM에는 사용자 요청사항·태그·요청 개수와 후보의 인덱스·이름·대표 유형·검색 태그·역과의 거리만 전달한다. ID와 좌표는 보내지 않고, `{"indices": [2, 0, 1]}`처럼 반환된 0부터 시작하는 인덱스로 원래 장소 객체를 복원한다. 동적 JSON Schema와 로컬 검증으로 정확히 `min(N, 후보 수)`개의 중복 없는 정수와 후보 범위를 확인하며, 출력은 코드의 기본 한도인 1024토큰으로 제한한다. 오류 시 재시도하거나 무작위 결과로 대체하지 않는다. HTTP 요청·응답 형식은 그대로이며 인덱스·선정 이유를 응답에 추가하지 않는다. 서로 다른 역의 추천에는 같은 장소가 포함될 수 있다.
 
 ## 코드 구조와 요청 흐름
 
@@ -284,9 +284,10 @@ flowchart TD
     C --> D[HeartRails: 관광지 근처 역 조회]
     D --> E[Ekispert: 역 간 경로와 시간·요금 조회]
     E --> F[optimizer: 방문 순서 계산]
-    F --> G[환승역 좌표 조회와 응답 조립]
-    G --> H[Pydantic 응답 모델]
-    H --> I[HTTP 응답 JSON]
+    F --> G[선택 경로의 역·환승역 좌표 조회]
+    G --> H[준비된 좌표로 응답 조립]
+    H --> I[Pydantic 응답 모델]
+    I --> J[HTTP 응답 JSON]
 ```
 
 - **Uvicorn**은 HTTP 요청을 받는 서버 프로그램이다. `app.main:app`은 `app/main.py`의 `app` 객체를 실행한다는 뜻이다.
@@ -297,9 +298,9 @@ flowchart TD
 
 장소 검색·주변 추천의 LLM 래퍼와 Google 클라이언트는 외부 호출·응답 오류를 `errors.py`의 공통 `Provider*` 예외로 분류한다. 서비스는 추천·검색 흐름을 실행하고, API는 공통 예외를 기존 HTTP 상태로 변환한다. LLM 응답 모델 검증과 연결 정리는 래퍼가 담당한다.
 
-예를 들어 주변 추천 요청은 `JSON → FastAPI의 요청 모델 검증 → api/nearby.py → nearby_service.py → Gemini·Google Places → 응답 모델 → JSON`으로 처리된다. 역할을 나누면 검색 방법을 바꾸더라도 프론트가 호출하는 URL과 JSON 형식은 유지할 수 있다.
+예를 들어 주변 추천 요청은 `JSON → FastAPI의 요청 모델 검증 → api/nearby.py → nearby_service.py → LLM·Google Places → 응답 모델 → JSON`으로 처리된다. 역할을 나누면 검색 방법을 바꾸더라도 프론트가 호출하는 URL과 JSON 형식은 유지할 수 있다.
 
-장소 검색은 `api/places.py → schemas/place_search.py → services/place_search_service.py → Gemini·clients/google_maps.py`로 처리한다. 영어 프롬프트는 `prompts/place_search.py`에서 `textwrap.dedent`로 관리하며, 앱은 테스트 모듈을 가져오지 않는다. 반환 필드는 `clients/google_maps.py`의 `search_text()` 내부 `FIELD_MASK`에서 수정한다.
+장소 검색은 `api/places.py → schemas/place_search.py → services/place_search_service.py → LLM·clients/google_maps.py`로 처리한다. 영어 프롬프트는 `prompts/place_search.py`에서 `textwrap.dedent`로 관리하며, 앱은 테스트 모듈을 가져오지 않는다. 반환 필드는 `clients/google_maps.py`의 `search_text()` 내부 `FIELD_MASK`에서 수정한다.
 
 동기 방식인 HeartRails 요청은 스레드에서 실행해 서버 이벤트 루프를 막지 않도록 한다. Chromium 부하를 줄이기 위해 앱 프로세스 하나당 최적화 작업을 한 번에 하나씩 실행한다. `--workers`를 늘리면 이 제한도 프로세스마다 따로 적용되므로 기본 실행 명령은 단일 프로세스를 사용한다.
 
