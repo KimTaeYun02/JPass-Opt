@@ -206,6 +206,10 @@ def build_day_output(day, day_date, start_at, stations, plan):
 
 async def optimize_route(request: RouteRequest) -> RouteResponse:
     """근처 역 → 경로 수집 → 최적화 → 응답. 일차별로 독립 실행한다."""
+    if request.includeAccessWalking:
+        from app.services.access_route_service import optimize_with_access
+
+        return await optimize_with_access(request)
     days = []
     for day in sorted(request.days, key=lambda item: item.dayIndex):
         day_date = request.startDate + timedelta(days=day.dayIndex - 1)

@@ -1,6 +1,6 @@
 # 동선 최적화 API
 
-이 문서는 현재 워킹 트리의 실제 구현을 설명한다. 관광지별 좌표로 근처 역을 찾고, 일차별 역 간 이동 시간을 기준으로 방문 순서를 계산한다. 관광지 체류 시간과 관광지↔역 접근 도보는 계산하지 않는다.
+이 문서는 현재 워킹 트리의 실제 구현을 설명한다. 기본 동작은 관광지별 좌표로 근처 역을 찾고, 일차별 역 간 이동 시간을 기준으로 방문 순서를 계산한다. 별도 선택 확장인 `includeAccessWalking=true`를 보내면 관광지↔역 도보까지 합산한다. 체류 시간은 두 방식 모두 제외한다. 아래 기존 계약 설명은 옵션을 생략한 경우를 기준으로 하며, 확장 계약은 마지막 절에서 구분한다.
 
 ## Endpoint
 
@@ -43,6 +43,7 @@ JSON Schema만으로 표현되지 않는 관계 검증과 계산 의미는 별�
 | `startDate` | string, date | 예 | 아니요 | 없음 | 정확한 `YYYY-MM-DD` 형식의 유효한 날짜 |
 | `dayCount` | integer | 예 | 아니요 | 없음 | 1 이상, 엄격한 정수. 문자열·실수·boolean 불가 |
 | `days` | array of DayInput | 예 | 아니요 | 없음 | 아래 관계 검증 적용 |
+| `includeAccessWalking` | boolean | 아니요 | 아니요 | `false` | 선택 확장. 엄격한 boolean, 문자열·숫자 불가 |
 
 실행 시 추가 검증:
 
@@ -118,7 +119,7 @@ JSON Schema만으로 표현되지 않는 관계 검증과 계산 의미는 별�
 | `timezone` | string | 아니요 | 아니요 | `"Asia/Tokyo"` | 이 값만 허용 |
 | `currency` | string | 아니요 | 아니요 | `"JPY"` | 이 값만 허용 |
 | `dataSource` | string | 아니요 | 아니요 | `"live"` | 이 값만 허용 |
-| `timingBasis` | string | 아니요 | 아니요 | `"stationTravelOnly"` | 이 값만 허용 |
+| `timingBasis` | string | 아니요 | 아니요 | `"stationTravelOnly"` | 기본 `stationTravelOnly`, 도보 확장 `placeTravelOnly` |
 | `days` | array of OptimizedDay | 예 | 아니요 | 없음 | `dayIndex` 오름차순 |
 | `totalTravelMinutes` | integer | 예 | 아니요 | 없음 | 0 이상, 일차별 합계 |
 | `totalTransportFare` | integer | 예 | 아니요 | 없음 | 0 이상, 일차별 합계 |
@@ -302,7 +303,7 @@ HeartRails 노선 조회에서 응답 형식 오류가 발생하면 역명 조�
 
 HeartRails HTTP timeout은 각 요청 10초다. 크롤러에는 페이지 접속 60초, 검색 버튼 클릭 15초, 결과 URL 대기 30초 등의 개별 timeout이 있다. 잠금 대기나 API 요청 전체에 대한 별도 timeout은 없다. 위 크롤링 횟수는 브라우저의 전체 HTTP 리소스 요청 횟수가 아니다.
 
-현재 서비스는 `headless=False`로 Chromium을 실행한다. 화면 환경이나 Xvfb, Playwright 브라우저·시스템 라이브러리가 필요하다. 실행 방법은 [backend README](../README.md)를 따른다. 이 API 자체는 Google/Gemini 키를 사용하지 않는다.
+현재 서비스는 `headless=False`로 Chromium을 실행한다. 화면 환경이나 Xvfb, Playwright 브라우저·시스템 라이브러리가 필요하다. 실행 방법은 [backend README](../README.md)를 따른다. 기본 모드는 Google/Gemini 키를 사용하지 않는다. 도보 확장은 별도의 서버용 Google Routes 키를 사용한다.
 
 계산 범위:
 
@@ -332,3 +333,53 @@ HeartRails HTTP timeout은 각 요청 10초다. 크롤러에는 페이지 접속
 결과는 `days[].visits` 순서대로 표시하고, `legs[].fromVisitId`와 `toVisitId`로 관광지를 연결한다. 지도 관광지 마커에는 `Visit.location`, 역 마커에는 `Visit.station.location`과 `TransportStep`의 역 좌표를 사용한다. 경로 좌표는 역 단위이므로 실제 도로·선로 polyline으로 해석하지 않는다.
 
 주변 추천에 역을 넘길 때는 `Visit.station` 또는 선택한 TransportStep 역의 `name`과 `location`을 `/api/nearby/recommend` 요청의 `stations[]`로 사용한다. 주변 추천은 추가 관광지를 제안하며 기존 optimize 결과를 자동으로 수정하지 않는다. 추천 장소를 일정에 추가하면 프론트가 수정한 RouteRequest로 다시 최적화를 요청한다.
+
+## 선택 확장: 관광지↔역 도보 포함 (2026-11-10)
+
+이 절은 Notion의 기존 확정 입출력에 더한 선택 확장이다. 요청에 `includeAccessWalking: true`를 명시해야 적용된다. 옵션 생략·`false`는 기존 처리와 JSON 응답을 유지하며 새 선택 필드를 출력하지 않는다. 구버전 서버가 옵션을 무시해 `stationTravelOnly`를 반환하면 새 프론트는 이를 도보 포함 결과로 표시하지 않고 오류를 안내한다.
+
+### 계산 방식과 범위
+
+1. 관광지별 HeartRails 근처 역 행에서 이름·정확한 좌표·지역으로 중복을 제거한 뒤 최대 3곳을 비교한다. 같은 이름에 다른 좌표·지역이 섞이면 현재 이름 기반 크롤러로 구분할 수 없어 422로 중단한다.
+2. Google Routes `computeRoutes`의 `WALK`로 관광지→역, 역→관광지를 각각 조회한다. 출발·도착 방향별로 실제 도보 시간이 짧은 역을 선택한다. 최근접 역의 직선거리만으로 도보 시간을 추정하지 않는다.
+3. 선택된 역 사이의 기존 Ekispert 조회를 재사용한다. `출발 도보 + 역 간 시간 + 도착 도보`가 관광지 사이 간선 비용이 된다.
+4. 같은 선택 역을 공유하는 관광지 쌍을 우선한 뒤, 나머지는 직선거리 1.2km 이하의 가까운 쌍 중 일차별 최대 12방향만 직접 도보로 비교한다. 제한된 후보에서 시간이 짧고, 동률이면 요금이 적은 경로를 채택한다.
+5. 이 유향 비용 행렬에 기존 Held–Karp를 적용한다. 방문 순서는 만들어진 행렬에 대해서 최적이지만, 모든 역 조합·모든 직접 도보 경로를 탐색하는 최적화는 아니다.
+
+관광지당 후보 3곳이면 도보 호출은 일차별 최대 `6n+12`회(8곳 60회), 역 간 크롤링은 최대 `n(n-1)`회(8곳 56회)다. 동일 좌표·동일 방향 조회는 일차 안에서 재사용하며 도보 요청 동시성은 4개다. 같은 관광지 좌표는 외부 요청 없이 0분·0m로 처리할 수 있다. 역까지 긴 도보도 총시간에 반영하지만 **관광지↔역 버스 연결은 지원하지 않는다.**
+
+체류·고정 일정·일별 종료시각·최초 관광지까지 이동은 제외한다. 역 간 시간표는 모두 일차 시작시각의 조회 결과이며 누적 출발시각으로 재조회하지 않는다. 따라서 방문 시각은 이동만 누적한 참고값이다. 요청 전체는 잠금 획득 후 540초로 제한한다. 도보 HTTP 요청은 각각 15초이며 자동 재시도하지 않는다. 취소 시 새 대기 요청은 중단하지만 이미 실행 중인 동기 HTTP는 timeout까지 남을 수 있다.
+
+### 추가 응답
+
+- `timingBasis: "placeTravelOnly"`: 관광지↔역 도보 포함 이동 시간이라는 뜻이다.
+- `days[].candidateSearchTruncated`: 가까운 직접 도보 후보가 12방향보다 많아 일부만 비교했는지 표시한다. `false`도 모든 역 조합·먼 관광지의 도보까지 비교했다는 뜻은 아니다.
+- `legs[].segments[]`: 실제 표시 순서의 도보·역 간 이동 구간이다. 각 `durationMinutes` 합계는 해당 leg 시간과 같고, leg 합계는 일차·여행 합계와 같다.
+
+각 segment는 다음 필드를 가진다.
+
+| 필드 | 의미 |
+| --- | --- |
+| `fromPoint`, `toPoint` | `{kind: "place" 또는 "station", name, location:{lat,lng}}` |
+| `mode` | `walking` 또는 `transit`. `transit`은 기존 역 간 경로 전체를 묶은 것으로 버스·지하철의 구분을 보장하지 않음 |
+| `durationMinutes` | 0 이상 정수. Google 초 단위 시간은 도보 구간별 분 올림 |
+| `distanceMeters` | 도보 거리(m), transit은 `null` |
+| `path` | Google polyline을 검증·디코딩한 도보 좌표 배열(2~10,000점). transit은 `null` |
+
+직접 도보 leg는 `segments` 한 개와 `route: []`다. 역을 거치면 접근 도보·역 간 transit·도착 도보 순서이며 같은 역 사이 이동은 transit 구간을 만들지 않는다. 기존 `route`는 역 간 노선·환승 상세로 유지한다. `Visit.station`은 최근접 참고 역이며 실제 구간에 선택된 출발·도착 역과 다를 수 있다. 새 프론트는 추천 입력에 `segments`와 `route`의 실제 역을 사용하며 관광지를 역으로 전달하지 않는다.
+
+지도 도보선은 `path`를 따르고, 노선선과 역 간 도보 환승선은 기존 역 좌표 참고선이다. Google WALK는 베타 기능이므로 보도·보행로 누락 가능성을 결과 화면에 안내한다. [Google travel mode 문서](https://developers.google.com/maps/documentation/routes/reference/rest/v2/RouteTravelMode), [computeRoutes 문서](https://developers.google.com/maps/documentation/routes/compute_route_directions).
+
+### 설정과 실패 처리
+
+서버에만 `GOOGLE_ROUTES_API_KEY`를 추가하고 해당 프로젝트의 Routes API를 활성화한다. 이 키는 프론트의 `VITE_` 환경변수나 응답에 넣지 않는다. Places·Maps JavaScript 키의 권한을 자동 확장하거나 다른 키로 대체하지 않는다. 키의 API 제한은 Routes API, 애플리케이션 제한은 실행 서버의 고정 외부 IP에 맞춘다. `.env`를 쓰면 실제 서버가 읽는 환경 파일에 추가하고, Kubernetes에서는 Secret 등 서버 환경 주입 경로로 설정한다.
+
+이 선택 기능의 키는 서버 시작의 필수값으로 두지 않고, 옵션이 켜진 요청에서 확인한다. Routes로 출발·도착 좌표 쌍을 보내므로 서버용 데이터 흐름에도 이 외부 서비스를 포함한다. 호출 수 제한은 일차별 제한일 뿐 전체 사용 금액 한도가 아니며, 배포 시 프로젝트의 Routes API 쿼터도 설정한다.
+
+현재 Kubernetes의 `apply_k8s_secret.py`와 Deployment는 Places·Gemini 키 두 개만 다룬다. 이 확장을 Kubernetes에서 켜려면 운영 환경의 Secret에 Routes 키를 저장하고 Deployment의 `env[].valueFrom.secretKeyRef`로 `GOOGLE_ROUTES_API_KEY`를 추가 주입해야 한다. 루트 `.env`에만 추가하면 기존 Kubernetes 배포에는 전달되지 않는다. 이 작업에서는 클러스터·인증 정보를 변경하지 않았다.
+
+여러 관광지 요청에서 키가 없으면 `503`으로 안전하게 안내하고 기존 모드로 자동 전환하지 않는다. 한 곳만 있는 날은 이동 구간이 없으므로 도보 조회가 필요 없다. 정상적인 빈 도보 결과는 해당 후보에서 제외하며 모든 후보 접근 도보가 없으면 422다. 정상적인 빈 역 간 결과에는 이미 구한 유효한 직접 도보를 사용할 수 있다. 인증·요청 한도·형식·연결·시간 초과 오류는 429/502/504로 전달하며 0분으로 대체하지 않는다.
+
+자동 검증은 `backend/contract_checks/test_access_routes.py`와 `web/tests/demo-access.test.mjs`에 있다. 실제 어댑터·Vite 프록시·FastAPI·최적화 엔진을 함께 검사하지만 외부 공급자 호출은 차단·대체한다. Google WALK 실계정 호출 성공을 보증하는 테스트는 아니다.
+
+2026-11-10 별도 실호출에서 Google WALK와 금각사→료안지 직접 도보 최적화·프론트 파싱을 확인했다. 철도 포함 검증은 테스트용 headless 크롤러의 HTTP 403으로 미완료이며, 아사쿠사의 같은 이름·다른 좌표 후보는 422로 중단됐다. 운영 전체 검증 완료를 의미하지 않는다. [실측값·검증 환경·버스 후속안](../../docs/ai/reviews/access-walking-live.md)을 참고한다.

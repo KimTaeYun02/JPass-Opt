@@ -13,6 +13,7 @@ AI와 함께 기획·구현·검토할 때 사용한 프로젝트 문서를 모�
 | [Held–Karp 이전](planning/HELD_KARP_MIGRATION.md) | 프론트 오프라인 계산 설계. 백엔드 API 알고리즘과 구분. |
 | [Notion 경로 자료 설계](planning/NOTION_ROUTING_DESIGN.md) | 불완전 자료·추정치·출발 시각 재조회 실험. |
 | [경로 확장 조사](planning/ROUTING_EXPANSION_RESEARCH.md) | 당시 성능·공급자 조사. 현재 가격·약관 보증 아님. |
+| [관광지 ↔ 역 접근 이동 조사](planning/ATTRACTION_STATION_ACCESS_RESEARCH.md) | 2026-11-09 기존 API·코드 재사용 조사. 무료 역 조회 포함, 도보·버스 통합 실호출은 미검증. |
 
 ## 설계·검토
 
@@ -28,6 +29,10 @@ AI와 함께 기획·구현·검토할 때 사용한 프로젝트 문서를 모�
 | [기준역 API 통합 계약](design/station-integration.md) | [기준역·프론트 통합 검증](reviews/station-integration.md) |
 | [백엔드 업데이트 통합 계약](design/backend-update-integration.md) | [업데이트 연동 검증](reviews/backend-update-integration.md) |
 | [배포 연결 보강 계약](design/deployment-hardening.md) | [배포 연결·실서비스 검증](reviews/deployment-hardening.md) |
+| [동선 결과 UI 계약](design/results-ux.md) | [결과 UI 검토·실행 결과](reviews/results-ux.md) |
+| [지도 이동 구간 색상 계약](design/map-mode-lines.md) | [지도 이동 구간 검토](reviews/map-mode-lines.md) |
+| [관광지↔역 도보 포함 계약](design/access-walking.md) | [도보 포함 검토·실행 결과](reviews/access-walking.md) |
+| 도보 실계정·버스 후속 조사 | [실호출 결과·남은 제약·버스 연결안](reviews/access-walking-live.md) |
 
 [이전 화면 흐름 QA](reviews/flow-qa-final.md)에는 포커스·입력 조합 등의 수동 검증 항목도 남아 있습니다. 과거 소스에 대한 추정을 현재 확정 결함으로 취급하지 마세요. 최종 통합 판단과 실제 실행 결과는 패키징 검토에 기록합니다.
 

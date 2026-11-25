@@ -6,6 +6,8 @@
 
 Docker로 실행·배포하려면 [Docker 실행·배포 안내](docs/docker.md)를 참고한다.
 
+공식 키 없이 기존 크롤러의 버스 검색·추출을 점검하려면 [버스 크롤러 검증](docs/ekispert-bus-crawler.md)을 참고한다. 별도 진단 도구이며 제품 API의 버스 연동 완료를 뜻하지 않는다.
+
 minikube로 로컬 Kubernetes를 테스트하려면 [Kubernetes 실행 안내](docs/kubernetes.md)를 참고한다.
 
 Argo CD에서 Git 설정으로 배포하려면 [Argo CD 실습 안내](docs/argocd.md)를 참고한다.
@@ -60,7 +62,7 @@ poetry run uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 ### Gemini 모델·장소 검색·주변 관광지 추천용 API 키
 
-장소 검색과 주변 관광지 추천은 Google Places와 Gemini를 사용한다. 저장소 루트의 `.env`에 다음 값을 설정한 뒤 서버를 시작한다. 앱은 시작 시 이 파일을 읽으며, 이미 설정된 환경 변수는 덮어쓰지 않는다.
+장소 검색과 주변 관광지 추천은 Google Places와 Gemini를 사용한다. 직접 실행하는 앱은 `backend/.env`를 읽으며 이미 설정된 환경 변수는 덮어쓰지 않는다. Docker Compose는 저장소 루트 `.env`를 주입한다. 루트 파일로 직접 실행하려면 `backend/`에서 `poetry run uvicorn app.main:app --env-file ../.env --host 127.0.0.1 --port 8000`처럼 명시한다. 다음 값을 실제 실행 방식이 읽는 환경에 설정한다.
 
 ```dotenv
 GOOGLE_PLACE_API_KEY=발급받은_Google_Places_API_키
@@ -316,7 +318,7 @@ flowchart TD
 
 성공 응답은 각 API의 계산·검색이 완료된 JSON이다. 현재는 요청마다 처리해서 반환하며 DB 저장, 작업 큐, 작업 ID 조회, 인증은 구현 범위에 포함하지 않았다.
 
-## 동선 최적화의 현재 계산 범위
+## 동선 최적화 기본 모드의 계산 범위
 
 - 각 일차의 방문 순서를 독립적으로 계산한다. 관광지를 다른 일차로 옮기지 않는다.
 - 관광지마다 가까운 역 하나를 고른 뒤 역 사이 총 이동 시간을 최소화한다. 시간이 같으면 교통비를 비교한다.
@@ -324,3 +326,9 @@ flowchart TD
 - 모든 역 간 경로는 해당 일차의 시작 시각으로 조회한다. 순서 결정 후에는 구간 소요 시간을 누적하며 후속 구간의 실제 출발 시각으로 재조회하지 않는다.
 - 관광지 체류 시간과 관광지↔역 도보 시간은 계산하지 않는다. 따라서 예상 도착 시각은 역 사이 이동 기준이다.
 - 요금은 구간별 원본 운임의 합계다. 교통 패스·묶음 요금 할인은 반영하지 않는다.
+
+## 도보 포함 계산의 추가 설정
+
+`POST /api/routes/optimize`는 기본적으로 기존 역 간 계산을 유지한다. `includeAccessWalking=true` 선택 확장은 서버 환경의 `GOOGLE_ROUTES_API_KEY`가 필요하다. Routes API를 활성화하고 API 제한을 Routes API로, IP 제한을 실제 실행 서버의 고정 외부 IP로 설정한다. 이 서버 키를 프론트 `VITE_` 변수에 넣지 않는다. 실행 시 읽는 환경 파일 또는 Kubernetes Secret을 통해 주입한다. 저장소 루트 `.env`와 `backend/.env` 중 어떤 파일을 읽는지는 실행 방법을 확인한다.
+
+이 확장은 최대 3개 역의 방향별 도보 접근과 제한된 직접 도보를 비교한다. 버스 연결·체류·누적 출발시각 재조회는 포함하지 않는다. 키가 없는 상태로 옵션을 켜면 503 안내를 반환하며 기존 모드는 계속 사용할 수 있다. [추가 입출력·호출 제한·실패 정책](docs/routes.md#선택-확장-관광지역-도보-포함-2026-11-10)을 참고한다.

@@ -5,6 +5,96 @@ import { createDemoMapController, DemoMapLoadError } from '../src/demo-map-contr
 const place = (id, order, state = 'routed') => ({ id, name: id, lat: 35 + id.charCodeAt(0) / 1000, lng: 135.75, order, state });
 const view = (places, selectedId, activeDayId = '0') => ({ activeDayId, places, selectedId, showRoute: true });
 const settle = () => new Promise(setImmediate);
+const segment = (mode, lat, lng = 139) => ({ mode, from: { lat, lng }, to: { lat: lat + .01, lng: lng + .01 } });
+
+test('walking geometry bends survive SDK polyline updates and viewport fitting', async () => {
+  const h = harness();
+  const s = segment('walking', 35);
+  const bend = { lat: 35.005, lng: 139.02 };
+  const path = [s.from, bend, s.to];
+  h.controller.update({ ...view([place('a', 1), place('b', 2)]), routeSegments: [{ ...s, path }] });
+  await settle();
+  assert.deepEqual(h.lines[0].path, path);
+  assert.ok(h.maps[0].fits[0][0].points.some(p => p.lng === bend.lng));
+  assert.equal(h.lines[0].icons[0].icon.strokeColor, '#258258');
+});
+
+test('mixed route segments keep disjoint endpoints separate and style only explicit walking', async () => {
+  const h = harness();
+  const segments = [segment('transit', 35), segment('walking', 36), segment('transit', 37)];
+  const current = { ...view([place('a', 1), place('b', 2)]), routeSegments: segments, routePath: [{ lat: 1, lng: 1 }, { lat: 2, lng: 2 }] };
+  h.controller.update(current); await settle();
+  assert.equal(h.lines.length, 3);
+  h.lines.forEach((line, index) => assert.deepEqual(line.path, [segments[index].from, segments[index].to]));
+  assert.equal(h.lines[0].strokeColor, '#3267d6');
+  assert.deepEqual(h.lines[0].icons, []);
+  assert.equal(h.lines[1].strokeOpacity, 0);
+  assert.equal(h.lines[1].icons[0].icon.strokeColor, '#258258');
+  assert.equal(h.lines[1].icons[0].icon.strokeOpacity, 1);
+  assert.equal(h.lines[1].icons[0].repeat, '14px');
+  assert.equal(h.lines[2].strokeOpacity, .9);
+  assert.ok(h.maps[0].fits[0][0].points.some((point) => point.lat === segments[2].to.lat));
+  assert.ok(!h.maps[0].fits[0][0].points.some((point) => point.lat === 1));
+  const pathWrites = h.lines.map((line) => line.pathWrites);
+  h.controller.update({ ...current, selectedId: 'a' });
+  assert.equal(h.lines.length, 3);
+  assert.deepEqual(h.lines.map((line) => line.pathWrites), pathWrites);
+  assert.equal(h.maps[0].fits.length, 1);
+  assert.equal(h.maps[0].pans.length, 1);
+});
+
+test('pooled route lines reset dashes and hide extra lines on day/input/empty-route changes', async () => {
+  const h = harness();
+  const places = [place('a', 1), place('b', 2)];
+  h.controller.update({ ...view(places), routeSegments: [segment('walking', 35), segment('transit', 36), segment('walking', 37)] }); await settle();
+  h.controller.update({ ...view(places, undefined, '1'), routeSegments: [segment('transit', 35)] });
+  assert.equal(h.lines.length, 3);
+  assert.deepEqual(h.lines[0].icons, []);
+  assert.equal(h.lines[0].strokeOpacity, .9);
+  assert.equal(h.lines[0].strokeColor, '#3267d6');
+  for (const line of h.lines.slice(1)) { assert.equal(line.visible, false); assert.deepEqual(line.path, []); }
+  h.controller.update({ ...view(places), routeSegments: [] });
+  for (const line of h.lines) { assert.equal(line.visible, false); assert.deepEqual(line.path, []); }
+  h.controller.update({ ...view(places), routeSegments: [segment('walking', 35)] });
+  assert.equal(h.lines[0].icons.length, 1);
+  h.controller.update({ ...view(places), routeSegments: [segment('walking', 35)], showRoute: false });
+  assert.ok(h.lines.every((line) => !line.visible));
+  const fits = h.maps[0].fits.length;
+  h.controller.update({ ...view(places), routeSegments: [segment('transit', 35), segment('walking', 36), segment('transit', 37)] });
+  assert.equal(h.lines.length, 3);
+  assert.ok(h.lines.every((line) => line.visible));
+  assert.equal(h.lines[1].strokeOpacity, 0);
+  assert.equal(h.lines[1].icons[0].icon.strokeColor, '#258258');
+  assert.deepEqual(h.lines[2].icons, []);
+  assert.equal(h.maps[0].fits.length, fits + 1);
+  h.controller.update({ ...view(places), routeSegments: [segment('walking', 35), segment('transit', 36), segment('walking', 37)] });
+  assert.equal(h.maps[0].fits.length, fits + 1, 'changing modes alone does not refit');
+});
+
+test('coincident endpoints draw no walking dot and a single marker still fits supplied route geometry', async () => {
+  const h = harness();
+  const point = { lat: 35.2, lng: 139.2 };
+  h.controller.update({ ...view([place('a', 1)]), routeSegments: [{ mode: 'walking', from: point, to: point }] }); await settle();
+  assert.equal(h.lines[0].visible, false);
+  assert.deepEqual(h.maps[0].zooms, [14]);
+  const actual = segment('walking', 36);
+  h.controller.update({ ...view([place('a', 1)]), routeSegments: [actual] });
+  assert.equal(h.lines[0].visible, true);
+  assert.ok(h.maps[0].fits[0][0].points.some((point) => point.lat === actual.to.lat));
+});
+
+test('every segment detaches on failure or destroy and late updates cannot restore it', async () => {
+  for (const end of ['fail', 'destroy']) {
+    const h = harness();
+    const current = { ...view([place('a', 1), place('b', 2)]), routeSegments: [segment('transit', 35), segment('walking', 36)] };
+    h.controller.update(current); await settle();
+    if (end === 'fail') h.controller.fail('authentication failed'); else h.controller.destroy();
+    assert.ok(h.lines.every((line) => line.map === null));
+    h.controller.update(current);
+    assert.equal(h.lines.length, 2);
+    assert.ok(h.lines.every((line) => line.map === null));
+  }
+});
 test('live map uses server station path instead of joining attraction coordinates', async () => {
   const h = harness();
   const places = [place('a', 1), place('b', 2)];
@@ -33,7 +123,8 @@ function harness(loadOverride) {
   }
   class FakeLine {
     constructor(options) { Object.assign(this, options); lines.push(this); }
-    setPath(path) { this.path = path; }
+    setPath(path) { this.path = path; this.pathWrites = (this.pathWrites ?? 0) + 1; }
+    setOptions(options) { Object.assign(this, options); }
     setVisible(visible) { this.visible = visible; }
     setMap(map) { this.map = map; }
   }

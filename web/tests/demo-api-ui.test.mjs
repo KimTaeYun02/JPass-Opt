@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { harness } from './demo-harness.mjs';
-import { apiPlaces, routeResponse } from './api-fixtures.mjs';
+import { apiPlaces, routeResponse, accessRouteResponse } from './api-fixtures.mjs';
 import { parseRouteResponse, createTravelApi } from '../src/demo-api.ts';
 
 const deferred = () => { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; };
@@ -27,6 +27,92 @@ async function fill(h) {
   h.dialogClick({ action: 'confirm-search' });
   h.click('continue');
 }
+
+test('walking option updates revisions, renders actual paths and invalidates stale results', async () => {
+  const { h, calls } = clientHarness({ async optimize(draft) {
+    calls.push(['optimize', draft]);
+    return parseRouteResponse(accessRouteResponse(draft), draft);
+  } });
+  await fill(h);
+  const revision = h.state().draft.revision;
+  h.click('view', { view: 'input' }); h.change('include-walking', true);
+  assert.equal(h.state().draft.revision, revision + 1);
+  assert.match(h.markup(), /id="include-walking"[^>]*checked/);
+  h.click('continue'); h.click('calculate'); await h.settle();
+  assert.equal(calls.at(-1)[1].includeAccessWalking, true);
+  assert.equal(h.state().view, 'result');
+  assert.deepEqual(h.state().map.routeSegments.map((s) => s.mode), ['walking', 'transit', 'walking']);
+  assert.equal(h.state().map.routeSegments[0].path.length, 3);
+  assert.match(h.markup(), /도보 포함 이동/);
+  assert.doesNotMatch(h.markup(), /장소↔역 이동 정보 미제공/);
+  assert.match(h.markup(), /관광지↔역 도보 포함 · 체류시간 미포함/);
+  assert.doesNotMatch(h.markup(), /역 간 이동 기준 · 관광지↔역 이동·체류시간 미포함/);
+  h.click('view', { view: 'input' }); h.change('include-walking', false);
+  assert.match(h.markup(), /역 간 이동 기준 · 관광지↔역 이동·체류시간 미포함/);
+  h.click('view', { view: 'result' });
+  assert.match(h.markup(), /일정이 변경됐어요/);
+  assert.match(h.markup(), /관광지↔역 도보 포함 · 체류시간 미포함/);
+});
+
+test('walking opt-in during an in-flight request discards the old result', async () => {
+  const pending = deferred();
+  const { h } = clientHarness({ optimize: () => pending.promise });
+  await fill(h); h.click('calculate');
+  h.change('include-walking', true);
+  pending.resolve(parseRouteResponse(routeResponse({ ...h.state().draft, includeAccessWalking: false }), { ...h.state().draft, includeAccessWalking: false, revision: h.state().draft.revision - 1 }));
+  await h.settle();
+  assert.equal(h.state().result, undefined);
+  assert.match(h.message(), /입력이 바뀌었어요/);
+});
+
+test('live map and SVG preserve step boundaries, explicit walking and truthful mode legends', async () => {
+  const { h } = clientHarness({ async optimize(draft) {
+    const response = routeResponse(draft);
+    const station = (name, lat) => ({ name, location: { lat, lng: 139 } });
+    response.days[0].legs[0].route = [
+      { fromStation: station('a', 35.2), toStation: station('b', 35.3), line: 'JR line' },
+      { fromStation: station('b', 35.3), toStation: station('c', 35.4), line: '도보' },
+      { fromStation: station('d', 35.5), toStation: station('e', 35.6), line: '도보가 포함된 노선명' },
+    ];
+    return parseRouteResponse(response, draft);
+  } });
+  await fill(h); h.click('calculate'); await h.settle();
+  const segments = h.state().map.routeSegments;
+  assert.deepEqual(segments.map((entry) => entry.mode), ['transit', 'walking', 'transit']);
+  assert.deepEqual(segments[1].to, { lat: 35.4, lng: 139 });
+  assert.deepEqual(segments[2].from, { lat: 35.5, lng: 139 });
+  assert.equal((h.markup().match(/<polyline /g) ?? []).length, 3);
+  assert.match(h.markup(), /stroke="#258258" stroke-width="4" stroke-dasharray="4 10"/);
+  assert.match(h.markup(), /legend-walking/);
+  assert.match(h.markup(), /역 좌표 간 참고선이며 실제 도로·선로 모양이 아닙니다/);
+  h.click('view', { view: 'input' });
+  assert.equal(h.state().map.showRoute, false);
+  assert.doesNotMatch(h.markup(), /<polyline |legend-walking/);
+});
+
+test('live day with no route steps has no attraction connector or mode legend', async () => {
+  const { h } = clientHarness({ async optimize(draft) {
+    const response = routeResponse(draft);
+    response.days[0].legs[0].route = [];
+    return parseRouteResponse(response, draft);
+  } });
+  await fill(h); h.click('calculate'); await h.settle();
+  assert.deepEqual(h.state().map.routeSegments, []);
+  assert.doesNotMatch(h.markup(), /<polyline |legend-walking|legend-route/);
+});
+test('walking-only map legend has no transit swatch and agrees with the result list', async () => {
+  const { h } = clientHarness({ async optimize(draft) {
+    const response = routeResponse(draft);
+    response.days[0].legs[0].route[0].line = '도보';
+    return parseRouteResponse(response, draft);
+  } });
+  await fill(h); h.click('calculate'); await h.settle();
+  assert.match(h.markup(), /class="route-mode walking"/);
+  assert.match(h.markup(), /legend-walking/);
+  assert.doesNotMatch(h.markup(), /legend-route/);
+  assert.deepEqual(h.state().map.routeSegments.map((entry) => entry.mode), ['walking']);
+});
+
 test('live UI has no startup/keystroke requests and renders server order, time, fare, steps and station path', async () => {
   const { h, calls } = clientHarness();
   assert.match(h.markup(), /실제 API 연결/);
@@ -46,7 +132,7 @@ test('live UI has no startup/keystroke requests and renders server order, time, 
   assert.match(h.markup(), /¥321/);
   assert.match(h.markup(), /server line/);
   assert.doesNotMatch(h.markup(), /교통편 예시|교통비 예시/);
-  assert.equal(h.state().map.routePath[0].lat, 35);
+  assert.equal(h.state().map.routeSegments[0].from.lat, 35);
   h.click('toggle-nearby');
   assert.equal(calls.filter(([kind]) => kind === 'nearby').length, 0);
   h.click('load-nearby'); await h.settle();

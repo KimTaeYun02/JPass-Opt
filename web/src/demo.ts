@@ -1,12 +1,14 @@
 import './demo.css';
 import './demo-reference.css';
-import { TAGS, addPlace, addPlaces, canApplyResult, clockAt, computeExample, dateAt, emptyDraft, initialDraft, initialRecommendations, placeById, recommendations, registerPlaces, removePlace, searchPlaces, setDayCount, validateDraft } from './demo-model';
-import { createTravelApi, formatJapanTime } from './demo-api';
+import { TAGS, addPlace, addPlaces, canApplyResult, computeExample, dateAt, emptyDraft, initialDraft, initialRecommendations, placeById, recommendations, registerPlaces, removePlace, searchPlaces, setDayCount, validateDraft } from './demo-model';
+import { createTravelApi } from './demo-api';
+import { renderRouteDay } from './demo-route-render';
 import { travelApiBase } from './demo-config';
 import { renderDemoMarkup } from './demo-render';
 import type { DemoPlace, DemoResult, Tag } from './demo-model';
 import type { PlaceSearch } from './demo-api';
 import { createGoogleDemoMap } from './demo-map';
+import { mapRoutePaths } from './demo-map-controller';
 import type { DemoMapView, MapPhase } from './demo-map-controller';
 
 const app = document.querySelector<HTMLElement>('#app')!;
@@ -83,6 +85,7 @@ function inputPanel(): string {
     ${!day.placeIds.length ? '<p class="empty-state">아직 비어 있는 하루예요.<br />가고 싶은 장소부터 하나 골라보세요.</p>' : ''}
     <button type="button" class="add-place" data-action="search" ${day.placeIds.length >= 8 ? 'disabled' : ''}><span aria-hidden="true">＋</span> 장소 추가하기</button>
     <p class="helper">방문 순서는 결과에서 확인할 수 있어요.</p>
+    ${apiMode ? `<label class="walking-toggle"><input id="include-walking" type="checkbox" ${draft.includeAccessWalking ? 'checked' : ''} /> 도보까지 포함해서 계산</label><p class="helper">관광지↔역 도보와 가까운 관광지 사이 직접 도보를 비교해요.</p>` : ''}
     ${apiMode ? `<label class="request-label" for="initial-query">이날 추천받을 지역·검색어 <span>선택</span></label><input id="initial-query" value="${html(initialQuery())}" placeholder="예: 교토의 조용한 정원과 카페" /><p class="helper">선택한 장소가 있으면 그 주변을 우선해 찾아요. 장소가 없는 날은 지역이나 검색어를 입력해 주세요.</p>` : ''}
     <div class="section-rule"></div><div class="taste-heading"><h2>3 · 여행 취향</h2><span>여러 개 선택</span></div>
     <div class="tag-list">${TAGS.map(([tag, label]) => `<button type="button" class="tag ${draft.tags.includes(tag) ? 'active' : ''}" data-action="tag" data-tag="${tag}" aria-pressed="${draft.tags.includes(tag)}">${draft.tags.includes(tag) ? '<span aria-hidden="true">✓</span> ' : ''}${label}</button>`).join('')}</div>
@@ -155,7 +158,7 @@ function resultPanel(): string {
     ${pendingPlacesPanel()}
     ${!day ? '<p class="empty-state">새로 추가한 일차예요.<br />장소를 넣고 다시 계산해 주세요.</p>' : routePanel(day)}
     <section class="nearby-section" aria-label="취향 관광지 추천"><button type="button" class="nearby-toggle" data-action="toggle-nearby" aria-expanded="${nearbyOpen}" aria-controls="nearby-results"><span><strong>취향에 맞는 관광지</strong><small>일정 주변에서 더 들를 곳을 찾아보세요</small></span><span aria-hidden="true">${nearbyOpen ? '−' : '＋'}</span></button><div id="nearby-results" ${nearbyOpen ? '' : 'hidden'}>${nearbyOpen ? nearbyPanel() : ''}</div></section>
-    <div class="trip-total"><span>여행 전체 교통비 <small>${liveResult() ? '조회 결과' : '예시'}</small></span><strong>${yen(result.days.reduce((sum, item) => sum + item.fare, 0))}</strong></div>`;
+    <div class="trip-total"><span>여행 전체 ${result.days.some((day) => day.accessWalking) ? '' : '역 간 '}교통비 <small>${liveResult() ? '조회 결과' : '예시'}</small></span><strong>${yen(result.days.reduce((sum, item) => sum + item.fare, 0))}</strong></div>`;
 }
 function pendingPlaceIds(): string[] {
   if (!result) return [];
@@ -171,16 +174,7 @@ function pendingPlacesPanel(): string {
   }).join('')}</section>`;
 }
 function routePanel(day: DemoResult['days'][number]): string {
-  let elapsed = 0;
-  return `<div class="day-summary"><span>${activeDay + 1}일차 · 교통비 ${liveResult() ? '조회 결과' : '예시'}</span><div class="summary-main"><strong>${yen(day.fare)}</strong><span>이동 ${day.minutes}분 · ${day.order.length}곳 방문</span></div></div>
-    <p class="timing-note">역 간 이동 기준 · 도보·체류시간 제외</p>
-    <ol class="route-list">${day.order.map((id, index) => {
-      const place = placeById(id);
-      const arrival = day.arrivals ? formatJapanTime(day.arrivals[id]!, resultDate()) : clockAt(day.startTime, elapsed);
-      const leg = day.legs[index];
-      if (leg) elapsed += leg.minutes;
-      return `<li><button type="button" class="route-stop ${selected === id ? 'selected' : ''}" data-action="focus" data-id="${id}"><span class="route-time"><span class="sr-only">역 간 누적 이동 시각 </span>${arrival}</span><span class="route-dot">${index + 1}</span><span class="route-info"><strong>${html(place.name)}</strong><span class="station-label">${html(day.stations?.[id]?.name ?? place.station)}</span></span></button>${leg ? `<div class="timeline-leg"><span>${html(leg.line)} · ${leg.minutes}분<small>${html(day.stations?.[id]?.name ?? place.station)} → ${html(day.stations?.[leg.to]?.name ?? placeById(leg.to).station)}</small></span><strong>${yen(leg.fare)}${liveResult() ? '' : ' · 예시'}</strong></div>${leg.route?.length ? `<details class="transport-details"><summary>이용 역·노선 ${leg.route.length}구간</summary>${leg.route.map((step) => `<p>${html(step.fromStation.name)} → ${html(step.toStation.name)}<small>${html(step.line)}</small></p>`).join('')}</details>` : ''}` : ''}</li>`;
-    }).join('')}</ol>`;
+  return renderRouteDay(day, { live: liveResult(), dayIndex: activeDay, date: resultDate(), selected, place: placeById });
 }
 function nearbyPanel(): string {
   if (apiMode) return apiNearbyPanel();
@@ -259,7 +253,7 @@ async function loadPlaces(kind: 'initial' | 'nearby' | 'search'): Promise<void> 
 }
 function apiPoint(place: { lat: number; lng: number }): [number, number] {
   const current = mapView();
-  const points = [...current.places, ...(current.routePath ?? [])];
+  const points = [...current.places, ...mapRoutePaths(current).flatMap((entry) => entry.path)];
   const lats = points.map((point) => point.lat), lngs = points.map((point) => point.lng);
   const south = Math.min(...lats, place.lat) - .005, north = Math.max(...lats, place.lat) + .005;
   const west = Math.min(...lngs, place.lng) - .005, east = Math.max(...lngs, place.lng) + .005;
@@ -267,15 +261,16 @@ function apiPoint(place: { lat: number; lng: number }): [number, number] {
 }
 function apiMapMarkup(): string {
   const current = mapView();
+  const paths = mapRoutePaths(current);
   const focus = selected ? current.places.find((place) => place.id === selected) : undefined;
   return `<div class="map-topline"><span>${activeDay + 1}일차 · ${dateAt(view === 'result' ? resultStartDate : draft.startDate, activeDay)}</span><small>${current.places.filter((place) => place.state !== 'recommended').length}곳 선택${view === 'result' && isDirty() ? ' · 이전 계산 결과' : ''}</small></div>
     <svg class="kyoto-map" ${mapPhase === 'ready' ? 'hidden' : ''} viewBox="0 0 1000 760" aria-label="장소와 역 좌표를 표시한 개략도"><rect width="1000" height="760" fill="#f1f3f4" />
-    ${current.showRoute && current.routePath?.length ? `<polyline points="${current.routePath.map((point) => apiPoint(point).join(',')).join(' ')}" fill="none" stroke="#2458de" stroke-width="4"/>` : ''}
+    ${paths.map(({ mode, path }) => `<polyline points="${path.map((point) => apiPoint(point).join(',')).join(' ')}" fill="none" stroke="${mode === 'walking' ? '#258258' : '#3267d6'}" stroke-width="4" ${mode === 'walking' ? 'stroke-dasharray="4 10"' : ''} stroke-linecap="round"/>`).join('')}
     ${current.places.map((mark) => marker(placeById(mark.id), mark.order === null ? '+' : String(mark.order), mark.state === 'recommended', mark.state === 'pending')).join('')}</svg>
     <div id="demo-map-slot"></div>${mapPhase !== 'ready' ? `<div class="live-map-status" role="status">${html(mapStatusMessage)}</div>` : ''}
-    <div class="map-legend"><span><i class="legend-visit"></i>방문 장소</span><span><i class="legend-nearby"></i>추천 후보</span>${current.showRoute ? '<span><i class="legend-route"></i>이용 역 연결선</span>' : ''}</div>
+    <div class="map-legend"><span><i class="legend-visit"></i>방문 장소</span><span><i class="legend-nearby"></i>추천 후보</span>${paths.some((entry) => entry.mode === 'transit') ? '<span><i class="legend-route"></i>노선 이동</span>' : ''}${paths.some((entry) => entry.mode === 'walking') ? '<span><i class="legend-walking"></i>도보</span>' : ''}</div>
     ${focus ? `<div class="map-place-card"><div><span class="eyebrow">${focus.state === 'pending' ? '추가됨 · 재계산 전' : focus.state === 'recommended' ? '추천 후보' : '방문 장소'}</span><strong>${html(focus.name)}</strong><p>${html(placeById(focus.id).area)}</p></div><button type="button" data-action="clear-focus" class="icon-button" aria-label="장소 상세 닫기">×</button></div>` : ''}
-    <div class="map-disclaimer">${mapPhase === 'ready' ? 'Google 지도' : '위치 개략도'} · 선은 이용 역 좌표를 연결하며 실제 선로 모양이 아닙니다</div>`;
+    <div class="map-disclaimer">${mapPhase === 'ready' ? 'Google 지도' : '위치 개략도'} · ${result?.days[activeDay]?.accessWalking ? '접근·직접 도보는 조회 경로, 노선·환승 구간은 역 좌표 간 참고선입니다' : '선은 역 좌표 간 참고선이며 실제 도로·선로 모양이 아닙니다'}</div>`;
 }
 function point(place: DemoPlace): [number, number] {
   if (apiMode) return apiPoint(place);
@@ -316,7 +311,7 @@ function mapMarkup(): string {
       <rect x="575" y="181" width="86" height="103" rx="28" fill="#e8f0e3" transform="rotate(-6 575 181)"/><rect x="500" y="337" width="54" height="43" rx="9" fill="#e8f0e3"/>
       <g class="map-area-label"><text x="117" y="190">嵐山</text><text x="358" y="192">北山</text><text x="565" y="237">京都御苑</text><text x="756" y="278">東山</text><text x="563" y="498">下京区</text><text x="782" y="621">伏見</text></g>
       <g class="map-small-label"><text x="630" y="362" transform="rotate(80 630 362)">KAMO RIVER</text><text x="533" y="571">京都駅 · 교토역</text></g>
-      ${validResult && ids.length > 1 ? `<polyline points="${points}" fill="none" stroke="#2458de" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/>` : ''}
+      ${validResult && ids.length > 1 ? `<polyline points="${points}" fill="none" stroke="#3267d6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".8"/>` : ''}
       ${stationMarkers(ids)}
       ${ids.map((id, index) => marker(placeById(id), String(index + 1), false)).join('')}
       ${pending.map((id) => marker(placeById(id), '+', false, true)).join('')}
@@ -336,8 +331,11 @@ function mapView(): DemoMapView {
   const marks: DemoMapView['places'] = ids.map((id, index) => ({ ...placeById(id), order: index + 1, state: 'routed' }));
   pending.forEach((id) => marks.push({ ...placeById(id), order: null, state: 'pending' }));
   candidates.forEach((place) => marks.push({ ...place, order: null, state: 'recommended' }));
-  const routePath = apiMode && calculated ? calculated.legs.flatMap((leg) => (leg.route ?? []).flatMap((step) => [step.fromStation.location, step.toStation.location])) : undefined;
-  return { activeDayId: String(activeDay), places: marks, selectedId: selected, showRoute: !!calculated, routePath };
+  const routeSegments: DemoMapView['routeSegments'] = apiMode && calculated ? calculated.legs.flatMap((leg) => {
+    const transit = (leg.route ?? []).map((step) => ({ mode: step.line === '도보' ? 'walking' as const : 'transit' as const, from: step.fromStation.location, to: step.toStation.location }));
+    return leg.segments ? leg.segments.flatMap((step) => step.mode === 'walking' ? [{ mode: 'walking' as const, from: step.fromPoint.location, to: step.toPoint.location, path: step.path! }] : transit) : transit;
+  }) : undefined;
+  return { activeDayId: String(activeDay), places: marks, selectedId: selected, showRoute: !!calculated, routeSegments };
 }
 function updateLiveMap(): void {
   const slot = app.querySelector<HTMLElement>('#demo-map-slot');
@@ -369,8 +367,10 @@ function render(): void {
   const title = view === 'input' ? '여행 정보 입력' : view === 'choose' ? '가보고 싶은 곳 더 고르기' : '나의 여행 동선';
   const description = view === 'input' ? '날짜별로 가고 싶은 곳을 골라보세요.' : view === 'choose' ? '추천 장소를 일차별로 선택해 보세요.' : '방문 순서와 이동 정보를 확인하세요.';
   const buttonLabel = view === 'input' ? '추천 관광지 고르기' : view === 'choose' ? '선택한 장소로 동선 만들기' : '변경한 조건으로 다시 계산';
+  const walkingBasis = view === 'result' ? result?.days[activeDay]?.accessWalking : draft.includeAccessWalking;
+  const timingNote = walkingBasis ? '관광지↔역 도보 포함 · 체류시간 미포함' : '역 간 이동 기준 · 관광지↔역 이동·체류시간 미포함';
   renderDemoMarkup(app, `<header class="site-header"><a href="${apiMode ? './demo.html' : './demo.html?mode=example'}" class="brand" aria-label="JR Pass Opt 데모 처음으로">JR Pass Opt</a><nav class="stepper" aria-label="여행 계획 단계">${steps.map(([step, label], index) => `${index ? '<span class="step-line" aria-hidden="true"></span>' : ''}<button type="button" data-action="view" data-view="${step}" ${view === step ? 'aria-current="step"' : ''} ${step === 'result' && !result ? 'disabled' : ''}><span class="step-no">${index + 1}</span>${label}${step === 'result' && isDirty() ? '<span class="change-dot" aria-label="변경됨"></span>' : ''}</button>`).join('')}</nav><span class="demo-badge">${apiMode ? '실제 API 연결 · PC 데모' : '예시 데이터 · PC 데모'}<a href="${apiMode ? './demo.html?mode=example' : './demo.html'}">${apiMode ? '예시 체험' : 'API 모드'}</a></span></header>
-    <main class="workspace"><section class="map-area" aria-label="일정 지도">${mapMarkup()}</section><aside class="planner" aria-label="여행 계획"><div class="panel-head"><div><h1>${title}</h1><p>${description}</p></div><span class="trip-length">${draft.dayCount}일 여행</span></div><div class="panel-content">${view === 'input' ? inputPanel() : view === 'choose' ? choosePanel() : resultPanel()}</div><footer class="panel-footer">${operationError ? `<p class="api-error" role="alert">${html(operationError)}</p>` : ''}${view === 'result' && isDirty() ? '<p class="footer-dirty">변경한 일정을 반영해 주세요.</p>' : ''}<button type="button" class="primary-button" data-action="${view === 'input' ? 'continue' : 'calculate'}" ${running ? 'disabled' : ''}>${running ? '<span class="spinner" aria-hidden="true"></span> 일정을 준비하고 있어요' : `${buttonLabel}<span aria-hidden="true">→</span>`}</button><p>${apiMode ? '역 간 이동 기준 · 도보·체류시간 제외' : '순서·시간·요금은 예시 데이터입니다'}</p></footer></aside></main>`);
+    <main class="workspace"><section class="map-area" aria-label="일정 지도">${mapMarkup()}</section><aside class="planner" aria-label="여행 계획"><div class="panel-head"><div><h1>${title}</h1><p>${description}</p></div><span class="trip-length">${draft.dayCount}일 여행</span></div><div class="panel-content">${view === 'input' ? inputPanel() : view === 'choose' ? choosePanel() : resultPanel()}</div><footer class="panel-footer">${operationError ? `<p class="api-error" role="alert">${html(operationError)}</p>` : ''}${view === 'result' && isDirty() ? '<p class="footer-dirty">변경한 일정을 반영해 주세요.</p>' : ''}<button type="button" class="primary-button" data-action="${view === 'input' ? 'continue' : 'calculate'}" ${running ? 'disabled' : ''}>${running ? '<span class="spinner" aria-hidden="true"></span> 일정을 준비하고 있어요' : `${buttonLabel}<span aria-hidden="true">→</span>`}</button><p>${apiMode ? timingNote : '순서·시간·요금은 예시 데이터입니다'}</p></footer></aside></main>`);
   const panel = app.querySelector('.panel-content');
   if (panel) panel.scrollTop = scroll;
   updateLiveMap();
@@ -497,6 +497,7 @@ app.addEventListener('change', (event) => {
   if (field.id === 'start-date') draft = { ...draft, startDate: field.value, revision: draft.revision + 1 };
   else if (field.id === 'day-count') { draft = setDayCount(draft, Number(field.value)); activeDay = Math.min(activeDay, draft.dayCount - 1); selected = undefined; }
   else if (field.id === 'start-time') draft = { ...draft, revision: draft.revision + 1, days: draft.days.map((day, index) => index === activeDay ? { ...day, startTime: field.value } : day) };
+  else if (field.id === 'include-walking') draft = { ...draft, includeAccessWalking: field.checked, revision: draft.revision + 1 };
   else return;
   render();
 });

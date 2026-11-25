@@ -15,3 +15,19 @@ export function routeResponse(draft = draftWithPlaces()) {
   });
   return { startDate: draft.startDate, dayCount: 1, timezone: 'Asia/Tokyo', currency: 'JPY', dataSource: 'live', timingBasis: 'stationTravelOnly', totalTravelMinutes: 17, totalTransportFare: 321, days: [{ dayIndex: 1, date: draft.startDate, startAt: '2026-11-10T08:00:00+09:00', endAt: '2026-11-10T08:17:00+09:00', visits, legs: [{ fromVisitId: 'server-0', toVisitId: 'server-1', departureAt: '2026-11-10T08:00:00+09:00', arrivalAt: '2026-11-10T08:17:00+09:00', durationMinutes: 17, fare: 321, route: [{ fromStation: station, toStation: { name: 'transfer', location: { lat: 35.005, lng: 139.002 } }, line: 'server line' }] }], totalTravelMinutes: 17, totalTransportFare: 321 }] };
 }
+
+export function accessRouteResponse(draft = { ...draftWithPlaces(), includeAccessWalking: true }) {
+  const raw = routeResponse(draft), day = raw.days[0], leg = day.legs[0];
+  raw.timingBasis = 'placeTravelOnly';
+  day.candidateSearchTruncated = false;
+  const placePoint = (visit) => ({ kind: 'place', name: visit.name, location: visit.location });
+  const stationPoint = (station) => ({ kind: 'station', ...station });
+  const from = placePoint(day.visits[0]), to = placePoint(day.visits[1]);
+  const a = stationPoint(leg.route[0].fromStation), b = stationPoint(leg.route[0].toStation);
+  leg.segments = [
+    { mode: 'walking', fromPoint: from, toPoint: a, durationMinutes: 3, distanceMeters: 200, path: [from.location, { lat: 35.004, lng: 139.001 }, a.location] },
+    { mode: 'transit', fromPoint: a, toPoint: b, durationMinutes: 11, distanceMeters: null, path: null },
+    { mode: 'walking', fromPoint: b, toPoint: to, durationMinutes: 3, distanceMeters: 200, path: [b.location, { lat: 35.001, lng: 139.001 }, to.location] },
+  ];
+  return raw;
+}

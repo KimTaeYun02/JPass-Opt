@@ -46,6 +46,30 @@ def validate_quote(quote):
         raise ValueError(f"{label}: 역 이름이 올바르지 않습니다.")
     if "source" in quote and quote["source"] not in ("snapshot", "estimate"):
         raise ValueError(f"{label}: 데이터 출처가 올바르지 않습니다.")
+    if "segments" in quote:
+        # 새 관광지 간 비용도 같은 DP를 사용하되 가짜 역을 만들지 않는다.
+        segments = quote["segments"]
+        if not isinstance(segments, list) or not segments:
+            raise ValueError(f"{label}: 이동 구간이 필요합니다.")
+        for segment in segments:
+            if (
+                not isinstance(segment, dict)
+                or segment.get("mode") not in ("walking", "transit")
+                or not _safe_cost(segment.get("durationMinutes"))
+            ):
+                raise ValueError(f"{label}: 이동 구간 형식이 올바르지 않습니다.")
+            for key in ("fromPoint", "toPoint"):
+                point = segment.get(key)
+                if (
+                    not isinstance(point, dict)
+                    or point.get("kind") not in ("place", "station")
+                    or not isinstance(point.get("name"), str)
+                    or not point["name"].strip()
+                ):
+                    raise ValueError(f"{label}: 이동 지점 형식이 올바르지 않습니다.")
+        if sum(segment["durationMinutes"] for segment in segments) != result["time"]:
+            raise ValueError(f"{label}: 이동 시간 합계가 일치하지 않습니다.")
+        return
     stops = result.get("route")
     if not isinstance(stops, list) or len(stops) < 2:
         raise ValueError(f"{label}: route에는 출발역과 도착역이 필요합니다.")

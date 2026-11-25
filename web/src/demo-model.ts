@@ -27,11 +27,13 @@ export const PLACES: DemoPlace[] = [
   { id: 'demo-park', name: '마루야마 공원', area: '기온', station: '기온시조역', lat: 35.0034, lng: 135.7803, tags: ['nature', 'relaxation'], rank: 11 },
 ];
 export type DemoDay = { placeIds: string[]; startTime: string; searchQuery?: string };
-export type Draft = { startDate: string; dayCount: number; days: DemoDay[]; tags: Tag[]; request: string; revision: number };
+export type Draft = { startDate: string; dayCount: number; days: DemoDay[]; tags: Tag[]; request: string; revision: number; includeAccessWalking?: boolean };
 export type RouteStation = { name: string; location: { lat: number; lng: number }; line?: string };
 export type TransportStep = { fromStation: RouteStation; toStation: RouteStation; line: string };
-export type DemoLeg = { from: string; to: string; minutes: number; fare: number; line: string; route?: TransportStep[]; departureAt?: string; arrivalAt?: string };
-export type DemoResult = { revision: number; dataSource?: 'live'; days: { order: string[]; legs: DemoLeg[]; minutes: number; fare: number; startTime: string; arrivals?: Record<string, string>; stations?: Record<string, RouteStation> }[] };
+export type TravelPoint = { kind: 'place' | 'station'; name: string; location: { lat: number; lng: number } };
+export type TravelSegment = { fromPoint: TravelPoint; toPoint: TravelPoint; mode: 'walking' | 'transit'; durationMinutes: number; distanceMeters: number | null; path: { lat: number; lng: number }[] | null };
+export type DemoLeg = { from: string; to: string; minutes: number; fare: number; line: string; route?: TransportStep[]; departureAt?: string; arrivalAt?: string; segments?: TravelSegment[] };
+export type DemoResult = { revision: number; dataSource?: 'live'; days: { order: string[]; legs: DemoLeg[]; minutes: number; fare: number; startTime: string; arrivals?: Record<string, string>; stations?: Record<string, RouteStation>; accessWalking?: boolean; candidateSearchTruncated?: boolean }[] };
 export function registerPlaces(places: DemoPlace[]): void {
   for (const place of places) {
     const index = PLACES.findIndex((item) => item.id === place.id);

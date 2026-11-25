@@ -4,7 +4,14 @@ import re
 from datetime import date
 from typing import Literal
 
-from pydantic import AwareDatetime, BaseModel, Field, field_validator, model_validator
+from pydantic import (
+    AwareDatetime,
+    BaseModel,
+    Field,
+    field_validator,
+    model_serializer,
+    model_validator,
+)
 
 from app.optimizer import MAX_ROUTE_STOPS
 
@@ -30,6 +37,7 @@ class DayInput(BaseModel):
 
 class RouteRequest(BaseModel):
     startDate: date
+    includeAccessWalking: bool = Field(default=False, strict=True)
     dayCount: int = Field(ge=1, strict=True)
     days: list[DayInput]
 
@@ -79,6 +87,29 @@ class TransportStep(BaseModel):
     line: str
 
 
+class RoutePoint(BaseModel):
+    kind: Literal["place", "station"]
+    name: str = Field(min_length=1)
+    location: Location
+
+
+class TravelSegment(BaseModel):
+    fromPoint: RoutePoint
+    toPoint: RoutePoint
+    mode: Literal["walking", "transit"]
+    durationMinutes: int = Field(ge=0, strict=True)
+    distanceMeters: int | None = Field(default=None, ge=0, strict=True)
+    path: list[Location] | None = Field(default=None, min_length=2, max_length=10000)
+
+    @model_validator(mode="after")
+    def check_walking(self):
+        if self.mode == "walking" and (
+            self.distanceMeters is None or self.path is None
+        ):
+            raise ValueError("도보 구간은 거리와 경로 좌표가 필요합니다.")
+        return self
+
+
 class Leg(BaseModel):
     fromVisitId: str
     toVisitId: str
@@ -87,6 +118,50 @@ class Leg(BaseModel):
     durationMinutes: int = Field(ge=0)
     fare: int = Field(ge=0)
     route: list[TransportStep]
+    segments: list[TravelSegment] | None = None
+
+    @model_validator(mode="after")
+    def check_segments(self):
+        if self.segments is None:
+            return self
+        if (
+            not self.segments
+            or sum(s.durationMinutes for s in self.segments) != self.durationMinutes
+        ):
+            raise ValueError("이동 구간의 시간 합계가 일치하지 않습니다.")
+        if (
+            self.segments[0].fromPoint.kind != "place"
+            or self.segments[-1].toPoint.kind != "place"
+        ):
+            raise ValueError("관광지 간 이동은 장소에서 시작하고 끝나야 합니다.")
+        for previous, current in zip(self.segments, self.segments[1:]):
+            if (
+                previous.toPoint.kind != current.fromPoint.kind
+                or previous.toPoint.location != current.fromPoint.location
+            ):
+                raise ValueError("이동 구간이 연속되지 않습니다.")
+        transit = [s for s in self.segments if s.mode == "transit"]
+        if len(transit) > 1 or bool(transit) != bool(self.route):
+            raise ValueError("역 간 이동과 노선 상세가 일치하지 않습니다.")
+        if transit and (
+            transit[0].fromPoint.kind != "station"
+            or transit[0].toPoint.kind != "station"
+            or transit[0].fromPoint.location != self.route[0].fromStation.location
+            or transit[0].toPoint.location != self.route[-1].toStation.location
+        ):
+            raise ValueError("역 간 이동의 양 끝 좌표가 일치하지 않습니다.")
+        if (
+            self.arrivalAt - self.departureAt
+        ).total_seconds() != self.durationMinutes * 60:
+            raise ValueError("이동 시각과 소요 시간이 일치하지 않습니다.")
+        return self
+
+    @model_serializer(mode="wrap")
+    def omit_legacy_extension(self, handler):
+        data = handler(self)
+        if self.segments is None:
+            data.pop("segments", None)
+        return data
 
 
 class OptimizedDay(BaseModel):
@@ -98,6 +173,14 @@ class OptimizedDay(BaseModel):
     legs: list[Leg]
     totalTravelMinutes: int = Field(ge=0)
     totalTransportFare: int = Field(ge=0)
+    candidateSearchTruncated: bool | None = None
+
+    @model_serializer(mode="wrap")
+    def omit_legacy_extension(self, handler):
+        data = handler(self)
+        if self.candidateSearchTruncated is None:
+            data.pop("candidateSearchTruncated", None)
+        return data
 
 
 class RouteResponse(BaseModel):
@@ -106,7 +189,7 @@ class RouteResponse(BaseModel):
     timezone: Literal["Asia/Tokyo"] = "Asia/Tokyo"
     currency: Literal["JPY"] = "JPY"
     dataSource: Literal["live"] = "live"
-    timingBasis: Literal["stationTravelOnly"] = "stationTravelOnly"
+    timingBasis: Literal["stationTravelOnly", "placeTravelOnly"] = "stationTravelOnly"
     days: list[OptimizedDay]
     totalTravelMinutes: int = Field(ge=0)
     totalTransportFare: int = Field(ge=0)

@@ -4,6 +4,8 @@ import { createRequire } from 'node:module';
 import vm from 'node:vm';
 import * as model from '../src/demo-model.ts';
 import { createTravelApi, formatJapanTime } from '../src/demo-api.ts';
+import { renderRouteDay } from '../src/demo-route-render.ts';
+import { mapRoutePaths } from '../src/demo-map-controller.ts';
 
 // In-memory unit harness; does not open or connect to a browser or web page.
 const require = createRequire(new URL('../package.json', import.meta.url));
@@ -21,7 +23,7 @@ export function harness({ mode = 'example', client = createTravelApi(), apiBase,
   const searchResults = { innerHTML: '' }, searchSelection = { innerHTML: '' }, searchConfirm = { disabled: true, textContent: '' };
   const toast = { textContent: '', classList: { add() {}, remove() {} } };
   const elements = { '#app': app, '#place-dialog': dialog, '#demo-search': search, '#search-results': searchResults, '#search-selection': searchSelection, '#search-confirm': searchConfirm, '#toast': toast };
-  const context = vm.createContext({ ...model, AbortController, travelApiBase: apiBase, createTravelApi: (base) => { onApiBase(base); return client; }, formatJapanTime, URLSearchParams, renderDemoMarkup: (element, markup) => {
+  const context = vm.createContext({ ...model, AbortController, renderRouteDay, mapRoutePaths, travelApiBase: apiBase, createTravelApi: (base) => { onApiBase(base); return client; }, formatJapanTime, URLSearchParams, renderDemoMarkup: (element, markup) => {
     // Validate the real render() output against the persistent renderer's shape contract.
     for (const pattern of [/class="site-header"/g, /class="planner"/g, /class="map-area"/g, /id="demo-map-slot"/g]) assert.equal([...markup.matchAll(pattern)].length, 1);
     element.innerHTML = markup;
@@ -32,7 +34,7 @@ export function harness({ mode = 'example', client = createTravelApi(), apiBase,
     state: () => JSON.parse(vm.runInContext('JSON.stringify({draft,view,result,operationError,loading,messages,map:mapView(),initialPool,nearbyPool})', context)),
     input(id, value) { listeners.get('input')({ target: { id, value } }); },
     click(action, extra = {}) { listeners.get('click')({ target: { closest: () => ({ dataset: { action, ...extra }, hasAttribute: () => false }) } }); },
-    change(id, value) { listeners.get('change')({ target: { id, value } }); },
+    change(id, value) { listeners.get('change')({ target: { id, value, checked: value === true } }); },
     async settle() { for (const callback of callbacks.splice(0)) callback(); await new Promise(setImmediate); },
     pending: () => callbacks.length,
     message: () => toast.textContent,

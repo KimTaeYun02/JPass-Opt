@@ -1,9 +1,9 @@
 import { TAGS, mergeCandidatePlaces, placeById, validateDraft } from './demo-model.ts';
-import type { DemoPlace, DemoResult, Draft, RouteStation, Tag, TransportStep } from './demo-model.ts';
+import type { DemoPlace, DemoResult, Draft, RouteStation, Tag, TransportStep, TravelPoint, TravelSegment } from './demo-model.ts';
 
 // Contract: Notion API 스키마 확정 / input-output docs, read 2026-10-27.
 export type Location = { lat: number; lng: number };
-export type RouteRequest = { startDate: string; dayCount: number; days: { dayIndex: number; dailyStartTime: string; places: { name: string; googlePlaceId: string; location: Location }[] }[] };
+export type RouteRequest = { startDate: string; dayCount: number; includeAccessWalking?: true; days: { dayIndex: number; dailyStartTime: string; places: { name: string; googlePlaceId: string; location: Location }[] }[] };
 export type NearbyRequest = { travelTypes: Tag[]; userRequest: string; stations: { name?: string; stationId?: string; line?: string; location: Location }[]; placeCount: number; radius: number };
 export type PlaceSearch = { places: DemoPlace[]; clarification: string | null; warnings?: string[]; notice?: string };
 export type StationResolveRequest = { days: { dayIndex: number; places: { googlePlaceId: string; location: Location }[] }[] };
@@ -17,7 +17,7 @@ const obj = (value: unknown): Record<string, unknown> => value !== null && typeo
 const list = (value: unknown): unknown[] => Array.isArray(value) ? value : invalid();
 const str = (value: unknown): string => typeof value === 'string' && value.trim() ? value : invalid();
 const num = (value: unknown): number => typeof value === 'number' && Number.isFinite(value) ? value : invalid();
-const count = (value: unknown): number => { const n = num(value); return Number.isInteger(n) && n >= 0 ? n : invalid(); };
+const count = (value: unknown): number => { const n = num(value); return Number.isSafeInteger(n) && n >= 0 ? n : invalid(); };
 function location(value: unknown): Location {
   const point = obj(value), lat = num(point.lat), lng = num(point.lng);
   return Math.abs(lat) <= 90 && Math.abs(lng) <= 180 ? { lat, lng } : invalid();
@@ -41,7 +41,7 @@ export function formatJapanTime(iso: string, date: string): string {
 export function buildRouteRequest(draft: Draft): RouteRequest {
   const errors = validateDraft(draft);
   if (errors.length) throw new TravelApiError(errors[0]);
-  return { startDate: draft.startDate, dayCount: draft.dayCount, days: draft.days.slice(0, draft.dayCount).map((day, index) => ({
+  return { startDate: draft.startDate, dayCount: draft.dayCount, ...(draft.includeAccessWalking ? { includeAccessWalking: true as const } : {}), days: draft.days.slice(0, draft.dayCount).map((day, index) => ({
     dayIndex: index + 1, dailyStartTime: day.startTime, places: day.placeIds.map((id) => {
       const place = placeById(id);
       if (!place.googlePlaceId?.trim() || id.startsWith('demo-')) throw new TravelApiError(`${place.name}: 실제 장소 검색 결과를 선택해 주세요.`);
@@ -51,7 +51,8 @@ export function buildRouteRequest(draft: Draft): RouteRequest {
 }
 export function parseRouteResponse(value: unknown, snapshot: Draft): DemoResult {
   const root = obj(value), request = buildRouteRequest(snapshot);
-  if (root.timezone !== 'Asia/Tokyo' || root.currency !== 'JPY' || root.dataSource !== 'live' || root.timingBasis !== 'stationTravelOnly' || root.startDate !== snapshot.startDate || root.dayCount !== snapshot.dayCount) invalid();
+  const accessWalking = snapshot.includeAccessWalking === true;
+  if (root.timezone !== 'Asia/Tokyo' || root.currency !== 'JPY' || root.dataSource !== 'live' || root.timingBasis !== (accessWalking ? 'placeTravelOnly' : 'stationTravelOnly') || root.startDate !== snapshot.startDate || root.dayCount !== snapshot.dayCount) invalid();
   const rawDays = list(root.days);
   if (rawDays.length !== snapshot.dayCount) invalid();
   const days = request.days.map((input, index) => {
@@ -83,14 +84,50 @@ export function parseRouteResponse(value: unknown, snapshot: Draft): DemoResult 
       const route: TransportStep[] = list(leg.route).map((value) => {
         const step = obj(value); return { fromStation: station(step.fromStation), toStation: station(step.toStation), line: str(step.line) };
       });
-      return { from: from!, to: to!, minutes: count(leg.durationMinutes), fare: count(leg.fare), line: route.map((step) => step.line).join(' → ') || '동일 역', route, departureAt: timestamp(leg.departureAt), arrivalAt: timestamp(leg.arrivalAt) };
+      const segments = accessWalking ? list(leg.segments).map(parseTravelSegment) : undefined;
+      if (segments) {
+        if (!segments.length || segments.reduce((sum, step) => sum + step.durationMinutes, 0) !== count(leg.durationMinutes)) invalid();
+        const inputFrom = placeById(from!), inputTo = placeById(to!);
+        const first = segments[0]!.fromPoint, last = segments.at(-1)!.toPoint;
+        if (first.kind !== 'place' || last.kind !== 'place' || first.location.lat !== inputFrom.lat || first.location.lng !== inputFrom.lng || last.location.lat !== inputTo.lat || last.location.lng !== inputTo.lng) invalid();
+        segments.slice(1).forEach((segment, i) => {
+          const previous = segments[i]!.toPoint;
+          if (previous.kind !== segment.fromPoint.kind || previous.location.lat !== segment.fromPoint.location.lat || previous.location.lng !== segment.fromPoint.location.lng) invalid();
+        });
+        const transit = segments.filter((segment) => segment.mode === 'transit');
+        if (transit.length > 1 || (transit.length === 0 && route.length > 0) || (transit.length === 1 && route.length === 0)) invalid();
+        if (transit.length) {
+          const first = transit[0]!.fromPoint, last = transit[0]!.toPoint;
+          const start = route[0]!.fromStation.location, end = route.at(-1)!.toStation.location;
+          if (first.kind !== 'station' || last.kind !== 'station' || first.location.lat !== start.lat || first.location.lng !== start.lng || last.location.lat !== end.lat || last.location.lng !== end.lng) invalid();
+        }
+        // Dwell-time support must change both backend clocks and this no-dwell contract.
+        if (Date.parse(timestamp(leg.arrivalAt)) - Date.parse(timestamp(leg.departureAt)) !== count(leg.durationMinutes) * 60000 || Date.parse(arrivals[from!]!) !== Date.parse(str(leg.departureAt)) || Date.parse(arrivals[to!]!) !== Date.parse(str(leg.arrivalAt))) invalid();
+      }
+      return { from: from!, to: to!, minutes: count(leg.durationMinutes), fare: count(leg.fare), line: route.map((step) => step.line).join(' → ') || (accessWalking ? '도보' : '동일 역'), route, departureAt: timestamp(leg.departureAt), arrivalAt: timestamp(leg.arrivalAt), ...(segments ? { segments } : {}) };
     });
     const minutes = count(day.totalTravelMinutes), fare = count(day.totalTransportFare);
     if (legs.length !== order.length - 1 || minutes !== legs.reduce((sum, leg) => sum + leg.minutes, 0) || fare !== legs.reduce((sum, leg) => sum + leg.fare, 0)) invalid();
-    return { order, arrivals, stations, legs, minutes, fare, startTime: formatJapanTime(str(day.startAt), str(day.date)) };
+    if (accessWalking && (Date.parse(arrivals[order[0]!]!) !== Date.parse(str(day.startAt)) || Date.parse(arrivals[order.at(-1)!]!) !== Date.parse(str(day.endAt)))) invalid();
+    if (accessWalking && typeof day.candidateSearchTruncated !== 'boolean') invalid();
+    return { order, arrivals, stations, legs, minutes, fare, startTime: formatJapanTime(str(day.startAt), str(day.date)), ...(accessWalking ? { accessWalking: true, candidateSearchTruncated: day.candidateSearchTruncated as boolean } : {}) };
   });
   if (count(root.totalTravelMinutes) !== days.reduce((sum, day) => sum + day.minutes, 0) || count(root.totalTransportFare) !== days.reduce((sum, day) => sum + day.fare, 0)) invalid();
   return { revision: snapshot.revision, dataSource: 'live', days };
+}
+function parseTravelSegment(value: unknown): TravelSegment {
+  const row = obj(value);
+  const point = (value: unknown): TravelPoint => {
+    const item = obj(value);
+    if (item.kind !== 'place' && item.kind !== 'station') invalid();
+    return { kind: item.kind as TravelPoint['kind'], name: str(item.name), location: location(item.location) };
+  };
+  if (row.mode !== 'walking' && row.mode !== 'transit') invalid();
+  const path = row.path === null ? null : list(row.path).map(location);
+  if (path && (path.length < 2 || path.length > 10000)) invalid();
+  const distanceMeters = row.distanceMeters === null ? null : count(row.distanceMeters);
+  if (row.mode === 'walking' && (!path || distanceMeters === null)) invalid();
+  return { fromPoint: point(row.fromPoint), toPoint: point(row.toPoint), mode: row.mode as TravelSegment['mode'], durationMinutes: count(row.durationMinutes), distanceMeters, path };
 }
 function apiPlace(googlePlaceId: string, name: string, point: Location, address: unknown, primaryType: unknown, tags: Tag[] = []): DemoPlace {
   return { id: `google:${encodeURIComponent(googlePlaceId)}`, googlePlaceId, name, lat: point.lat, lng: point.lng, area: typeof address === 'string' ? address : '일본', station: '경로 계산 후 확인', address: typeof address === 'string' ? address : null, primaryType: typeof primaryType === 'string' ? primaryType : null, tags, rank: 0 };
@@ -134,7 +171,10 @@ export function buildNearbyRequest(draft: Draft, result: DemoResult, dayIndex: n
     // Preserve the first raw line string instead of synthesizing a combined line name.
     stations.set(key, { ...value, line: previous?.line ?? line });
   };
-  Object.values(day.stations).forEach((value) => add(value));
+  if (!day.accessWalking || !day.legs.length) Object.values(day.stations).forEach((value) => add(value));
+  day.legs.forEach((leg) => leg.segments?.forEach((segment) => {
+    for (const point of [segment.fromPoint, segment.toPoint]) if (point.kind === 'station') add(point);
+  }));
   day.legs.forEach((leg) => leg.route?.forEach((step) => { add(step.fromStation, step.line); add(step.toStation, step.line); }));
   if (!stations.size) throw new TravelApiError('추천에 사용할 역이 없어요.');
   return { travelTypes: [...draft.tags], userRequest: draft.request, stations: [...stations.values()], placeCount: 3, radius: 1000 };
@@ -261,7 +301,13 @@ export function createTravelApi(base?: string, fetcher: typeof fetch = fetch) {
     return parseStationResponse(await post('/stations/resolve', request, 120000, signal), request);
   }
   return {
-    async optimize(draft: Draft) { return parseRouteResponse(await post('/routes/optimize', buildRouteRequest(draft), 600000), draft); },
+    async optimize(draft: Draft) {
+      try { return parseRouteResponse(await post('/routes/optimize', buildRouteRequest(draft), 600000), draft); }
+      catch (error) {
+        if (draft.includeAccessWalking && error instanceof TravelApiError && error.status === 503) throw new TravelApiError('도보 포함 계산을 현재 사용할 수 없어요. 옵션을 끄고 다시 계산하거나 관리자에게 문의해 주세요.', 503);
+        throw error;
+      }
+    },
     async nearby(draft: Draft, result: DemoResult, day: number) { return normalizeNearby(await post('/nearby/recommend', buildNearbyRequest(draft, result, day), 120000)); },
     search,
     resolveStations,

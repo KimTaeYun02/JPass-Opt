@@ -1,15 +1,31 @@
 export type PlaceMark = { id: string; name: string; lat: number; lng: number; order: number | null; state: 'routed' | 'pending' | 'recommended' };
-export type DemoMapView = { activeDayId: string; places: PlaceMark[]; selectedId?: string; showRoute: boolean; routePath?: { lat: number; lng: number }[] };
+type MapPoint = { lat: number; lng: number };
+export type MapRouteSegment = { mode: 'transit' | 'walking'; from: MapPoint; to: MapPoint; path?: MapPoint[] };
+export type DemoMapView = { activeDayId: string; places: PlaceMark[]; selectedId?: string; showRoute: boolean; routePath?: MapPoint[]; routeSegments?: MapRouteSegment[] };
 export type MapPhase = 'loading' | 'ready' | 'fallback';
 export class DemoMapLoadError extends Error {}
 export type MapSdk = { Map: typeof google.maps.Map; AdvancedMarkerElement: typeof google.maps.marker.AdvancedMarkerElement; Polyline: typeof google.maps.Polyline; LatLngBounds: typeof google.maps.LatLngBounds };
 type Options = { host: HTMLElement; load: () => Promise<MapSdk>; onSelect: (id: string) => void; onStatus: (phase: MapPhase, message: string) => void; createElement?: (tag: string) => HTMLElement };
 
+export function mapRoutePaths(view: DemoMapView): { mode: MapRouteSegment['mode']; path: MapPoint[] }[] {
+  if (!view.showRoute) return [];
+  if (view.routeSegments !== undefined) return view.routeSegments.map(({ mode, from, to, path }) => ({ mode, path: path ?? [from, to] })).filter(({ path }) => path.length > 1 && path.some((p) => p.lat !== path[0]!.lat || p.lng !== path[0]!.lng));
+  const path = view.routePath ?? view.places.filter((place) => place.state === 'routed' && place.order !== null).sort((a, b) => a.order! - b.order!).map(({ lat, lng }) => ({ lat, lng }));
+  return path.length > 1 ? [{ mode: 'transit', path }] : [];
+}
+
+function lineStyle(mode: MapRouteSegment['mode']): google.maps.PolylineOptions {
+  return mode === 'walking' ? {
+    strokeColor: '#258258', strokeOpacity: 0, strokeWeight: 4, zIndex: 2,
+    icons: [{ icon: { path: 'M 0,-1 0,1', strokeColor: '#258258', strokeOpacity: 1, strokeWeight: 3, scale: 2 }, offset: '0', repeat: '14px' }],
+  } : { strokeColor: '#3267d6', strokeOpacity: 0.9, strokeWeight: 4, zIndex: 1, icons: [] };
+}
+
 export function createDemoMapController(options: Options) {
   let latest: DemoMapView | undefined;
   let sdk: MapSdk | undefined;
   let map: google.maps.Map | undefined;
-  let line: google.maps.Polyline | undefined;
+  const lines: { line: google.maps.Polyline; mode: MapRouteSegment['mode']; pathKey: string }[] = [];
   let started = false;
   let disposed = false;
   let failed = false;
@@ -22,12 +38,16 @@ export function createDemoMapController(options: Options) {
     markers.forEach(({ marker, click }) => { marker.removeEventListener('gmp-click', click); marker.map = null; });
     markers.clear();
   }
+  function clearLines() {
+    lines.forEach(({ line }) => line.setMap(null));
+    lines.length = 0;
+  }
   function fail(message: string) {
     if (disposed || failed) return;
     failed = true;
     phase = 'fallback';
     clearMarkers();
-    line?.setMap(null);
+    clearLines();
     options.onStatus('fallback', message);
   }
   function paint() {
@@ -57,16 +77,23 @@ export function createDemoMapController(options: Options) {
       entry.badge.textContent = place.order === null ? '+' : String(place.order);
       entry.name.textContent = place.name;
     });
-    const route = latest.showRoute ? latest.places.filter((place) => place.state === 'routed' && place.order !== null).sort((a, b) => a.order! - b.order!) : [];
-    const path = latest.showRoute ? latest.routePath ?? route.map(({ lat, lng }) => ({ lat, lng })) : [];
-    line!.setPath(path);
-    line!.setVisible(path.length > 1);
+    const paths = mapRoutePaths(latest);
+    paths.forEach(({ mode, path }, index) => {
+      if (!lines[index]) lines.push({ line: new sdk!.Polyline({ map, clickable: false, ...lineStyle(mode) }), mode, pathKey: '' });
+      const entry = lines[index]!;
+      if (entry.mode !== mode) { entry.line.setOptions(lineStyle(mode)); entry.mode = mode; }
+      const pathKey = JSON.stringify(path);
+      if (entry.pathKey !== pathKey) { entry.line.setPath(path); entry.pathKey = pathKey; }
+      entry.line.setVisible(path.length > 1);
+    });
+    lines.slice(paths.length).forEach((entry) => { entry.line.setPath([]); entry.pathKey = '[]'; entry.line.setVisible(false); });
+    const path = paths.flatMap((entry) => entry.path);
     const nextCameraKey = `${latest.activeDayId}:${[...visible].sort().join(',')}:${JSON.stringify(path)}`;
     if (nextCameraKey !== cameraKey) {
       cameraKey = nextCameraKey;
       if (latest.places.length === 1 && path.length === 0) {
         map.setCenter({ lat: latest.places[0]!.lat, lng: latest.places[0]!.lng }); map.setZoom(14);
-      } else if (latest.places.length > 1) {
+      } else if (latest.places.length > 1 || path.length > 1) {
         const bounds = new sdk.LatLngBounds();
         latest.places.forEach((place) => bounds.extend({ lat: place.lat, lng: place.lng }));
         path.forEach((point) => bounds.extend(point));
@@ -90,11 +117,11 @@ export function createDemoMapController(options: Options) {
       if (disposed || failed) return;
       sdk = loaded;
       map = new sdk.Map(options.host, { center: { lat: 35.006, lng: 135.755 }, zoom: 12, mapId: 'DEMO_MAP_ID', disableDefaultUI: true, zoomControl: true, keyboardShortcuts: true, clickableIcons: false, gestureHandling: 'greedy' });
-      line = new sdk.Polyline({ map, strokeColor: '#2458de', strokeOpacity: 0.8, strokeWeight: 4, clickable: false });
+      lines.push({ line: new sdk.Polyline({ map, clickable: false, ...lineStyle('transit') }), mode: 'transit', pathKey: '' });
       paint();
       phase = 'ready';
       options.onStatus('ready', 'Google 지도 · 방문 순서 연결선');
     }).catch((error: unknown) => fail(error instanceof DemoMapLoadError ? error.message : 'Google 지도 SDK 로딩에 실패했어요. 개략도로 표시합니다. 네트워크 연결과 키 권한을 확인해 주세요.'));
   }
-  return { update, fail, status: () => phase, attach(parent: HTMLElement) { if (options.host.parentElement !== parent) parent.append(options.host); }, destroy() { disposed = true; clearMarkers(); line?.setMap(null); } };
+  return { update, fail, status: () => phase, attach(parent: HTMLElement) { if (options.host.parentElement !== parent) parent.append(options.host); }, destroy() { disposed = true; clearMarkers(); clearLines(); } };
 }

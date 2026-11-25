@@ -12,7 +12,7 @@
           "동선 최적화"
         ],
         "summary": "일차별 최적 방문 순서와 역 위치 조회",
-        "description": "관광지별 실제 Google Place ID와 좌표를 받아 방문 순서, 역·환승역 좌표, 이동 시간과 교통비를 반환합니다. 시각은 체류·도보를 제외한 역 간 이동 기준입니다.",
+        "description": "관광지별 실제 Google Place ID와 좌표를 받아 방문 순서, 역·환승역 좌표, 이동 시간과 교통비를 반환합니다. 기본은 역 간 이동 기준이며 includeAccessWalking=true이면 접근 도보와 제한된 직접 도보를 비교합니다. 체류는 제외합니다.",
         "operationId": "optimize_api_routes_optimize_post",
         "requestBody": {
           "content": {
@@ -43,6 +43,9 @@
           },
           "502": {
             "description": "외부 역·경로 정보 서비스 조회 오류"
+          },
+          "503": {
+            "description": "선택한 도보 경로 기능의 서버 설정 미완료"
           },
           "504": {
             "description": "외부 역·경로 정보 서비스 응답 시간 초과"
@@ -283,6 +286,20 @@
             },
             "type": "array",
             "title": "Route"
+          },
+          "segments": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/TravelSegment"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Segments"
           }
         },
         "type": "object",
@@ -473,6 +490,17 @@
             "type": "integer",
             "minimum": 0.0,
             "title": "Totaltransportfare"
+          },
+          "candidateSearchTruncated": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Candidatesearchtruncated"
           }
         },
         "type": "object",
@@ -760,12 +788,44 @@
         ],
         "title": "ResolvedStation"
       },
+      "RoutePoint": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "place",
+              "station"
+            ],
+            "title": "Kind"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Name"
+          },
+          "location": {
+            "$ref": "#/components/schemas/Location"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "name",
+          "location"
+        ],
+        "title": "RoutePoint"
+      },
       "RouteRequest": {
         "properties": {
           "startDate": {
             "type": "string",
             "format": "date",
             "title": "Startdate"
+          },
+          "includeAccessWalking": {
+            "type": "boolean",
+            "title": "Includeaccesswalking",
+            "default": false
           },
           "dayCount": {
             "type": "integer",
@@ -819,7 +879,10 @@
           },
           "timingBasis": {
             "type": "string",
-            "const": "stationTravelOnly",
+            "enum": [
+              "stationTravelOnly",
+              "placeTravelOnly"
+            ],
             "title": "Timingbasis",
             "default": "stationTravelOnly"
           },
@@ -1189,6 +1252,65 @@
           "line"
         ],
         "title": "TransportStep"
+      },
+      "TravelSegment": {
+        "properties": {
+          "fromPoint": {
+            "$ref": "#/components/schemas/RoutePoint"
+          },
+          "toPoint": {
+            "$ref": "#/components/schemas/RoutePoint"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "walking",
+              "transit"
+            ],
+            "title": "Mode"
+          },
+          "durationMinutes": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Durationminutes"
+          },
+          "distanceMeters": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Distancemeters"
+          },
+          "path": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Location"
+                },
+                "type": "array",
+                "maxItems": 10000,
+                "minItems": 2
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Path"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fromPoint",
+          "toPoint",
+          "mode",
+          "durationMinutes"
+        ],
+        "title": "TravelSegment"
       },
       "ValidationError": {
         "properties": {
