@@ -135,10 +135,10 @@ export function initialRecommendations(draft: Draft, day: number, ownedIds: Read
     address: null, primaryType: null,
   }));
 }
-export function recommendations(draft: Draft, day: number): DemoPlace[] {
+export function recommendations(draft: Draft, day: number, leg?: Pick<DemoLeg, 'from' | 'to'>): DemoPlace[] {
   if (!draft.tags.length || !draft.days[day]?.placeIds.length) return [];
   const visited = new Set(draft.days.slice(0, draft.dayCount).flatMap((item) => item.placeIds));
-  const anchors = draft.days[day]!.placeIds.map(placeById);
+  const anchors = (leg ? [leg.from, leg.to] : draft.days[day]!.placeIds).map(placeById);
   // A local proximity fixture for interaction only, not a production nearby-search algorithm.
   return PLACES.filter((place) => !visited.has(place.id) && place.tags.some((tag) => draft.tags.includes(tag)) && anchors.some((anchor) => Math.hypot(anchor.lat - place.lat, anchor.lng - place.lng) < 0.035)).slice(0, 3);
 }

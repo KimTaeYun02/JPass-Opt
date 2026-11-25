@@ -1,4 +1,4 @@
-import { TAGS, mergeCandidatePlaces, placeById, validateDraft } from './demo-model.ts';
+import { TAGS, googlePlaceKey, mergeCandidatePlaces, placeById, validateDraft } from './demo-model.ts';
 import type { DemoPlace, DemoResult, Draft, RouteStation, Tag, TransportStep, TravelPoint, TravelSegment } from './demo-model.ts';
 
 // Contract: Notion API 스키마 확정 / input-output docs, read 2026-10-27.
@@ -130,7 +130,7 @@ function parseTravelSegment(value: unknown): TravelSegment {
   return { fromPoint: point(row.fromPoint), toPoint: point(row.toPoint), mode: row.mode as TravelSegment['mode'], durationMinutes: count(row.durationMinutes), distanceMeters, path };
 }
 function apiPlace(googlePlaceId: string, name: string, point: Location, address: unknown, primaryType: unknown, tags: Tag[] = []): DemoPlace {
-  return { id: `google:${encodeURIComponent(googlePlaceId)}`, googlePlaceId, name, lat: point.lat, lng: point.lng, area: typeof address === 'string' ? address : '일본', station: '경로 계산 후 확인', address: typeof address === 'string' ? address : null, primaryType: typeof primaryType === 'string' ? primaryType : null, tags, rank: 0 };
+  return { id: googlePlaceKey(googlePlaceId), googlePlaceId, name, lat: point.lat, lng: point.lng, area: typeof address === 'string' ? address : '일본', station: '경로 계산 후 확인', address: typeof address === 'string' ? address : null, primaryType: typeof primaryType === 'string' ? primaryType : null, tags, rank: 0 };
 }
 export function normalizeNearby(value: unknown): DemoPlace[] {
   const root = obj(value);
@@ -158,11 +158,10 @@ export function normalizeNearby(value: unknown): DemoPlace[] {
   });
   return [...places.values()];
 }
-export function buildNearbyRequest(draft: Draft, result: DemoResult, dayIndex: number): NearbyRequest {
-  if (!draft.tags.length) throw new TravelApiError('여행 취향을 한 개 이상 선택해 주세요.');
-  if (draft.revision !== result.revision) throw new TravelApiError('변경한 일정으로 먼저 다시 계산해 주세요.');
-  const day = result.days[dayIndex];
-  if (!day?.stations) throw new TravelApiError('추천에 사용할 계산된 역 정보가 없어요.');
+export function nearbyRouteStations(day: DemoResult['days'][number], legIndex?: number): NearbyRequest['stations'] {
+  const leg = legIndex === undefined ? undefined : day.legs[legIndex];
+  if (legIndex !== undefined && !leg) return [];
+  const legs = leg ? [leg] : day.legs;
   const stations = new Map<string, NearbyRequest['stations'][number]>();
   const add = (value: RouteStation, line?: string) => {
     const key = JSON.stringify([value.name, value.location.lat, value.location.lng]);
@@ -171,13 +170,26 @@ export function buildNearbyRequest(draft: Draft, result: DemoResult, dayIndex: n
     // Preserve the first raw line string instead of synthesizing a combined line name.
     stations.set(key, { ...value, line: previous?.line ?? line });
   };
-  if (!day.accessWalking || !day.legs.length) Object.values(day.stations).forEach((value) => add(value));
-  day.legs.forEach((leg) => leg.segments?.forEach((segment) => {
+  const useVisitStations = leg ? !day.accessWalking && !leg.route?.length : !day.accessWalking || !day.legs.length;
+  if (useVisitStations) {
+    const visits = leg ? [day.stations?.[leg.from], day.stations?.[leg.to]] : Object.values(day.stations ?? {});
+    visits.forEach((value) => { if (value) add(value); });
+  }
+  legs.forEach((item) => item.segments?.forEach((segment) => {
     for (const point of [segment.fromPoint, segment.toPoint]) if (point.kind === 'station') add(point);
   }));
-  day.legs.forEach((leg) => leg.route?.forEach((step) => { add(step.fromStation, step.line); add(step.toStation, step.line); }));
-  if (!stations.size) throw new TravelApiError('추천에 사용할 역이 없어요.');
-  return { travelTypes: [...draft.tags], userRequest: draft.request, stations: [...stations.values()], placeCount: 3, radius: 1000 };
+  legs.forEach((item) => item.route?.forEach((step) => { add(step.fromStation, step.line); add(step.toStation, step.line); }));
+  return [...stations.values()];
+}
+
+export function buildNearbyRequest(draft: Draft, result: DemoResult, dayIndex: number, legIndex?: number): NearbyRequest {
+  if (!draft.tags.length) throw new TravelApiError('여행 취향을 한 개 이상 선택해 주세요.');
+  if (draft.revision !== result.revision) throw new TravelApiError('변경한 일정으로 먼저 다시 계산해 주세요.');
+  const day = result.days[dayIndex];
+  if (!day?.stations) throw new TravelApiError('추천에 사용할 계산된 역 정보가 없어요.');
+  const stations = nearbyRouteStations(day, legIndex);
+  if (!stations.length) throw new TravelApiError(legIndex === undefined ? '추천에 사용할 역이 없어요.' : '이 구간의 역 정보가 없어 장소 검색을 이용해 주세요.');
+  return { travelTypes: [...draft.tags], userRequest: draft.request, stations, placeCount: 3, radius: 1000 };
 }
 
 export function buildStationRequest(draft: Draft, dayIndex: number): StationResolveRequest {
@@ -219,13 +231,19 @@ export function parseStationResponse(value: unknown, request: StationResolveRequ
   return { stations: [...stations.values()], warnings };
 }
 
-export function searchBiasForPlaces(places: DemoPlace[]): SearchBias | undefined {
+export function searchBiasForPlaces(places: Location[]): SearchBias | undefined {
   if (!places.length) return undefined;
   const points = places.map((place) => location({ lat: place.lat, lng: place.lng }));
   return { rectangle: {
     low: { latitude: Math.max(-90, Math.min(...points.map((p) => p.lat)) - .01), longitude: Math.max(-180, Math.min(...points.map((p) => p.lng)) - .01) },
     high: { latitude: Math.min(90, Math.max(...points.map((p) => p.lat)) + .01), longitude: Math.min(180, Math.max(...points.map((p) => p.lng)) + .01) },
   } };
+}
+
+export function searchBiasForRouteLeg(day: DemoResult['days'][number], legIndex: number): SearchBias | undefined {
+  const leg = day.legs[legIndex];
+  if (!leg) return undefined;
+  return searchBiasForPlaces([placeById(leg.from), placeById(leg.to), ...nearbyRouteStations(day, legIndex).map(({ location }) => location)]);
 }
 
 // Contract: backend/app/schemas/place_search.py on JPass-Opt main, checked 2026-11-05.
@@ -308,7 +326,7 @@ export function createTravelApi(base?: string, fetcher: typeof fetch = fetch) {
         throw error;
       }
     },
-    async nearby(draft: Draft, result: DemoResult, day: number) { return normalizeNearby(await post('/nearby/recommend', buildNearbyRequest(draft, result, day), 120000)); },
+    async nearby(draft: Draft, result: DemoResult, day: number, legIndex?: number) { return normalizeNearby(await post('/nearby/recommend', buildNearbyRequest(draft, result, day, legIndex), 120000)); },
     search,
     resolveStations,
     async initial(draft: Draft, day: number, query: string, signal?: AbortSignal): Promise<PlaceSearch> {

@@ -65,3 +65,16 @@ input,select,textarea{border-color:#d5dbe4;border-radius:6px;background:#fff}but
   white-space: nowrap;
 }
 .draft-tools button:hover:not(:disabled) { background: #f4f6f9; }
+
+.leg-recommendation { margin: 0 0 14px 73px; min-width: 0; }
+.leg-recommendation-toggle {
+  padding: 6px 10px;
+  border: 1px solid #cdd5e1;
+  border-radius: 5px;
+  color: #2458de;
+  font-size: 11px;
+}
+.leg-recommendation-toggle:hover:not(:disabled),
+.leg-recommendation-toggle[aria-expanded="true"] { background: #f0f5ff; }
+.leg-recommendation-panel { margin-top: 9px; padding-left: 10px; border-left: 2px solid var(--line); }
+.leg-recommendation-panel .request-label { margin-top: 12px; }

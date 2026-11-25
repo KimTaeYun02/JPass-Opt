@@ -4,7 +4,7 @@ import { createRequire } from 'node:module';
 import vm from 'node:vm';
 import * as model from '../src/demo-model.ts';
 import * as draftFile from '../src/demo-draft-file.ts';
-import { createTravelApi, formatJapanTime } from '../src/demo-api.ts';
+import { createTravelApi, formatJapanTime, nearbyRouteStations, searchBiasForRouteLeg } from '../src/demo-api.ts';
 import { renderRouteDay } from '../src/demo-route-render.ts';
 import { mapRoutePaths } from '../src/demo-map-controller.ts';
 
@@ -26,7 +26,7 @@ export function harness({ mode = 'example', client = createTravelApi(), apiBase,
   const toast = { textContent: '', classList: { add() {}, remove() {} } };
   const elements = { '#app': app, '#place-dialog': dialog, '#demo-search': search, '#search-results': searchResults, '#search-selection': searchSelection, '#search-confirm': searchConfirm, '#draft-import': draftImport, '#toast': toast };
   const localStorage = { getItem: (key) => storage.get(key) ?? null, setItem: (key, value) => storage.set(key, value) };
-  const context = vm.createContext({ ...model, ...draftFile, AbortController, Error, renderRouteDay, mapRoutePaths, travelApiBase: apiBase, createTravelApi: (base) => { onApiBase(base); return client; }, formatJapanTime, URLSearchParams, renderDemoMarkup: (element, markup) => {
+  const context = vm.createContext({ ...model, ...draftFile, AbortController, Error, renderRouteDay, mapRoutePaths, travelApiBase: apiBase, createTravelApi: (base) => { onApiBase(base); return client; }, formatJapanTime, nearbyRouteStations, searchBiasForRouteLeg, URLSearchParams, renderDemoMarkup: (element, markup) => {
     // Validate the real render() output against the persistent renderer's shape contract.
     for (const pattern of [/class="site-header"/g, /class="planner"/g, /class="map-area"/g, /id="demo-map-slot"/g]) assert.equal([...markup.matchAll(pattern)].length, 1);
     element.innerHTML = markup;

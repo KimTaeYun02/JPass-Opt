@@ -2,7 +2,7 @@ import type { DemoLeg, DemoPlace, DemoResult, RouteStation } from './demo-model'
 import { formatJapanTime } from './demo-api.ts';
 
 type RouteDay = DemoResult['days'][number];
-type RouteView = { live: boolean; dayIndex: number; date: string; selected?: string; place: (id: string) => DemoPlace };
+type RouteView = { live: boolean; dayIndex: number; date: string; selected?: string; place: (id: string) => DemoPlace; legActions?: (leg: DemoLeg, index: number) => string };
 const html = (value: string): string => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!);
 const yen = (value: number): string => `¥${value.toLocaleString('ja-JP')}`;
 const stationName = (station: string | undefined): string => station && station !== '경로 계산 후 확인' ? station : '역 정보 미제공';
@@ -37,7 +37,7 @@ export function renderRouteDay(day: RouteDay, view: RouteView): string {
       const arrival = view.live && day.arrivals?.[id] ? formatJapanTime(day.arrivals[id], view.date) : undefined;
       const offset = elapsed;
       if (leg) elapsed += leg.minutes;
-      return `<li><button type="button" class="route-stop ${view.selected === id ? 'selected' : ''}" data-action="focus" data-id="${html(id)}"><span class="route-time"><span class="sr-only">누적 ${day.accessWalking ? '전체' : '역 간'} 이동 </span>+${offset}분</span><span class="route-dot">${index + 1}</span><span class="route-info"><strong>${html(place.name)}</strong><span class="station-label">${day.accessWalking ? '참고 역' : '이용 역'} · ${html(stationName(day.stations?.[id]?.name ?? place.station))}</span>${arrival ? `<small class="route-reference-time">이동 기준 시각 ${html(arrival)}</small>` : ''}</span></button>${leg ? renderLeg(leg, day, view) : ''}</li>`;
+      return `<li><button type="button" class="route-stop ${view.selected === id ? 'selected' : ''}" data-action="focus" data-id="${html(id)}"><span class="route-time"><span class="sr-only">누적 ${day.accessWalking ? '전체' : '역 간'} 이동 </span>+${offset}분</span><span class="route-dot">${index + 1}</span><span class="route-info"><strong>${html(place.name)}</strong><span class="station-label">${day.accessWalking ? '참고 역' : '이용 역'} · ${html(stationName(day.stations?.[id]?.name ?? place.station))}</span>${arrival ? `<small class="route-reference-time">이동 기준 시각 ${html(arrival)}</small>` : ''}</span></button>${leg ? renderLeg(leg, day, view) + (view.legActions?.(leg, index) ?? '') : ''}</li>`;
     }).join('')}</ol>
     ${day.order.length === 1 ? '<p class="route-unavailable single-place">선택한 장소가 1곳이라 관광지 사이 이동 구간이 없어요.</p>' : ''}`;
 }
