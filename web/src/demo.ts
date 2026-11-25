@@ -267,7 +267,10 @@ function resultPanel(): string {
     ${pendingPlacesPanel()}
     ${!day ? '<p class="empty-state">새로 추가한 일차예요.<br />장소를 넣고 다시 계산해 주세요.</p>' : routePanel(day)}
     <section class="nearby-section" aria-label="취향 관광지 추천"><button type="button" class="nearby-toggle" data-action="toggle-nearby" aria-expanded="${dayNearbyOpen}" aria-controls="nearby-results"><span><strong>취향에 맞는 관광지</strong><small>일정 주변에서 더 들를 곳을 찾아보세요</small></span><span aria-hidden="true">${dayNearbyOpen ? '−' : '＋'}</span></button><div id="nearby-results" ${dayNearbyOpen ? '' : 'hidden'}>${dayNearbyOpen ? nearbyPanel() : ''}</div></section>
-    <div class="trip-total"><span>여행 전체 ${result.days.some((day) => day.accessWalking) ? '' : '역 간 '}교통비 <small>${liveResult() ? '조회 결과' : '예시'}</small></span><strong>${yen(result.days.reduce((sum, item) => sum + item.fare, 0))}</strong></div>`;
+    <div class="trip-total"><span>여행 전체 ${result.days.some((day) => day.accessWalking) ? '' : '역 간 '}교통비 <small>${liveResult() ? '조회 결과' : '예시'}</small></span><strong>${yen(result.days.reduce((sum, item) => sum + item.fare, 0))}</strong></div>
+    <section class="pass-comparison" aria-labelledby="pass-comparison-title">
+      <h2 id="pass-comparison-title">패스 비교</h2><p>패스 데이터 연결 대기</p>
+    </section>`;
 }
 function pendingPlaceIds(): string[] {
   if (!result) return [];

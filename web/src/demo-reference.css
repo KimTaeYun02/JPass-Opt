@@ -78,3 +78,16 @@ input,select,textarea{border-color:#d5dbe4;border-radius:6px;background:#fff}but
 .leg-recommendation-toggle[aria-expanded="true"] { background: #f0f5ff; }
 .leg-recommendation-panel { margin-top: 9px; padding-left: 10px; border-left: 2px solid var(--line); }
 .leg-recommendation-panel .request-label { margin-top: 12px; }
+
+.pass-comparison {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+  margin-top: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+.pass-comparison h2 { font-size: 13px; }
+.pass-comparison p { color: var(--muted); font-size: 11px; }
